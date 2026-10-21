@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { FileText, Menu, X, ArrowUpRight, Github, Linkedin, Terminal, Sparkles } from "lucide-react";
+import { FileText, Eye, Menu, X, ArrowUpRight, Github, Linkedin, Terminal, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useResumeViewer } from "@/context/ResumeViewerContext";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -13,6 +14,7 @@ const navLinks = [
 ];
 
 const Navbar = () => {
+  const { openResume } = useResumeViewer();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -85,14 +87,12 @@ const Navbar = () => {
         {/* Actions */}
         <div className="flex items-center gap-3">
           <Button
-            asChild
             size="sm"
             variant="outline"
-            className="hidden sm:inline-flex gap-1.5 border-white/15 hover:border-cyan-300/40 text-white/80 hover:text-white bg-white/[0.04] text-xs font-mono h-9 px-3"
+            onClick={openResume}
+            className="hidden sm:inline-flex gap-1.5 border-white/15 hover:border-cyan-300/40 text-white/80 hover:text-white bg-white/[0.04] text-xs font-mono h-9 px-3 cursor-pointer"
           >
-            <a href="./Abishek_Pranav_Resume.pdf" download="Abishek_Pranav_GV_Resume.pdf">
-              <FileText className="w-3.5 h-3.5 text-cyan-300" /> Resume.pdf
-            </a>
+            <Eye className="w-3.5 h-3.5 text-cyan-300" /> View Resume
           </Button>
 
           <Button
@@ -144,14 +144,15 @@ const Navbar = () => {
             </div>
 
             <Button
-              asChild
               size="sm"
               variant="outline"
-              className="border-white/15 text-white/90 text-xs h-8"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openResume();
+              }}
+              className="border-white/15 text-white/90 text-xs h-8 cursor-pointer gap-1"
             >
-              <a href="./Abishek_Pranav_Resume.pdf" download="Abishek_Pranav_GV_Resume.pdf">
-                <FileText className="w-3 h-3 text-cyan-300 mr-1" /> Resume
-              </a>
+              <Eye className="w-3 h-3 text-cyan-300 mr-1" /> View Resume
             </Button>
           </div>
         </div>

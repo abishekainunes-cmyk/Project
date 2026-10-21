@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
-import { Mail, Phone, Linkedin, Github, FileText, ArrowUpRight, MapPin, Sparkles, Send } from "lucide-react";
+import { Mail, Phone, Linkedin, Github, FileText, Eye, ArrowUpRight, MapPin, Sparkles, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useResumeViewer } from "@/context/ResumeViewerContext";
 
 const ContactSection = () => {
+  const { openResume } = useResumeViewer();
   return (
     <section className="px-6 py-28 relative border-t border-white/[0.08] overflow-hidden" id="contact">
       {/* Background glow */}
@@ -54,14 +56,12 @@ const ContactSection = () => {
             </Button>
 
             <Button
-              asChild
               variant="outline"
               size="lg"
-              className="gap-2 border-white/15 hover:border-white/30 text-slate-300 hover:text-white bg-white/[0.04] text-sm h-12 px-6 transition-all duration-200"
+              onClick={openResume}
+              className="gap-2 border-white/15 hover:border-white/30 text-slate-300 hover:text-white bg-white/[0.04] text-sm h-12 px-6 transition-all duration-200 cursor-pointer"
             >
-              <a href="./Abishek_Pranav_Resume.pdf" download="Abishek_Pranav_GV_Resume.pdf">
-                <FileText className="w-4 h-4 text-cyan-400" /> Download Resume (PDF)
-              </a>
+              <Eye className="w-4 h-4 text-cyan-400" /> View Executive CV
             </Button>
           </div>
 
@@ -114,13 +114,12 @@ const ContactSection = () => {
               >
                 <Linkedin className="w-3.5 h-3.5" /> LinkedIn
               </a>
-              <a
-                href="./Abishek_Pranav_Resume.pdf"
-                download="Abishek_Pranav_GV_Resume.pdf"
-                className="hover:text-cyan-400 transition-colors flex items-center gap-1.5 font-medium"
+              <button
+                onClick={openResume}
+                className="hover:text-cyan-400 transition-colors flex items-center gap-1.5 font-medium cursor-pointer"
               >
-                <FileText className="w-3.5 h-3.5" /> Resume
-              </a>
+                <Eye className="w-3.5 h-3.5" /> View CV
+              </button>
             </div>
           </div>
         </motion.div>

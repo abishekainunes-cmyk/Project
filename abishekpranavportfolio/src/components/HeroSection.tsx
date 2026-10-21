@@ -6,6 +6,7 @@ import {
   MapPin, 
   ArrowRight, 
   FileText, 
+  Eye,
   Sparkles, 
   ExternalLink,
   Github,
@@ -14,8 +15,10 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useResumeViewer } from "@/context/ResumeViewerContext";
 
 const HeroSection = () => {
+  const { openResume } = useResumeViewer();
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center pt-24 pb-16 lab-grid overflow-hidden">
       {/* Radial atmospheric ambient glows */}
@@ -107,14 +110,12 @@ const HeroSection = () => {
             </Button>
 
             <Button
-              asChild
               variant="ghost"
               size="lg"
-              className="h-11 px-4 rounded-md text-white/70 hover:text-white hover:bg-white/[0.04] text-xs font-mono transition"
+              onClick={openResume}
+              className="h-11 px-4 rounded-md text-white/70 hover:text-white hover:bg-white/[0.04] text-xs font-mono transition cursor-pointer"
             >
-              <a href="./Abishek_Pranav_Resume.pdf" download="Abishek_Pranav_GV_Resume.pdf">
-                <FileText className="mr-1.5 h-3.5 w-3.5 text-cyan-300" /> Resume.pdf
-              </a>
+              <Eye className="mr-1.5 h-3.5 w-3.5 text-cyan-300" /> View Resume
             </Button>
           </div>
 
