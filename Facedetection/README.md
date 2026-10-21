@@ -1,6 +1,7 @@
 # 👤 AERO-BIO // Quantum Edge Biometric Cognition OS 5.0
 
-[![Live Production Web App](https://img.shields.io/badge/Live_Deployment-face--detection--biometrics.vercel.app-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://face-detection-biometrics.vercel.app)
+[![Live Production Web App](https://img.shields.io/badge/Live_Vercel-face--detection--biometrics.vercel.app-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://face-detection-biometrics.vercel.app)
+[![Live GitHub Pages](https://img.shields.io/badge/Live_GitHub_Pages-abishekpranavgv.github.io-06B6D4?style=for-the-badge&logo=github&logoColor=white)](https://abishekpranavgv.github.io/Facedetection/)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-abishekainunes--cmyk%2FProject-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/abishekainunes-cmyk/Project/tree/main/Facedetection)
 [![WASM Acceleration](https://img.shields.io/badge/Acceleration-WASM%20%2B%20WebGL%20GPU-06B6D4?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/WebAssembly)
 [![Python Version](https://img.shields.io/badge/Python-3.8%2B%20%7C%20OpenCV%204.x-5C3EE8?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
