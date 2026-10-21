@@ -72,7 +72,7 @@ const caseStudiesData: CaseStudy[] = [
       "Pre-caching product category visual indexes drastically reduces runtime latency during live client calls"
     ],
     liveUrl: "https://indiamart-ai-catalog-studio.vercel.app",
-    githubUrl: "https://github.com/AbishekPranavGV/IndiaMART-AI-Content-Catalog-Generator"
+    githubUrl: "https://github.com/abishekainunes-cmyk/Project/tree/main/IndiaMART-AI-Content-Catalog-Generator"
   },
   {
     id: "social-command-center",
@@ -109,7 +109,7 @@ const caseStudiesData: CaseStudy[] = [
       "Separating content generation logic from platform dispatch adapters ensures resilience against upstream API deprecations"
     ],
     liveUrl: "https://nunessocialpostmachine-app.vercel.app",
-    githubUrl: "https://github.com/AbishekPranavGV/social-command-center"
+    githubUrl: "https://github.com/abishekainunes-cmyk/Project/tree/main/social-command-center"
   },
   {
     id: "autonomous-temp-cleaner",
@@ -146,7 +146,7 @@ const caseStudiesData: CaseStudy[] = [
       "Gracefully skipping locked file handles provides superior operational safety compared to forceful process termination"
     ],
     liveUrl: "https://autonomous-system-temp-cleaner.vercel.app",
-    githubUrl: "https://github.com/AbishekPranavGV/Autonomous-System-Temp-Cleaner"
+    githubUrl: "https://github.com/abishekainunes-cmyk/Project/tree/main/Autonomous-System-Temp-Cleaner"
   },
   {
     id: "nicms-strategic-blueprint",
@@ -183,7 +183,7 @@ const caseStudiesData: CaseStudy[] = [
       "Automated digital handshakes with enforced SLAs are the only effective remedy for bureaucratic inter-agency case stalling"
     ],
     liveUrl: "https://abishekpranavgv.github.io/NICMS-SriLanka-Strategic-Blueprint/",
-    githubUrl: "https://github.com/AbishekPranavGV/NICMS-SriLanka-Strategic-Blueprint"
+    githubUrl: "https://github.com/abishekainunes-cmyk/Project/tree/main/NICMS-SriLanka-Strategic-Blueprint"
   }
 ];
 

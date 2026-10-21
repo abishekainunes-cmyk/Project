@@ -62,7 +62,7 @@ const Navbar = () => {
           
           <div className="flex items-center space-x-3 pl-2 border-l border-white/10">
             <a 
-              href="https://github.com/AbishekPranavGV" 
+              href="https://github.com/abishekainunes-cmyk" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-white/60 hover:text-cyan-200 transition-colors"
@@ -135,7 +135,7 @@ const Navbar = () => {
 
           <div className="pt-4 border-t border-white/10 flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <a href="https://github.com/AbishekPranavGV" target="_blank" rel="noreferrer" className="text-white/70 hover:text-cyan-200">
+              <a href="https://github.com/abishekainunes-cmyk" target="_blank" rel="noreferrer" className="text-white/70 hover:text-cyan-200">
                 <Github className="w-5 h-5" />
               </a>
               <a href="https://www.linkedin.com/in/abishek-pranav-g-v-/" target="_blank" rel="noreferrer" className="text-white/70 hover:text-cyan-200">

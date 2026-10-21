@@ -152,7 +152,7 @@ const HeroSection = () => {
                     alt="Abishek Pranav G V"
                     className="absolute inset-0 w-full h-full object-cover object-center filter contrast-105 brightness-95"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://github.com/AbishekPranavGV.png";
+                      (e.target as HTMLImageElement).src = "https://github.com/abishekainunes-cmyk.png";
                     }}
                   />
                   {/* High-tech gradient overlay for legible typography */}

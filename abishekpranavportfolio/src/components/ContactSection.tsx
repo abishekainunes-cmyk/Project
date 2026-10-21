@@ -99,7 +99,7 @@ const ContactSection = () => {
             </div>
             <div className="flex items-center gap-6">
               <a
-                href="https://github.com/AbishekPranavGV"
+                href="https://github.com/abishekainunes-cmyk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-cyan-400 transition-colors flex items-center gap-1.5 font-medium"

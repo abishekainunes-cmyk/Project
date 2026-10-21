@@ -88,17 +88,17 @@ const AboutSection = () => {
               src="./abishek_avatar.png" 
               alt="Abishek Pranav" 
               className="w-11 h-11 rounded-full border border-cyan-400/50 object-cover shadow-md shadow-cyan-500/20"
-              onError={(e) => { (e.target as HTMLImageElement).src = "https://github.com/AbishekPranavGV.png"; }}
+              onError={(e) => { (e.target as HTMLImageElement).src = "https://github.com/abishekainunes-cmyk.png"; }}
             />
             <div className="text-left font-mono">
               <div className="text-xs font-bold text-white">Abishek Pranav G V</div>
               <a 
-                href="https://github.com/AbishekPranavGV" 
+                href="https://github.com/abishekainunes-cmyk" 
                 target="_blank" 
                 rel="noreferrer"
                 className="text-[10px] text-cyan-300 hover:underline block"
               >
-                @AbishekPranavGV
+                @abishekainunes-cmyk
               </a>
             </div>
           </div>

@@ -120,7 +120,7 @@ const FeaturedProjectSection = () => {
                 </Button>
                 <Button variant="outline" size="sm" asChild className="gap-2">
                   <a
-                    href="https://github.com/AbishekPranavGV/Retail-Sales-Performance-Predictive-Analytics"
+                    href="https://github.com/abishekainunes-cmyk/Project/tree/main/Retail-Sales-Performance-Predictive-Analytics"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

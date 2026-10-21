@@ -1,7 +1,7 @@
 # Abishek Pranav G V | AI Engineering & Intelligent Automation Portfolio V3 ⚡
 
 [![Live Production](https://img.shields.io/badge/Live%20Portfolio-Vercel%20Edge%20(Production)-blue?style=for-the-badge&logo=vercel)](https://abishekpranavportfolio.vercel.app)
-[![Tests Passing](https://img.shields.io/badge/Tests-7%20Passed%20(100%25)-emerald?style=for-the-badge&logo=vitest)](https://github.com/AbishekPranavGV/abishekpranavportfolio)
+[![Tests Passing](https://img.shields.io/badge/Tests-7%20Passed%20(100%25)-emerald?style=for-the-badge&logo=vitest)](https://github.com/abishekainunes-cmyk/Project/tree/main/abishekpranavportfolio)
 [![React 18](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
@@ -87,5 +87,5 @@ npm run build
 **Abishek Pranav G V**  
 AI Engineer & Intelligent Systems Specialist  
 - **Portfolio:** [abishekpranavportfolio.vercel.app](https://abishekpranavportfolio.vercel.app)  
-- **GitHub:** [@AbishekPranavGV](https://github.com/AbishekPranavGV)  
+- **GitHub:** [@abishekainunes-cmyk](https://github.com/abishekainunes-cmyk)  
 - **LinkedIn:** [Abishek Pranav G V](https://www.linkedin.com/in/abishek-pranav-g-v-/)
