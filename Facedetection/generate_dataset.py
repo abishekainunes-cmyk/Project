@@ -1,53 +1,69 @@
+"""
+Automated Facial Biometric Sample Capture & Augmentation
+Engineered by: Abishek Pranav G V
+Captures grayscale normalized face crops for training LBPH classifiers.
+"""
+
 import cv2
 import os
+import sys
 
-# Define dataset path
-DATA_FOLDER = r"C:\Users\lirda\OneDrive\Desktop\Open CV face detecction\Facedetection\data"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FOLDER = os.path.join(BASE_DIR, "data")
+CASCADE_FACE = os.path.join(BASE_DIR, "haarcascade_frontalface_default.xml")
 
-# Ensure dataset folder exists
 if not os.path.exists(DATA_FOLDER):
-    os.makedirs(DATA_FOLDER)
+    os.makedirs(DATA_FOLDER, exist_ok=True)
 
-def generate_dataset(user_id):
-    """Captures images from webcam and saves them in dataset."""
-    video_capture = cv2.VideoCapture(0)
-    faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+def generate_dataset(user_id, max_samples=100):
+    face_cascade = cv2.CascadeClassifier(CASCADE_FACE)
+    if face_cascade.empty():
+        print(f"[-] Error: Face cascade missing at {CASCADE_FACE}")
+        sys.exit(1)
 
-    if faceCascade.empty():
-        print("Error: Face cascade file is missing.")
-        exit()
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("[-] Error: Camera hardware inaccessible.")
+        sys.exit(1)
 
-    print(f"Collecting face data for User ID: {user_id}")
+    print(f"[+] Commencing biometric signature enrollment for User ID: {user_id}")
+    print(f"[+] Target: {max_samples} normalized samples. Press 'q' to abort.")
+
     img_id = 0
-
     while True:
-        ret, frame = video_capture.read()
+        ret, frame = cap.read()
         if not ret:
-            print("Error: Could not read frame from webcam.")
             break
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = faceCascade.detectMultiScale(gray, 1.1, 10)
+        gray = cv2.equalizeHist(gray)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(80, 80))
 
         for (x, y, w, h) in faces:
             roi_gray = gray[y:y+h, x:x+w]
-            file_path = os.path.join(DATA_FOLDER, f"user.{str(user_id)}.{str(img_id)}.jpg")
-            cv2.imwrite(file_path, roi_gray)
+            # Standardize face crop dimensions for LBPH
+            roi_resized = cv2.resize(roi_gray, (200, 200))
+            
+            file_path = os.path.join(DATA_FOLDER, f"user.{user_id}.{img_id}.jpg")
+            cv2.imwrite(file_path, roi_resized)
             img_id += 1
-            print(f"Saved {file_path}")
 
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            # Progress overlay
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            cv2.putText(frame, f"Samples: {img_id}/{max_samples}", (x, y - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
-        cv2.imshow("Face Capture", frame)
-
-        # Stop after collecting 500 images or press 'q' to quit
-        if img_id >= 500 or cv2.waitKey(1) & 0xFF == ord('q'):
+        cv2.imshow("Biometric Enrollment Capture", frame)
+        if img_id >= max_samples or (cv2.waitKey(1) & 0xFF == ord('q')):
             break
 
-    video_capture.release()
+    cap.release()
     cv2.destroyAllWindows()
-    print(f"Collected {img_id} images for User ID {user_id}")
+    print(f"[+] Enrollment complete. Captured {img_id} samples in {DATA_FOLDER}")
 
-# Ask for User ID
-user_id = input("Enter a unique User ID: ")
-generate_dataset(user_id)
+if __name__ == "__main__":
+    uid = input("Enter Numeric User ID (e.g. 1 for Admin, 2 for Operator): ").strip()
+    if not uid.isdigit():
+        print("[-] Invalid user ID. Must be integer.")
+        sys.exit(1)
+    generate_dataset(int(uid))

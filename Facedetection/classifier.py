@@ -1,39 +1,54 @@
+"""
+LBPH Biometric Model Trainer
+Engineered by: Abishek Pranav G V
+Trains Local Binary Patterns Histograms (LBPH) on captured normalized face dataset.
+"""
+
 import cv2
 import numpy as np
 import os
+import sys
 
-def get_images_and_labels(data_folder):
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FOLDER = os.path.join(BASE_DIR, "data")
+MODEL_FILE = os.path.join(BASE_DIR, "classifier.yml")
+
+def train_classifier():
+    if not os.path.exists(DATA_FOLDER):
+        print(f"[-] Error: Dataset directory {DATA_FOLDER} not found. Run generate_dataset.py first.")
+        sys.exit(1)
+
     images = []
     labels = []
-    for file in os.listdir(data_folder):
-        if file.startswith("user"):
-            path = os.path.join(data_folder, file)
-            img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-            label = int(file.split(".")[1])  # Extract user ID from filename
+
+    files = [f for f in os.listdir(DATA_FOLDER) if f.startswith("user.")]
+    if not files:
+        print(f"[-] No training images found in {DATA_FOLDER}.")
+        sys.exit(1)
+
+    print(f"[+] Loading {len(files)} biometric face samples...")
+    for f in files:
+        path = os.path.join(DATA_FOLDER, f)
+        img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            continue
+        try:
+            label = int(f.split(".")[1])
             images.append(img)
             labels.append(label)
-    return images, np.array(labels)
+        except Exception:
+            continue
 
-data_folder = r"C:\Users\lirda\OneDrive\Desktop\Open CV face detecction\Facedetection\data"
+    if not images:
+        print("[-] Error: No valid images could be parsed.")
+        sys.exit(1)
 
-if not os.path.exists(data_folder):
-    print("Error: Data folder does not exist. Please collect face data first.")
-    exit()
+    print(f"[+] Training LBPH Face Recognizer (Radius=1, Neighbors=8, Grid=8x8)...")
+    clf = cv2.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    clf.train(images, np.array(labels))
 
-# Initialize LBPH face recognizer
-clf = cv2.face.LBPHFaceRecognizer_create()
+    clf.write(MODEL_FILE)
+    print(f"[+] Training successful! Serialized weights saved to: {MODEL_FILE}")
 
-print("Fetching images and labels...")
-faces, ids = get_images_and_labels(data_folder)
-
-if len(faces) == 0:
-    print("Error: No images found for training.")
-    exit()
-
-print("Training classifier...")
-clf.train(faces, ids)
-
-# Save classifier model
-classifier_path = "classifier.yml"
-clf.write(classifier_path)
-print(f"Classifier saved as {classifier_path}")
+if __name__ == "__main__":
+    train_classifier()

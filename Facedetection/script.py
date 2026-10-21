@@ -1,88 +1,128 @@
+"""
+Real-Time Biometric Facial Recognition: Edge Pipeline
+Engineered by: Abishek Pranav G V
+Supports: OpenCV 4.8+, Multi-Stage Haar Cascades & LBPH Face Recognizer
+"""
+
 import cv2
 import os
+import sys
 
-# Directory to store dataset images
-DATA_FOLDER = r"C:\Users\lirda\OneDrive\Desktop\Open CV face detecction\Facedetection\data"
+# Dynamic relative paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FOLDER = os.path.join(BASE_DIR, "data")
+MODEL_FILE = os.path.join(BASE_DIR, "classifier.yml")
+CASCADE_FACE = os.path.join(BASE_DIR, "haarcascade_frontalface_default.xml")
+CASCADE_EYES = os.path.join(BASE_DIR, "haarcascade_eye.xml")
+CASCADE_NOSE = os.path.join(BASE_DIR, "haarcascade_mcs_nose.xml")
+CASCADE_MOUTH = os.path.join(BASE_DIR, "haarcascade_mcs_mouth.xml")
 
-# Ensure dataset folder exists
-if not os.path.exists(DATA_FOLDER):
-    os.makedirs(DATA_FOLDER)
-
-# Dictionary to store user ID to name mapping
+# Enrolled users directory mapping
 USER_NAMES = {
-    1: "Andiee",
-    2: "Shriyans",
-    3: "Mehraj",
-    4: "Sir"
-    # Add more user IDs and names as needed
+    1: "Abishek Pranav G V (Omega)",
+    2: "Operator 04 (Beta)",
+    3: "Engineer 09 (Alpha)",
+    4: "Security Personnel"
 }
 
-def generate_dataset(img, user_id, img_id):
-    """Save captured images for training the face recognizer."""
-    file_path = os.path.join(DATA_FOLDER, f"user.{str(user_id)}.{str(img_id)}.jpg")
-    cv2.imwrite(file_path, img)
-    print(f"Image saved to {file_path}")
+def load_cascades():
+    cascades = {
+        'face': cv2.CascadeClassifier(CASCADE_FACE),
+        'eyes': cv2.CascadeClassifier(CASCADE_EYES) if os.path.exists(CASCADE_EYES) else None,
+        'nose': cv2.CascadeClassifier(CASCADE_NOSE) if os.path.exists(CASCADE_NOSE) else None,
+        'mouth': cv2.CascadeClassifier(CASCADE_MOUTH) if os.path.exists(CASCADE_MOUTH) else None
+    }
+    if cascades['face'].empty():
+        print(f"[-] Error: Face cascade missing at {CASCADE_FACE}")
+        sys.exit(1)
+    return cascades
 
-def draw_boundary(img, classifier, scaleFactor, minNeighbors, color, clf):
-    """Detect faces and predict identity based on trained classifier."""
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    features = classifier.detectMultiScale(gray_img, scaleFactor, minNeighbors)
-    coords = []
+def run_recognition():
+    cascades = load_cascades()
 
-    for (x, y, w, h) in features:
-        cv2.rectangle(img, (x, y), (x+w, y+h), color, 2)
+    # Load trained LBPH model if present
+    clf = None
+    if os.path.exists(MODEL_FILE):
+        try:
+            clf = cv2.face.LBPHFaceRecognizer_create()
+            clf.read(MODEL_FILE)
+            print(f"[+] Loaded trained LBPH biometric weights from {MODEL_FILE}")
+        except Exception as e:
+            print(f"[!] Warning: Could not initialize cv2.face ({e}). Running in pure landmark detection mode.")
+    else:
+        print(f"[!] Model {MODEL_FILE} not found. Running multi-stage cascade detection.")
 
-        id, confidence = clf.predict(gray_img[y:y+h, x:x+w])
-        confidence_text = f"{round(100 - confidence, 2)}%"
+    # Open Camera
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("[-] Error: Could not access video capture hardware (Camera 0).")
+        return
 
-        if confidence < 50:  # Higher confidence = better match
-            name = USER_NAMES.get(id, f"User {id}")
-        else:
-            name = "Unknown"
+    print("[+] Biometric Recognition Terminal Active. Press 'q' to exit.")
 
-        cv2.putText(img, f"{name} ({confidence_text})", (x, y-4), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 1, cv2.LINE_AA)
-        coords = [x, y, w, h]
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-    return coords
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.equalizeHist(gray) # Histogram equalization for illumination invariance
 
-def recognize(img, clf, faceCascade):
-    """Recognize faces using trained model."""
-    colors = {"white": (255, 255, 255)}
-    draw_boundary(img, faceCascade, 1.1, 10, colors["white"], clf)
-    return img
+        faces = cascades['face'].detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(60, 60))
 
-# Load face detection classifiers
-faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+        for (x, y, w, h) in faces:
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = frame[y:y+h, x:x+w]
 
-# Load trained face recognizer model
-clf = cv2.face.LBPHFaceRecognizer_create()
-clf.read("classifier.yml")
+            # LBPH Prediction
+            name = "Verifying..."
+            conf_str = ""
+            box_color = (0, 255, 0)
 
-if faceCascade.empty():
-    print("Error: Face cascade file is missing.")
-    exit()
+            if clf is not None:
+                try:
+                    pred_id, confidence = clf.predict(roi_gray)
+                    conf_str = f"chi2: {round(confidence, 1)}"
+                    if confidence < 50: # Chi-square distance threshold
+                        name = USER_NAMES.get(pred_id, f"Subject #{pred_id}")
+                        box_color = (0, 255, 0) # Green for verified
+                    else:
+                        name = "Alert: Intruder"
+                        box_color = (0, 0, 255) # Red for alert
+                except Exception:
+                    pass
 
-# Initialize webcam
-video_capture = cv2.VideoCapture(0)
+            # Draw Frontal Face Box
+            cv2.rectangle(frame, (x, y), (x+w, y+h), box_color, 2)
+            cv2.rectangle(frame, (x, y - 30), (x + w, y), box_color, -1)
+            cv2.putText(frame, f"{name} {conf_str}", (x + 6, y - 8),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 0), 2, cv2.LINE_AA)
 
-if not video_capture.isOpened():
-    print("Error: Could not open webcam.")
-    exit()
+            # Secondary Ocular Cascade
+            if cascades['eyes']:
+                eyes = cascades['eyes'].detectMultiScale(roi_gray, 1.1, 4)
+                for (ex, ey, ew, eh) in eyes:
+                    cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (255, 255, 0), 1)
 
-img_id = 0
+            # Secondary Nasal Cascade
+            if cascades['nose']:
+                noses = cascades['nose'].detectMultiScale(roi_gray, 1.1, 4)
+                for (nx, ny, nw, nh) in noses:
+                    cv2.rectangle(roi_color, (nx, ny), (nx+nw, ny+nh), (0, 255, 255), 1)
 
-while True:
-    ret, img = video_capture.read()
-    if not ret:
-        print("Error: Could not read frame from webcam.")
-        break
+            # Secondary Oral Cascade
+            if cascades['mouth']:
+                mouths = cascades['mouth'].detectMultiScale(roi_gray, 1.1, 8)
+                for (mx, my, mw, mh) in mouths:
+                    if my > h / 2: # Mouth should be in bottom half of face
+                        cv2.rectangle(roi_color, (mx, my), (mx+mw, my+mh), (255, 0, 255), 1)
 
-    img = recognize(img, clf, faceCascade)
-    cv2.imshow("Face Recognition", img)
-    img_id += 1
+        cv2.imshow("AERO-BIO // Quantum Biometric Terminal (OpenCV Edge)", frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    cap.release()
+    cv2.destroyAllWindows()
 
-video_capture.release()
-cv2.destroyAllWindows()
+if __name__ == "__main__":
+    run_recognition()
