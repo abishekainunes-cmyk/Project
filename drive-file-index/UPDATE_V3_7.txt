@@ -1,0 +1,28 @@
+NUNES DRIVE FILE INDEXER V3.7 - UPDATE
+======================================
+
+WHAT THIS VERSION FIXES
+1. Fixes the Lock timeout error during the one-time cleanup.
+2. Normal Files keeps ONLY PDF files.
+3. Normal Files shows cleaned product name from the PDF filename.
+4. Mini Catalog rows are kept, but File Name is cleaned to product/model name only.
+5. Videos rows are kept, but File Name is cleaned to product/model name only.
+6. Drive Link and hidden File ID are preserved in Mini Catalog and Videos.
+7. Future newly scanned Mini Catalog/Video files use the same product/model name filter.
+8. Google Drive files themselves are never renamed, moved, or deleted.
+
+UPDATE STEPS
+1. Open the SAME Apps Script project.
+2. Replace the complete Code.gs with the supplied Code.gs.
+3. Save (Ctrl+S).
+4. From the function dropdown run: APPLY_V3_7_SHEET_RULES_ONCE
+5. If it says cleanup was queued because a scan is still finishing, DO NOT RUN IT AGAIN.
+   The script will wait safely and apply the cleanup automatically after the active scan releases the lock.
+6. After the cleanup starts/completes, Normal Files rebuilds automatically with PDFs only.
+7. Deploy -> Manage deployments -> Edit -> New version -> Deploy.
+8. Keep the same /exec URL and BAT launcher.
+
+IMPORTANT
+- Mini Catalog and Videos are NOT cleared.
+- Only their visible File Name column is cleaned.
+- Normal Files is rebuilt because all old non-PDF entries must be removed safely.

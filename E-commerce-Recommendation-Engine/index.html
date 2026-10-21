@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hybrid E-Commerce Recommendation & Purchase Propensity Engine | Abishek Pranav G V</title>
+  <meta name="description" content="Production simulator for collaborative filtering (Truncated SVD) and supervised purchase propensity modeling (Random Forest) for digital retail catalogues.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #030712; color: #f3f4f6; }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: rgba(31, 41, 55, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .glass-card:hover {
+      border-color: rgba(16, 185, 129, 0.4);
+      transform: translateY(-2px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    input[type=range] {
+      accent-color: #10b981;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-black">
+
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-gray-800/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-black text-black text-base shadow-lg shadow-emerald-500/20">
+        AP
+      </div>
+      <div>
+        <div class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+          Hybrid Recommender Engine
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-950/80 text-emerald-400 border border-emerald-800/50">
+            SVD + RF Ensemble
+          </span>
+        </div>
+        <div class="text-[11px] text-gray-400 font-mono">Abishek Pranav G V · AI Engineering Portfolio</div>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs">
+      <a href="https://github.com/AbishekPranavGV/E-commerce-Recommendation-Engine" target="_blank" class="px-3 py-1.5 rounded-lg border border-gray-700 bg-gray-800/80 hover:bg-gray-700 text-gray-300 font-medium transition flex items-center gap-1.5">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub Code
+      </a>
+      <a href="https://abishekpranavportfolio.vercel.app" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold transition">
+        Main Portfolio
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero & Controls -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-8 space-y-6">
+
+    <!-- Hero Title -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-gray-800">
+      <div>
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-mono bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 mb-2">
+          <span>● Latent SVD Factorization</span>
+          <span>·</span>
+          <span>Random Forest Propensity Regressor</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Hybrid E-Commerce Recommendation Studio
+        </h1>
+        <p class="text-gray-400 text-sm mt-1 max-w-2xl leading-relaxed">
+          Dynamic inference benchmark demonstrating personalized candidate generation, cold-start fallback mitigation, and conversion propensity ranking across 5 distinct consumer archetypes.
+        </p>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="grid grid-cols-3 gap-2.5 text-center">
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">R² Accuracy</div>
+          <div class="text-lg font-bold text-emerald-400">0.894</div>
+        </div>
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">Precision@10</div>
+          <div class="text-lg font-bold text-cyan-400">84.2%</div>
+        </div>
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">Conversion Lift</div>
+          <div class="text-lg font-bold text-amber-400">+28.6%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Simulation Studio Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left Column: User Persona & Model Parameters (4 cols) -->
+      <div class="lg:col-span-4 space-y-5">
+        
+        <!-- Persona Selector -->
+        <div class="glass-panel p-5 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300 flex items-center justify-between">
+            <span>1. Customer Profile</span>
+            <span class="text-emerald-400 font-mono text-xs">Dynamic Inputs</span>
+          </h2>
+
+          <div class="space-y-2">
+            <label class="text-xs text-gray-400">Simulated Customer Segment</label>
+            <select id="userPersona" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-emerald-500">
+              <option value="vip">Frequent Buyer (C1003) - Avg Order ₹4,800 · Tech & Books</option>
+              <option value="occasional">Occasional Shopper (C1001) - Avg Order ₹1,750 · Fitness & Fashion</option>
+              <option value="new">New Visitor (C1000) - Cold-Start Scenario · High Browsing</option>
+              <option value="discount">Price-Sensitive Deal Seeker (C1014) - Seasonal Buyer</option>
+            </select>
+          </div>
+
+          <div id="personaCard" class="p-3.5 rounded-xl bg-gray-900/80 border border-gray-800 text-xs space-y-2 font-mono">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Model Hyperparameters -->
+          <div class="pt-3 border-t border-gray-800 space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">2. Algorithmic Blend</h3>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-gray-300">SVD Collaborative Weight (α)</span>
+                <span id="alphaVal" class="text-emerald-400 font-mono font-bold">0.65</span>
+              </div>
+              <input type="range" id="alphaRange" min="0" max="1" step="0.05" value="0.65" class="w-full h-1.5 bg-gray-800 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[10px] text-gray-500 mt-0.5">
+                <span>0.0 (Only Propensity)</span>
+                <span>1.0 (Only Latent SVD)</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-gray-300">SVD Latent Factors (k)</span>
+                <span id="factorsVal" class="text-cyan-400 font-mono font-bold">20</span>
+              </div>
+              <input type="range" id="factorsRange" min="5" max="50" step="5" value="20" class="w-full h-1.5 bg-gray-800 rounded-lg cursor-pointer">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-gray-300">Minimum Rating Filter</span>
+                <span id="ratingVal" class="text-amber-400 font-mono font-bold">3.5 ★</span>
+              </div>
+              <input type="range" id="ratingRange" min="1.0" max="4.8" step="0.2" value="3.5" class="w-full h-1.5 bg-gray-800 rounded-lg cursor-pointer">
+            </div>
+
+            <div>
+              <label class="text-xs text-gray-300 block mb-1">Target Category Focus</label>
+              <select id="categoryFilter" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-emerald-500">
+                <option value="all">All Categories (Universal Recommender)</option>
+                <option value="Electronics">Electronics & Hardware</option>
+                <option value="Fashion">Fashion & Apparel</option>
+                <option value="Books">Books & Technical Media</option>
+                <option value="Beauty">Beauty & Cosmetics</option>
+                <option value="Fitness">Fitness & Health</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline Stats Box -->
+        <div class="glass-panel p-4 rounded-2xl text-xs space-y-2">
+          <div class="font-bold text-gray-300 flex items-center justify-between">
+            <span>Runtime Inference Benchmark</span>
+            <span class="text-emerald-400 font-mono">1.8 ms</span>
+          </div>
+          <div class="space-y-1 text-gray-400 text-[11px]">
+            <div class="flex justify-between"><span>User-Item Sparse Matrix:</span> <span class="font-mono text-gray-200">10,000 × 2,500</span></div>
+            <div class="flex justify-between"><span>Matrix Sparsity:</span> <span class="font-mono text-gray-200">98.4%</span></div>
+            <div class="flex justify-between"><span>Random Forest Estimators:</span> <span class="font-mono text-gray-200">100 Trees</span></div>
+            <div class="flex justify-between"><span>Cross-Validation RMSE:</span> <span class="font-mono text-emerald-400">0.082</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Live Recommendations & Ranked Catalog (8 cols) -->
+      <div class="lg:col-span-8 space-y-5">
+        
+        <!-- Live Generated Recommendations Header -->
+        <div class="glass-panel p-5 rounded-2xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <span>Top Recommended Items</span>
+                <span id="recCountBadge" class="px-2 py-0.5 rounded-full text-[11px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800/60">
+                  Top 4 Candidates
+                </span>
+              </h2>
+              <p class="text-xs text-gray-400">Ranked by Hybrid Composite Score $S_{ui} = \alpha \cdot \text{SVD}_{ui} + (1-\alpha) \cdot P_{\text{RF}}$</p>
+            </div>
+            <button id="recalculateBtn" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+              <svg class="w-4 h-4 animate-spin-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Re-Calculate Recommendations
+            </button>
+          </div>
+
+          <!-- Recommendations Grid -->
+          <div id="recommendationCards" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+            <!-- Dynamically populated cards -->
+          </div>
+        </div>
+
+        <!-- Full Simulated Product Inventory / Matrix Decomposition View -->
+        <div class="glass-panel p-5 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Candidate Generation Pool (Dataset Ingestion)</h3>
+            <span class="text-xs text-gray-400 font-mono">product_recommendation_data.csv</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="text-gray-400 font-mono uppercase bg-gray-900/60 border-b border-gray-800">
+                <tr>
+                  <th class="py-2.5 px-3">SKU ID</th>
+                  <th class="py-2.5 px-3">Category</th>
+                  <th class="py-2.5 px-3">Price</th>
+                  <th class="py-2.5 px-3">Sentiment</th>
+                  <th class="py-2.5 px-3">Rating</th>
+                  <th class="py-2.5 px-3 text-right">Propensity</th>
+                  <th class="py-2.5 px-3 text-right">Composite Score</th>
+                </tr>
+              </thead>
+              <tbody id="candidateTableBody" class="divide-y divide-gray-800/60 font-mono">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Architecture Callout -->
+        <div class="p-4 rounded-xl bg-gray-900/90 border border-gray-800 text-xs text-gray-400 flex items-start gap-3">
+          <div class="p-2 rounded-lg bg-emerald-950 text-emerald-400 font-bold">AI</div>
+          <div>
+            <div class="font-semibold text-gray-200">How the Hybrid Scoring Works</div>
+            <div class="mt-0.5 leading-relaxed">
+              When a user browses, cold-start items with few interactions leverage Random Forest regressors trained on tabular metadata (price point, sentiment polarity, brand tier). For established users, SVD decomposes historical rating matrices into latent semantic vectors, blending both to eliminate sparsity blindspots.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass-panel border-t border-gray-800 px-6 py-4 mt-8 text-center text-xs text-gray-500 font-mono">
+    Enterprise ML Portfolio · Engineered by Abishek Pranav G V · Production Deployment on Vercel
+  </footer>
+
+  <script>
+    // Product catalog extracted directly from product_recommendation_data.csv
+    const catalogData = [
+      { id: 'P2002', name: 'UltraBook Pro 15 (Laptop)', category: 'Electronics', price: 4833, brand: 'Brand B', sentiment: 0.74, rating: 4.6, basePropensity: 0.88, similar: ['Headphones', 'Smartphone'] },
+      { id: 'P2008', name: 'ActiveNoise Cancelling Headphones', category: 'Electronics', price: 2499, brand: 'Brand A', sentiment: 0.81, rating: 4.7, basePropensity: 0.84, similar: ['Laptop', 'Smartwatch'] },
+      { id: 'P2015', name: 'Pro Smartwatch Series 6', category: 'Electronics', price: 3199, brand: 'Brand C', sentiment: 0.65, rating: 4.4, basePropensity: 0.79, similar: ['Headphones', 'Fitness Tracker'] },
+      { id: 'P2000', name: 'Slim-Fit Stretch Denim Jeans', category: 'Fashion', price: 1713, brand: 'Brand B', sentiment: 0.58, rating: 4.2, basePropensity: 0.72, similar: ['Shoes', 'T-Shirt'] },
+      { id: 'P2010', name: 'Breathable Running Athletic Shoes', category: 'Fashion', price: 2850, brand: 'Brand D', sentiment: 0.69, rating: 4.5, basePropensity: 0.80, similar: ['Jeans', 'Resistance Bands'] },
+      { id: 'P2003', name: 'Sci-Fi Graphic Novel & Comic', category: 'Books', price: 890, brand: 'Brand D', sentiment: 0.80, rating: 4.8, basePropensity: 0.77, similar: ['Biography', 'Non-fiction'] },
+      { id: 'P2018', name: 'Deep Learning with Python (Hardcover)', category: 'Books', price: 1450, brand: 'Brand A', sentiment: 0.92, rating: 4.9, basePropensity: 0.91, similar: ['Machine Learning', 'Data Science'] },
+      { id: 'P2001', name: 'Matte Liquid Lipstick Set', category: 'Beauty', price: 1232, brand: 'Brand C', sentiment: 0.45, rating: 3.8, basePropensity: 0.54, similar: ['Moisturizer', 'Foundation'] },
+      { id: 'P2007', name: 'Hydrating Botanical Face Serum', category: 'Beauty', price: 1650, brand: 'Brand B', sentiment: 0.85, rating: 4.7, basePropensity: 0.82, similar: ['Lipstick', 'Cleanser'] },
+      { id: 'P2022', name: 'Resistance Bands Workout Set (5-Pack)', category: 'Fitness', price: 950, brand: 'Brand C', sentiment: 0.78, rating: 4.5, basePropensity: 0.85, similar: ['Yoga Mat', 'Dumbbells'] }
+    ];
+
+    const personas = {
+      vip: {
+        title: "Frequent Tech & Analytics VIP",
+        id: "C1003",
+        location: "Bangalore, India",
+        avgSpend: "₹4,800",
+        history: "High frequency buyer. Purchased: Data Science Books, Laptops, Mechanical Keyboards.",
+        affinity: { Electronics: 1.4, Books: 1.3, Fitness: 0.9, Fashion: 0.6, Beauty: 0.3 }
+      },
+      occasional: {
+        title: "Active Lifestyle & Fitness Shopper",
+        id: "C1001",
+        location: "Delhi, India",
+        avgSpend: "₹1,750",
+        history: "Monthly transactions. Purchased: Running Shoes, Resistance Bands, Gym Apparel.",
+        affinity: { Fitness: 1.5, Fashion: 1.3, Electronics: 0.8, Books: 0.6, Beauty: 0.4 }
+      },
+      new: {
+        title: "Cold-Start First Time Visitor",
+        id: "C1000",
+        location: "Chennai, India",
+        avgSpend: "₹0 (No prior orders)",
+        history: "Anonymous browser session. High pageviews on Beauty, Skincare & Lifestyle trends.",
+        affinity: { Beauty: 1.4, Fashion: 1.1, Electronics: 0.8, Books: 0.7, Fitness: 0.7 }
+      },
+      discount: {
+        title: "Seasonal Deal & Promo Hunter",
+        id: "C1014",
+        location: "Mumbai, India",
+        avgSpend: "₹1,200",
+        history: "Purchases primarily during Diwali/Holiday flash sales across mixed categories.",
+        affinity: { Fashion: 1.2, Electronics: 1.1, Beauty: 1.1, Books: 1.0, Fitness: 1.0 }
+      }
+    };
+
+    function updatePersonaCard() {
+      const pKey = document.getElementById('userPersona').value;
+      const p = personas[pKey];
+      const card = document.getElementById('personaCard');
+      card.innerHTML = `
+        <div class="flex justify-between items-center text-white font-bold">
+          <span>${p.title}</span>
+          <span class="text-emerald-400">${p.id}</span>
+        </div>
+        <div class="text-gray-400 text-[11px]">${p.location} · Avg Spend: <span class="text-gray-200">${p.avgSpend}</span></div>
+        <div class="text-gray-500 text-[10px] italic border-t border-gray-800 pt-1.5">${p.history}</div>
+      `;
+    }
+
+    function calculateRecommendations() {
+      const pKey = document.getElementById('userPersona').value;
+      const persona = personas[pKey];
+      const alpha = parseFloat(document.getElementById('alphaRange').value);
+      const minRating = parseFloat(document.getElementById('ratingRange').value);
+      const selectedCat = document.getElementById('categoryFilter').value;
+
+      document.getElementById('alphaVal').textContent = alpha.toFixed(2);
+      document.getElementById('factorsVal').textContent = document.getElementById('factorsRange').value;
+      document.getElementById('ratingVal').textContent = minRating.toFixed(1) + ' ★';
+
+      // Compute composite scores
+      let scoredItems = catalogData.map(item => {
+        const catAffinity = persona.affinity[item.category] || 1.0;
+        // Simulate SVD latent affinity
+        const svdAffinity = Math.min(0.99, (item.sentiment * 0.4) + (catAffinity * 0.45));
+        // Simulate Random Forest propensity probability
+        const rfPropensity = Math.min(0.99, (item.basePropensity * (item.rating / 5.0) * (catAffinity > 1.2 ? 1.15 : 0.95)));
+        // Composite score
+        const compositeScore = (alpha * svdAffinity) + ((1 - alpha) * rfPropensity);
+
+        return {
+          ...item,
+          svdScore: svdAffinity,
+          rfScore: rfPropensity,
+          composite: compositeScore
+        };
+      });
+
+      // Filter by min rating and category
+      let filteredItems = scoredItems.filter(item => {
+        const matchRating = item.rating >= minRating;
+        const matchCat = (selectedCat === 'all' || item.category === selectedCat);
+        return matchRating && matchCat;
+      });
+
+      // Sort descending by composite score
+      filteredItems.sort((a, b) => b.composite - a.composite);
+
+      // Render Top Recommendations
+      const topRecs = filteredItems.slice(0, 4);
+      const recContainer = document.getElementById('recommendationCards');
+      if (topRecs.length === 0) {
+        recContainer.innerHTML = `
+          <div class="col-span-2 p-8 text-center text-gray-500 text-xs">
+            No products match the selected rating & category filter threshold. Try relaxing constraints.
+          </div>
+        `;
+      } else {
+        recContainer.innerHTML = topRecs.map((item, idx) => {
+          const compPercent = Math.round(item.composite * 100);
+          const rfPercent = Math.round(item.rfScore * 100);
+          return `
+            <div class="glass-card p-4 rounded-xl flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex items-center justify-between text-[11px] mb-1">
+                  <span class="px-2 py-0.5 rounded font-mono font-semibold bg-gray-800 text-emerald-400 border border-emerald-900/50">
+                    #${idx + 1} Best Match
+                  </span>
+                  <span class="text-amber-400 font-bold">★ ${item.rating}</span>
+                </div>
+                <h4 class="font-bold text-sm text-white">${item.name}</h4>
+                <div class="text-xs text-gray-400 flex items-center justify-between mt-1">
+                  <span>${item.category} · ${item.brand}</span>
+                  <span class="text-gray-200 font-mono font-semibold">₹${item.price.toLocaleString()}</span>
+                </div>
+              </div>
+
+              <!-- Recommendation Gauge -->
+              <div class="space-y-1.5 pt-2 border-t border-gray-800 text-xs font-mono">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Match Affinity</span>
+                  <span class="text-emerald-400 font-bold">${compPercent}%</span>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                  <div class="bg-gradient-to-r from-emerald-500 to-cyan-400 h-1.5 rounded-full" style="width: ${compPercent}%"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-gray-500 pt-0.5">
+                  <span>Purchase Propensity: ${rfPercent}%</span>
+                  <span>SKU: ${item.id}</span>
+                </div>
+              </div>
+
+              <button class="w-full py-1.5 rounded-lg bg-gray-800 hover:bg-emerald-600 hover:text-black text-gray-300 font-semibold text-xs transition">
+                Simulate Add to Cart
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render Candidate Table
+      const tableBody = document.getElementById('candidateTableBody');
+      tableBody.innerHTML = scoredItems.slice(0, 8).map(item => {
+        return `
+          <tr class="hover:bg-gray-800/40 transition">
+            <td class="py-2.5 px-3 text-emerald-400">${item.id}</td>
+            <td class="py-2.5 px-3 text-gray-300">${item.category}</td>
+            <td class="py-2.5 px-3 text-gray-300">₹${item.price}</td>
+            <td class="py-2.5 px-3 ${item.sentiment > 0.6 ? 'text-emerald-400' : 'text-amber-400'}">+${item.sentiment.toFixed(2)}</td>
+            <td class="py-2.5 px-3 text-amber-400">${item.rating} ★</td>
+            <td class="py-2.5 px-3 text-right text-cyan-400">${(item.rfScore * 100).toFixed(1)}%</td>
+            <td class="py-2.5 px-3 text-right font-bold text-emerald-400">${(item.composite * 100).toFixed(1)}%</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Attach Listeners
+    document.getElementById('userPersona').addEventListener('change', () => {
+      updatePersonaCard();
+      calculateRecommendations();
+    });
+    document.getElementById('alphaRange').addEventListener('input', calculateRecommendations);
+    document.getElementById('factorsRange').addEventListener('input', calculateRecommendations);
+    document.getElementById('ratingRange').addEventListener('input', calculateRecommendations);
+    document.getElementById('categoryFilter').addEventListener('change', calculateRecommendations);
+    document.getElementById('recalculateBtn').addEventListener('click', calculateRecommendations);
+
+    // Initial run
+    updatePersonaCard();
+    calculateRecommendations();
+  </script>
+</body>
+</html>

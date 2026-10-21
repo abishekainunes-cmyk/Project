@@ -1,0 +1,119 @@
+PAGE=https://seller.indiamart.com/#succ_url=L3Byb2R1Y3QvbWFuYWdlcHJvZHVjdHMv
+TITLE=Sell on IndiaMART | Free Registration on India's Largest Online Marketplace
+MAIN: IndiaMART -> https://seller.indiamart.com/
+MAIN: Search
+MAIN: Search by Image -> https://lens.indiamart.com/
+MAIN: Buy With IndiaMART -> //buyer.indiamart.com/buyertools/postbl?modid=MY
+MAIN: Help -> https://help.indiamart.com/
+MAIN: Sign In
+MAIN: Sell on IndiaMART -> #soi
+MAIN: How to Register -> #htr
+MAIN: Success Stories -> #sss
+MAIN: What can you sell -> #wcys
+MAIN: IndiaMART Advantage -> #imap
+MAIN: 
+MAIN: Start Selling
+MAIN: Register
+MAIN: 1
+MAIN: 2
+MAIN: 3
+MAIN: 4
+MAIN: I am interested
+MAIN: Facebook -> https://www.facebook.com/IndiaMART
+MAIN: Twitter -> https://twitter.com/IndiaMART
+MAIN: linkedin -> https://www.linkedin.com/company/indiamart-intermesh-limited/
+MAIN: iOS App -> https://itunes.apple.com/us/app/indiamart-buy-sell-products/id668561641?mt=8
+MAIN: Android App -> https://play.google.com/store/apps/details?id=com.indiamart.m
+MAIN: https://m.indiamart.com -> https://m.indiamart.com/
+MAIN: About Us -> https://corporate.indiamart.com/about-us/
+MAIN: Join Sales -> https://corporate.indiamart.com/partner-with-us/
+MAIN: Success Stories -> https://corporate.indiamart.com/category/success-stories/
+MAIN: Press Section -> https://corporate.indiamart.com/category/indiamart-in-news/press-releases/
+MAIN: Advertise with Us -> https://corporate.indiamart.com/advertise-with-indiamart/
+MAIN: Jobs & Careers -> https://corporate.indiamart.com/careers-at-im/
+MAIN: Feedback -> https://help.indiamart.com/user-feedback/
+MAIN: Complaints -> https://help.indiamart.com/complaint-registration/
+MAIN: Customer Care -> https://corporate.indiamart.com/customer-care-services/
+MAIN: Contact Us -> https://corporate.indiamart.com/branch-offices/
+MAIN: Suppliers Tool Kit -> https://seller.indiamart.com
+MAIN: Seller Tools -> //seller.indiamart.com/
+MAIN: Latest BuyLead -> https://seller.indiamart.com/bltxn/?pref=recent
+MAIN: Learning Centre -> https://corporate.indiamart.com/quick-learn/
+MAIN: Ship With IndiaMART -> https://shipwith.indiamart.com/
+MAIN: Buyers Tool Kit -> //seller.indiamart.com/blgen/postbl?modid=MY
+MAIN: Post Your Requirement -> //seller.indiamart.com/blgen/postbl?modid=MY
+MAIN: Products You Buy -> //seller.indiamart.com/companyprofile/myproductbuy/?modid=MY
+MAIN: Search Products & Suppliers -> https://www.indiamart.com/search.html
+MAIN: Accounting Software -> https://busy.in/
+MAIN: Tally on Mobile -> https://www.livekeeping.com/
+MAIN: GST e-Invoice -> https://busy.in/e-invoice-software
+MAIN: Terms of Use -> https://www.indiamart.com/terms-of-use.html
+MAIN: Privacy Policy -> https://www.indiamart.com/privacy-policy.html
+MAIN: Link to Us -> https://www.indiamart.com/link-to-us.html
+FRAME7: Play video
+FRAME7: Hide player controls
+FRAME7: Customer Story | IndiaMART | Sapphire Interior Solutions Pvt. Ltd -> https://www.youtube.com/watch?v=J94IptHO37M
+FRAME7: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME7: 
+FRAME8: Play video
+FRAME8: Hide player controls
+FRAME8: Customer Story | IndiaMART | Moorti Mahal -> https://www.youtube.com/watch?v=bXraGMeBZ2c
+FRAME8: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME8: 
+FRAME8: Share
+FRAME8: Watch on -> https://www.youtube.com/watch?v=bXraGMeBZ2c
+FRAME9: Play video
+FRAME9: Hide player controls
+FRAME9: Customer Story | IndiaMART | A&D Instruments India Pvt. Ltd. -> https://www.youtube.com/watch?v=6gnda0B2OEA
+FRAME9: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME9: 
+FRAME9: Share
+FRAME9: Watch on -> https://www.youtube.com/watch?v=6gnda0B2OEA
+FRAME10: Play video
+FRAME10: Hide player controls
+FRAME10: Customer Story | IndiaMART | New Arts Structures Private Limited -> https://www.youtube.com/watch?v=5cSZQftvHZc
+FRAME10: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME10: 
+FRAME11: Play video
+FRAME11: Hide player controls
+FRAME11: Customer Story | IndiaMART | Sapphire Interior Solutions Pvt. Ltd -> https://www.youtube.com/watch?v=J94IptHO37M
+FRAME11: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME11: 
+FRAME12: Play video
+FRAME12: Hide player controls
+FRAME12: Customer Story | IndiaMART | Moorti Mahal -> https://www.youtube.com/watch?v=bXraGMeBZ2c
+FRAME12: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME12: 
+FRAME12: Share
+FRAME12: Watch on -> https://www.youtube.com/watch?v=bXraGMeBZ2c
+FRAME13: Play video
+FRAME13: Hide player controls
+FRAME13: Customer Story | IndiaMART | A&D Instruments India Pvt. Ltd. -> https://www.youtube.com/watch?v=6gnda0B2OEA
+FRAME13: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME13: 
+FRAME13: Share
+FRAME13: Watch on -> https://www.youtube.com/watch?v=6gnda0B2OEA
+FRAME14: Play video
+FRAME14: Hide player controls
+FRAME14: Customer Story | IndiaMART | New Arts Structures Private Limited -> https://www.youtube.com/watch?v=5cSZQftvHZc
+FRAME14: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME14: 
+FRAME15: Play video
+FRAME15: Hide player controls
+FRAME15: Customer Story | IndiaMART | Sapphire Interior Solutions Pvt. Ltd -> https://www.youtube.com/watch?v=J94IptHO37M
+FRAME15: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME15: 
+FRAME16: Play video
+FRAME16: Hide player controls
+FRAME16: Customer Story | IndiaMART | Moorti Mahal -> https://www.youtube.com/watch?v=bXraGMeBZ2c
+FRAME16: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME16: 
+FRAME16: Share
+FRAME16: Watch on -> https://www.youtube.com/watch?v=bXraGMeBZ2c
+FRAME17: Play video
+FRAME17: Hide player controls
+FRAME17: Customer Story | IndiaMART | A&D Instruments India Pvt. Ltd. -> https://www.youtube.com/watch?v=6gnda0B2OEA
+FRAME17: IndiaMART InterMESH Ltd -> /channel/UCL1y2Y3FouN8y6DJGj12MHg
+FRAME17: 
+FRAME17: Share
+FRAME17: Watch on -> https://www.youtube.com/watch?v=6gnda0B2OEA

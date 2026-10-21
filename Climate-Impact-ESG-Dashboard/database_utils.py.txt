@@ -1,0 +1,37 @@
+import sqlite3
+import pandas as pd
+import os
+
+DB_PATH = "esg_history.db"
+
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS esg_logs (
+            timestamp TEXT, distance REAL, fuel TEXT, aqi INTEGER,
+            temperature REAL, wind_speed REAL, carbon REAL,
+            risk_score REAL, decision TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def save_log(row: dict):
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("INSERT INTO esg_logs VALUES (?,?,?,?,?,?,?,?,?)", (
+        row["timestamp"], row["distance"], row["fuel"], row["aqi"],
+        row["temperature"], row["wind_speed"], row["carbon"],
+        row["risk_score"], row["decision"]
+    ))
+    conn.commit()
+    conn.close()
+
+def load_history():
+    if not os.path.exists(DB_PATH):
+        return pd.DataFrame()
+    conn = sqlite3.connect(DB_PATH)
+    df = pd.read_sql("SELECT * FROM esg_logs", conn)
+    conn.close()
+    return df

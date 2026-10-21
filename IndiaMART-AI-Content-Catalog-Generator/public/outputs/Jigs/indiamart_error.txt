@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "U:\Completed\Abishek\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\automation.py", line 796, in continue_to_indiamart
+    browser.open_add_form(bool(match.get("matched")))
+  File "U:\Completed\Abishek\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\indiamart.py", line 1222, in open_add_form
+    raise RuntimeError(
+RuntimeError: Could not find the IndiaMART Add Product / Add Variant control. Check ERROR.png and the INDIAMART_SELECTOR_DEBUG log.

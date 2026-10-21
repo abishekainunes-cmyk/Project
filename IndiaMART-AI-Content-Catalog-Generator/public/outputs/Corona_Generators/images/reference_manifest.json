@@ -1,0 +1,37 @@
+[
+  {
+    "index": 1,
+    "source_type": "URL",
+    "source_ref": "https://4.imimg.com/data4/UO/NX/MY-3438082/corona-generator-2-kw-1000x1000.jpg",
+    "saved_path": "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\references\\reference_1.jpg",
+    "score": 557745.21
+  },
+  {
+    "index": 2,
+    "source_type": "LOCAL",
+    "source_ref": "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\input_images\\Corona_Generators\\20260902_084715_194469.png",
+    "saved_path": "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\references\\reference_2.jpg",
+    "score": 551504.69
+  },
+  {
+    "index": 3,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/2/NL/KC/SD/3438082/front-back-auto-registration-back-to-back-registration-registered-lamination-500x500.jpg",
+    "saved_path": "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\references\\reference_3.jpg",
+    "score": 75717.33
+  },
+  {
+    "index": 4,
+    "source_type": "URL",
+    "source_ref": "https://4.imimg.com/data4/DN/TH/MY-3438082/gumming-machine-corona-treater-500x500.jpg",
+    "saved_path": "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\references\\reference_4.jpg",
+    "score": 66247.8
+  },
+  {
+    "index": 5,
+    "source_type": "URL",
+    "source_ref": "https://4.imimg.com/data4/NX/YK/MY-3438082/corona-station-2-kw-economy-500x500.jpg",
+    "saved_path": "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\references\\reference_5.jpg",
+    "score": 64897.19
+  }
+]

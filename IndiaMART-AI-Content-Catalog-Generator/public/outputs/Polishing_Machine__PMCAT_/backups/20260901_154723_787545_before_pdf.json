@@ -1,0 +1,114 @@
+{
+  "schema_version": 2,
+  "record_product_name": "Polishing Machine (PMCAT)",
+  "source": {
+    "source_row": "6",
+    "sheet_name": "final sheet",
+    "sheet_row": {
+      "AVAILABLE CATEGORIES": "No Match",
+      "Bitumen Testing Apparatus": "Polishing Machine (PMCAT)",
+      "Column 3": "",
+      "Column 4": "",
+      "Column 5": "",
+      "Product Name": "Polishing Machine (PMCAT)"
+    },
+    "product_name": "Polishing Machine (PMCAT)",
+    "model": "",
+    "selling_price": ""
+  },
+  "research": {
+    "found": false,
+    "title": "",
+    "source_url": "",
+    "discovery_url": "",
+    "description": "",
+    "specifications": [],
+    "company_details": {
+      "company_name": "",
+      "location": "",
+      "source_url": "",
+      "source_domain": ""
+    },
+    "image_urls": []
+  },
+  "approved": {
+    "listing_name": "Polishing Machine (PMCAT)",
+    "product_name": "Polishing Machine (PMCAT)",
+    "model": "",
+    "variant_name": "Polishing Machine (PMCAT)",
+    "description": "The Polishing Machine (PMCAT) is designed for efficient bitumen testing, offering precise control and consistent results. It features a robust construction and advanced polishing mechanisms to ensure accurate evaluation of surface texture and quality. The machine is compatible with standard bitumen samples and is suitable for use in laboratories and quality control environments. With its user-friendly interface and reliable performance, the PMCAT provides a dependable solution for bitumen testing applications.",
+    "key_features": [
+      "Robust construction for durability",
+      "Advanced polishing mechanisms for precision",
+      "Compatibility with standard bitumen samples",
+      "User-friendly interface for ease of use",
+      "Efficient and consistent testing results",
+      "Suitable for laboratories and quality control environments",
+      "Reliable performance for accurate evaluation",
+      "Standardized testing process for consistent results"
+    ],
+    "applications": [],
+    "specifications": [
+      {
+        "name": "AVAILABLE CATEGORIES",
+        "value": "No Match"
+      },
+      {
+        "name": "Bitumen Testing Apparatus",
+        "value": "Polishing Machine (PMCAT)"
+      }
+    ],
+    "company_details": {
+      "company_name": "",
+      "location": "",
+      "source_url": "",
+      "source_domain": ""
+    }
+  },
+  "ai": {
+    "provider": "ollama",
+    "model": "qwen3:1.7b",
+    "attempted": true,
+    "response_ok": true,
+    "mode": "QWEN_WITH_FALLBACK",
+    "label": "Qwen3 + Python Fallback",
+    "response_time_seconds": 44.03,
+    "ai_fields": [
+      "listing_name",
+      "variant_name",
+      "description",
+      "key_features"
+    ],
+    "fallback_fields": [
+      "applications"
+    ],
+    "error": "",
+    "raw_response_chars": 1109
+  },
+  "assets": {
+    "images": [],
+    "image_web_urls": [],
+    "image_source": "PENDING",
+    "pdf_path": "",
+    "pdf_web_url": ""
+  },
+  "indiamart": {
+    "decision": "",
+    "match": {},
+    "seller_status": "",
+    "seller_message": "",
+    "url": ""
+  },
+  "status": "REVIEW_READY_IMAGE_PENDING",
+  "timestamps": {
+    "researched_at": "2026-09-01T15:45:33",
+    "ai_at": "2026-09-01T15:46:17",
+    "prepared_at": "2026-09-01T15:46:17"
+  },
+  "last_failure": {
+    "phase": "BUILD_PDF",
+    "stage": "ERROR",
+    "message": "NO_IMAGE_FOR_PDF: Prepare again or upload one genuine product image.",
+    "at": "2026-09-01T15:47:18"
+  }
+}

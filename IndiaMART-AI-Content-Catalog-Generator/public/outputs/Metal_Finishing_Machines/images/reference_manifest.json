@@ -1,0 +1,37 @@
+[
+  {
+    "index": 1,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/7/FY/QA/CQ/47242214/80-litre-vibratory-finishing-machine-1000x1000.jpg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Metal_Finishing_Machines\\images\\references\\reference_1.jpg",
+    "score": 953109.99
+  },
+  {
+    "index": 2,
+    "source_type": "LOCAL",
+    "source_ref": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\input_images\\Metal_Finishing_Machines\\20260901_171340_115498.webp",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Metal_Finishing_Machines\\images\\references\\reference_2.jpg",
+    "score": 284311.82
+  },
+  {
+    "index": 3,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/7/HT/TK/UG/47242214/deburring-vibratory-finishing-machine-500x500.jpg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Metal_Finishing_Machines\\images\\references\\reference_3.jpg",
+    "score": 191308.48
+  },
+  {
+    "index": 4,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/7/TA/DF/JO/47242214/centrifugal-metal-finishing-machine-500x500.jpg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Metal_Finishing_Machines\\images\\references\\reference_4.jpg",
+    "score": 155708.62
+  },
+  {
+    "index": 5,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/6/LZ/RP/HC/47242214/tiles-tumbling-machine-500x500.jpg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Metal_Finishing_Machines\\images\\references\\reference_5.jpg",
+    "score": -33985.19
+  }
+]

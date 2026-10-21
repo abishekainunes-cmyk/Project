@@ -1,0 +1,37 @@
+[
+  {
+    "slot": 1,
+    "variant": "front_hero",
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2024/2/390896041/PX/FG/US/111585399/industrial-jigs-and-fixture-500x500.jpg",
+    "output_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Jigs\\images\\product_1.jpg"
+  },
+  {
+    "slot": 2,
+    "variant": "three_quarter_left",
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2024/2/390896041/PX/FG/US/111585399/industrial-jigs-and-fixture-500x500.jpg",
+    "output_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Jigs\\images\\product_2.jpg"
+  },
+  {
+    "slot": 3,
+    "variant": "three_quarter_right",
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2024/2/390896041/PX/FG/US/111585399/industrial-jigs-and-fixture-500x500.jpg",
+    "output_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Jigs\\images\\product_3.jpg"
+  },
+  {
+    "slot": 4,
+    "variant": "elevated",
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2024/2/390896041/PX/FG/US/111585399/industrial-jigs-and-fixture-500x500.jpg",
+    "output_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Jigs\\images\\product_4.jpg"
+  },
+  {
+    "slot": 5,
+    "variant": "alternate_composition",
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2024/2/390896041/PX/FG/US/111585399/industrial-jigs-and-fixture-500x500.jpg",
+    "output_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Jigs\\images\\product_5.jpg"
+  }
+]

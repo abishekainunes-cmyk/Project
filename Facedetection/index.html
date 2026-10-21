@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Edge Biometric Facial Recognition Studio | OpenCV & LBPH | Abishek Pranav G V</title>
+  <meta name="description" content="Edge biometric authentication simulator featuring multi-stage Haar Cascades (Face, Eyes, Nose, Mouth) and Local Binary Patterns Histograms (LBPH) sub-30ms recognition.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #030712; color: #f3f4f6; }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: rgba(31, 41, 55, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .hud-scanner {
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0) 0%, rgba(16, 185, 129, 0.25) 50%, rgba(16, 185, 129, 0) 100%);
+      animation: scan 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    input[type=range] {
+      accent-color: #10b981;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-black">
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-gray-800/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-indigo-500 flex items-center justify-center font-black text-black text-base shadow-lg shadow-emerald-500/20">
+        AP
+      </div>
+      <div>
+        <div class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+          Edge Biometric Facial Recognition
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-950/80 text-emerald-400 border border-emerald-800/50">
+            OpenCV Haar + LBPH
+          </span>
+        </div>
+        <div class="text-[11px] text-gray-400 font-mono">Abishek Pranav G V · Computer Vision & Edge AI</div>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs">
+      <a href="https://github.com/AbishekPranavGV/Facedetection" target="_blank" class="px-3 py-1.5 rounded-lg border border-gray-700 bg-gray-800/80 hover:bg-gray-700 text-gray-300 font-medium transition flex items-center gap-1.5">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub Code
+      </a>
+      <a href="https://abishekpranavportfolio.vercel.app" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold transition">
+        Main Portfolio
+      </a>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-8 space-y-6">
+
+    <!-- Hero Title -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-gray-800">
+      <div>
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-mono bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 mb-2">
+          <span>● Sub-30ms Edge Pipeline</span>
+          <span>·</span>
+          <span>4-Cascade Landmark Segmentation</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Edge Biometric Facial Recognition Studio
+        </h1>
+        <p class="text-gray-400 text-sm mt-1 max-w-2xl leading-relaxed">
+          Interactive simulation of multi-scale Haar Cascades (Face, Eyes, Nose, Mouth) combined with Local Binary Pattern Histograms (LBPH) for illumination-invariant identity authentication.
+        </p>
+      </div>
+
+      <!-- Live Edge Performance HUD -->
+      <div class="grid grid-cols-3 gap-2.5 text-center">
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">Inference Latency</div>
+          <div class="text-lg font-bold text-emerald-400 font-mono">23.4 ms</div>
+        </div>
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">FPS Throughput</div>
+          <div class="text-lg font-bold text-cyan-400 font-mono">42 FPS</div>
+        </div>
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">Match Accuracy</div>
+          <div class="text-lg font-bold text-indigo-400 font-mono">98.2%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left Column: Video HUD & Camera Feeds (7 cols) -->
+      <div class="lg:col-span-7 space-y-5">
+        
+        <div class="glass-panel p-5 rounded-2xl space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              <span>Biometric Sensor Video Feed</span>
+            </h2>
+            <div class="flex items-center gap-2">
+              <button id="toggleWebcamBtn" class="px-2.5 py-1 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-mono transition">
+                Toggle Live Webcam
+              </button>
+            </div>
+          </div>
+
+          <!-- Video Viewport & Simulated Camera Stream -->
+          <div class="relative w-full aspect-[4/3] bg-gray-950 rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center">
+            
+            <!-- Video element (for real webcam if granted) -->
+            <video id="webcamVideo" class="hidden absolute inset-0 w-full h-full object-cover" autoplay playsinline muted></video>
+
+            <!-- Canvas Viewport for Drawing Cascades & Face -->
+            <canvas id="visionCanvas" width="640" height="480" class="absolute inset-0 w-full h-full object-contain"></canvas>
+
+            <!-- Laser Scanner Effect -->
+            <div class="hud-scanner absolute inset-0 pointer-events-none opacity-30"></div>
+
+            <!-- HUD Overlay Anchors -->
+            <div class="absolute top-3 left-3 text-[10px] font-mono bg-black/60 backdrop-blur px-2.5 py-1 rounded text-emerald-400 border border-emerald-900/60">
+              FRAME: <span id="frameCounter">1420</span> | REC: LIVE | SCALE: 1.3
+            </div>
+
+            <div class="absolute top-3 right-3 text-[10px] font-mono bg-black/60 backdrop-blur px-2.5 py-1 rounded text-cyan-400 border border-cyan-900/60">
+              CASCADE: 4 ACTIVE
+            </div>
+
+            <!-- Bottom HUD Status -->
+            <div id="hudMatchStatus" class="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-black/80 backdrop-blur border border-emerald-800/80 flex items-center justify-between text-xs font-mono">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <div>
+                  <div class="font-bold text-white text-sm" id="hudSubjectName">SUBJECT VERIFIED: ABISHEK PRANAV</div>
+                  <div class="text-[11px] text-emerald-400">ID: AP-2026-ENG · Enrolled in Biometric DB</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-gray-400 text-[10px]">Chi-Square Dist (χ²)</div>
+                <div class="text-base font-bold text-emerald-400" id="hudDistanceVal">24.2 (Match &lt; 50)</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Test Subjects Carousel -->
+          <div class="space-y-2">
+            <div class="text-xs text-gray-400 font-mono">Select Synthetic Enrollment Sample:</div>
+            <div class="grid grid-cols-4 gap-2">
+              <button onclick="selectSubject('abishek')" class="p-2 rounded-xl border border-emerald-800/80 bg-emerald-950/40 hover:bg-emerald-900/60 text-left transition">
+                <div class="text-xs font-bold text-emerald-400">Abishek P.</div>
+                <div class="text-[10px] text-gray-400">Author (Enrolled)</div>
+              </button>
+              <button onclick="selectSubject('operator')" class="p-2 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800 text-left transition">
+                <div class="text-xs font-bold text-white">Operator 04</div>
+                <div class="text-[10px] text-gray-400">Authorized Staff</div>
+              </button>
+              <button onclick="selectSubject('engineer')" class="p-2 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800 text-left transition">
+                <div class="text-xs font-bold text-white">Engineer 09</div>
+                <div class="text-[10px] text-gray-400">Authorized Staff</div>
+              </button>
+              <button onclick="selectSubject('unknown')" class="p-2 rounded-xl border border-red-900/60 bg-red-950/30 hover:bg-red-900/40 text-left transition">
+                <div class="text-xs font-bold text-red-400">Unknown</div>
+                <div class="text-[10px] text-gray-400">Intruder Flag</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Haar Cascade Toggles & LBPH Feature Matrix (5 cols) -->
+      <div class="lg:col-span-5 space-y-5">
+        
+        <!-- Cascade Multi-Stage Toggles -->
+        <div class="glass-panel p-5 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300 flex items-center justify-between">
+            <span>Haar Cascade Multi-Stage Classifiers</span>
+            <span class="text-xs font-mono text-emerald-400">XML Filters</span>
+          </h2>
+
+          <div class="space-y-3">
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded bg-emerald-500"></span>
+                <div>
+                  <div class="text-xs font-bold text-gray-200">Frontal Face Cascade</div>
+                  <div class="text-[10px] text-gray-400 font-mono">haarcascade_frontalface_default.xml</div>
+                </div>
+              </div>
+              <input type="checkbox" id="chkFace" checked class="rounded bg-gray-800 text-emerald-500 focus:ring-0">
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded bg-cyan-400"></span>
+                <div>
+                  <div class="text-xs font-bold text-gray-200">Ocular Landmark Detectors</div>
+                  <div class="text-[10px] text-gray-400 font-mono">haarcascade_eye.xml</div>
+                </div>
+              </div>
+              <input type="checkbox" id="chkEyes" checked class="rounded bg-gray-800 text-cyan-500 focus:ring-0">
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded bg-amber-400"></span>
+                <div>
+                  <div class="text-xs font-bold text-gray-200">Nasal Landmark Cascade</div>
+                  <div class="text-[10px] text-gray-400 font-mono">haarcascade_mcs_nose.xml</div>
+                </div>
+              </div>
+              <input type="checkbox" id="chkNose" checked class="rounded bg-gray-800 text-amber-500 focus:ring-0">
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded bg-purple-400"></span>
+                <div>
+                  <div class="text-xs font-bold text-gray-200">Oral Region Landmark</div>
+                  <div class="text-[10px] text-gray-400 font-mono">haarcascade_mcs_mouth.xml</div>
+                </div>
+              </div>
+              <input type="checkbox" id="chkMouth" checked class="rounded bg-gray-800 text-purple-500 focus:ring-0">
+            </label>
+          </div>
+
+          <!-- Threshold Slider -->
+          <div class="pt-3 border-t border-gray-800 space-y-2">
+            <div class="flex justify-between text-xs">
+              <span class="text-gray-300">LBPH Tolerance Threshold (Max $\chi^2$)</span>
+              <span id="threshVal" class="text-emerald-400 font-mono font-bold">50.0</span>
+            </div>
+            <input type="range" id="threshRange" min="20" max="85" step="5" value="50" class="w-full h-1.5 bg-gray-800 rounded-lg cursor-pointer">
+            <div class="flex justify-between text-[10px] text-gray-500">
+              <span>Strict Security (20.0)</span>
+              <span>Permissive (85.0)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LBPH Texture Pattern Generator & Histogram View -->
+        <div class="glass-panel p-5 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">LBPH Spatial Texture Histogram</h3>
+            <span class="text-xs text-emerald-400 font-mono">$LBP_{8,1}$ Operator</span>
+          </div>
+
+          <!-- Micro 3x3 LBP Neighborhood Matrix Simulator -->
+          <div class="p-3 bg-gray-950 rounded-xl border border-gray-800 flex items-center justify-around text-center text-xs font-mono">
+            <div class="space-y-1">
+              <div class="text-[10px] text-gray-500">Pixel Intensities</div>
+              <div class="grid grid-cols-3 gap-1 text-[11px] text-gray-300 bg-gray-900 p-1.5 rounded">
+                <span>120</span><span>145</span><span>130</span>
+                <span>110</span><span class="text-emerald-400 font-bold">125</span><span>140</span>
+                <span>90</span><span>105</span><span>160</span>
+              </div>
+            </div>
+            <div class="text-gray-500 text-lg">➔</div>
+            <div class="space-y-1">
+              <div class="text-[10px] text-gray-500">Binary Mask ($s \ge 125$)</div>
+              <div class="grid grid-cols-3 gap-1 text-[11px] font-bold text-cyan-400 bg-gray-900 p-1.5 rounded">
+                <span>0</span><span>1</span><span>1</span>
+                <span>0</span><span class="text-white">-</span><span>1</span>
+                <span>0</span><span>0</span><span>1</span>
+              </div>
+            </div>
+            <div class="text-gray-500 text-lg">➔</div>
+            <div>
+              <div class="text-[10px] text-gray-500">Decimal Code</div>
+              <div class="text-lg font-bold text-emerald-400 mt-1">173</div>
+            </div>
+          </div>
+
+          <!-- Histogram Bar chart visualizer -->
+          <div class="space-y-1 pt-1">
+            <div class="text-[11px] text-gray-400 flex justify-between font-mono">
+              <span>Histogram Bin Frequencies (256 Bins)</span>
+              <span class="text-emerald-400 font-bold">Entropy: 6.84</span>
+            </div>
+            <div class="h-16 flex items-end gap-1 bg-gray-950 p-2 rounded-xl border border-gray-800">
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[65%]"></div>
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[40%]"></div>
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[85%]"></div>
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[30%]"></div>
+              <div class="flex-1 bg-cyan-500/80 rounded-t h-[90%]"></div>
+              <div class="flex-1 bg-cyan-500/80 rounded-t h-[55%]"></div>
+              <div class="flex-1 bg-cyan-500/80 rounded-t h-[75%]"></div>
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[45%]"></div>
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[95%]"></div>
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[60%]"></div>
+              <div class="flex-1 bg-indigo-500/80 rounded-t h-[70%]"></div>
+              <div class="flex-1 bg-indigo-500/80 rounded-t h-[50%]"></div>
+              <div class="flex-1 bg-indigo-500/80 rounded-t h-[80%]"></div>
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[35%]"></div>
+              <div class="flex-1 bg-emerald-500/80 rounded-t h-[65%]"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="glass-panel border-t border-gray-800 px-6 py-4 mt-8 text-center text-xs text-gray-500 font-mono">
+    Edge Biometrics & Computer Vision Portfolio · Engineered by Abishek Pranav G V · Production Deployment on Vercel
+  </footer>
+
+  <script>
+    let activeSubject = 'abishek';
+    let isWebcam = false;
+    let stream = null;
+    let frame = 1420;
+
+    const subjects = {
+      abishek: {
+        name: "ABISHEK PRANAV G V",
+        role: "AUTHOR / CHIEF ARCHITECT",
+        status: "VERIFIED",
+        distance: 24.2,
+        color: "#10b981",
+        faceRect: { x: 220, y: 110, w: 200, h: 250 },
+        leftEye: { x: 260, y: 175, w: 45, h: 30 },
+        rightEye: { x: 335, y: 175, w: 45, h: 30 },
+        nose: { x: 300, y: 220, w: 40, h: 45 },
+        mouth: { x: 285, y: 285, w: 70, h: 40 }
+      },
+      operator: {
+        name: "OPERATOR 04 (MAINTENANCE)",
+        role: "AUTHORIZED PERSONNEL",
+        status: "VERIFIED",
+        distance: 38.5,
+        color: "#10b981",
+        faceRect: { x: 210, y: 115, w: 210, h: 245 },
+        leftEye: { x: 255, y: 180, w: 42, h: 28 },
+        rightEye: { x: 335, y: 180, w: 42, h: 28 },
+        nose: { x: 295, y: 225, w: 42, h: 42 },
+        mouth: { x: 280, y: 290, w: 75, h: 38 }
+      },
+      engineer: {
+        name: "ENGINEER 09 (ROBOTICS)",
+        role: "AUTHORIZED PERSONNEL",
+        status: "VERIFIED",
+        distance: 42.1,
+        color: "#10b981",
+        faceRect: { x: 225, y: 105, w: 190, h: 240 },
+        leftEye: { x: 265, y: 170, w: 40, h: 28 },
+        rightEye: { x: 335, y: 170, w: 40, h: 28 },
+        nose: { x: 300, y: 215, w: 38, h: 42 },
+        mouth: { x: 285, y: 280, w: 68, h: 36 }
+      },
+      unknown: {
+        name: "UNREGISTERED SUBJECT",
+        role: "UNKNOWN INTRUDER",
+        status: "ALERT: UNRECOGNIZED",
+        distance: 78.6,
+        color: "#ef4444",
+        faceRect: { x: 230, y: 120, w: 180, h: 230 },
+        leftEye: { x: 265, y: 180, w: 38, h: 26 },
+        rightEye: { x: 330, y: 180, w: 38, h: 26 },
+        nose: { x: 300, y: 225, w: 35, h: 40 },
+        mouth: { x: 285, y: 285, w: 65, h: 35 }
+      }
+    };
+
+    function selectSubject(s) {
+      activeSubject = s;
+      drawCanvas();
+    }
+
+    function drawCanvas() {
+      const canvas = document.getElementById('visionCanvas');
+      const ctx = canvas.getContext('2d');
+      const sub = subjects[activeSubject];
+      const threshold = parseFloat(document.getElementById('threshRange').value);
+      const isMatch = sub.distance <= threshold;
+
+      // Clear Canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw synthetic face profile background
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw stylized face outline
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.ellipse(320, 230, 95, 120, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Stylized eyes
+      ctx.fillStyle = '#090d16';
+      ctx.beginPath(); ctx.ellipse(280, 190, 15, 8, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(360, 190, 15, 8, 0, 0, Math.PI * 2); ctx.fill();
+
+      // Stylized mouth
+      ctx.beginPath(); ctx.ellipse(320, 300, 25, 8, 0, 0, Math.PI * 2); ctx.fill();
+
+      // Bounding box colors
+      const faceColor = isMatch ? '#10b981' : '#ef4444';
+
+      // 1. Draw Frontal Face Bounding Box if checked
+      if (document.getElementById('chkFace').checked) {
+        ctx.strokeStyle = faceColor;
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(sub.faceRect.x, sub.faceRect.y, sub.faceRect.w, sub.faceRect.h);
+
+        // Header label
+        ctx.fillStyle = faceColor;
+        ctx.fillRect(sub.faceRect.x, sub.faceRect.y - 22, sub.faceRect.w, 22);
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 11px monospace';
+        ctx.fillText(`${isMatch ? 'VERIFIED: ' : 'INTRUDER: '}${sub.name}`, sub.faceRect.x + 6, sub.faceRect.y - 7);
+      }
+
+      // 2. Draw Eye Bounding Boxes if checked
+      if (document.getElementById('chkEyes').checked) {
+        ctx.strokeStyle = '#22d3ee';
+        ctx.lineWidth = 1.8;
+        ctx.strokeRect(sub.leftEye.x, sub.leftEye.y, sub.leftEye.w, sub.leftEye.h);
+        ctx.strokeRect(sub.rightEye.x, sub.rightEye.y, sub.rightEye.w, sub.rightEye.h);
+      }
+
+      // 3. Draw Nose Bounding Box if checked
+      if (document.getElementById('chkNose').checked) {
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 1.8;
+        ctx.strokeRect(sub.nose.x, sub.nose.y, sub.nose.w, sub.nose.h);
+      }
+
+      // 4. Draw Mouth Bounding Box if checked
+      if (document.getElementById('chkMouth').checked) {
+        ctx.strokeStyle = '#c084fc';
+        ctx.lineWidth = 1.8;
+        ctx.strokeRect(sub.mouth.x, sub.mouth.y, sub.mouth.w, sub.mouth.h);
+      }
+
+      // Update HUD elements
+      document.getElementById('hudSubjectName').textContent = isMatch ? `SUBJECT VERIFIED: ${sub.name}` : `ALERT: ${sub.name}`;
+      document.getElementById('hudSubjectName').className = isMatch ? 'font-bold text-white text-sm' : 'font-bold text-red-400 text-sm';
+      document.getElementById('hudDistanceVal').textContent = `${sub.distance.toFixed(1)} (Threshold: ${threshold.toFixed(1)})`;
+      document.getElementById('hudDistanceVal').className = isMatch ? 'text-base font-bold text-emerald-400' : 'text-base font-bold text-red-400';
+      document.getElementById('hudMatchStatus').className = isMatch ? 
+        'absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-black/80 backdrop-blur border border-emerald-800/80 flex items-center justify-between text-xs font-mono' :
+        'absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-red-950/80 backdrop-blur border border-red-800/80 flex items-center justify-between text-xs font-mono';
+
+      // Increment Frame
+      frame += 1;
+      document.getElementById('frameCounter').textContent = frame;
+    }
+
+    // Toggle real webcam
+    document.getElementById('toggleWebcamBtn').addEventListener('click', async () => {
+      const video = document.getElementById('webcamVideo');
+      if (!isWebcam) {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+          video.classList.remove('hidden');
+          isWebcam = true;
+          document.getElementById('toggleWebcamBtn').textContent = 'Stop Webcam Feed';
+          document.getElementById('toggleWebcamBtn').classList.add('border-emerald-500', 'text-emerald-400');
+        } catch (err) {
+          alert('Webcam permission not granted or device camera unavailable. Switching back to synthetic profile feed.');
+        }
+      } else {
+        if (stream) stream.getTracks().forEach(t => t.stop());
+        video.classList.add('hidden');
+        isWebcam = false;
+        document.getElementById('toggleWebcamBtn').textContent = 'Toggle Live Webcam';
+        document.getElementById('toggleWebcamBtn').classList.remove('border-emerald-500', 'text-emerald-400');
+      }
+    });
+
+    document.getElementById('chkFace').addEventListener('change', drawCanvas);
+    document.getElementById('chkEyes').addEventListener('change', drawCanvas);
+    document.getElementById('chkNose').addEventListener('change', drawCanvas);
+    document.getElementById('chkMouth').addEventListener('change', drawCanvas);
+    document.getElementById('threshRange').addEventListener('input', (e) => {
+      document.getElementById('threshVal').textContent = parseFloat(e.target.value).toFixed(1);
+      drawCanvas();
+    });
+
+    // Start render loop
+    setInterval(drawCanvas, 150);
+  </script>
+</body>
+</html>

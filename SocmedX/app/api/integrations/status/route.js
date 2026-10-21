@@ -1,0 +1,263 @@
+import { ensureInstagramConnection } from "../../../lib/meta-instagram";
+import { cookies } from "next/headers";
+import { OAUTH, envReady, ENABLED_SOCIAL_PROVIDER_IDS } from "../../../lib/oauth-config";
+import { cookieName, unseal, readConfig, secretFromJar } from "../../../lib/oauth-store";
+import { getSharedState, setSharedState, sharedStateReady } from "../../../lib/shared-state";
+import { fetchUpstream } from "../../../lib/upstream-backend";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const DEFAULT_UPSTREAM = "https://nunes-social-post-machine-nte3uoaxh-instruasia-6728.vercel.app";
+
+function tokenUsable(token) {
+  if (!token?.access_token) return false;
+  if (!token.expires_at) return true;
+  return Number(token.expires_at) > Date.now() + 60_000;
+}
+
+async function validateFacebookPublishing(token, saved) {
+  if (!tokenUsable(token)) {
+    return {
+      connected: false,
+      health: token?.access_token ? "token-expired" : "not-connected",
+      missingPermissions: [],
+      pageAccessible: false,
+      canCreate: false
+    };
+  }
+
+  const required = ["pages_show_list", "pages_read_engagement", "pages_manage_posts"];
+  let granted = [];
+  let pageAccessible = false;
+  let canCreate = false;
+  let pageName = saved?.name || "Nunes Instrumentation";
+  let pageId = saved?.accountId || "1398853319976762";
+  let tasks = [];
+  let tokenValid = false;
+
+  try {
+    const pr = await fetch(
+      "https://graph.facebook.com/v24.0/me/permissions?access_token=" + encodeURIComponent(token.access_token),
+      { cache: "no-store" }
+    );
+    const pj = await pr.json().catch(() => ({}));
+    if (pr.ok && Array.isArray(pj.data)) {
+      tokenValid = true;
+      granted = pj.data.filter(x => x.status === "granted").map(x => x.permission);
+    }
+  } catch (e) {
+    console.warn("[FACEBOOK HEALTH] permissions check error", String(e?.message || e));
+  }
+
+  try {
+    const ar = await fetch(
+      "https://graph.facebook.com/v24.0/me/accounts?fields=id,name,access_token,tasks,instagram_business_account&access_token=" +
+        encodeURIComponent(token.access_token),
+      { cache: "no-store" }
+    );
+    const aj = await ar.json().catch(() => ({}));
+    const pages = Array.isArray(aj.data) ? aj.data : [];
+    const page =
+      (saved?.accountId ? pages.find(x => String(x.id) === String(saved.accountId)) : null) ||
+      pages.find(x => /nunes/i.test(x.name || "")) ||
+      pages[0] ||
+      null;
+
+    if (page) {
+      pageAccessible = true;
+      pageId = String(page.id);
+      pageName = page.name || pageName;
+      tasks = Array.isArray(page.tasks) ? page.tasks : [];
+      canCreate = !tasks.length || tasks.includes("CREATE_CONTENT") || tasks.includes("MANAGE");
+    }
+  } catch (e) {
+    console.warn("[FACEBOOK HEALTH] page access check error", String(e?.message || e));
+  }
+
+  const missingPermissions = required.filter(x => !granted.includes(x));
+  const connected = tokenValid && pageAccessible && canCreate && missingPermissions.length === 0;
+
+  return {
+    connected,
+    health: connected
+      ? "connected"
+      : !tokenValid
+        ? "token-invalid"
+        : !pageAccessible
+          ? "page-access-required"
+          : missingPermissions.length
+            ? "limited-permissions"
+            : "insufficient-page-role",
+    missingPermissions,
+    grantedPermissions: granted,
+    pageAccessible,
+    canCreate,
+    pageId,
+    pageName,
+    tasks,
+    tokenExpiresAt: token.expires_at || null,
+    metaUserId: token.meta_user_id || null
+  };
+}
+
+export async function GET(request) {
+  let tokenFb = await getSharedState("token:facebook");
+  let tokenLi = await getSharedState("token:linkedin");
+
+  // If local tokens are not present in current container, fetch from verified production backend
+  if (!tokenUsable(tokenFb) && !tokenUsable(tokenLi)) {
+    try {
+      const res = await fetchUpstream("api/integrations/status");
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.ok && data?.integrations) {
+          return Response.json(data);
+        }
+      }
+    } catch (e) {
+      console.warn("[STATUS PROXY FALLBACK FAILED]", String(e?.message || e));
+    }
+  }
+
+  const jar = await cookies();
+  const integrations = {};
+
+  for (const [id, cfg] of Object.entries(OAUTH)) {
+    if (!ENABLED_SOCIAL_PROVIDER_IDS.includes(id)) continue;
+
+    const browserToken = unseal(jar.get(cookieName(cfg.label))?.value, secretFromJar(jar));
+    const browserConfig = readConfig(jar, id);
+
+    let token = await getSharedState(`token:${id}`);
+    let saved = await getSharedState(`config:${id}`);
+
+    if (!token && browserToken?.access_token) {
+      token = browserToken;
+      await setSharedState(`token:${id}`, browserToken);
+    }
+    if (!saved && browserConfig?.clientId && browserConfig?.clientSecret) {
+      saved = browserConfig;
+      await setSharedState(`config:${id}`, browserConfig);
+    }
+
+    const configured = envReady(id) || Boolean(saved?.clientId && saved?.clientSecret);
+
+    if (id === "facebook") {
+      const health = await validateFacebookPublishing(token, saved);
+      integrations[cfg.label] = {
+        signedIn: tokenUsable(token),
+        sharedSaved: Boolean(token?.access_token),
+        publishingReady: health.connected,
+        connected: health.connected,
+        configured,
+        mode: health.connected
+          ? "connected"
+          : token?.access_token
+            ? "signed-in-action-required"
+            : configured
+              ? "ready-to-login"
+              : "app-setup-required",
+        publishingHealth: health.health,
+        health,
+        tokenExpiresAt: token?.expires_at || null,
+        metaUserId: token?.meta_user_id || null,
+        actionRequired: health.connected
+          ? ""
+          : health.health === "token-expired" || health.health === "token-invalid"
+            ? "Reconnect Meta because the stored Facebook token is expired or invalid."
+            : health.health === "limited-permissions"
+              ? "Reconnect Meta and grant the required Page permissions."
+              : health.health === "page-access-required"
+                ? "Reconnect Meta and select/authorize the Nunes Instrumentation Page."
+                : health.health === "insufficient-page-role"
+                  ? "Your Facebook user needs Page content/admin access."
+                  : ""
+      };
+      continue;
+    }
+
+    if (id === "instagram") {
+      const fbToken = await getSharedState("token:facebook");
+      let instagramRepair = null;
+
+      // Auto-discover and repair Instagram from stored Facebook authorization
+      if (tokenUsable(fbToken) && (!token?.access_token || !saved?.verified)) {
+        instagramRepair = await ensureInstagramConnection(saved || {}, fbToken);
+        token = await getSharedState("token:instagram");
+        saved = await getSharedState("config:instagram");
+      }
+
+      const verified = Boolean(saved?.verified && tokenUsable(token) && saved?.accountId);
+      const connected = verified;
+
+      integrations[cfg.label] = {
+        connected,
+        configured,
+        publishingReady: connected,
+        mode: connected ? "connected" : configured ? "action-required" : "app-setup-required",
+        accountId: connected ? String(saved?.accountId || "") : (saved?.accountId || ""),
+        name: connected ? String(saved?.name || token?.username || "nunesinstrumentation") : "",
+        accountType: connected ? String(saved?.accountType || token?.account_type || "BUSINESS") : "",
+        facebookPageId: connected ? String(saved?.secondaryId || token?.facebook_page_id || "") : "",
+        facebookPageName: connected ? String(saved?.facebookPageName || token?.facebook_page_name || "Nunes Instrumentation") : "",
+        tokenExpiresAt: token?.expires_at || fbToken?.expires_at || null,
+        verified: connected,
+        repair: instagramRepair,
+        actionRequired: connected
+          ? ""
+          : instagramRepair?.reason === "instagram-not-linked-to-page"
+            ? "Link the Instagram Professional account (@nunesinstrumentation) to the Facebook Page and reconnect Meta."
+            : instagramRepair?.reason === "page-discovery-failed"
+              ? "Meta could not list Pages for this login. Reconnect and grant pages_show_list."
+              : instagramRepair?.reason === "facebook-page-not-found"
+                ? "The Meta login has no accessible Facebook Page."
+                : instagramRepair?.reason === "meta-token-missing"
+                  ? "Connect Meta first."
+                  : "Reconnect Meta with instagram_basic and instagram_content_publish permissions."
+      };
+      continue;
+    }
+
+    integrations[cfg.label] = {
+      connected: tokenUsable(token),
+      configured,
+      publishingReady: tokenUsable(token),
+      mode: tokenUsable(token) ? "connected" : configured ? "ready-to-login" : "app-setup-required"
+    };
+  }
+
+  const [waToken, waConfig, waNumbersRaw] = await Promise.all([
+    getSharedState("token:whatsapp"),
+    getSharedState("config:whatsapp"),
+    getSharedState("whatsapp:numbers")
+  ]);
+
+  const waNumbers = Array.isArray(waNumbersRaw) ? waNumbersRaw : [];
+  const legacyConnected = tokenUsable(waToken) && Boolean(waConfig?.accountId && waConfig?.secondaryId);
+  const numbersConnected =
+    waNumbers.filter(n => n?.enabled !== false && n?.phoneNumberId && (n?.accessToken || tokenUsable(waToken))).length ||
+    (legacyConnected ? 1 : 0);
+
+  integrations.WhatsApp = {
+    connected: numbersConnected > 0,
+    configured: Boolean(waConfig?.clientId && waConfig?.clientSecret),
+    publishingReady: numbersConnected > 0,
+    mode: numbersConnected > 0 ? "connected" : waConfig?.clientId && waConfig?.clientSecret ? "ready-to-login" : "not-connected",
+    phoneNumberId: waConfig?.accountId || "",
+    wabaId: waConfig?.secondaryId || "",
+    phone: waConfig?.phone || "",
+    numbersConnected,
+    numberCount: numbersConnected,
+    numbersConfigured: waNumbers.length || (waConfig?.accountId ? 1 : 0),
+    tokenExpiresAt: waToken?.expires_at || null
+  };
+
+  return Response.json({
+    ok: true,
+    n8nRequired: false,
+    secureStorageReady: sharedStateReady(),
+    secureStorageMode: sharedStateReady() ? "shared-server-encrypted" : "proxy-fallback",
+    integrations
+  });
+}

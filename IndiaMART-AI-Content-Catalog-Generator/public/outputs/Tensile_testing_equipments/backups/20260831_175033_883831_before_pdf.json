@@ -1,0 +1,111 @@
+{
+  "schema_version": 2,
+  "record_product_name": "Tensile testing equipments",
+  "source": {
+    "source_row": "2",
+    "sheet_name": "final sheet",
+    "sheet_row": {
+      "AVAILABLE CATEGORIES": "No Match",
+      "Bitumen Testing Apparatus": "Tensile testing equipments",
+      "Column 3": "",
+      "Column 4": "",
+      "Column 5": "",
+      "Product Name": "Tensile testing equipments"
+    },
+    "product_name": "Tensile testing equipments",
+    "model": "",
+    "selling_price": ""
+  },
+  "research": {
+    "found": false,
+    "title": "",
+    "source_url": "",
+    "discovery_url": "",
+    "description": "",
+    "specifications": [],
+    "company_details": {
+      "company_name": "",
+      "location": "",
+      "source_url": "",
+      "source_domain": ""
+    },
+    "image_urls": []
+  },
+  "approved": {
+    "listing_name": "Tensile testing equipments",
+    "product_name": "Tensile testing equipments",
+    "model": "",
+    "variant_name": "Tensile testing equipments",
+    "description": "The Tensile testing equipments are designed for precise and reliable performance in material testing. These devices are suitable for a wide range of applications, including bitumen testing, where they provide accurate measurements of tensile strength. The equipment is built with high-quality materials and is engineered for durability and precision. It offers a user-friendly interface and advanced data acquisition systems to ensure accurate results. The device is suitable for use in laboratories, research facilities, and industrial environments.",
+    "key_features": [
+      "High-precision tensile testing",
+      "Suitable for bitumen testing",
+      "Durable construction",
+      "User-friendly interface",
+      "Advanced data acquisition system",
+      "Accurate measurements",
+      "Reliable performance",
+      "Industrial and research applications",
+      "Precision engineering",
+      "High-quality materials",
+      "Versatile use in laboratories"
+    ],
+    "applications": [],
+    "specifications": [
+      {
+        "name": "AVAILABLE CATEGORIES",
+        "value": "No Match"
+      },
+      {
+        "name": "Bitumen Testing Apparatus",
+        "value": "Tensile testing equipments"
+      }
+    ],
+    "company_details": {
+      "company_name": "",
+      "location": "",
+      "source_url": "",
+      "source_domain": ""
+    }
+  },
+  "ai": {
+    "provider": "ollama",
+    "model": "qwen3:1.7b",
+    "attempted": true,
+    "response_ok": true,
+    "mode": "QWEN_WITH_FALLBACK",
+    "label": "Qwen3 + Python Fallback",
+    "response_time_seconds": 42.73,
+    "ai_fields": [
+      "listing_name",
+      "variant_name",
+      "description",
+      "key_features"
+    ],
+    "fallback_fields": [
+      "applications"
+    ],
+    "error": "",
+    "raw_response_chars": 1100
+  },
+  "assets": {
+    "images": [],
+    "image_web_urls": [],
+    "image_source": "PENDING",
+    "pdf_path": "",
+    "pdf_web_url": ""
+  },
+  "indiamart": {
+    "decision": "",
+    "match": {},
+    "seller_status": "",
+    "seller_message": "",
+    "url": ""
+  },
+  "status": "REVIEW_READY_IMAGE_PENDING",
+  "timestamps": {
+    "researched_at": "2026-08-31T17:48:27",
+    "ai_at": "2026-08-31T17:49:09",
+    "prepared_at": "2026-08-31T17:49:09"
+  }
+}

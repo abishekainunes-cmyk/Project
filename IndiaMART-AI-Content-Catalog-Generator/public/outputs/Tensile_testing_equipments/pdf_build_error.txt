@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "T:\Completed\Abishek\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\automation.py", line 484, in save_review_and_build_pdf
+    raise RuntimeError("NO_IMAGE_FOR_PDF: Prepare again or upload one genuine product image.")
+RuntimeError: NO_IMAGE_FOR_PDF: Prepare again or upload one genuine product image.

@@ -1,0 +1,1001 @@
+Transaction_ID,Date,Product_ID,Category,Units_Sold,Unit_Price,Store_Location
+T1464,2024-01-01,G106,Groceries,5,416.77,Coimbatore
+T1122,2024-01-01,G147,Groceries,3,824.86,Bangalore
+T1882,2024-01-01,H120,Home Decor,6,5981.24,Bangalore
+T1893,2024-01-02,A148,Apparel,9,2698.72,Palakkad
+T1658,2024-01-02,E104,Electronics,3,35735.01,Palakkad
+T1907,2024-01-02,G115,Groceries,7,965.44,Bangalore
+T1256,2024-01-02,E103,Electronics,8,41526.53,Chennai
+T1722,2024-01-02,H145,Home Decor,8,945.22,Bangalore
+T1932,2024-01-03,G128,Groceries,4,1261.21,Palakkad
+T1279,2024-01-03,A128,Apparel,7,1802.77,Bangalore
+T1758,2024-01-04,H140,Home Decor,6,515.88,Palakkad
+T1001,2024-01-04,H145,Home Decor,8,7356.18,Palakkad
+T1539,2024-01-05,H132,Home Decor,8,3564.04,Coimbatore
+T1314,2024-01-06,H118,Home Decor,1,7245.8,Bangalore
+T1617,2024-01-06,H111,Home Decor,8,3909.64,Chennai
+T1289,2024-01-07,A103,Apparel,5,2453.46,Chennai
+T1246,2024-01-07,E106,Electronics,4,43054.13,Chennai
+T1881,2024-01-08,E105,Electronics,5,29698.33,Chennai
+T1069,2024-01-08,G121,Groceries,9,496.9,Chennai
+T1685,2024-01-08,H139,Home Decor,9,1781.86,Coimbatore
+T1988,2024-01-10,H102,Home Decor,7,741.77,Chennai
+T1744,2024-01-11,G130,Groceries,5,623.42,Chennai
+T1261,2024-01-11,G104,Groceries,3,1825.77,Palakkad
+T1101,2024-01-12,A111,Apparel,3,1549.2,Coimbatore
+T1918,2024-01-13,E133,Electronics,8,27022.65,Bangalore
+T1560,2024-01-16,G134,Groceries,5,932.46,Chennai
+T1863,2024-01-16,E146,Electronics,9,6743.84,Coimbatore
+T1729,2024-01-17,A106,Apparel,2,1334.94,Coimbatore
+T1460,2024-01-17,E127,Electronics,7,46710.02,Bangalore
+T1664,2024-01-18,A127,Apparel,6,1254.76,Palakkad
+T1229,2024-01-19,G132,Groceries,8,721.99,Coimbatore
+T1275,2024-01-20,E129,Electronics,1,43178.72,Coimbatore
+T1012,2024-01-21,G126,Groceries,1,1830.18,Bangalore
+T1728,2024-01-23,E109,Electronics,4,24220.12,Palakkad
+T1335,2024-01-23,H116,Home Decor,4,721.09,Palakkad
+T1895,2024-01-23,E108,Electronics,2,24326.96,Chennai
+T1876,2024-01-24,A141,Apparel,7,4051.02,Palakkad
+T1011,2024-01-24,H107,Home Decor,1,2088.91,Chennai
+T1308,2024-01-27,G110,Groceries,4,1976.25,Bangalore
+T1703,2024-01-27,G147,Groceries,8,1697.7,Palakkad
+T1096,2024-01-28,E136,Electronics,1,7650.93,Coimbatore
+T1618,2024-01-28,E122,Electronics,4,26895.62,Chennai
+T1615,2024-01-28,E119,Electronics,7,29044.34,Coimbatore
+T1126,2024-01-31,E108,Electronics,1,7948.3,Chennai
+T1842,2024-02-04,E140,Electronics,6,44035.95,Palakkad
+T1878,2024-02-04,G132,Groceries,8,82.95,Palakkad
+T1236,2024-02-05,E101,Electronics,8,39137.58,Coimbatore
+T1471,2024-02-05,G106,Groceries,7,107.58,Chennai
+T1474,2024-02-06,G106,Groceries,6,1763.07,Bangalore
+T1193,2024-02-06,H119,Home Decor,8,1696.84,Chennai
+T1678,2024-02-06,E137,Electronics,7,47474.33,Coimbatore
+T1782,2024-02-07,A121,Apparel,9,2807.05,Palakkad
+T1171,2024-02-08,G101,Groceries,4,1500.78,Bangalore
+T1684,2024-02-08,E114,Electronics,8,19880.6,Chennai
+T1291,2024-02-08,E116,Electronics,4,27859.71,Coimbatore
+T1198,2024-02-08,H128,Home Decor,6,2468.49,Palakkad
+T1503,2024-02-08,E147,Electronics,5,23849.39,Palakkad
+T1415,2024-02-10,E123,Electronics,2,32845.0,Bangalore
+T1828,2024-02-11,E119,Electronics,5,45396.7,Palakkad
+T1528,2024-02-12,E148,Electronics,4,22071.24,Palakkad
+T1639,2024-02-12,E128,Electronics,1,39882.76,Palakkad
+T1848,2024-02-13,H116,Home Decor,9,2853.23,Palakkad
+T1033,2024-02-15,E140,Electronics,8,38409.83,Bangalore
+T1170,2024-02-15,G139,Groceries,7,403.34,Bangalore
+T1910,2024-02-17,G119,Groceries,6,1294.65,Chennai
+T1749,2024-02-19,H118,Home Decor,4,880.3,Palakkad
+T1418,2024-02-19,A107,Apparel,2,4800.55,Chennai
+T1243,2024-02-19,G107,Groceries,2,194.97,Chennai
+T1805,2024-02-20,A149,Apparel,4,4049.35,Coimbatore
+T1119,2024-02-22,H122,Home Decor,1,4585.66,Chennai
+T1835,2024-02-23,E137,Electronics,7,37952.07,Chennai
+T1622,2024-02-25,A112,Apparel,8,2630.72,Palakkad
+T1995,2024-02-25,E108,Electronics,1,15336.41,Palakkad
+T1576,2024-02-25,H134,Home Decor,6,1109.38,Bangalore
+T1840,2024-02-26,E143,Electronics,9,36424.72,Bangalore
+T1353,2024-02-27,H108,Home Decor,8,670.6,Palakkad
+T1214,2024-03-01,A144,Apparel,2,2605.24,Chennai
+T1983,2024-03-02,H122,Home Decor,7,4187.1,Bangalore
+T1977,2024-03-02,H119,Home Decor,2,5597.1,Palakkad
+T1446,2024-03-03,H107,Home Decor,3,4225.63,Coimbatore
+T1964,2024-03-03,H113,Home Decor,4,2075.06,Palakkad
+T1451,2024-03-03,H109,Home Decor,3,7987.86,Chennai
+T1815,2024-03-04,A118,Apparel,2,2074.38,Coimbatore
+T1571,2024-03-04,G145,Groceries,5,54.0,Chennai
+T1564,2024-03-05,G138,Groceries,2,1539.18,Chennai
+T1522,2024-03-05,H102,Home Decor,6,7925.64,Palakkad
+T1934,2024-03-06,H140,Home Decor,7,277.33,Palakkad
+T1427,2024-03-07,A140,Apparel,8,734.78,Palakkad
+T1091,2024-03-07,G126,Groceries,5,1447.9,Chennai
+T1669,2024-03-08,H117,Home Decor,7,3106.99,Palakkad
+T1017,2024-03-10,G104,Groceries,7,802.11,Palakkad
+T1823,2024-03-11,H132,Home Decor,4,347.02,Palakkad
+T1201,2024-03-13,A149,Apparel,4,4404.26,Bangalore
+T1250,2024-03-13,G134,Groceries,3,616.38,Bangalore
+T1333,2024-03-13,A114,Apparel,9,3942.11,Bangalore
+T1179,2024-03-15,E128,Electronics,6,12010.27,Bangalore
+T1697,2024-03-15,H124,Home Decor,1,3813.3,Palakkad
+T1756,2024-03-17,H102,Home Decor,5,7385.47,Bangalore
+T1104,2024-03-17,E134,Electronics,8,7615.56,Coimbatore
+T1859,2024-03-18,A116,Apparel,6,3308.37,Palakkad
+T1378,2024-03-18,G143,Groceries,1,567.71,Bangalore
+T1041,2024-03-19,E109,Electronics,8,26448.01,Palakkad
+T1582,2024-03-20,H133,Home Decor,6,6311.97,Bangalore
+T1186,2024-03-21,A149,Apparel,5,2875.83,Palakkad
+T1395,2024-03-22,H137,Home Decor,9,1345.44,Coimbatore
+T1965,2024-03-22,A118,Apparel,2,2776.52,Palakkad
+T1839,2024-03-23,G119,Groceries,7,1301.09,Palakkad
+T1345,2024-03-23,E135,Electronics,9,15799.63,Palakkad
+T1059,2024-03-23,G149,Groceries,9,554.26,Palakkad
+T1761,2024-03-24,G137,Groceries,5,1431.99,Bangalore
+T1044,2024-03-24,H116,Home Decor,6,468.66,Bangalore
+T1767,2024-03-25,A133,Apparel,4,4125.41,Chennai
+T1018,2024-03-27,A117,Apparel,7,4455.54,Chennai
+T1707,2024-03-27,E138,Electronics,8,49579.8,Chennai
+T1450,2024-03-29,H105,Home Decor,4,7365.84,Bangalore
+T1870,2024-03-29,A136,Apparel,7,1970.69,Bangalore
+T1813,2024-03-29,G106,Groceries,4,1003.78,Coimbatore
+T1025,2024-03-29,E101,Electronics,4,31151.04,Bangalore
+T1288,2024-03-30,H135,Home Decor,8,1414.06,Coimbatore
+T1123,2024-03-30,A119,Apparel,7,2029.76,Palakkad
+T1936,2024-04-01,H109,Home Decor,4,6914.94,Coimbatore
+T1681,2024-04-02,G109,Groceries,6,444.01,Bangalore
+T1641,2024-04-03,G111,Groceries,5,743.34,Coimbatore
+T1412,2024-04-03,E118,Electronics,6,19687.89,Chennai
+T1394,2024-04-03,E117,Electronics,8,22762.07,Coimbatore
+T1602,2024-04-03,H111,Home Decor,6,4770.0,Bangalore
+T1883,2024-04-05,A130,Apparel,4,709.71,Coimbatore
+T1875,2024-04-06,G121,Groceries,5,1593.63,Coimbatore
+T1926,2024-04-06,H127,Home Decor,3,5608.37,Coimbatore
+T1306,2024-04-07,H144,Home Decor,2,2326.31,Chennai
+T1269,2024-04-07,G105,Groceries,5,61.39,Palakkad
+T1545,2024-04-07,G108,Groceries,1,1258.84,Palakkad
+T1053,2024-04-10,E121,Electronics,1,6501.55,Palakkad
+T1453,2024-04-10,E112,Electronics,7,19046.29,Bangalore
+T1140,2024-04-10,H126,Home Decor,9,2762.62,Palakkad
+T1085,2024-04-11,E107,Electronics,9,38025.36,Coimbatore
+T1590,2024-04-11,H133,Home Decor,1,5934.28,Chennai
+T1851,2024-04-11,A115,Apparel,3,2898.67,Chennai
+T1789,2024-04-14,G146,Groceries,6,1438.26,Bangalore
+T1124,2024-04-14,H124,Home Decor,7,2385.78,Chennai
+T1512,2024-04-16,H123,Home Decor,4,3544.07,Palakkad
+T1068,2024-04-17,E116,Electronics,9,33532.57,Chennai
+T1078,2024-04-17,G117,Groceries,5,1560.68,Coimbatore
+T1974,2024-04-17,H103,Home Decor,9,6138.02,Palakkad
+T1990,2024-04-19,A146,Apparel,8,917.63,Coimbatore
+T1257,2024-04-20,A126,Apparel,5,4103.16,Palakkad
+T1785,2024-04-20,G134,Groceries,1,485.78,Chennai
+T1061,2024-04-21,A119,Apparel,5,4406.51,Coimbatore
+T1818,2024-04-21,H141,Home Decor,5,6109.14,Coimbatore
+T1925,2024-04-26,H142,Home Decor,9,5302.49,Chennai
+T1016,2024-04-26,A134,Apparel,6,3201.92,Palakkad
+T1633,2024-04-27,G112,Groceries,9,1723.65,Chennai
+T1562,2024-04-27,A137,Apparel,7,1976.07,Palakkad
+T1527,2024-04-28,A145,Apparel,8,4199.64,Chennai
+T1613,2024-04-28,E130,Electronics,8,46296.53,Chennai
+T1790,2024-04-28,G127,Groceries,9,379.17,Palakkad
+T1963,2024-04-29,A124,Apparel,6,2915.0,Chennai
+T1511,2024-05-01,A120,Apparel,5,926.81,Palakkad
+T1945,2024-05-01,H125,Home Decor,4,1076.87,Chennai
+T1748,2024-05-03,A135,Apparel,5,1500.41,Chennai
+T1810,2024-05-03,E137,Electronics,8,6744.54,Chennai
+T1580,2024-05-05,A147,Apparel,8,4694.45,Coimbatore
+T1133,2024-05-05,H110,Home Decor,7,675.21,Bangalore
+T1339,2024-05-06,H114,Home Decor,3,2310.26,Bangalore
+T1849,2024-05-06,A140,Apparel,2,2572.16,Chennai
+T1287,2024-05-07,E135,Electronics,3,9286.72,Chennai
+T1948,2024-05-07,G137,Groceries,1,926.31,Palakkad
+T1587,2024-05-09,E107,Electronics,6,41875.34,Coimbatore
+T1225,2024-05-09,A128,Apparel,4,863.58,Bangalore
+T1923,2024-05-10,A127,Apparel,4,1041.38,Palakkad
+T1099,2024-05-10,H103,Home Decor,4,374.5,Palakkad
+T1500,2024-05-11,A112,Apparel,6,2410.71,Coimbatore
+T1369,2024-05-11,G121,Groceries,4,1530.62,Palakkad
+T1432,2024-05-13,G111,Groceries,9,1064.93,Coimbatore
+T1688,2024-05-17,E141,Electronics,9,34700.49,Coimbatore
+T1145,2024-05-19,H126,Home Decor,3,6014.99,Chennai
+T1890,2024-05-19,A128,Apparel,3,2358.01,Chennai
+T1004,2024-05-20,G121,Groceries,2,1552.66,Palakkad
+T1997,2024-05-22,A130,Apparel,1,1303.43,Bangalore
+T1554,2024-05-23,E114,Electronics,4,44204.29,Bangalore
+T1635,2024-05-23,E147,Electronics,4,5516.7,Coimbatore
+T1040,2024-05-23,E123,Electronics,7,37266.72,Palakkad
+T1480,2024-05-24,H123,Home Decor,6,7600.59,Bangalore
+T1730,2024-05-24,H147,Home Decor,5,2967.35,Coimbatore
+T1467,2024-05-26,H109,Home Decor,5,7151.42,Chennai
+T1499,2024-05-26,E133,Electronics,3,22353.67,Palakkad
+T1410,2024-05-29,A148,Apparel,1,2131.18,Bangalore
+T1603,2024-05-29,G141,Groceries,5,555.85,Coimbatore
+T1800,2024-05-30,H110,Home Decor,4,2190.86,Coimbatore
+T1871,2024-06-01,E147,Electronics,7,32382.25,Coimbatore
+T1286,2024-06-02,H136,Home Decor,1,3428.84,Coimbatore
+T1212,2024-06-02,E130,Electronics,5,31824.65,Chennai
+T1558,2024-06-03,E118,Electronics,1,31920.99,Palakkad
+T1873,2024-06-03,H126,Home Decor,4,979.08,Coimbatore
+T1905,2024-06-05,E125,Electronics,7,48047.93,Bangalore
+T1614,2024-06-05,E104,Electronics,7,20314.15,Coimbatore
+T1746,2024-06-06,E148,Electronics,7,21035.13,Coimbatore
+T1904,2024-06-06,H134,Home Decor,4,7179.69,Palakkad
+T1661,2024-06-07,G105,Groceries,4,982.37,Palakkad
+T1334,2024-06-08,E118,Electronics,8,33241.51,Palakkad
+T1992,2024-06-09,E138,Electronics,9,43202.79,Chennai
+T1023,2024-06-09,H148,Home Decor,1,1654.16,Coimbatore
+T1476,2024-06-09,A117,Apparel,4,3505.65,Chennai
+T1034,2024-06-09,E146,Electronics,6,37416.48,Chennai
+T1607,2024-06-10,E141,Electronics,1,19598.96,Bangalore
+T1753,2024-06-10,A111,Apparel,5,1109.81,Chennai
+T1205,2024-06-10,E100,Electronics,1,17497.37,Palakkad
+T1469,2024-06-11,E113,Electronics,8,27987.89,Coimbatore
+T1357,2024-06-11,G115,Groceries,7,1951.92,Chennai
+T1961,2024-06-11,E106,Electronics,4,44667.2,Chennai
+T1238,2024-06-11,A129,Apparel,6,2680.94,Bangalore
+T1674,2024-06-11,A102,Apparel,6,4486.12,Chennai
+T1235,2024-06-11,A140,Apparel,2,1214.46,Coimbatore
+T1959,2024-06-12,A123,Apparel,5,2727.39,Bangalore
+T1307,2024-06-13,E101,Electronics,7,7928.66,Coimbatore
+T1433,2024-06-14,A118,Apparel,4,2195.98,Bangalore
+T1548,2024-06-15,G109,Groceries,8,1004.14,Coimbatore
+T1532,2024-06-15,A119,Apparel,4,2527.08,Chennai
+T1628,2024-06-16,E117,Electronics,7,48206.91,Bangalore
+T1786,2024-06-17,E106,Electronics,8,28772.96,Bangalore
+T1189,2024-06-18,E100,Electronics,3,35225.68,Chennai
+T1705,2024-06-18,H104,Home Decor,2,2157.17,Palakkad
+T1276,2024-06-18,A148,Apparel,3,2325.31,Palakkad
+T1344,2024-06-18,A141,Apparel,8,1233.58,Bangalore
+T1210,2024-06-19,A115,Apparel,6,4316.86,Palakkad
+T1501,2024-06-19,A125,Apparel,8,3177.66,Palakkad
+T1136,2024-06-20,E136,Electronics,9,35166.51,Palakkad
+T1249,2024-06-21,G138,Groceries,2,172.75,Coimbatore
+T1409,2024-06-21,A139,Apparel,2,4271.7,Chennai
+T1131,2024-06-21,G113,Groceries,1,410.03,Coimbatore
+T1820,2024-06-22,A104,Apparel,7,1099.37,Bangalore
+T1611,2024-06-22,H107,Home Decor,6,3045.69,Bangalore
+T1962,2024-06-22,H103,Home Decor,1,1070.91,Palakkad
+T1665,2024-06-22,G119,Groceries,1,1028.04,Coimbatore
+T1666,2024-06-22,A143,Apparel,7,2319.13,Bangalore
+T1062,2024-06-23,A148,Apparel,6,4919.69,Coimbatore
+T1824,2024-06-24,G117,Groceries,9,1147.86,Chennai
+T1216,2024-06-25,E144,Electronics,5,7010.96,Coimbatore
+T1304,2024-06-27,H139,Home Decor,3,1918.68,Chennai
+T1090,2024-06-27,A126,Apparel,5,3252.36,Coimbatore
+T1318,2024-06-28,G130,Groceries,3,471.89,Chennai
+T1927,2024-06-28,G126,Groceries,1,1985.99,Coimbatore
+T1771,2024-06-29,E129,Electronics,4,10713.2,Palakkad
+T1768,2024-06-29,A120,Apparel,3,4758.45,Bangalore
+T1655,2024-06-29,A140,Apparel,4,1195.25,Palakkad
+T1783,2024-06-29,E126,Electronics,1,49581.43,Palakkad
+T1147,2024-06-30,G145,Groceries,4,1298.82,Bangalore
+T1332,2024-07-02,E135,Electronics,2,18129.63,Coimbatore
+T1360,2024-07-02,G121,Groceries,5,445.42,Coimbatore
+T1219,2024-07-03,E135,Electronics,4,16664.12,Chennai
+T1174,2024-07-05,H139,Home Decor,1,846.3,Bangalore
+T1739,2024-07-05,H131,Home Decor,3,4808.65,Palakkad
+T1599,2024-07-08,E105,Electronics,2,34265.19,Chennai
+T1710,2024-07-08,E133,Electronics,3,42878.52,Coimbatore
+T1736,2024-07-10,A136,Apparel,6,4375.12,Coimbatore
+T1970,2024-07-10,A143,Apparel,5,3503.67,Coimbatore
+T1397,2024-07-10,H117,Home Decor,2,6177.66,Bangalore
+T1747,2024-07-11,H120,Home Decor,3,7640.88,Chennai
+T1644,2024-07-13,G125,Groceries,2,1383.43,Coimbatore
+T1717,2024-07-13,E139,Electronics,6,32390.8,Palakkad
+T1634,2024-07-13,E108,Electronics,8,10894.43,Chennai
+T1233,2024-07-14,H112,Home Decor,3,5098.91,Palakkad
+T1899,2024-07-15,H127,Home Decor,6,7540.68,Chennai
+T1165,2024-07-15,H135,Home Decor,6,6046.37,Coimbatore
+T1702,2024-07-16,H148,Home Decor,8,7620.09,Bangalore
+T1380,2024-07-16,H112,Home Decor,6,3620.02,Palakkad
+T1629,2024-07-17,E118,Electronics,7,26366.56,Coimbatore
+T1967,2024-07-18,H118,Home Decor,5,6264.79,Bangalore
+T1478,2024-07-18,G142,Groceries,5,849.54,Bangalore
+T1110,2024-07-18,H134,Home Decor,8,3700.67,Coimbatore
+T1323,2024-07-19,E129,Electronics,7,34996.88,Palakkad
+T1865,2024-07-19,G126,Groceries,1,1983.53,Palakkad
+T1709,2024-07-19,G128,Groceries,9,1502.06,Bangalore
+T1912,2024-07-19,G102,Groceries,6,395.81,Bangalore
+T1887,2024-07-20,H124,Home Decor,8,7571.15,Palakkad
+T1046,2024-07-21,E109,Electronics,2,9515.52,Chennai
+T1901,2024-07-21,E142,Electronics,2,37656.5,Palakkad
+T1808,2024-07-21,H103,Home Decor,7,1149.42,Coimbatore
+T1798,2024-07-21,E130,Electronics,8,10896.55,Coimbatore
+T1794,2024-07-22,G136,Groceries,5,1215.59,Bangalore
+T1071,2024-07-22,E101,Electronics,2,10624.62,Palakkad
+T1463,2024-07-23,G100,Groceries,9,756.32,Bangalore
+T1005,2024-07-24,G110,Groceries,8,487.44,Palakkad
+T1663,2024-07-26,G127,Groceries,7,1520.59,Chennai
+T1609,2024-07-26,E103,Electronics,9,36161.69,Chennai
+T1662,2024-07-27,A111,Apparel,9,3580.58,Chennai
+T1429,2024-07-29,A106,Apparel,3,982.1,Coimbatore
+T1208,2024-07-31,A104,Apparel,1,3593.32,Chennai
+T1393,2024-08-01,E140,Electronics,4,27151.4,Chennai
+T1724,2024-08-01,H130,Home Decor,3,7784.62,Chennai
+T1600,2024-08-01,H123,Home Decor,3,6695.77,Bangalore
+T1816,2024-08-03,G110,Groceries,7,888.95,Coimbatore
+T1426,2024-08-05,H145,Home Decor,1,5895.39,Coimbatore
+T1221,2024-08-05,E100,Electronics,7,23043.85,Chennai
+T1751,2024-08-07,H130,Home Decor,6,4069.19,Palakkad
+T1166,2024-08-07,E141,Electronics,3,43907.99,Bangalore
+T1706,2024-08-08,G121,Groceries,7,1336.93,Bangalore
+T1154,2024-08-10,A108,Apparel,8,1161.08,Palakkad
+T1113,2024-08-10,E141,Electronics,5,6491.04,Palakkad
+T1425,2024-08-11,G120,Groceries,8,178.37,Bangalore
+T1447,2024-08-11,G149,Groceries,4,377.76,Bangalore
+T1946,2024-08-12,H115,Home Decor,4,424.07,Coimbatore
+T1365,2024-08-12,A127,Apparel,9,1552.12,Chennai
+T1542,2024-08-13,H106,Home Decor,1,3830.43,Bangalore
+T1227,2024-08-19,G136,Groceries,8,791.54,Bangalore
+T1242,2024-08-19,E141,Electronics,6,28269.29,Palakkad
+T1555,2024-08-21,H135,Home Decor,6,7161.47,Chennai
+T1723,2024-08-21,G130,Groceries,5,937.67,Chennai
+T1444,2024-08-21,G139,Groceries,3,1999.83,Palakkad
+T1993,2024-08-23,A123,Apparel,3,3162.75,Chennai
+T1473,2024-08-24,H110,Home Decor,2,7306.0,Chennai
+T1349,2024-08-24,E107,Electronics,2,33903.9,Bangalore
+T1484,2024-08-24,E107,Electronics,1,17422.75,Chennai
+T1419,2024-08-25,H132,Home Decor,9,3326.78,Coimbatore
+T1680,2024-08-26,E100,Electronics,5,11196.59,Chennai
+T1896,2024-08-26,G126,Groceries,4,1443.47,Coimbatore
+T1382,2024-08-26,A132,Apparel,5,3243.29,Coimbatore
+T1550,2024-08-27,G141,Groceries,8,939.28,Palakkad
+T1087,2024-08-27,E148,Electronics,4,13068.94,Coimbatore
+T1950,2024-08-27,A105,Apparel,6,4440.46,Palakkad
+T1294,2024-08-28,E130,Electronics,5,8023.63,Bangalore
+T1538,2024-08-28,A140,Apparel,8,633.21,Coimbatore
+T1668,2024-08-28,G116,Groceries,1,969.79,Coimbatore
+T1313,2024-08-30,A106,Apparel,3,1869.36,Coimbatore
+T1038,2024-09-01,H139,Home Decor,6,3465.12,Bangalore
+T1014,2024-09-03,G116,Groceries,6,1123.55,Palakkad
+T1855,2024-09-04,G102,Groceries,6,632.39,Chennai
+T1312,2024-09-04,E120,Electronics,3,39105.63,Coimbatore
+T1637,2024-09-06,E139,Electronics,2,19370.11,Bangalore
+T1830,2024-09-06,A111,Apparel,6,3180.86,Bangalore
+T1232,2024-09-06,E115,Electronics,7,43891.26,Palakkad
+T1197,2024-09-07,H146,Home Decor,8,2470.28,Palakkad
+T1264,2024-09-08,E110,Electronics,5,10380.3,Coimbatore
+T1048,2024-09-08,A130,Apparel,1,3122.37,Palakkad
+T1546,2024-09-09,E136,Electronics,4,25456.37,Coimbatore
+T1903,2024-09-12,H107,Home Decor,9,4973.45,Coimbatore
+T1509,2024-09-12,H126,Home Decor,9,6561.13,Bangalore
+T1405,2024-09-12,A147,Apparel,1,2983.78,Palakkad
+T1677,2024-09-13,H137,Home Decor,7,4635.82,Chennai
+T1374,2024-09-13,G135,Groceries,6,493.67,Bangalore
+T1643,2024-09-13,A146,Apparel,5,2246.58,Bangalore
+T1869,2024-09-14,G108,Groceries,5,695.88,Palakkad
+T1700,2024-09-15,E147,Electronics,3,26962.57,Palakkad
+T1801,2024-09-15,H140,Home Decor,9,3303.12,Palakkad
+T1156,2024-09-16,H123,Home Decor,6,5835.85,Bangalore
+T1362,2024-09-17,H146,Home Decor,6,4347.94,Bangalore
+T1180,2024-09-18,G112,Groceries,4,293.05,Bangalore
+T1280,2024-09-19,H142,Home Decor,7,7172.77,Bangalore
+T1624,2024-09-19,G138,Groceries,7,1923.24,Chennai
+T1067,2024-09-21,G142,Groceries,7,103.27,Coimbatore
+T1648,2024-09-22,H149,Home Decor,2,2877.8,Coimbatore
+T1924,2024-09-22,H147,Home Decor,8,6537.64,Chennai
+T1153,2024-09-23,H119,Home Decor,5,7503.62,Bangalore
+T1814,2024-09-24,G117,Groceries,6,80.73,Palakkad
+T1008,2024-09-24,A131,Apparel,5,2327.24,Coimbatore
+T1200,2024-09-24,G134,Groceries,5,1879.1,Palakkad
+T1727,2024-09-27,A121,Apparel,9,502.5,Chennai
+T1513,2024-09-27,A139,Apparel,6,4084.3,Bangalore
+T1642,2024-09-28,E121,Electronics,5,37467.83,Chennai
+T1917,2024-09-28,E119,Electronics,4,34575.29,Bangalore
+T1223,2024-10-01,G108,Groceries,5,578.53,Chennai
+T1024,2024-10-01,H135,Home Decor,1,5237.79,Bangalore
+T1052,2024-10-05,H132,Home Decor,3,6260.12,Chennai
+T1487,2024-10-06,G117,Groceries,1,486.05,Bangalore
+T1671,2024-10-06,G125,Groceries,5,849.39,Bangalore
+T1037,2024-10-06,A112,Apparel,5,3690.34,Palakkad
+T1088,2024-10-06,A132,Apparel,8,824.14,Coimbatore
+T1565,2024-10-07,G138,Groceries,8,677.06,Palakkad
+T1192,2024-10-08,E125,Electronics,1,9406.99,Coimbatore
+T1400,2024-10-11,A134,Apparel,7,2728.96,Chennai
+T1252,2024-10-11,G114,Groceries,1,924.44,Chennai
+T1482,2024-10-13,G115,Groceries,4,683.71,Coimbatore
+T1117,2024-10-13,H104,Home Decor,2,6843.24,Coimbatore
+T1461,2024-10-13,H138,Home Decor,9,2301.95,Palakkad
+T1575,2024-10-14,E137,Electronics,3,7187.72,Coimbatore
+T1778,2024-10-14,A132,Apparel,2,2314.35,Chennai
+T1032,2024-10-14,E113,Electronics,6,42204.4,Chennai
+T1039,2024-10-16,H140,Home Decor,8,6180.42,Chennai
+T1273,2024-10-16,A145,Apparel,6,652.35,Coimbatore
+T1891,2024-10-17,H107,Home Decor,9,3008.86,Coimbatore
+T1224,2024-10-19,H123,Home Decor,2,3929.9,Coimbatore
+T1631,2024-10-20,G126,Groceries,5,384.1,Chennai
+T1439,2024-10-22,E124,Electronics,6,38576.0,Coimbatore
+T1293,2024-10-23,E141,Electronics,2,23335.08,Bangalore
+T1185,2024-10-23,E116,Electronics,7,10198.4,Palakkad
+T1556,2024-10-24,A128,Apparel,3,2881.52,Palakkad
+T1670,2024-10-25,G133,Groceries,6,178.91,Bangalore
+T1699,2024-10-26,A109,Apparel,5,1241.63,Coimbatore
+T1738,2024-10-27,G101,Groceries,1,254.94,Chennai
+T1095,2024-10-28,H103,Home Decor,6,5615.43,Coimbatore
+T1075,2024-10-28,H142,Home Decor,5,3390.22,Palakkad
+T1732,2024-10-30,H141,Home Decor,1,1479.19,Chennai
+T1010,2024-10-30,A123,Apparel,4,1969.61,Coimbatore
+T1772,2024-11-02,A116,Apparel,7,4345.82,Bangalore
+T1317,2024-11-04,E110,Electronics,15,33966.0,Chennai
+T1549,2024-11-04,G147,Groceries,2,985.45,Chennai
+T1884,2024-11-05,H145,Home Decor,1,1089.16,Bangalore
+T1951,2024-11-05,G113,Groceries,9,121.56,Coimbatore
+T1384,2024-11-05,A102,Apparel,13,3446.96,Chennai
+T1376,2024-11-08,A135,Apparel,13,1643.16,Coimbatore
+T1942,2024-11-08,G148,Groceries,3,686.13,Palakkad
+T1874,2024-11-10,H143,Home Decor,7,2843.7,Chennai
+T1290,2024-11-11,G127,Groceries,6,1913.4,Palakkad
+T1691,2024-11-11,E121,Electronics,11,20469.23,Palakkad
+T1493,2024-11-12,H108,Home Decor,8,2878.2,Palakkad
+T1523,2024-11-13,G104,Groceries,1,721.6,Bangalore
+T1692,2024-11-14,H105,Home Decor,1,2395.18,Palakkad
+T1058,2024-11-14,H132,Home Decor,7,3200.46,Bangalore
+T1652,2024-11-15,H106,Home Decor,9,3488.73,Coimbatore
+T1999,2024-11-15,A107,Apparel,11,4006.88,Chennai
+T1604,2024-11-16,A134,Apparel,12,1042.4,Coimbatore
+T1299,2024-11-16,E118,Electronics,12,49429.93,Bangalore
+T1632,2024-11-18,E146,Electronics,10,32513.72,Bangalore
+T1704,2024-11-19,G108,Groceries,7,1919.2,Coimbatore
+T1114,2024-11-19,E141,Electronics,17,29542.89,Chennai
+T1456,2024-11-19,A134,Apparel,16,2841.13,Bangalore
+T1525,2024-11-21,A127,Apparel,15,1306.31,Coimbatore
+T1860,2024-11-22,G139,Groceries,8,1644.0,Bangalore
+T1414,2024-11-24,H131,Home Decor,7,1705.15,Bangalore
+T1557,2024-11-25,E149,Electronics,17,45156.52,Chennai
+T1070,2024-11-25,E123,Electronics,14,13020.33,Bangalore
+T1943,2024-11-25,H145,Home Decor,6,2834.88,Palakkad
+T1620,2024-11-25,H146,Home Decor,5,1113.78,Chennai
+T1074,2024-11-25,H114,Home Decor,7,6597.19,Coimbatore
+T1645,2024-11-26,E134,Electronics,18,33127.9,Bangalore
+T1076,2024-11-27,H134,Home Decor,6,7007.08,Coimbatore
+T1928,2024-11-27,H121,Home Decor,7,4340.03,Bangalore
+T1007,2024-11-27,A147,Apparel,11,4257.18,Palakkad
+T1388,2024-11-28,A104,Apparel,12,3188.32,Coimbatore
+T1142,2024-11-29,H144,Home Decor,1,5677.62,Bangalore
+T1035,2024-11-29,E148,Electronics,17,40333.51,Palakkad
+T1897,2024-12-01,G139,Groceries,4,99.9,Coimbatore
+T1047,2024-12-02,A103,Apparel,14,2429.4,Bangalore
+T1958,2024-12-03,G125,Groceries,6,805.77,Bangalore
+T1027,2024-12-03,G119,Groceries,3,556.16,Bangalore
+T1868,2024-12-04,G112,Groceries,1,683.3,Bangalore
+T1561,2024-12-05,H113,Home Decor,6,7540.9,Bangalore
+T1292,2024-12-06,E132,Electronics,11,49481.14,Bangalore
+T1259,2024-12-10,A137,Apparel,11,718.44,Palakkad
+T1566,2024-12-10,E119,Electronics,12,24315.18,Chennai
+T1021,2024-12-10,E132,Electronics,12,35245.51,Bangalore
+T1646,2024-12-11,G108,Groceries,2,331.69,Coimbatore
+T1541,2024-12-13,G100,Groceries,8,1164.41,Palakkad
+T1051,2024-12-13,G106,Groceries,6,1520.09,Chennai
+T1933,2024-12-15,A136,Apparel,17,3787.03,Chennai
+T1606,2024-12-15,A112,Apparel,14,4130.6,Chennai
+T1885,2024-12-15,A142,Apparel,14,823.55,Chennai
+T1440,2024-12-16,G117,Groceries,5,251.12,Chennai
+T1838,2024-12-17,E130,Electronics,14,42361.59,Chennai
+T1137,2024-12-18,A144,Apparel,18,2092.69,Coimbatore
+T1979,2024-12-18,G146,Groceries,6,358.57,Chennai
+T1588,2024-12-20,G107,Groceries,2,903.0,Palakkad
+T1443,2024-12-20,G146,Groceries,2,1521.77,Chennai
+T1986,2024-12-21,H114,Home Decor,4,3668.8,Chennai
+T1064,2024-12-22,A123,Apparel,9,4259.06,Chennai
+T1352,2024-12-22,E127,Electronics,17,10195.81,Palakkad
+T1649,2024-12-24,H115,Home Decor,3,6194.99,Coimbatore
+T1399,2024-12-25,E144,Electronics,20,8488.79,Palakkad
+T1531,2024-12-26,G105,Groceries,9,1547.95,Coimbatore
+T1919,2024-12-27,G122,Groceries,1,1591.64,Coimbatore
+T1902,2024-12-27,E139,Electronics,14,27885.72,Palakkad
+T1020,2024-12-27,H133,Home Decor,1,4708.99,Bangalore
+T1237,2025-01-02,G129,Groceries,5,1211.67,Bangalore
+T1116,2025-01-02,E103,Electronics,9,32925.58,Coimbatore
+T1519,2025-01-03,G119,Groceries,5,559.14,Palakkad
+T1358,2025-01-04,H124,Home Decor,7,2004.69,Chennai
+T1102,2025-01-04,E113,Electronics,5,17435.28,Chennai
+T1226,2025-01-07,A125,Apparel,9,3540.03,Chennai
+T1492,2025-01-09,A138,Apparel,6,2726.48,Bangalore
+T1944,2025-01-09,E145,Electronics,1,31103.35,Chennai
+T1861,2025-01-11,E103,Electronics,8,49160.06,Palakkad
+T1657,2025-01-12,H132,Home Decor,6,2708.01,Coimbatore
+T1608,2025-01-12,E119,Electronics,4,29905.43,Palakkad
+T1434,2025-01-12,G100,Groceries,4,1290.02,Chennai
+T1097,2025-01-13,E129,Electronics,6,38006.68,Palakkad
+T1320,2025-01-14,E129,Electronics,9,7765.56,Coimbatore
+T1002,2025-01-15,E129,Electronics,7,42081.83,Coimbatore
+T1526,2025-01-15,A149,Apparel,9,1033.07,Coimbatore
+T1585,2025-01-17,E105,Electronics,2,26025.41,Coimbatore
+T1822,2025-01-17,A107,Apparel,5,2418.96,Coimbatore
+T1781,2025-01-18,A108,Apparel,2,4872.69,Palakkad
+T1160,2025-01-18,H103,Home Decor,9,5264.17,Chennai
+T1404,2025-01-20,E118,Electronics,2,12424.49,Bangalore
+T1361,2025-01-20,A147,Apparel,4,3991.17,Chennai
+T1379,2025-01-20,A136,Apparel,7,4825.34,Palakkad
+T1141,2025-01-21,A131,Apparel,2,1425.38,Coimbatore
+T1065,2025-01-23,G103,Groceries,8,370.98,Palakkad
+T1795,2025-01-23,H118,Home Decor,7,5600.52,Palakkad
+T1324,2025-01-26,H135,Home Decor,4,7316.84,Coimbatore
+T1351,2025-01-26,E134,Electronics,5,14256.62,Palakkad
+T1438,2025-01-27,E140,Electronics,4,41258.88,Coimbatore
+T1796,2025-01-27,E104,Electronics,9,34728.34,Coimbatore
+T1834,2025-01-27,G123,Groceries,2,470.85,Palakkad
+T1491,2025-01-28,E130,Electronics,5,24951.4,Bangalore
+T1846,2025-01-28,H132,Home Decor,5,7797.25,Bangalore
+T1880,2025-01-29,A117,Apparel,9,2480.97,Palakkad
+T1258,2025-01-29,E112,Electronics,3,12853.52,Bangalore
+T1268,2025-01-30,H124,Home Decor,2,1823.03,Chennai
+T1244,2025-01-30,G138,Groceries,1,1418.42,Palakkad
+T1150,2025-01-30,H146,Home Decor,5,745.13,Bangalore
+T1215,2025-01-31,H104,Home Decor,9,7744.78,Bangalore
+T1879,2025-02-02,G100,Groceries,2,1120.86,Coimbatore
+T1939,2025-02-02,E126,Electronics,5,40606.1,Chennai
+T1164,2025-02-03,E144,Electronics,6,33977.58,Coimbatore
+T1457,2025-02-04,A101,Apparel,2,3235.88,Coimbatore
+T1303,2025-02-05,H141,Home Decor,1,7706.34,Bangalore
+T1862,2025-02-06,G123,Groceries,6,1361.15,Palakkad
+T1626,2025-02-06,G124,Groceries,1,1656.51,Coimbatore
+T1321,2025-02-11,H147,Home Decor,6,5178.73,Coimbatore
+T1877,2025-02-11,A130,Apparel,4,1096.99,Palakkad
+T1754,2025-02-12,A112,Apparel,6,3760.17,Chennai
+T1019,2025-02-13,E130,Electronics,2,14061.24,Palakkad
+T1540,2025-02-14,A128,Apparel,3,3648.2,Coimbatore
+T1586,2025-02-15,E148,Electronics,2,40492.81,Bangalore
+T1220,2025-02-15,A129,Apparel,7,1610.25,Palakkad
+T1177,2025-02-16,E137,Electronics,4,8752.9,Coimbatore
+T1947,2025-02-17,H124,Home Decor,9,3237.87,Bangalore
+T1006,2025-02-18,E121,Electronics,2,17445.96,Chennai
+T1908,2025-02-18,A138,Apparel,2,3311.04,Bangalore
+T1825,2025-02-19,A105,Apparel,2,503.77,Bangalore
+T1559,2025-02-19,A134,Apparel,3,3221.23,Bangalore
+T1305,2025-02-20,G105,Groceries,7,1018.08,Coimbatore
+T1348,2025-02-21,H115,Home Decor,8,3757.25,Chennai
+T1745,2025-02-21,G129,Groceries,5,1224.29,Coimbatore
+T1445,2025-02-21,E134,Electronics,7,27407.96,Coimbatore
+T1430,2025-02-23,E118,Electronics,8,28173.37,Chennai
+T1601,2025-02-23,G134,Groceries,5,1501.14,Bangalore
+T1372,2025-02-24,E114,Electronics,4,41619.77,Coimbatore
+T1202,2025-02-25,E137,Electronics,6,40538.33,Bangalore
+T1390,2025-02-26,H121,Home Decor,8,3991.41,Bangalore
+T1421,2025-02-26,A113,Apparel,5,1543.93,Bangalore
+T1013,2025-02-27,E102,Electronics,2,36452.35,Bangalore
+T1574,2025-02-28,A148,Apparel,5,3406.97,Coimbatore
+T1763,2025-02-28,G132,Groceries,6,1851.93,Chennai
+T1407,2025-02-28,G142,Groceries,1,54.26,Palakkad
+T1347,2025-02-28,E121,Electronics,3,15997.26,Chennai
+T1310,2025-03-01,E127,Electronics,1,37788.41,Chennai
+T1424,2025-03-01,E144,Electronics,1,25856.27,Coimbatore
+T1128,2025-03-01,A109,Apparel,8,3580.4,Bangalore
+T1106,2025-03-01,A116,Apparel,8,4627.17,Chennai
+T1240,2025-03-02,A124,Apparel,2,4965.36,Coimbatore
+T1328,2025-03-02,G138,Groceries,4,512.82,Palakkad
+T1836,2025-03-02,G131,Groceries,5,97.85,Palakkad
+T1900,2025-03-03,E137,Electronics,4,34594.13,Coimbatore
+T1504,2025-03-03,A116,Apparel,7,3241.91,Palakkad
+T1779,2025-03-04,A138,Apparel,8,804.35,Coimbatore
+T1831,2025-03-05,E107,Electronics,7,12256.69,Chennai
+T1551,2025-03-05,H103,Home Decor,6,5799.99,Coimbatore
+T1086,2025-03-08,E120,Electronics,6,48192.72,Bangalore
+T1468,2025-03-08,H149,Home Decor,5,4329.13,Bangalore
+T1093,2025-03-09,G144,Groceries,3,1596.45,Chennai
+T1109,2025-03-09,E111,Electronics,1,38006.1,Chennai
+T1984,2025-03-09,H104,Home Decor,1,3997.15,Palakkad
+T1132,2025-03-10,E128,Electronics,3,41933.51,Coimbatore
+T1530,2025-03-11,A106,Apparel,1,2429.92,Bangalore
+T1592,2025-03-12,A145,Apparel,9,3472.37,Coimbatore
+T1488,2025-03-12,H105,Home Decor,6,1690.49,Chennai
+T1752,2025-03-12,G120,Groceries,7,331.88,Palakkad
+T1579,2025-03-13,H113,Home Decor,1,773.53,Coimbatore
+T1826,2025-03-16,H111,Home Decor,6,3945.84,Chennai
+T1858,2025-03-16,A100,Apparel,3,4825.91,Palakkad
+T1204,2025-03-17,H105,Home Decor,8,7253.34,Palakkad
+T1436,2025-03-17,A136,Apparel,6,3152.27,Bangalore
+T1740,2025-03-18,A123,Apparel,9,3604.64,Palakkad
+T1733,2025-03-19,E133,Electronics,4,21325.39,Coimbatore
+T1976,2025-03-20,G145,Groceries,4,1194.62,Bangalore
+T1734,2025-03-21,A132,Apparel,7,1723.59,Bangalore
+T1161,2025-03-21,A138,Apparel,1,4783.71,Bangalore
+T1483,2025-03-23,A113,Apparel,3,1189.57,Coimbatore
+T1827,2025-03-26,E144,Electronics,3,26079.7,Bangalore
+T1031,2025-03-26,H141,Home Decor,7,3048.73,Bangalore
+T1957,2025-03-27,A146,Apparel,9,4127.67,Chennai
+T1852,2025-03-27,G132,Groceries,9,1104.54,Coimbatore
+T1366,2025-03-29,A107,Apparel,6,1305.44,Coimbatore
+T1100,2025-03-30,H146,Home Decor,6,4603.35,Coimbatore
+T1015,2025-04-01,E101,Electronics,7,37915.64,Coimbatore
+T1514,2025-04-02,G101,Groceries,2,285.69,Palakkad
+T1455,2025-04-03,E148,Electronics,9,19498.46,Coimbatore
+T1194,2025-04-03,H143,Home Decor,7,314.73,Bangalore
+T1773,2025-04-05,G120,Groceries,3,1640.16,Palakkad
+T1534,2025-04-05,E107,Electronics,2,5149.74,Coimbatore
+T1417,2025-04-05,H140,Home Decor,1,3421.98,Palakkad
+T1309,2025-04-05,E109,Electronics,4,23617.19,Chennai
+T1063,2025-04-07,H115,Home Decor,3,4023.36,Chennai
+T1516,2025-04-07,H146,Home Decor,1,3438.91,Coimbatore
+T1573,2025-04-08,E107,Electronics,3,28948.94,Palakkad
+T1595,2025-04-08,A103,Apparel,9,4281.52,Chennai
+T1597,2025-04-08,H110,Home Decor,8,932.23,Coimbatore
+T1829,2025-04-09,H117,Home Decor,1,2069.54,Palakkad
+T1847,2025-04-09,E102,Electronics,5,34597.01,Bangalore
+T1026,2025-04-11,A133,Apparel,8,2926.14,Palakkad
+T1055,2025-04-12,H147,Home Decor,7,3657.51,Palakkad
+T1340,2025-04-13,H120,Home Decor,8,2678.93,Palakkad
+T1788,2025-04-13,G108,Groceries,2,1198.73,Coimbatore
+T1387,2025-04-14,G115,Groceries,1,741.2,Coimbatore
+T1750,2025-04-14,H101,Home Decor,8,2925.54,Coimbatore
+T1569,2025-04-15,H128,Home Decor,9,3009.45,Bangalore
+T1537,2025-04-19,A127,Apparel,2,996.42,Coimbatore
+T1144,2025-04-19,E139,Electronics,9,16588.0,Palakkad
+T1485,2025-04-19,E108,Electronics,9,35789.86,Bangalore
+T1627,2025-04-19,G139,Groceries,9,1460.6,Coimbatore
+T1152,2025-04-20,G119,Groceries,1,1777.07,Palakkad
+T1593,2025-04-25,A131,Apparel,1,842.91,Coimbatore
+T1719,2025-04-25,E106,Electronics,7,30261.02,Coimbatore
+T1711,2025-04-28,A114,Apparel,4,2118.46,Coimbatore
+T1247,2025-04-30,H105,Home Decor,2,392.8,Palakkad
+T1423,2025-05-01,H138,Home Decor,8,4238.51,Bangalore
+T1435,2025-05-01,H145,Home Decor,3,5172.97,Coimbatore
+T1807,2025-05-03,A108,Apparel,2,2339.93,Bangalore
+T1589,2025-05-06,A113,Apparel,4,3564.51,Chennai
+T1437,2025-05-06,G117,Groceries,4,1681.16,Chennai
+T1368,2025-05-06,E113,Electronics,5,13429.57,Bangalore
+T1178,2025-05-07,H146,Home Decor,5,5030.02,Palakkad
+T1231,2025-05-08,G132,Groceries,1,501.1,Bangalore
+T1507,2025-05-10,H121,Home Decor,7,6151.32,Coimbatore
+T1659,2025-05-10,H100,Home Decor,4,3237.34,Coimbatore
+T1867,2025-05-10,E130,Electronics,2,28306.01,Bangalore
+T1775,2025-05-10,G117,Groceries,2,1534.2,Chennai
+T1726,2025-05-13,A101,Apparel,7,1636.94,Bangalore
+T1134,2025-05-14,E134,Electronics,3,26820.23,Bangalore
+T1489,2025-05-14,E138,Electronics,4,6396.63,Coimbatore
+T1241,2025-05-14,A146,Apparel,1,3357.45,Palakkad
+T1508,2025-05-14,E124,Electronics,2,9930.44,Bangalore
+T1998,2025-05-14,H122,Home Decor,2,978.85,Coimbatore
+T1955,2025-05-15,G124,Groceries,6,1076.42,Bangalore
+T1253,2025-05-15,E126,Electronics,8,36362.49,Palakkad
+T1650,2025-05-15,A143,Apparel,8,3759.79,Palakkad
+T1470,2025-05-15,A145,Apparel,4,3277.48,Bangalore
+T1941,2025-05-17,A124,Apparel,3,4650.75,Palakkad
+T1245,2025-05-18,G140,Groceries,1,526.0,Bangalore
+T1978,2025-05-19,A148,Apparel,6,878.44,Bangalore
+T1693,2025-05-19,E103,Electronics,5,8542.65,Chennai
+T1155,2025-05-20,G124,Groceries,4,1421.18,Coimbatore
+T1187,2025-05-20,H133,Home Decor,9,4950.66,Bangalore
+T1913,2025-05-20,H113,Home Decor,6,1899.29,Coimbatore
+T1982,2025-05-21,H101,Home Decor,8,6598.12,Chennai
+T1143,2025-05-21,H132,Home Decor,6,5843.53,Palakkad
+T1181,2025-05-22,G104,Groceries,5,469.76,Palakkad
+T1803,2025-05-24,G128,Groceries,2,1855.34,Palakkad
+T1481,2025-05-24,A129,Apparel,3,2203.25,Bangalore
+T1370,2025-05-24,A102,Apparel,9,3676.05,Chennai
+T1477,2025-05-25,A136,Apparel,7,4431.89,Bangalore
+T1793,2025-05-26,G104,Groceries,3,436.99,Bangalore
+T1552,2025-05-29,A119,Apparel,1,1655.4,Chennai
+T1050,2025-05-30,E106,Electronics,7,11827.95,Coimbatore
+T1191,2025-05-30,A110,Apparel,1,4565.42,Coimbatore
+T1759,2025-05-30,A119,Apparel,5,1600.37,Bangalore
+T1935,2025-05-31,A146,Apparel,2,4265.01,Bangalore
+T1442,2025-06-01,G105,Groceries,1,675.97,Palakkad
+T1960,2025-06-01,G144,Groceries,5,223.67,Bangalore
+T1148,2025-06-04,H100,Home Decor,4,1366.42,Chennai
+T1311,2025-06-04,G120,Groceries,4,1827.18,Palakkad
+T1239,2025-06-05,A140,Apparel,5,4121.39,Palakkad
+T1737,2025-06-06,G109,Groceries,7,1660.62,Chennai
+T1322,2025-06-06,G107,Groceries,5,1571.78,Bangalore
+T1112,2025-06-07,A149,Apparel,7,3162.66,Coimbatore
+T1764,2025-06-09,E105,Electronics,2,23368.34,Chennai
+T1296,2025-06-10,H145,Home Decor,8,4786.69,Bangalore
+T1022,2025-06-10,G149,Groceries,6,359.46,Coimbatore
+T1151,2025-06-11,A105,Apparel,1,3817.64,Palakkad
+T1355,2025-06-11,H107,Home Decor,9,3287.4,Chennai
+T1036,2025-06-11,A122,Apparel,5,826.01,Chennai
+T1616,2025-06-12,A101,Apparel,1,4609.35,Palakkad
+T1277,2025-06-14,H131,Home Decor,1,7015.64,Chennai
+T1125,2025-06-14,E143,Electronics,7,33893.25,Palakkad
+T1791,2025-06-15,A100,Apparel,8,4525.71,Bangalore
+T1529,2025-06-16,A101,Apparel,2,3379.4,Palakkad
+T1696,2025-06-17,E144,Electronics,5,46203.72,Bangalore
+T1718,2025-06-17,A134,Apparel,7,1496.53,Bangalore
+T1931,2025-06-18,H132,Home Decor,1,2496.69,Palakkad
+T1572,2025-06-18,G115,Groceries,7,1494.39,Bangalore
+T1930,2025-06-22,E105,Electronics,2,40909.77,Chennai
+T1396,2025-06-22,E113,Electronics,6,39404.56,Coimbatore
+T1996,2025-06-23,E102,Electronics,9,26376.99,Chennai
+T1298,2025-06-23,A144,Apparel,4,4173.55,Coimbatore
+T1694,2025-06-24,G142,Groceries,8,1351.36,Bangalore
+T1042,2025-06-26,A149,Apparel,1,3487.12,Palakkad
+T1381,2025-06-27,E118,Electronics,7,12321.58,Palakkad
+T1199,2025-06-29,H103,Home Decor,7,5962.19,Bangalore
+T1578,2025-06-29,H119,Home Decor,8,5282.34,Bangalore
+T1660,2025-06-30,A142,Apparel,8,2020.89,Coimbatore
+T1459,2025-07-01,E116,Electronics,1,8662.37,Bangalore
+T1449,2025-07-05,G115,Groceries,5,211.0,Bangalore
+T1922,2025-07-06,H104,Home Decor,1,3810.51,Palakkad
+T1377,2025-07-07,H106,Home Decor,8,7015.1,Palakkad
+T1167,2025-07-08,G133,Groceries,8,436.5,Palakkad
+T1364,2025-07-08,H149,Home Decor,1,978.06,Coimbatore
+T1776,2025-07-12,H105,Home Decor,5,6184.53,Chennai
+T1175,2025-07-12,A111,Apparel,1,4766.53,Palakkad
+T1043,2025-07-13,A132,Apparel,4,2150.97,Bangalore
+T1127,2025-07-13,A112,Apparel,9,3653.92,Bangalore
+T1129,2025-07-14,E127,Electronics,5,48307.31,Bangalore
+T1679,2025-07-15,H111,Home Decor,5,7862.47,Palakkad
+T1952,2025-07-16,G122,Groceries,1,1433.18,Palakkad
+T1698,2025-07-17,H115,Home Decor,7,217.66,Palakkad
+T1853,2025-07-18,A108,Apparel,6,4712.08,Coimbatore
+T1073,2025-07-21,A117,Apparel,2,739.15,Bangalore
+T1596,2025-07-21,H132,Home Decor,2,3477.46,Palakkad
+T1105,2025-07-21,G133,Groceries,7,1127.37,Chennai
+T1701,2025-07-22,A122,Apparel,9,3813.65,Palakkad
+T1000,2025-07-22,H123,Home Decor,9,4359.93,Palakkad
+T1281,2025-07-22,G130,Groceries,4,1456.91,Chennai
+T1420,2025-07-24,H116,Home Decor,5,3546.22,Chennai
+T1845,2025-07-24,A142,Apparel,3,2320.91,Palakkad
+T1211,2025-07-24,A102,Apparel,5,1147.1,Palakkad
+T1413,2025-07-27,E131,Electronics,2,14297.96,Bangalore
+T1092,2025-07-28,G106,Groceries,8,726.52,Bangalore
+T1251,2025-07-30,H107,Home Decor,5,1404.37,Bangalore
+T1218,2025-07-30,H113,Home Decor,1,1839.14,Chennai
+T1045,2025-07-30,A139,Apparel,5,1421.04,Coimbatore
+T1987,2025-08-01,G101,Groceries,5,1944.77,Palakkad
+T1213,2025-08-03,G110,Groceries,8,1227.04,Palakkad
+T1254,2025-08-03,H132,Home Decor,7,2564.19,Palakkad
+T1157,2025-08-05,G107,Groceries,8,800.87,Coimbatore
+T1864,2025-08-08,A148,Apparel,1,1436.36,Bangalore
+T1568,2025-08-08,A129,Apparel,6,1854.02,Palakkad
+T1359,2025-08-08,H124,Home Decor,4,4048.29,Palakkad
+T1784,2025-08-08,H138,Home Decor,8,1078.79,Palakkad
+T1521,2025-08-08,H104,Home Decor,6,784.96,Chennai
+T1486,2025-08-09,A113,Apparel,1,4062.6,Chennai
+T1479,2025-08-10,A112,Apparel,7,3260.14,Bangalore
+T1441,2025-08-10,A147,Apparel,3,3465.27,Coimbatore
+T1757,2025-08-10,A144,Apparel,2,3906.66,Palakkad
+T1949,2025-08-11,E123,Electronics,2,33594.17,Chennai
+T1583,2025-08-12,E109,Electronics,9,16713.05,Coimbatore
+T1274,2025-08-13,E143,Electronics,1,38997.37,Palakkad
+T1695,2025-08-14,A123,Apparel,4,3276.59,Bangalore
+T1843,2025-08-15,E120,Electronics,6,17947.77,Coimbatore
+T1762,2025-08-15,H108,Home Decor,8,5181.3,Coimbatore
+T1804,2025-08-16,E128,Electronics,5,26204.12,Chennai
+T1940,2025-08-16,A126,Apparel,4,1207.61,Palakkad
+T1544,2025-08-16,A132,Apparel,2,3556.69,Palakkad
+T1084,2025-08-17,A143,Apparel,7,1550.36,Bangalore
+T1094,2025-08-17,E106,Electronics,9,16864.12,Palakkad
+T1743,2025-08-18,H148,Home Decor,7,5148.65,Palakkad
+T1735,2025-08-19,G132,Groceries,3,1055.5,Palakkad
+T1656,2025-08-19,H134,Home Decor,5,2856.15,Palakkad
+T1715,2025-08-19,E121,Electronics,4,48472.29,Chennai
+T1610,2025-08-22,A147,Apparel,3,2534.93,Bangalore
+T1403,2025-08-22,H128,Home Decor,7,7067.43,Palakkad
+T1675,2025-08-24,H121,Home Decor,9,6762.4,Bangalore
+T1342,2025-08-24,G134,Groceries,1,207.39,Coimbatore
+T1742,2025-08-24,A115,Apparel,6,4078.24,Chennai
+T1520,2025-08-24,G136,Groceries,5,961.86,Palakkad
+T1089,2025-08-25,A114,Apparel,6,3317.12,Palakkad
+T1916,2025-08-26,H138,Home Decor,5,1807.25,Chennai
+T1331,2025-08-26,E111,Electronics,4,8998.18,Coimbatore
+T1383,2025-08-27,G138,Groceries,4,1976.84,Coimbatore
+T1350,2025-08-28,G141,Groceries,5,1516.67,Chennai
+T1623,2025-08-28,G147,Groceries,8,804.19,Palakkad
+T1326,2025-08-30,E146,Electronics,8,6701.31,Palakkad
+T1888,2025-09-01,A118,Apparel,7,4364.24,Chennai
+T1857,2025-09-03,E127,Electronics,1,43385.74,Coimbatore
+T1638,2025-09-04,H130,Home Decor,7,7350.1,Coimbatore
+T1284,2025-09-06,E108,Electronics,3,12702.8,Chennai
+T1375,2025-09-07,H136,Home Decor,1,7947.71,Palakkad
+T1630,2025-09-07,E149,Electronics,9,41440.2,Chennai
+T1138,2025-09-08,H100,Home Decor,4,326.73,Chennai
+T1598,2025-09-08,E111,Electronics,5,13002.81,Bangalore
+T1230,2025-09-09,H134,Home Decor,1,6484.69,Coimbatore
+T1338,2025-09-09,A118,Apparel,8,4946.67,Palakkad
+T1654,2025-09-09,G122,Groceries,4,1326.47,Chennai
+T1636,2025-09-10,G112,Groceries,9,1682.42,Bangalore
+T1672,2025-09-10,A139,Apparel,6,2261.4,Chennai
+T1028,2025-09-11,E103,Electronics,2,45837.99,Coimbatore
+T1570,2025-09-11,A112,Apparel,8,2271.94,Chennai
+T1329,2025-09-15,E144,Electronics,4,9730.18,Bangalore
+T1892,2025-09-16,G133,Groceries,2,67.47,Palakkad
+T1190,2025-09-16,G101,Groceries,9,1491.21,Palakkad
+T1330,2025-09-16,A119,Apparel,1,1166.12,Palakkad
+T1118,2025-09-18,G133,Groceries,3,1143.93,Coimbatore
+T1255,2025-09-18,G148,Groceries,9,744.51,Bangalore
+T1108,2025-09-18,E105,Electronics,3,38539.28,Palakkad
+T1406,2025-09-18,A149,Apparel,9,4893.26,Palakkad
+T1973,2025-09-21,G106,Groceries,8,701.44,Chennai
+T1367,2025-09-21,E101,Electronics,9,32678.36,Coimbatore
+T1139,2025-09-24,A120,Apparel,2,2888.38,Palakkad
+T1506,2025-09-25,H143,Home Decor,5,1714.76,Palakkad
+T1577,2025-09-25,A109,Apparel,6,4046.67,Chennai
+T1991,2025-09-26,A110,Apparel,7,2042.76,Bangalore
+T1619,2025-09-27,G118,Groceries,3,893.14,Palakkad
+T1787,2025-09-27,A131,Apparel,4,4463.92,Bangalore
+T1173,2025-09-29,H129,Home Decor,4,5004.09,Chennai
+T1217,2025-09-30,E139,Electronics,8,24841.77,Palakkad
+T1077,2025-09-30,E126,Electronics,8,36162.62,Coimbatore
+T1591,2025-10-02,E121,Electronics,1,37257.28,Coimbatore
+T1647,2025-10-03,G132,Groceries,2,1655.66,Palakkad
+T1168,2025-10-06,E106,Electronics,7,38532.57,Coimbatore
+T1325,2025-10-07,A117,Apparel,3,3252.66,Palakkad
+T1812,2025-10-08,G125,Groceries,3,1726.13,Coimbatore
+T1968,2025-10-08,A142,Apparel,2,1726.7,Chennai
+T1799,2025-10-10,H142,Home Decor,2,7305.35,Palakkad
+T1809,2025-10-12,G138,Groceries,3,1991.4,Chennai
+T1054,2025-10-12,H115,Home Decor,2,922.4,Coimbatore
+T1162,2025-10-12,H144,Home Decor,5,366.05,Palakkad
+T1731,2025-10-12,G140,Groceries,1,573.63,Palakkad
+T1725,2025-10-12,A149,Apparel,1,3584.64,Palakkad
+T1713,2025-10-12,E128,Electronics,3,5847.9,Palakkad
+T1462,2025-10-13,H144,Home Decor,8,3059.03,Bangalore
+T1176,2025-10-13,A136,Apparel,7,2452.25,Coimbatore
+T1915,2025-10-13,G103,Groceries,7,1923.78,Coimbatore
+T1975,2025-10-15,A147,Apparel,3,3617.7,Palakkad
+T1690,2025-10-16,A143,Apparel,7,1814.03,Bangalore
+T1906,2025-10-17,G108,Groceries,1,1178.23,Bangalore
+T1146,2025-10-17,H140,Home Decor,3,6771.03,Coimbatore
+T1079,2025-10-19,E136,Electronics,4,13194.96,Palakkad
+T1889,2025-10-19,A110,Apparel,5,3883.71,Coimbatore
+T1510,2025-10-20,E134,Electronics,1,33740.72,Bangalore
+T1708,2025-10-20,E126,Electronics,1,34741.08,Palakkad
+T1363,2025-10-21,E138,Electronics,3,41912.92,Chennai
+T1780,2025-10-24,E147,Electronics,9,22416.54,Bangalore
+T1267,2025-10-24,G137,Groceries,6,1408.33,Chennai
+T1209,2025-10-24,E144,Electronics,7,47033.93,Chennai
+T1497,2025-10-25,H104,Home Decor,7,916.44,Bangalore
+T1605,2025-10-25,E111,Electronics,7,36204.41,Palakkad
+T1458,2025-10-25,A100,Apparel,2,595.19,Bangalore
+T1003,2025-10-26,G147,Groceries,6,938.25,Chennai
+T1149,2025-10-28,E101,Electronics,9,21338.98,Chennai
+T1300,2025-10-29,G142,Groceries,4,1548.25,Bangalore
+T1282,2025-10-29,E133,Electronics,4,25264.57,Palakkad
+T1911,2025-10-31,G134,Groceries,9,664.94,Palakkad
+T1716,2025-11-01,A100,Apparel,12,4430.33,Bangalore
+T1270,2025-11-01,A103,Apparel,15,1316.82,Coimbatore
+T1356,2025-11-03,G105,Groceries,3,643.47,Bangalore
+T1533,2025-11-03,E141,Electronics,10,8858.96,Palakkad
+T1385,2025-11-03,H130,Home Decor,2,6381.03,Bangalore
+T1411,2025-11-04,A130,Apparel,14,2649.67,Palakkad
+T1844,2025-11-04,A141,Apparel,16,4275.72,Bangalore
+T1797,2025-11-06,E127,Electronics,15,47024.9,Coimbatore
+T1687,2025-11-06,A119,Apparel,12,2616.71,Palakkad
+T1431,2025-11-08,G116,Groceries,5,1155.4,Chennai
+T1319,2025-11-08,A118,Apparel,13,3152.63,Bangalore
+T1295,2025-11-08,E143,Electronics,6,15319.72,Palakkad
+T1416,2025-11-09,G126,Groceries,5,1408.95,Bangalore
+T1980,2025-11-09,A128,Apparel,8,2115.79,Bangalore
+T1937,2025-11-10,E145,Electronics,19,21432.8,Chennai
+T1667,2025-11-10,A100,Apparel,15,4084.31,Chennai
+T1720,2025-11-12,A127,Apparel,14,3646.73,Bangalore
+T1755,2025-11-12,A139,Apparel,16,835.56,Coimbatore
+T1821,2025-11-12,H130,Home Decor,2,1359.0,Coimbatore
+T1475,2025-11-16,G141,Groceries,8,1363.47,Chennai
+T1833,2025-11-17,A147,Apparel,14,3441.06,Coimbatore
+T1653,2025-11-19,H137,Home Decor,6,7168.14,Bangalore
+T1262,2025-11-20,G125,Groceries,3,892.12,Coimbatore
+T1777,2025-11-24,G146,Groceries,4,517.24,Chennai
+T1766,2025-11-24,E103,Electronics,13,27049.17,Bangalore
+T1837,2025-11-24,A114,Apparel,7,4997.77,Coimbatore
+T1082,2025-11-25,E121,Electronics,13,16089.49,Palakkad
+T1972,2025-11-27,E149,Electronics,17,16807.93,Coimbatore
+T1103,2025-11-29,G113,Groceries,5,1639.24,Bangalore
+T1741,2025-11-29,A128,Apparel,18,2134.41,Bangalore
+T1712,2025-11-30,E129,Electronics,17,6137.62,Palakkad
+T1285,2025-12-01,G128,Groceries,3,1012.58,Chennai
+T1971,2025-12-01,E121,Electronics,15,23712.21,Bangalore
+T1515,2025-12-02,E101,Electronics,16,8747.77,Chennai
+T1080,2025-12-03,H117,Home Decor,2,5548.54,Palakkad
+T1524,2025-12-03,G140,Groceries,4,947.24,Bangalore
+T1769,2025-12-03,H139,Home Decor,2,3910.31,Palakkad
+T1806,2025-12-03,G148,Groceries,5,1276.1,Chennai
+T1914,2025-12-03,E127,Electronics,9,47459.81,Coimbatore
+T1163,2025-12-04,G127,Groceries,1,118.13,Chennai
+T1207,2025-12-06,A148,Apparel,15,685.98,Chennai
+T1898,2025-12-06,E104,Electronics,9,37845.84,Coimbatore
+T1228,2025-12-07,A128,Apparel,10,4958.54,Palakkad
+T1985,2025-12-07,G120,Groceries,2,151.04,Bangalore
+T1584,2025-12-10,G123,Groceries,3,1401.95,Chennai
+T1909,2025-12-11,H123,Home Decor,4,4539.78,Chennai
+T1302,2025-12-11,E140,Electronics,16,29272.67,Coimbatore
+T1060,2025-12-12,A147,Apparel,12,4107.06,Bangalore
+T1107,2025-12-13,H107,Home Decor,2,3492.59,Chennai
+T1391,2025-12-13,A143,Apparel,11,559.14,Coimbatore
+T1502,2025-12-14,A131,Apparel,18,3194.07,Chennai
+T1495,2025-12-15,E142,Electronics,9,20210.37,Palakkad
+T1465,2025-12-15,E142,Electronics,11,34948.5,Palakkad
+T1682,2025-12-17,G102,Groceries,4,1299.59,Coimbatore
+T1341,2025-12-17,A127,Apparel,6,2381.71,Palakkad
+T1535,2025-12-18,H107,Home Decor,2,6438.93,Bangalore
+T1115,2025-12-19,E145,Electronics,19,9313.79,Bangalore
+T1392,2025-12-20,G136,Groceries,3,1809.26,Bangalore
+T1494,2025-12-20,G104,Groceries,2,707.09,Coimbatore
+T1850,2025-12-20,E112,Electronics,16,18757.03,Palakkad
+T1547,2025-12-22,E144,Electronics,10,48939.95,Coimbatore
+T1981,2025-12-22,G130,Groceries,8,206.18,Coimbatore
+T1673,2025-12-24,A144,Apparel,10,857.21,Palakkad
+T1111,2025-12-24,H124,Home Decor,3,2941.98,Chennai
+T1994,2025-12-24,E120,Electronics,13,13388.9,Bangalore
+T1969,2025-12-25,A148,Apparel,14,3231.45,Palakkad
+T1195,2025-12-26,E130,Electronics,9,29769.28,Chennai
+T1336,2025-12-26,G122,Groceries,8,957.53,Palakkad
+T1389,2025-12-26,H107,Home Decor,9,3908.21,Palakkad
+T1248,2025-12-26,A120,Apparel,11,2278.04,Chennai
+T1301,2025-12-29,E135,Electronics,7,26253.88,Coimbatore
+T1811,2025-12-30,E114,Electronics,17,39981.84,Bangalore
+T1130,2025-12-30,H115,Home Decor,4,3002.16,Chennai
+T1316,2025-12-30,H147,Home Decor,2,6138.01,Bangalore
+T1183,2025-12-30,H107,Home Decor,9,848.91,Bangalore
+T1283,2025-12-31,A114,Apparel,13,969.06,Coimbatore
+T1517,2026-01-01,G116,Groceries,7,231.39,Coimbatore
+T1454,2026-01-01,G139,Groceries,5,1395.19,Coimbatore
+T1621,2026-01-02,G133,Groceries,3,214.54,Bangalore
+T1057,2026-01-03,G148,Groceries,1,1784.78,Coimbatore
+T1398,2026-01-03,H137,Home Decor,6,1564.54,Chennai
+T1817,2026-01-06,G109,Groceries,3,804.91,Coimbatore
+T1448,2026-01-06,H139,Home Decor,1,2491.62,Palakkad
+T1260,2026-01-06,G147,Groceries,8,1338.88,Coimbatore
+T1373,2026-01-07,G111,Groceries,3,1005.18,Bangalore
+T1271,2026-01-07,E128,Electronics,9,39915.18,Palakkad
+T1422,2026-01-09,G111,Groceries,5,806.91,Chennai
+T1938,2026-01-09,G109,Groceries,2,1002.18,Chennai
+T1135,2026-01-09,G144,Groceries,7,440.63,Palakkad
+T1466,2026-01-10,G144,Groceries,8,1041.14,Chennai
+T1272,2026-01-10,H110,Home Decor,5,3920.65,Chennai
+T1894,2026-01-11,A115,Apparel,4,3569.19,Chennai
+T1921,2026-01-13,A143,Apparel,7,630.27,Bangalore
+T1266,2026-01-15,H111,Home Decor,9,7411.5,Coimbatore
+T1346,2026-01-16,E141,Electronics,8,22271.81,Chennai
+T1651,2026-01-16,G142,Groceries,4,1350.76,Bangalore
+T1169,2026-01-17,A134,Apparel,1,4837.39,Coimbatore
+T1760,2026-01-17,H132,Home Decor,4,6281.94,Palakkad
+T1989,2026-01-17,H146,Home Decor,7,7650.17,Coimbatore
+T1886,2026-01-21,G117,Groceries,6,713.03,Palakkad
+T1929,2026-01-22,G144,Groceries,2,1729.46,Bangalore
+T1920,2026-01-22,A105,Apparel,6,4754.35,Chennai
+T1518,2026-01-23,E140,Electronics,5,7288.33,Bangalore
+T1774,2026-01-23,H126,Home Decor,9,1727.74,Chennai
+T1196,2026-01-24,G118,Groceries,5,479.9,Chennai
+T1490,2026-01-24,A118,Apparel,6,3189.38,Palakkad
+T1188,2026-01-24,H110,Home Decor,1,505.64,Palakkad
+T1676,2026-01-25,G117,Groceries,4,1957.66,Coimbatore
+T1553,2026-01-27,G110,Groceries,6,1287.97,Palakkad
+T1327,2026-01-28,G115,Groceries,3,1069.3,Palakkad
+T1581,2026-01-28,E121,Electronics,2,43594.39,Palakkad
+T1029,2026-01-30,G101,Groceries,5,1947.07,Coimbatore
+T1402,2026-02-02,H112,Home Decor,9,2856.3,Chennai
+T1072,2026-02-02,A118,Apparel,3,1458.08,Coimbatore
+T1689,2026-02-05,H135,Home Decor,4,771.82,Palakkad
+T1278,2026-02-05,G107,Groceries,9,1970.9,Bangalore
+T1009,2026-02-07,A111,Apparel,9,3841.26,Bangalore
+T1819,2026-02-08,E134,Electronics,5,25304.52,Chennai
+T1594,2026-02-08,H147,Home Decor,1,2261.6,Coimbatore
+T1354,2026-02-08,A146,Apparel,8,4782.75,Bangalore
+T1953,2026-02-08,E119,Electronics,8,22538.17,Chennai
+T1315,2026-02-09,E135,Electronics,4,22603.35,Coimbatore
+T1841,2026-02-09,G140,Groceries,2,1365.71,Coimbatore
+T1498,2026-02-11,G116,Groceries,1,1905.86,Bangalore
+T1765,2026-02-12,H137,Home Decor,5,5765.42,Chennai
+T1625,2026-02-12,G113,Groceries,1,1936.6,Bangalore
+T1297,2026-02-12,A103,Apparel,3,555.8,Coimbatore
+T1714,2026-02-13,H112,Home Decor,2,2935.63,Coimbatore
+T1536,2026-02-13,E116,Electronics,6,10228.76,Coimbatore
+T1083,2026-02-14,A113,Apparel,8,4494.71,Bangalore
+T1721,2026-02-14,G128,Groceries,9,187.83,Coimbatore
+T1206,2026-02-15,G117,Groceries,6,472.42,Bangalore
+T1401,2026-02-17,G118,Groceries,3,695.13,Palakkad
+T1159,2026-02-18,A136,Apparel,3,2801.81,Coimbatore
+T1612,2026-02-19,G129,Groceries,1,639.71,Palakkad
+T1866,2026-02-21,E109,Electronics,1,38695.41,Coimbatore
+T1172,2026-02-21,A122,Apparel,5,1464.15,Bangalore
+T1098,2026-02-21,H149,Home Decor,5,4268.31,Palakkad
+T1472,2026-02-23,H116,Home Decor,7,4446.54,Bangalore
+T1832,2026-02-23,H107,Home Decor,5,1567.43,Bangalore
+T1954,2026-02-26,A129,Apparel,3,583.36,Chennai
+T1263,2026-02-27,H126,Home Decor,6,4236.08,Chennai
+T1049,2026-03-01,H113,Home Decor,8,6597.58,Palakkad
+T1184,2026-03-02,E104,Electronics,1,28952.56,Chennai
+T1158,2026-03-04,A102,Apparel,7,1434.0,Coimbatore
+T1567,2026-03-04,A125,Apparel,1,3145.17,Palakkad
+T1343,2026-03-04,H114,Home Decor,2,7706.82,Bangalore
+T1956,2026-03-08,A138,Apparel,5,1385.86,Bangalore
+T1563,2026-03-08,G111,Groceries,7,647.1,Coimbatore
+T1428,2026-03-09,E101,Electronics,3,32989.58,Palakkad
+T1543,2026-03-09,H103,Home Decor,2,4013.17,Chennai
+T1386,2026-03-11,G108,Groceries,2,1468.41,Coimbatore
+T1496,2026-03-11,G129,Groceries,6,135.05,Coimbatore
+T1966,2026-03-11,H113,Home Decor,3,3188.89,Bangalore
+T1182,2026-03-12,A128,Apparel,6,4208.11,Coimbatore
+T1081,2026-03-12,G112,Groceries,4,660.1,Bangalore
+T1872,2026-03-15,E116,Electronics,1,8039.86,Coimbatore
+T1203,2026-03-18,G113,Groceries,6,1245.56,Bangalore
+T1056,2026-03-18,H119,Home Decor,3,5889.58,Palakkad
+T1265,2026-03-19,A133,Apparel,7,4476.12,Chennai
+T1222,2026-03-19,H125,Home Decor,1,1275.59,Palakkad
+T1121,2026-03-21,H105,Home Decor,5,3119.2,Bangalore
+T1686,2026-03-21,E116,Electronics,3,5212.21,Palakkad
+T1337,2026-03-21,E141,Electronics,6,47384.29,Coimbatore
+T1120,2026-03-22,E134,Electronics,1,28715.92,Coimbatore
+T1683,2026-03-25,A140,Apparel,3,4761.19,Bangalore
+T1856,2026-03-26,H116,Home Decor,5,6567.63,Coimbatore
+T1505,2026-03-26,A135,Apparel,4,2967.79,Palakkad
+T1066,2026-03-26,A111,Apparel,1,3497.38,Coimbatore
+T1234,2026-03-27,A109,Apparel,6,2607.94,Coimbatore
+T1371,2026-03-28,A103,Apparel,8,3184.81,Palakkad
+T1030,2026-03-29,A130,Apparel,6,2990.3,Bangalore
+T1640,2026-03-30,A114,Apparel,2,1183.08,Coimbatore
+T1408,2026-03-31,E143,Electronics,2,8581.92,Coimbatore
+T1854,2026-04-03,H140,Home Decor,3,4294.87,Bangalore
+T1452,2026-04-04,A139,Apparel,7,3804.16,Coimbatore
+T1792,2026-04-05,E143,Electronics,6,39482.96,Palakkad
+T1770,2026-04-07,A142,Apparel,7,2784.32,Palakkad
+T1802,2026-04-07,E145,Electronics,1,26887.76,Palakkad

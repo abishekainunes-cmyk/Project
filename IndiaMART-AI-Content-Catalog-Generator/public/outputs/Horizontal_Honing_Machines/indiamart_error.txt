@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "U:\Completed\Abishek\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\automation.py", line 825, in continue_to_indiamart
+    browser.wait_until_operator_closes_review(max_seconds=3600)
+  File "U:\Completed\Abishek\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\indiamart.py", line 1814, in wait_until_operator_closes_review
+    self.page.wait_for_timeout(700)
+  File "C:\Users\Nunes\AppData\Local\NUNES_INDIAMART_AUTOMATION\venv\Lib\site-packages\playwright\sync_api\_generated.py", line 11496, in wait_for_timeout
+    self._sync(self._impl_obj.wait_for_timeout(timeout=timeout))
+  File "C:\Users\Nunes\AppData\Local\NUNES_INDIAMART_AUTOMATION\venv\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "C:\Users\Nunes\AppData\Local\NUNES_INDIAMART_AUTOMATION\venv\Lib\site-packages\playwright\_impl\_page.py", line 1104, in wait_for_timeout
+    await self._main_frame.wait_for_timeout(timeout)
+  File "C:\Users\Nunes\AppData\Local\NUNES_INDIAMART_AUTOMATION\venv\Lib\site-packages\playwright\_impl\_frame.py", line 844, in wait_for_timeout
+    await self._channel.send("waitForTimeout", None, {"waitTimeout": timeout})
+  File "C:\Users\Nunes\AppData\Local\NUNES_INDIAMART_AUTOMATION\venv\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Nunes\AppData\Local\NUNES_INDIAMART_AUTOMATION\venv\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: Page.wait_for_timeout: Target page, context or browser has been closed

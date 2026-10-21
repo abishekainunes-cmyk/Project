@@ -1,0 +1,37 @@
+[
+  {
+    "index": 1,
+    "source_type": "LOCAL",
+    "source_ref": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\input_images\\Horizontal_Honing_Machines\\20260901_163914_480260.jpg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Horizontal_Honing_Machines\\images\\references\\reference_1.jpg",
+    "score": 669918.77
+  },
+  {
+    "index": 2,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/8/TR/JQ/SV/1877096/hamano-make-horizontal-honing-machine-1000x1000.jpg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Horizontal_Honing_Machines\\images\\references\\reference_2.jpg",
+    "score": 645288.96
+  },
+  {
+    "index": 3,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/12/OM/TB/JO/1877096/delapena-horizontal-honing-machine-500x500.jpg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Horizontal_Honing_Machines\\images\\references\\reference_3.jpg",
+    "score": 72601.29
+  },
+  {
+    "index": 4,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/8/ZK/PG/FN/1877096/electraulic-vertical-broaching-500x500.jpg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Horizontal_Honing_Machines\\images\\references\\reference_4.jpg",
+    "score": 68263.55
+  },
+  {
+    "index": 5,
+    "source_type": "URL",
+    "source_ref": "https://5.imimg.com/data5/SELLER/Default/2022/8/KG/AY/PO/1877096/boring-table-500x500.jpeg",
+    "saved_path": "\\\\Nunes_Nas\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Horizontal_Honing_Machines\\images\\references\\reference_5.jpg",
+    "score": 66373.67
+  }
+]

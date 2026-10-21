@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NICMS — National Integrated Case Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --teal-50: #E1F5EE; --teal-100: #9FE1CB; --teal-200: #5DCAA5;
+    --teal-400: #1D9E75; --teal-600: #0F6E56; --teal-800: #085041; --teal-900: #04342C;
+    --slate-50: #F8F9FA; --slate-100: #EEF0F2; --slate-200: #DDE2E7;
+    --slate-400: #8D97A2; --slate-600: #4A5568; --slate-800: #1A202C; --slate-900: #0D1117;
+    --amber-50: #FAEEDA; --amber-100: #FAC775; --amber-400: #BA7517; --amber-800: #633806;
+    --rose-50: #FAECE7; --rose-100: #F5C4B3; --rose-400: #D85A30; --rose-800: #4A1B0C;
+    --blue-50: #E6F1FB; --blue-100: #B5D4F4; --blue-400: #378ADD; --blue-800: #0C447C;
+    --white: #FFFFFF;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-xl: 24px;
+    --transition: 0.18s ease;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--slate-800);
+    background: var(--slate-50);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ======= SCREENS ======= */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: block; }
+
+  /* ======= PANIC BUTTON ======= */
+  #panic-btn {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    background: var(--slate-800); color: var(--white);
+    border: none; border-radius: var(--radius-md);
+    padding: 10px 16px; font-family: var(--font-body); font-size: 13px;
+    font-weight: 500; cursor: pointer; letter-spacing: 0.01em;
+    display: flex; align-items: center; gap: 8px;
+    transition: background var(--transition);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  }
+  #panic-btn:hover { background: var(--slate-600); }
+  #panic-btn .dot { width: 6px; height: 6px; background: var(--rose-400); border-radius: 50%; }
+
+  /* ======= NAV ======= */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--slate-200);
+    padding: 0 40px;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--slate-800);
+  }
+  .nav-logo {
+    width: 34px; height: 34px; background: var(--teal-400);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo i { color: var(--white); font-size: 16px; }
+  .nav-title { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
+  .nav-subtitle { font-size: 11px; color: var(--slate-400); letter-spacing: 0.02em; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 6px; }
+  .nav-btn {
+    background: none; border: 1px solid var(--slate-200);
+    color: var(--slate-600); border-radius: var(--radius-sm);
+    padding: 7px 14px; font-size: 13px; font-family: var(--font-body);
+    cursor: pointer; transition: all var(--transition); font-weight: 500;
+  }
+  .nav-btn:hover { background: var(--slate-100); }
+  .nav-btn.primary { background: var(--teal-400); color: var(--white); border-color: var(--teal-400); }
+  .nav-btn.primary:hover { background: var(--teal-600); border-color: var(--teal-600); }
+  .nav-btn.active { background: var(--teal-50); color: var(--teal-600); border-color: var(--teal-100); }
+
+  /* ======= LANDING PAGE ======= */
+  .hero {
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 40px 60px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--teal-50); color: var(--teal-600);
+    border: 1px solid var(--teal-100); border-radius: 40px;
+    padding: 5px 14px; font-size: 12px; font-weight: 500; letter-spacing: 0.03em;
+    margin-bottom: 24px; text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: 48px; line-height: 1.1; color: var(--slate-900);
+    margin-bottom: 20px; letter-spacing: -0.02em;
+  }
+  .hero-title em { font-style: italic; color: var(--teal-400); }
+  .hero-desc { font-size: 16px; color: var(--slate-600); line-height: 1.7; margin-bottom: 36px; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    border-radius: var(--radius-md); padding: 12px 22px;
+    font-family: var(--font-body); font-size: 14px; font-weight: 500;
+    cursor: pointer; border: none; transition: all var(--transition); text-decoration: none;
+  }
+  .btn-primary { background: var(--teal-400); color: var(--white); }
+  .btn-primary:hover { background: var(--teal-600); transform: translateY(-1px); }
+  .btn-secondary { background: var(--white); color: var(--slate-700); border: 1px solid var(--slate-200); }
+  .btn-secondary:hover { background: var(--slate-100); }
+  .btn-ghost { background: transparent; color: var(--teal-600); padding: 12px 0; }
+  .btn-ghost:hover { color: var(--teal-800); }
+
+  .hero-visual {
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--radius-xl); padding: 28px; position: relative;
+  }
+  .hero-visual-header {
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 18px; border-bottom: 1px solid var(--slate-100); margin-bottom: 20px;
+  }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal-400); }
+  .status-dot.amber { background: var(--amber-400); }
+  .status-dot.rose { background: var(--rose-400); }
+  .step-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px; border-radius: var(--radius-md);
+    margin-bottom: 8px; transition: background var(--transition);
+    border: 1px solid transparent;
+  }
+  .step-item:hover { background: var(--teal-50); border-color: var(--teal-100); }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--teal-50); color: var(--teal-600);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500; flex-shrink: 0;
+  }
+  .step-num.active { background: var(--teal-400); color: var(--white); }
+  .step-content h4 { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .step-content p { font-size: 12px; color: var(--slate-400); }
+
+  .agencies-grid {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; padding-top: 18px;
+    border-top: 1px solid var(--slate-100);
+  }
+  .agency-pill {
+    background: var(--slate-100); color: var(--slate-600);
+    border-radius: 30px; padding: 4px 12px; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .agency-pill.active { background: var(--teal-50); color: var(--teal-600); }
+
+  .features-strip {
+    background: var(--white); border-top: 1px solid var(--slate-200);
+    border-bottom: 1px solid var(--slate-200);
+    padding: 48px 40px;
+  }
+  .features-inner { max-width: 1100px; margin: 0 auto; }
+  .features-label {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--slate-400); margin-bottom: 32px;
+  }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .feature-card {
+    padding: 24px; background: var(--slate-50); border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg); transition: all var(--transition);
+  }
+  .feature-card:hover { border-color: var(--teal-100); background: var(--teal-50); }
+  .feature-icon {
+    width: 40px; height: 40px; background: var(--teal-50); border: 1px solid var(--teal-100);
+    border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .feature-icon i { color: var(--teal-600); font-size: 18px; }
+  .feature-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+  .feature-card p { font-size: 13px; color: var(--slate-400); line-height: 1.6; }
+
+  /* ======= REPORT FORM ======= */
+  .report-layout {
+    max-width: 760px; margin: 0 auto; padding: 48px 40px;
+  }
+  .report-header { margin-bottom: 40px; }
+  .report-header h1 {
+    font-family: var(--font-display); font-size: 32px; margin-bottom: 10px; letter-spacing: -0.02em;
+  }
+  .report-header p { color: var(--slate-400); font-size: 15px; }
+
+  .progress-bar-wrap { margin-bottom: 36px; }
+  .progress-steps { display: flex; gap: 8px; margin-bottom: 8px; }
+  .progress-step {
+    flex: 1; height: 4px; background: var(--slate-200); border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  .progress-step.done { background: var(--teal-400); }
+  .progress-step.active { background: var(--teal-200); }
+  .progress-label { font-size: 12px; color: var(--slate-400); }
+
+  .form-card {
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--radius-xl); padding: 32px; margin-bottom: 20px;
+  }
+  .form-section { display: none; }
+  .form-section.active { display: block; }
+
+  .form-question {
+    font-size: 20px; font-family: var(--font-display);
+    color: var(--slate-900); margin-bottom: 8px; line-height: 1.3;
+  }
+  .form-hint { font-size: 13px; color: var(--slate-400); margin-bottom: 24px; }
+
+  .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .option-card {
+    background: var(--slate-50); border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius-md); padding: 14px 16px;
+    cursor: pointer; transition: all var(--transition);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .option-card:hover { border-color: var(--teal-200); background: var(--teal-50); }
+  .option-card.selected { border-color: var(--teal-400); background: var(--teal-50); }
+  .option-card i { color: var(--teal-400); font-size: 20px; }
+  .option-card.selected i { color: var(--teal-600); }
+  .option-label { font-size: 14px; font-weight: 500; }
+  .option-desc { font-size: 12px; color: var(--slate-400); }
+
+  .form-input {
+    width: 100%; padding: 12px 16px; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius-md); font-family: var(--font-body); font-size: 14px;
+    color: var(--slate-800); background: var(--slate-50);
+    transition: border-color var(--transition); outline: none;
+  }
+  .form-input:focus { border-color: var(--teal-400); background: var(--white); }
+  .form-textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+  .form-label { font-size: 13px; font-weight: 500; color: var(--slate-600); margin-bottom: 8px; display: block; }
+
+  .upload-area {
+    border: 2px dashed var(--slate-200); border-radius: var(--radius-lg);
+    padding: 32px; text-align: center; cursor: pointer;
+    transition: all var(--transition); background: var(--slate-50);
+  }
+  .upload-area:hover { border-color: var(--teal-200); background: var(--teal-50); }
+  .upload-area i { font-size: 28px; color: var(--slate-400); margin-bottom: 10px; display: block; }
+  .upload-area h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .upload-area p { font-size: 12px; color: var(--slate-400); }
+
+  .upload-preview {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--teal-50); border: 1px solid var(--teal-100);
+    border-radius: var(--radius-md); margin-top: 12px;
+  }
+  .upload-preview i { color: var(--teal-600); font-size: 20px; }
+  .upload-preview .file-info { flex: 1; }
+  .upload-preview .file-name { font-size: 13px; font-weight: 500; }
+  .upload-preview .file-hash { font-size: 11px; color: var(--slate-400); font-family: monospace; }
+
+  .anon-option {
+    background: var(--amber-50); border: 1px solid var(--amber-100);
+    border-radius: var(--radius-md); padding: 16px; margin-top: 20px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .anon-option i { color: var(--amber-400); font-size: 20px; margin-top: 2px; }
+  .anon-option h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .anon-option p { font-size: 12px; color: var(--slate-400); }
+
+  .form-nav { display: flex; justify-content: space-between; align-items: center; }
+  .form-nav-info { font-size: 12px; color: var(--slate-400); }
+
+  /* ======= SUCCESS SCREEN ======= */
+  .success-card {
+    max-width: 520px; margin: 80px auto; padding: 48px;
+    background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius-xl);
+    text-align: center;
+  }
+  .success-icon {
+    width: 72px; height: 72px; background: var(--teal-50); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;
+  }
+  .success-icon i { color: var(--teal-400); font-size: 32px; }
+  .success-card h1 { font-family: var(--font-display); font-size: 28px; margin-bottom: 10px; }
+  .justice-key {
+    background: var(--slate-900); color: var(--teal-200);
+    font-family: monospace; font-size: 22px; letter-spacing: 0.15em;
+    padding: 18px 28px; border-radius: var(--radius-md); margin: 24px 0;
+    display: inline-block;
+  }
+  .justice-key-label { font-size: 12px; color: var(--slate-400); margin-bottom: 6px; }
+
+  /* ======= DASHBOARD ======= */
+  .dashboard-layout { display: flex; min-height: calc(100vh - 64px); }
+  .sidebar {
+    width: 220px; background: var(--white); border-right: 1px solid var(--slate-200);
+    padding: 24px 16px; flex-shrink: 0; position: sticky; top: 64px;
+    height: calc(100vh - 64px); overflow-y: auto;
+  }
+  .sidebar-section { margin-bottom: 28px; }
+  .sidebar-label {
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--slate-400); font-weight: 500; margin-bottom: 8px; padding: 0 8px;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: var(--radius-sm);
+    font-size: 13px; cursor: pointer; color: var(--slate-600);
+    transition: all var(--transition); position: relative;
+  }
+  .sidebar-item:hover { background: var(--slate-100); color: var(--slate-800); }
+  .sidebar-item.active { background: var(--teal-50); color: var(--teal-700); font-weight: 500; }
+  .sidebar-item i { font-size: 16px; }
+  .sidebar-badge {
+    margin-left: auto; background: var(--rose-400); color: var(--white);
+    border-radius: 20px; padding: 1px 7px; font-size: 10px; font-weight: 600;
+  }
+  .sidebar-badge.teal { background: var(--teal-400); }
+
+  .main-content { flex: 1; padding: 32px; overflow-y: auto; }
+  .page-header { margin-bottom: 28px; }
+  .page-header h1 { font-size: 22px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .page-header p { color: var(--slate-400); font-size: 14px; }
+
+  /* Metrics */
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .metric-card {
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg); padding: 20px 22px;
+  }
+  .metric-card .metric-label { font-size: 12px; color: var(--slate-400); margin-bottom: 8px; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase; }
+  .metric-card .metric-value { font-size: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--slate-900); }
+  .metric-card .metric-change { font-size: 12px; margin-top: 4px; }
+  .metric-card .metric-change.up { color: var(--teal-600); }
+  .metric-card .metric-change.down { color: var(--rose-400); }
+  .metric-card.accent-teal { border-top: 3px solid var(--teal-400); }
+  .metric-card.accent-amber { border-top: 3px solid var(--amber-400); }
+  .metric-card.accent-rose { border-top: 3px solid var(--rose-400); }
+  .metric-card.accent-blue { border-top: 3px solid var(--blue-400); }
+
+  /* Kanban */
+  .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .kanban-col {}
+  .kanban-col-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 4px; margin-bottom: 12px;
+  }
+  .kanban-col-header h3 { font-size: 13px; font-weight: 500; color: var(--slate-600); }
+  .kanban-count {
+    background: var(--slate-200); color: var(--slate-600);
+    border-radius: 20px; padding: 1px 8px; font-size: 11px; font-weight: 600;
+  }
+  .kanban-count.new { background: var(--rose-50); color: var(--rose-400); }
+  .kanban-count.review { background: var(--amber-50); color: var(--amber-400); }
+  .kanban-count.resolved { background: var(--teal-50); color: var(--teal-600); }
+  .kanban-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .kanban-dot.new { background: var(--rose-400); }
+  .kanban-dot.review { background: var(--amber-400); }
+  .kanban-dot.action { background: var(--blue-400); }
+  .kanban-dot.resolved { background: var(--teal-400); }
+
+  .case-card {
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg); padding: 16px; margin-bottom: 10px;
+    cursor: pointer; transition: all var(--transition);
+  }
+  .case-card:hover { border-color: var(--teal-100); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+  .case-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .case-id { font-size: 11px; color: var(--slate-400); font-family: monospace; }
+  .priority-badge {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .priority-badge.high { background: var(--rose-50); color: var(--rose-400); }
+  .priority-badge.medium { background: var(--amber-50); color: var(--amber-400); }
+  .priority-badge.low { background: var(--teal-50); color: var(--teal-600); }
+  .case-card h4 { font-size: 13px; font-weight: 500; margin-bottom: 6px; line-height: 1.4; }
+  .case-card-meta { display: flex; gap: 10px; align-items: center; }
+  .case-tag {
+    font-size: 11px; background: var(--slate-100); color: var(--slate-500);
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .case-time { font-size: 11px; color: var(--slate-400); margin-left: auto; display: flex; align-items: center; gap: 4px; }
+  .case-agencies { display: flex; gap: 4px; margin-top: 10px; }
+  .agency-avatar {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 600; border: 1.5px solid var(--white);
+  }
+  .agency-avatar.police { background: var(--blue-50); color: var(--blue-800); }
+  .agency-avatar.ccid { background: var(--amber-50); color: var(--amber-800); }
+  .agency-avatar.ncpa { background: var(--teal-50); color: var(--teal-800); }
+  .agency-avatar.mowca { background: var(--rose-50); color: var(--rose-800); }
+
+  /* Case Detail Panel */
+  .case-detail-panel {
+    position: fixed; right: 0; top: 64px; width: 420px;
+    height: calc(100vh - 64px); background: var(--white);
+    border-left: 1px solid var(--slate-200); overflow-y: auto;
+    transform: translateX(100%); transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    z-index: 200; padding: 28px;
+  }
+  .case-detail-panel.open { transform: translateX(0); }
+  .panel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .panel-close { background: none; border: 1px solid var(--slate-200); border-radius: var(--radius-sm); width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .panel-close:hover { background: var(--slate-100); }
+  .panel-case-id { font-size: 11px; color: var(--slate-400); font-family: monospace; margin-bottom: 6px; }
+  .panel-title { font-size: 18px; font-weight: 500; line-height: 1.3; }
+
+  .detail-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--slate-100); }
+  .detail-section:last-child { border-bottom: none; }
+  .detail-section-title { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate-400); margin-bottom: 12px; font-weight: 500; }
+
+  .timeline { }
+  .timeline-item { display: flex; gap: 12px; margin-bottom: 16px; position: relative; }
+  .timeline-item::before { content: ''; position: absolute; left: 15px; top: 28px; bottom: -16px; width: 1px; background: var(--slate-200); }
+  .timeline-item:last-child::before { display: none; }
+  .timeline-dot { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .timeline-dot.police { background: var(--blue-50); }
+  .timeline-dot.police i { color: var(--blue-400); font-size: 14px; }
+  .timeline-dot.mowca { background: var(--rose-50); }
+  .timeline-dot.mowca i { color: var(--rose-400); font-size: 14px; }
+  .timeline-dot.ccid { background: var(--amber-50); }
+  .timeline-dot.ccid i { color: var(--amber-400); font-size: 14px; }
+  .timeline-content h5 { font-size: 13px; font-weight: 500; }
+  .timeline-content p { font-size: 12px; color: var(--slate-400); }
+
+  .handshake-alert {
+    background: var(--rose-50); border: 1px solid var(--rose-100);
+    border-radius: var(--radius-md); padding: 14px 16px;
+    display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px;
+  }
+  .handshake-alert i { color: var(--rose-400); font-size: 16px; margin-top: 2px; }
+  .handshake-alert .ha-title { font-size: 13px; font-weight: 500; color: var(--rose-800); }
+  .handshake-alert .ha-sub { font-size: 12px; color: var(--rose-400); }
+  .handshake-btn {
+    background: var(--teal-400); color: var(--white); border: none; border-radius: var(--radius-sm);
+    padding: 8px 16px; font-size: 13px; font-family: var(--font-body); cursor: pointer; font-weight: 500;
+    width: 100%; margin-top: 8px; transition: background var(--transition);
+  }
+  .handshake-btn:hover { background: var(--teal-600); }
+  .handshake-btn.accepted { background: var(--slate-200); color: var(--slate-600); cursor: default; }
+
+  .chat-box {
+    background: var(--slate-50); border-radius: var(--radius-md);
+    border: 1px solid var(--slate-200); overflow: hidden;
+  }
+  .chat-messages { padding: 16px; max-height: 200px; overflow-y: auto; }
+  .chat-msg { display: flex; gap: 8px; margin-bottom: 12px; }
+  .chat-avatar { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+  .chat-avatar.police { background: var(--blue-50); color: var(--blue-800); }
+  .chat-avatar.ccid { background: var(--amber-50); color: var(--amber-800); }
+  .chat-bubble { background: var(--white); border: 1px solid var(--slate-200); border-radius: 0 8px 8px 8px; padding: 8px 12px; font-size: 12px; color: var(--slate-700); line-height: 1.5; }
+  .chat-input-row { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--slate-200); }
+  .chat-input { flex: 1; padding: 8px 12px; border: 1px solid var(--slate-200); border-radius: var(--radius-sm); font-size: 13px; font-family: var(--font-body); outline: none; }
+  .chat-input:focus { border-color: var(--teal-400); }
+  .chat-send { background: var(--teal-400); color: var(--white); border: none; border-radius: var(--radius-sm); width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .chat-send:hover { background: var(--teal-600); }
+
+  /* Evidence pills */
+  .evidence-list { display: flex; flex-direction: column; gap: 8px; }
+  .evidence-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); }
+  .evidence-item i { color: var(--teal-400); font-size: 16px; }
+  .evidence-item .ev-name { font-size: 12px; font-weight: 500; flex: 1; }
+  .evidence-item .ev-hash { font-size: 10px; color: var(--slate-400); font-family: monospace; }
+  .verified-badge { display: flex; align-items: center; gap: 4px; font-size: 10px; background: var(--teal-50); color: var(--teal-600); padding: 2px 8px; border-radius: 20px; }
+
+  /* Track case */
+  .track-layout { max-width: 580px; margin: 80px auto; padding: 0 40px; }
+  .track-card { background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 40px; }
+  .track-title { font-family: var(--font-display); font-size: 28px; margin-bottom: 10px; }
+  .track-desc { color: var(--slate-400); font-size: 14px; margin-bottom: 32px; }
+  .key-input-wrap { display: flex; gap: 10px; margin-bottom: 28px; }
+  .key-input { flex: 1; padding: 14px 18px; border: 1.5px solid var(--slate-200); border-radius: var(--radius-md); font-size: 16px; font-family: monospace; letter-spacing: 0.08em; outline: none; transition: border-color var(--transition); }
+  .key-input:focus { border-color: var(--teal-400); }
+  .track-result { background: var(--teal-50); border: 1px solid var(--teal-100); border-radius: var(--radius-lg); padding: 24px; }
+  .track-status-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .track-status-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--teal-400); color: var(--white); padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 500; }
+  .track-step { display: flex; gap: 12px; margin-bottom: 14px; }
+  .track-step-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .track-step-icon.done { background: var(--teal-400); }
+  .track-step-icon.done i { color: var(--white); font-size: 13px; }
+  .track-step-icon.pending { background: var(--slate-200); }
+  .track-step-icon.pending i { color: var(--slate-400); font-size: 13px; }
+  .track-step-text h5 { font-size: 13px; font-weight: 500; }
+  .track-step-text p { font-size: 12px; color: var(--slate-400); }
+
+  /* Org routing visual */
+  .routing-visual { background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; margin-bottom: 32px; }
+  .routing-title { font-size: 13px; font-weight: 500; color: var(--slate-600); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .routing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .routing-org {
+    border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px;
+    text-align: center; transition: all var(--transition); cursor: pointer;
+  }
+  .routing-org:hover { border-color: var(--teal-200); background: var(--teal-50); }
+  .routing-org.assigned { border-color: var(--teal-400); background: var(--teal-50); }
+  .routing-org.lead { border-color: var(--teal-600); background: var(--teal-100); }
+  .routing-org i { font-size: 22px; color: var(--teal-400); margin-bottom: 6px; display: block; }
+  .routing-org.lead i { color: var(--teal-600); }
+  .routing-org h5 { font-size: 11px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: var(--slate-700); }
+  .routing-org p { font-size: 10px; color: var(--slate-400); margin-top: 2px; }
+  .lead-badge { display: inline-block; background: var(--teal-400); color: var(--white); border-radius: 20px; padding: 1px 8px; font-size: 9px; font-weight: 700; letter-spacing: 0.04em; margin-top: 4px; text-transform: uppercase; }
+
+  /* Animations */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeIn 0.3s ease; }
+
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .pulse { animation: pulse 2s infinite; }
+
+  /* responsive */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 40px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .kanban-board { grid-template-columns: 1fr 1fr; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .option-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======= PANIC BUTTON ======= -->
+<button id="panic-btn" onclick="panicExit()" title="Quick exit">
+  <span class="dot pulse"></span>
+  Quick exit
+</button>
+
+<!-- ======= NAV ======= -->
+<nav>
+  <a href="#" class="nav-brand" onclick="showScreen('landing'); return false;">
+    <div class="nav-logo"><i class="fa-solid fa-shield-halved"></i></div>
+    <div>
+      <div class="nav-title">NICMS</div>
+      <div class="nav-subtitle">Sri Lanka</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <button class="nav-btn" onclick="showScreen('landing')" id="nav-landing">Home</button>
+    <button class="nav-btn" onclick="showScreen('report')" id="nav-report">Report incident</button>
+    <button class="nav-btn" onclick="showScreen('track')" id="nav-track">Track case</button>
+    <button class="nav-btn primary" onclick="showScreen('dashboard')" id="nav-dashboard">Officer portal</button>
+  </div>
+</nav>
+
+<!-- ======= SCREEN: LANDING ======= -->
+<div id="screen-landing" class="screen active">
+  <section class="hero">
+    <div class="hero-content fade-in">
+      <div class="hero-eyebrow"><i class="fa-solid fa-circle" style="font-size:8px"></i>Confidential & secure</div>
+      <h1 class="hero-title">One place.<br><em>Every agency.</em><br>Your voice heard.</h1>
+      <p class="hero-desc">Sri Lanka's first unified digital platform for SGBV and TFGBV case management. Report once. Never repeat your story again.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="showScreen('report')">
+          <i class="fa-solid fa-plus"></i> Report an incident
+        </button>
+        <button class="btn btn-secondary" onclick="showScreen('track')">
+          <i class="fa-solid fa-key"></i> Track with Justice Key
+        </button>
+      </div>
+    </div>
+    <div class="hero-visual fade-in" style="animation-delay:0.1s">
+      <div class="hero-visual-header">
+        <div class="status-dot"></div>
+        <div class="status-dot amber"></div>
+        <div class="status-dot rose"></div>
+        <span style="font-size:13px;color:var(--slate-400);margin-left:4px">Unified case routing — live</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num active">1</div>
+        <div class="step-content">
+          <h4>Report submitted</h4>
+          <p>Single intake — no repeated forms</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num active">2</div>
+        <div class="step-content">
+          <h4>Intelligent routing</h4>
+          <p>System assigns lead agency automatically</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Secure case handling</h4>
+          <p>All agencies collaborate on one case file</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Resolution & follow-up</h4>
+          <p>Track progress anonymously at any time</p>
+        </div>
+      </div>
+      <div class="agencies-grid">
+        <span class="agency-pill active">Police CWB</span>
+        <span class="agency-pill active">CCID</span>
+        <span class="agency-pill">NCPA</span>
+        <span class="agency-pill">MoWCA</span>
+        <span class="agency-pill">SLCERT</span>
+        <span class="agency-pill">Legal Aid</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-strip">
+    <div class="features-inner">
+      <div class="features-label">Core platform features</div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-lock"></i></div>
+          <h3>Zero-knowledge privacy</h3>
+          <p>Your data is encrypted end-to-end. Even system administrators cannot read your case details without your explicit authorization.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-key"></i></div>
+          <h3>Justice Key — anonymous tracking</h3>
+          <p>Receive a 16-digit key to track your case from any device. No login, no email, no digital footprint that an abuser can find.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-fingerprint"></i></div>
+          <h3>Evidence time-capsule</h3>
+          <p>Every uploaded file receives a cryptographic checksum (SHA-256) that proves it was never altered — a silent, untampered court witness.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-wifi-slash"></i></div>
+          <h3>Offline-first resilience</h3>
+          <p>In areas with poor connectivity, your report is saved locally and synced automatically when the signal returns. Nothing is lost.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-handshake"></i></div>
+          <h3>Digital handshake protocol</h3>
+          <p>Every inter-agency referral requires formal acceptance within 4 hours. Accountability is not optional — it's built into the code.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-door-open"></i></div>
+          <h3>Panic button — instant exit</h3>
+          <p>A persistent "Quick Exit" button replaces the site instantly with a weather search. Visible to you, invisible to anyone behind you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ======= SCREEN: REPORT ======= -->
+<div id="screen-report" class="screen">
+  <div class="report-layout">
+    <div class="report-header fade-in">
+      <h1>Report an incident</h1>
+      <p>Your answers guide us — you only share what you're comfortable with. This is a safe space.</p>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-steps">
+        <div class="progress-step active" id="ps1"></div>
+        <div class="progress-step" id="ps2"></div>
+        <div class="progress-step" id="ps3"></div>
+        <div class="progress-step" id="ps4"></div>
+      </div>
+      <div class="progress-label" id="progress-label">Step 1 of 4 — Incident type</div>
+    </div>
+
+    <div class="form-card fade-in">
+
+      <!-- Section 1: Type -->
+      <div class="form-section active" id="fs-1">
+        <div class="form-question">What kind of incident are you reporting?</div>
+        <div class="form-hint">Choose the option that best fits. You can add more detail in the next steps.</div>
+        <div class="option-grid">
+          <div class="option-card" onclick="selectOption(this, 'type')" data-val="physical">
+            <i class="fa-solid fa-person-shelter"></i>
+            <div>
+              <div class="option-label">Physical violence</div>
+              <div class="option-desc">Assault, harassment, domestic violence</div>
+            </div>
+          </div>
+          <div class="option-card" onclick="selectOption(this, 'type')" data-val="digital">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <div>
+              <div class="option-label">Technology-facilitated (TFGBV)</div>
+              <div class="option-desc">Threats online, leaked photos, cyberstalking</div>
+            </div>
+          </div>
+          <div class="option-card" onclick="selectOption(this, 'type')" data-val="child">
+            <i class="fa-solid fa-child"></i>
+            <div>
+              <div class="option-label">Child abuse or exploitation</div>
+              <div class="option-desc">Any harm involving a minor under 18</div>
+            </div>
+          </div>
+          <div class="option-card" onclick="selectOption(this, 'type')" data-val="other">
+            <i class="fa-solid fa-ellipsis"></i>
+            <div>
+              <div class="option-label">Other / not sure</div>
+              <div class="option-desc">Describe in your own words</div>
+            </div>
+          </div>
+        </div>
+        <div id="digital-followup" style="display:none;margin-top:20px">
+          <div style="background:var(--blue-50);border:1px solid var(--blue-100);border-radius:var(--radius-md);padding:16px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+            <i class="fa-solid fa-circle-info" style="color:var(--blue-400);margin-top:2px"></i>
+            <div style="font-size:13px;color:var(--blue-800)">For technology-facilitated incidents, we'll ask for platform links and screenshots. SLCERT and CCID will be automatically notified.</div>
+          </div>
+          <label class="form-label">Platform(s) involved (e.g. Instagram, WhatsApp, TikTok)</label>
+          <input type="text" class="form-input" placeholder="Enter platform names..." style="margin-bottom:12px">
+          <label class="form-label">URL or link to the incident (if available)</label>
+          <input type="text" class="form-input" placeholder="https://...">
+        </div>
+      </div>
+
+      <!-- Section 2: Description -->
+      <div class="form-section" id="fs-2">
+        <div class="form-question">Describe what happened</div>
+        <div class="form-hint">Share as much or as little as you're comfortable with. You can come back and add more later.</div>
+        <textarea class="form-input form-textarea" placeholder="In your own words, describe what happened..."></textarea>
+        <div style="margin-top:20px">
+          <label class="form-label">When did this happen?</label>
+          <input type="date" class="form-input" style="max-width:280px">
+        </div>
+        <div style="margin-top:16px">
+          <label class="form-label">Location (district or area — optional)</label>
+          <input type="text" class="form-input" placeholder="e.g. Colombo, Kandy, Galle...">
+        </div>
+      </div>
+
+      <!-- Section 3: Evidence -->
+      <div class="form-section" id="fs-3">
+        <div class="form-question">Upload evidence (optional)</div>
+        <div class="form-hint">Screenshots, photos, videos, or documents. Every file is stored in a sealed vault with a unique digital fingerprint to ensure it reaches court untampered.</div>
+        <div class="upload-area" onclick="simulateUpload()">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <h4>Tap to upload files</h4>
+          <p>PNG, JPG, MP4, PDF — up to 50MB per file</p>
+        </div>
+        <div id="uploaded-files"></div>
+        <div class="anon-option">
+          <i class="fa-solid fa-user-secret"></i>
+          <div>
+            <h4>Stay completely anonymous?</h4>
+            <p>Check this box and you will receive a Justice Key instead of registering an account. No email or phone number required. Your evidence is still preserved and linked to your case.</p>
+            <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+              <input type="checkbox" id="anon-check" style="width:16px;height:16px;accent-color:var(--teal-400)">
+              <label for="anon-check" style="font-size:13px;font-weight:500;cursor:pointer">Yes, generate a Justice Key for me</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Contact -->
+      <div class="form-section" id="fs-4">
+        <div class="form-question">How should we reach you?</div>
+        <div class="form-hint">This is optional. If you prefer anonymity, skip this section and use your Justice Key to track progress.</div>
+        <label class="form-label">Your name (optional)</label>
+        <input type="text" class="form-input" placeholder="You may use a nickname" style="margin-bottom:16px">
+        <label class="form-label">Phone or WhatsApp (optional)</label>
+        <input type="text" class="form-input" placeholder="+94 ..." style="margin-bottom:16px">
+        <label class="form-label">Email address (optional)</label>
+        <input type="email" class="form-input" placeholder="Not visible to other parties" style="margin-bottom:24px">
+
+        <div class="routing-visual">
+          <div class="routing-title">
+            <i class="fa-solid fa-sitemap" style="color:var(--teal-400)"></i>
+            Auto-routing preview — based on your report
+          </div>
+          <div class="routing-grid">
+            <div class="routing-org lead" id="route-police">
+              <i class="fa-solid fa-badge-check"></i>
+              <h5>Police CWB</h5>
+              <p>Lead agency</p>
+              <span class="lead-badge">Lead</span>
+            </div>
+            <div class="routing-org assigned" id="route-ccid">
+              <i class="fa-solid fa-magnifying-glass-plus"></i>
+              <h5>CCID</h5>
+              <p>Digital evidence</p>
+            </div>
+            <div class="routing-org" id="route-ncpa">
+              <i class="fa-solid fa-child-reaching"></i>
+              <h5>NCPA</h5>
+              <p>If minor involved</p>
+            </div>
+            <div class="routing-org assigned" id="route-mowca">
+              <i class="fa-solid fa-heart-pulse"></i>
+              <h5>MoWCA</h5>
+              <p>Counseling support</p>
+            </div>
+            <div class="routing-org assigned" id="route-slcert">
+              <i class="fa-solid fa-wifi"></i>
+              <h5>SLCERT</h5>
+              <p>Cyber takedown</p>
+            </div>
+            <div class="routing-org" id="route-legal">
+              <i class="fa-solid fa-scale-balanced"></i>
+              <h5>Legal Aid</h5>
+              <p>Court proceedings</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn btn-secondary" id="btn-back" onclick="formBack()" style="display:none">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+      <div class="form-nav-info" id="form-nav-info">All data is encrypted in transit</div>
+      <button class="btn btn-primary" id="btn-next" onclick="formNext()">
+        Continue <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ======= SCREEN: SUCCESS ======= -->
+<div id="screen-success" class="screen">
+  <div class="success-card fade-in" style="max-width:520px;margin:80px auto;padding:48px;background:var(--white);border:1px solid var(--slate-200);border-radius:var(--radius-xl);text-align:center">
+    <div class="success-icon">
+      <i class="fa-solid fa-shield-check"></i>
+    </div>
+    <h1 style="font-family:var(--font-display);font-size:28px;margin-bottom:10px">Your report is received</h1>
+    <p style="color:var(--slate-400);font-size:14px;margin-bottom:24px">The Police Children & Women Bureau has been assigned as the lead agency. A counselor from MoWCA will contact you within 24 hours.</p>
+
+    <div class="justice-key-label">Your Justice Key — save this privately</div>
+    <div class="justice-key">JK-4827-9351-0284</div>
+    <p style="font-size:12px;color:var(--slate-400);margin-bottom:28px">Use this 16-digit key to track your case anonymously from any device, at any time. Do not share it with anyone.</p>
+
+    <div style="background:var(--teal-50);border:1px solid var(--teal-100);border-radius:var(--radius-md);padding:16px;text-align:left;margin-bottom:24px">
+      <div style="font-size:12px;font-weight:500;color:var(--teal-800);margin-bottom:8px">What happens next</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--teal-700)">
+          <i class="fa-solid fa-check-circle" style="color:var(--teal-400)"></i> Case assigned to Police CWB (lead)
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--teal-700)">
+          <i class="fa-solid fa-check-circle" style="color:var(--teal-400)"></i> Evidence vault sealed with SHA-256 fingerprint
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--slate-400)">
+          <i class="fa-solid fa-clock" style="color:var(--slate-400)"></i> CCID digital review — within 4 hours
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--slate-400)">
+          <i class="fa-solid fa-clock" style="color:var(--slate-400)"></i> Counseling referral — within 24 hours
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="showScreen('track')" style="width:100%;justify-content:center">
+      <i class="fa-solid fa-key"></i> Track my case
+    </button>
+    <button class="btn btn-ghost" onclick="showScreen('landing')" style="width:100%;justify-content:center;margin-top:8px">
+      Return to home
+    </button>
+  </div>
+</div>
+
+<!-- ======= SCREEN: TRACK ======= -->
+<div id="screen-track" class="screen">
+  <div class="track-layout">
+    <div class="track-card fade-in">
+      <h1 class="track-title">Track your case</h1>
+      <p class="track-desc">Enter your 16-digit Justice Key to check your case status — no login required, no personal details needed.</p>
+      <div class="key-input-wrap">
+        <input type="text" class="key-input" id="key-input" placeholder="JK-XXXX-XXXX-XXXX" maxlength="19" oninput="formatKey(this)">
+        <button class="btn btn-primary" onclick="trackCase()">
+          <i class="fa-solid fa-search"></i> Find case
+        </button>
+      </div>
+      <div id="track-result" style="display:none">
+        <div class="track-result fade-in">
+          <div class="track-status-header">
+            <div>
+              <div style="font-size:12px;color:var(--slate-400);margin-bottom:4px">Case reference</div>
+              <div style="font-size:15px;font-weight:500">NICMS-2026-04821</div>
+            </div>
+            <div style="margin-left:auto">
+              <div class="track-status-badge"><i class="fa-solid fa-circle-dot" style="font-size:10px"></i> Under review</div>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--teal-100);padding-top:16px;margin-bottom:16px">
+            <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--teal-600);font-weight:500;margin-bottom:12px">Progress timeline</div>
+            <div class="track-step">
+              <div class="track-step-icon done"><i class="fa-solid fa-check"></i></div>
+              <div class="track-step-text"><h5>Report received</h5><p>May 7, 2026 — 09:42 AM</p></div>
+            </div>
+            <div class="track-step">
+              <div class="track-step-icon done"><i class="fa-solid fa-check"></i></div>
+              <div class="track-step-text"><h5>Lead agency assigned — Police CWB</h5><p>May 7, 2026 — 09:45 AM</p></div>
+            </div>
+            <div class="track-step">
+              <div class="track-step-icon done"><i class="fa-solid fa-check"></i></div>
+              <div class="track-step-text"><h5>CCID digital review initiated</h5><p>May 7, 2026 — 11:10 AM</p></div>
+            </div>
+            <div class="track-step">
+              <div class="track-step-icon pending"><i class="fa-solid fa-clock"></i></div>
+              <div class="track-step-text"><h5>MoWCA counseling referral</h5><p>Pending acceptance — expected by 1:45 PM</p></div>
+            </div>
+            <div class="track-step">
+              <div class="track-step-icon pending"><i class="fa-solid fa-clock"></i></div>
+              <div class="track-step-text"><h5>Case resolution</h5><p>Awaiting investigation progress</p></div>
+            </div>
+          </div>
+          <div style="background:var(--teal-100);border-radius:var(--radius-sm);padding:12px;font-size:12px;color:var(--teal-800)">
+            <i class="fa-solid fa-shield-halved" style="margin-right:6px"></i>
+            Your evidence vault is sealed. All 2 files verified with SHA-256 checksums.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= SCREEN: DASHBOARD ======= -->
+<div id="screen-dashboard" class="screen">
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 10px 20px;border-bottom:1px solid var(--slate-100);margin-bottom:16px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--blue-50);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--blue-800)">SI</div>
+        <div>
+          <div style="font-size:13px;font-weight:500">SI Priya Perera</div>
+          <div style="font-size:11px;color:var(--slate-400)">Police CWB, Colombo</div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Main</div>
+        <div class="sidebar-item active" onclick="dashTab('kanban', this)"><i class="fa-solid fa-table-columns"></i> Case board <span class="sidebar-badge">3</span></div>
+        <div class="sidebar-item" onclick="dashTab('map', this)"><i class="fa-solid fa-map-pin"></i> Incident map</div>
+        <div class="sidebar-item"><i class="fa-solid fa-chart-line"></i> Analytics</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Agencies</div>
+        <div class="sidebar-item" onclick="dashTab('collab', this)"><i class="fa-solid fa-handshake"></i> Collaboration <span class="sidebar-badge teal">1</span></div>
+        <div class="sidebar-item"><i class="fa-solid fa-bell"></i> Alerts</div>
+        <div class="sidebar-item"><i class="fa-solid fa-file-shield"></i> Evidence vault</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Settings</div>
+        <div class="sidebar-item"><i class="fa-solid fa-user-gear"></i> My profile</div>
+        <div class="sidebar-item"><i class="fa-solid fa-lock"></i> Security</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+      <!-- KANBAN TAB -->
+      <div id="dash-kanban" class="dash-tab-panel">
+        <div class="page-header">
+          <h1>Case board</h1>
+          <p>All active cases assigned to your agency — May 7, 2026</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card accent-rose">
+            <div class="metric-label">New cases</div>
+            <div class="metric-value">3</div>
+            <div class="metric-change down"><i class="fa-solid fa-arrow-up" style="font-size:10px"></i> +2 today</div>
+          </div>
+          <div class="metric-card accent-amber">
+            <div class="metric-label">Under review</div>
+            <div class="metric-value">8</div>
+            <div class="metric-change" style="color:var(--slate-400)">Stable</div>
+          </div>
+          <div class="metric-card accent-blue">
+            <div class="metric-label">Agency action needed</div>
+            <div class="metric-value">2</div>
+            <div class="metric-change down"><i class="fa-solid fa-triangle-exclamation" style="font-size:10px;color:var(--rose-400)"></i> Handshakes pending</div>
+          </div>
+          <div class="metric-card accent-teal">
+            <div class="metric-label">Resolved this month</div>
+            <div class="metric-value">24</div>
+            <div class="metric-change up"><i class="fa-solid fa-arrow-up" style="font-size:10px"></i> +15% vs last month</div>
+          </div>
+        </div>
+
+        <div class="kanban-board">
+          <!-- New -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <span class="kanban-dot new"></span>
+              <h3>New reports</h3>
+              <span class="kanban-count new">3</span>
+            </div>
+            <div class="case-card" onclick="openPanel('case1')">
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04821</span>
+                <span class="priority-badge high">High</span>
+              </div>
+              <h4>TFGBV — Intimate image leak via Telegram</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">TFGBV</span>
+                <span class="case-tag">Digital evidence</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 2h ago</span>
+              </div>
+              <div class="case-agencies" style="margin-top:8px">
+                <div class="agency-avatar police" title="Police CWB">PO</div>
+                <div class="agency-avatar ccid" title="CCID">CC</div>
+                <div class="agency-avatar mowca" title="MoWCA">MW</div>
+              </div>
+            </div>
+            <div class="case-card" onclick="openPanel('case2')">
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04818</span>
+                <span class="priority-badge high">High</span>
+              </div>
+              <h4>Cyberstalking — Persistent harassment via multiple platforms</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">TFGBV</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 4h ago</span>
+              </div>
+              <div class="case-agencies" style="margin-top:8px">
+                <div class="agency-avatar police" title="Police CWB">PO</div>
+                <div class="agency-avatar ccid" title="CCID">CC</div>
+              </div>
+            </div>
+            <div class="case-card">
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04815</span>
+                <span class="priority-badge medium">Medium</span>
+              </div>
+              <h4>Domestic violence — Colombo 7 district</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">Physical</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 6h ago</span>
+              </div>
+              <div class="case-agencies" style="margin-top:8px">
+                <div class="agency-avatar police" title="Police CWB">PO</div>
+                <div class="agency-avatar mowca" title="MoWCA">MW</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <span class="kanban-dot review"></span>
+              <h3>Under review</h3>
+              <span class="kanban-count review">8</span>
+            </div>
+            <div class="case-card">
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04790</span>
+                <span class="priority-badge high">High</span>
+              </div>
+              <h4>Child exploitation — Online grooming reported by school</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">Child</span>
+                <span class="case-tag">NCPA lead</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 1d ago</span>
+              </div>
+              <div class="case-agencies" style="margin-top:8px">
+                <div class="agency-avatar ncpa" title="NCPA">NC</div>
+                <div class="agency-avatar police" title="Police CWB">PO</div>
+                <div class="agency-avatar ccid" title="CCID">CC</div>
+              </div>
+            </div>
+            <div class="case-card">
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04776</span>
+                <span class="priority-badge medium">Medium</span>
+              </div>
+              <h4>Sexual harassment — Workplace incident, Kandy district</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">SGBV</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 2d ago</span>
+              </div>
+              <div class="case-agencies" style="margin-top:8px">
+                <div class="agency-avatar police" title="Police CWB">PO</div>
+                <div class="agency-avatar mowca" title="MoWCA">MW</div>
+              </div>
+            </div>
+            <div class="case-card">
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04761</span>
+                <span class="priority-badge low">Low</span>
+              </div>
+              <h4>Online threats — Anonymous messages via Instagram</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">TFGBV</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 3d ago</span>
+              </div>
+              <div class="case-agencies" style="margin-top:8px">
+                <div class="agency-avatar ccid" title="CCID">CC</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action needed -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <span class="kanban-dot action"></span>
+              <h3>Action needed</h3>
+              <span class="kanban-count" style="background:var(--blue-50);color:var(--blue-400)">2</span>
+            </div>
+            <div class="case-card" onclick="openPanel('case1')" style="border-left:3px solid var(--rose-400)">
+              <div style="display:flex;align-items:center;gap:6px;background:var(--rose-50);border-radius:var(--radius-sm);padding:6px 10px;margin-bottom:10px;font-size:12px;color:var(--rose-800)">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size:11px"></i>
+                Handshake overdue — MoWCA (4h 22m)
+              </div>
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04821</span>
+                <span class="priority-badge high">High</span>
+              </div>
+              <h4>TFGBV — Intimate image leak via Telegram</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">Referral pending</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 2h ago</span>
+              </div>
+            </div>
+            <div class="case-card" style="border-left:3px solid var(--amber-400)">
+              <div style="display:flex;align-items:center;gap:6px;background:var(--amber-50);border-radius:var(--radius-sm);padding:6px 10px;margin-bottom:10px;font-size:12px;color:var(--amber-800)">
+                <i class="fa-solid fa-file-signature" style="font-size:11px"></i>
+                Evidence review requested by CCID
+              </div>
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04790</span>
+                <span class="priority-badge high">High</span>
+              </div>
+              <h4>Child exploitation — Online grooming reported by school</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">Awaiting sign-off</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 1d ago</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resolved -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <span class="kanban-dot resolved"></span>
+              <h3>Resolved</h3>
+              <span class="kanban-count resolved">24</span>
+            </div>
+            <div class="case-card" style="opacity:0.75">
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04710</span>
+                <span class="priority-badge low">Closed</span>
+              </div>
+              <h4>Online harassment — FIR filed, suspect identified</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">Resolved</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 5d ago</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;color:var(--teal-600)">
+                <i class="fa-solid fa-circle-check"></i> Closed — victim satisfied
+              </div>
+            </div>
+            <div class="case-card" style="opacity:0.75">
+              <div class="case-card-top">
+                <span class="case-id">#NICMS-2026-04688</span>
+                <span class="priority-badge low">Closed</span>
+              </div>
+              <h4>Domestic violence — Restraining order obtained</h4>
+              <div class="case-card-meta">
+                <span class="case-tag">Resolved</span>
+                <span class="case-time"><i class="fa-regular fa-clock" style="font-size:10px"></i> 6d ago</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;color:var(--teal-600)">
+                <i class="fa-solid fa-circle-check"></i> Legal action complete
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLLAB TAB -->
+      <div id="dash-collab" class="dash-tab-panel" style="display:none">
+        <div class="page-header">
+          <h1>Agency collaboration</h1>
+          <p>Pending handshakes and inter-agency communications</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div>
+            <div style="font-size:13px;font-weight:500;margin-bottom:14px;color:var(--slate-600)">Pending handshakes</div>
+            <div style="background:var(--white);border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:20px;margin-bottom:12px">
+              <div class="handshake-alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div>
+                  <div class="ha-title">MoWCA counseling referral — case #04821</div>
+                  <div class="ha-sub">Overdue by 22 minutes — escalation triggered</div>
+                </div>
+              </div>
+              <button class="handshake-btn" id="hs-btn-1" onclick="acceptHandshake('hs-btn-1')">Accept referral</button>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:20px">
+              <div style="display:flex;align-items:center;gap:8px;padding:12px;background:var(--amber-50);border:1px solid var(--amber-100);border-radius:var(--radius-md);margin-bottom:10px">
+                <i class="fa-solid fa-clock" style="color:var(--amber-400)"></i>
+                <div>
+                  <div style="font-size:13px;font-weight:500;color:var(--amber-800)">SLCERT content takedown — case #04821</div>
+                  <div style="font-size:12px;color:var(--amber-400)">Awaiting — 1h 40m remaining</div>
+                </div>
+              </div>
+              <button class="handshake-btn" id="hs-btn-2" onclick="acceptHandshake('hs-btn-2')">Acknowledge request</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:500;margin-bottom:14px;color:var(--slate-600)">Secure inter-agency chat — Case #04821</div>
+            <div class="chat-box">
+              <div class="chat-messages" id="chat-messages">
+                <div class="chat-msg">
+                  <div class="chat-avatar police">PO</div>
+                  <div><div style="font-size:10px;color:var(--slate-400);margin-bottom:3px">SI Perera · Police CWB · 9:48 AM</div><div class="chat-bubble">Evidence uploaded. 2 screenshots and 1 video. SHA checksums verified. Waiting for CCID digital analysis.</div></div>
+                </div>
+                <div class="chat-msg">
+                  <div class="chat-avatar ccid">CC</div>
+                  <div><div style="font-size:10px;color:var(--slate-400);margin-bottom:3px">Insp. Nimal · CCID · 10:15 AM</div><div class="chat-bubble">Received. Video metadata confirms origin. Takedown request submitted to SLCERT. Suspect IP traced — logging with telecom.</div></div>
+                </div>
+                <div class="chat-msg">
+                  <div class="chat-avatar police">PO</div>
+                  <div><div style="font-size:10px;color:var(--slate-400);margin-bottom:3px">SI Perera · Police CWB · 11:02 AM</div><div class="chat-bubble">MoWCA referral sent. Please confirm counselor assignment — survivor is distressed and needs support ASAP.</div></div>
+                </div>
+              </div>
+              <div class="chat-input-row">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Type a secure message..." onkeydown="if(event.key==='Enter')sendChat()">
+                <button class="chat-send" onclick="sendChat()"><i class="fa-solid fa-paper-plane" style="font-size:13px"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAP TAB -->
+      <div id="dash-map" class="dash-tab-panel" style="display:none">
+        <div class="page-header">
+          <h1>Incident heatmap — Sri Lanka</h1>
+          <p>Distribution of active cases by district — May 2026</p>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--slate-200);border-radius:var(--radius-xl);padding:28px">
+          <div style="display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start">
+            <div>
+              <svg viewBox="0 0 340 500" width="100%" style="max-width:400px">
+                <!-- Sri Lanka simplified shape -->
+                <g fill="var(--teal-50)" stroke="var(--teal-200)" stroke-width="1">
+                  <path d="M160,20 L200,30 L230,60 L250,100 L260,140 L255,180 L265,220 L260,260 L245,300 L220,340 L195,380 L170,420 L150,460 L130,440 L120,400 L110,360 L105,320 L100,280 L95,240 L100,200 L95,160 L100,120 L115,80 L140,45 Z"/>
+                </g>
+                <!-- District hotspots -->
+                <circle cx="185" cy="120" r="22" fill="var(--rose-400)" opacity="0.3"/>
+                <circle cx="185" cy="120" r="12" fill="var(--rose-400)" opacity="0.6"/>
+                <circle cx="185" cy="120" r="5" fill="var(--rose-400)"/>
+                <text x="185" y="155" text-anchor="middle" font-size="10" fill="var(--slate-600)" font-family="DM Sans, sans-serif">Colombo</text>
+                <text x="185" y="167" text-anchor="middle" font-size="9" fill="var(--rose-400)" font-family="DM Sans, sans-serif">8 cases</text>
+
+                <circle cx="190" cy="210" r="16" fill="var(--amber-400)" opacity="0.3"/>
+                <circle cx="190" cy="210" r="9" fill="var(--amber-400)" opacity="0.6"/>
+                <circle cx="190" cy="210" r="4" fill="var(--amber-400)"/>
+                <text x="220" y="214" font-size="10" fill="var(--slate-600)" font-family="DM Sans, sans-serif">Kandy</text>
+                <text x="220" y="226" font-size="9" fill="var(--amber-400)" font-family="DM Sans, sans-serif">5 cases</text>
+
+                <circle cx="150" cy="300" r="12" fill="var(--blue-400)" opacity="0.3"/>
+                <circle cx="150" cy="300" r="7" fill="var(--blue-400)" opacity="0.6"/>
+                <circle cx="150" cy="300" r="3" fill="var(--blue-400)"/>
+                <text x="100" y="304" font-size="10" fill="var(--slate-600)" font-family="DM Sans, sans-serif">Galle</text>
+                <text x="100" y="316" font-size="9" fill="var(--blue-400)" font-family="DM Sans, sans-serif">3 cases</text>
+
+                <circle cx="210" cy="160" r="10" fill="var(--teal-400)" opacity="0.3"/>
+                <circle cx="210" cy="160" r="5" fill="var(--teal-400)" opacity="0.6"/>
+                <circle cx="210" cy="160" r="2" fill="var(--teal-400)"/>
+                <text x="228" y="164" font-size="10" fill="var(--slate-600)" font-family="DM Sans, sans-serif">Gampaha</text>
+                <text x="228" y="176" font-size="9" fill="var(--teal-400)" font-family="DM Sans, sans-serif">2 cases</text>
+              </svg>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:500;color:var(--slate-400);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px">District breakdown</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--rose-400);flex-shrink:0"></div>
+                  <div style="font-size:13px;flex:1">Colombo</div>
+                  <div style="font-size:13px;font-weight:500">8</div>
+                  <div style="width:80px;height:4px;background:var(--slate-100);border-radius:4px;overflow:hidden"><div style="width:100%;height:100%;background:var(--rose-400);border-radius:4px"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--amber-400);flex-shrink:0"></div>
+                  <div style="font-size:13px;flex:1">Kandy</div>
+                  <div style="font-size:13px;font-weight:500">5</div>
+                  <div style="width:80px;height:4px;background:var(--slate-100);border-radius:4px;overflow:hidden"><div style="width:63%;height:100%;background:var(--amber-400);border-radius:4px"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--blue-400);flex-shrink:0"></div>
+                  <div style="font-size:13px;flex:1">Galle</div>
+                  <div style="font-size:13px;font-weight:500">3</div>
+                  <div style="width:80px;height:4px;background:var(--slate-100);border-radius:4px;overflow:hidden"><div style="width:38%;height:100%;background:var(--blue-400);border-radius:4px"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--teal-400);flex-shrink:0"></div>
+                  <div style="font-size:13px;flex:1">Gampaha</div>
+                  <div style="font-size:13px;font-weight:500">2</div>
+                  <div style="width:80px;height:4px;background:var(--slate-100);border-radius:4px;overflow:hidden"><div style="width:25%;height:100%;background:var(--teal-400);border-radius:4px"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--slate-200);flex-shrink:0"></div>
+                  <div style="font-size:13px;flex:1">Other</div>
+                  <div style="font-size:13px;font-weight:500">5</div>
+                  <div style="width:80px;height:4px;background:var(--slate-100);border-radius:4px;overflow:hidden"><div style="width:63%;height:100%;background:var(--slate-400);border-radius:4px"></div></div>
+                </div>
+              </div>
+              <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--slate-100)">
+                <div style="font-size:12px;font-weight:500;color:var(--slate-400);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">By type</div>
+                <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+                  <div style="display:flex;justify-content:space-between"><span>TFGBV / Digital</span><span style="font-weight:500;color:var(--teal-600)">45%</span></div>
+                  <div style="display:flex;justify-content:space-between"><span>Physical / Domestic</span><span style="font-weight:500">30%</span></div>
+                  <div style="display:flex;justify-content:space-between"><span>Child exploitation</span><span style="font-weight:500;color:var(--rose-400)">15%</span></div>
+                  <div style="display:flex;justify-content:space-between"><span>Other</span><span style="font-weight:500">10%</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Case Detail Slide-over Panel -->
+<div id="case-panel" class="case-detail-panel">
+  <div class="panel-header">
+    <div>
+      <div class="panel-case-id" id="panel-case-id">#NICMS-2026-04821</div>
+      <div class="panel-title" id="panel-title">TFGBV — Intimate image leak via Telegram</div>
+    </div>
+    <button class="panel-close" onclick="closePanel()"><i class="fa-solid fa-xmark" style="font-size:14px"></i></button>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:20px">
+    <span class="priority-badge high">High priority</span>
+    <span style="font-size:11px;background:var(--blue-50);color:var(--blue-800);padding:3px 10px;border-radius:20px;font-weight:500">Police CWB lead</span>
+    <span style="font-size:11px;background:var(--teal-50);color:var(--teal-600);padding:3px 10px;border-radius:20px;font-weight:500">Active</span>
+  </div>
+
+  <div class="detail-section">
+    <div class="detail-section-title">Handshake status</div>
+    <div class="handshake-alert">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <div>
+        <div class="ha-title">MoWCA counseling — overdue 22 min</div>
+        <div class="ha-sub">Original deadline: 09:45 AM — escalated</div>
+      </div>
+    </div>
+    <button class="handshake-btn" id="panel-hs" onclick="acceptPanelHandshake()">Accept MoWCA referral</button>
+  </div>
+
+  <div class="detail-section">
+    <div class="detail-section-title">Evidence vault — 2 items</div>
+    <div class="evidence-list">
+      <div class="evidence-item">
+        <i class="fa-solid fa-image"></i>
+        <div class="ev-name">screenshot_001.png</div>
+        <div class="ev-hash">sha256: 4f2a9c…</div>
+        <span class="verified-badge"><i class="fa-solid fa-check" style="font-size:9px"></i> Verified</span>
+      </div>
+      <div class="evidence-item">
+        <i class="fa-solid fa-video"></i>
+        <div class="ev-name">evidence_video.mp4</div>
+        <div class="ev-hash">sha256: 8b1e7d…</div>
+        <span class="verified-badge"><i class="fa-solid fa-check" style="font-size:9px"></i> Verified</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-section">
+    <div class="detail-section-title">Case timeline</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot police"><i class="fa-solid fa-file-circle-plus"></i></div>
+        <div class="timeline-content"><h5>Report submitted by survivor</h5><p>May 7 — 9:42 AM · Anonymous (Justice Key)</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot police"><i class="fa-solid fa-user-shield"></i></div>
+        <div class="timeline-content"><h5>Case assigned — Police CWB (lead)</h5><p>May 7 — 9:45 AM · Auto-routed</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot ccid"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <div class="timeline-content"><h5>CCID digital analysis initiated</h5><p>May 7 — 11:10 AM · Handshake accepted</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot mowca"><i class="fa-solid fa-heart-pulse"></i></div>
+        <div class="timeline-content"><h5>MoWCA counseling referral sent</h5><p>May 7 — 11:02 AM · Awaiting acceptance</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-section">
+    <div class="detail-section-title">Secure case chat</div>
+    <div class="chat-box" style="max-height:none">
+      <div class="chat-messages">
+        <div class="chat-msg">
+          <div class="chat-avatar police">PO</div>
+          <div><div style="font-size:10px;color:var(--slate-400);margin-bottom:3px">SI Perera · 9:48 AM</div><div class="chat-bubble">Evidence uploaded and sealed. CCID please expedite — survivor is in distress.</div></div>
+        </div>
+        <div class="chat-msg">
+          <div class="chat-avatar ccid">CC</div>
+          <div><div style="font-size:10px;color:var(--slate-400);margin-bottom:3px">Insp. Nimal · 10:15 AM</div><div class="chat-bubble">Confirmed. Takedown request submitted to SLCERT. IP traced.</div></div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" class="chat-input" placeholder="Add case note..." id="panel-chat-input" onkeydown="if(event.key==='Enter')sendPanelChat()">
+        <button class="chat-send" onclick="sendPanelChat()"><i class="fa-solid fa-paper-plane" style="font-size:13px"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 4;
+  const stepLabels = ['Incident type', 'What happened', 'Evidence', 'Review & submit'];
+  let uploadCount = 0;
+
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    document.querySelectorAll('.nav-btn[id^="nav-"]').forEach(b => b.classList.remove('active'));
+    const nb = document.getElementById('nav-' + name);
+    if (nb) nb.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function selectOption(el, group) {
+    el.closest('.option-grid').querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    if (group === 'type' && el.dataset.val === 'digital') {
+      document.getElementById('digital-followup').style.display = 'block';
+    } else if (group === 'type') {
+      document.getElementById('digital-followup').style.display = 'none';
+    }
+  }
+
+  function updateProgress() {
+    for (let i = 1; i <= totalSteps; i++) {
+      const el = document.getElementById('ps' + i);
+      el.className = 'progress-step';
+      if (i < currentStep) el.classList.add('done');
+      else if (i === currentStep) el.classList.add('active');
+    }
+    document.getElementById('progress-label').textContent = `Step ${currentStep} of ${totalSteps} — ${stepLabels[currentStep-1]}`;
+    document.getElementById('btn-back').style.display = currentStep > 1 ? 'inline-flex' : 'none';
+    document.getElementById('btn-next').innerHTML = currentStep === totalSteps
+      ? '<i class="fa-solid fa-paper-plane"></i> Submit report'
+      : 'Continue <i class="fa-solid fa-arrow-right"></i>';
+  }
+
+  function formNext() {
+    if (currentStep < totalSteps) {
+      document.getElementById('fs-' + currentStep).classList.remove('active');
+      currentStep++;
+      document.getElementById('fs-' + currentStep).classList.add('active');
+      updateProgress();
+    } else {
+      showScreen('success');
+    }
+  }
+
+  function formBack() {
+    if (currentStep > 1) {
+      document.getElementById('fs-' + currentStep).classList.remove('active');
+      currentStep--;
+      document.getElementById('fs-' + currentStep).classList.add('active');
+      updateProgress();
+    }
+  }
+
+  function simulateUpload() {
+    uploadCount++;
+    const files = ['screenshot_evidence.png', 'chat_log_export.pdf', 'video_record.mp4'];
+    const hashes = ['4f2a9c1b8e3d7f6a', '9b5c2e8d1f4a7c3e', '3d8f1b9c5e2a4d7f'];
+    const fname = files[uploadCount % 3];
+    const fhash = hashes[uploadCount % 3];
+    const icons = ['fa-image', 'fa-file-pdf', 'fa-video'];
+    const icon = icons[uploadCount % 3];
+    const container = document.getElementById('uploaded-files');
+    const el = document.createElement('div');
+    el.className = 'upload-preview';
+    el.innerHTML = `<i class="fa-solid ${icon}"></i><div class="file-info"><div class="file-name">${fname}</div><div class="file-hash">SHA-256: ${fhash}… — sealed</div></div><i class="fa-solid fa-circle-check" style="color:var(--teal-400)"></i>`;
+    container.appendChild(el);
+  }
+
+  function trackCase() {
+    const val = document.getElementById('key-input').value.replace(/\D/g,'');
+    if (val.length >= 12) {
+      document.getElementById('track-result').style.display = 'block';
+    } else {
+      alert('Please enter a valid 16-digit Justice Key (e.g. JK-4827-9351-0284)');
+    }
+  }
+
+  function formatKey(el) {
+    let v = el.value.replace(/[^0-9]/g, '');
+    let formatted = 'JK-';
+    if (v.length > 0) formatted += v.substring(0,4);
+    if (v.length > 4) formatted += '-' + v.substring(4,8);
+    if (v.length > 8) formatted += '-' + v.substring(8,12);
+    el.value = formatted;
+  }
+
+  function panicExit() {
+    window.location.href = 'https://www.google.com/search?q=local+weather+today';
+  }
+
+  function openPanel(caseId) {
+    document.getElementById('case-panel').classList.add('open');
+  }
+
+  function closePanel() {
+    document.getElementById('case-panel').classList.remove('open');
+  }
+
+  function acceptHandshake(btnId) {
+    const btn = document.getElementById(btnId);
+    btn.className = 'handshake-btn accepted';
+    btn.textContent = '✓ Accepted — recorded';
+  }
+
+  function acceptPanelHandshake() {
+    const btn = document.getElementById('panel-hs');
+    btn.className = 'handshake-btn accepted';
+    btn.textContent = '✓ MoWCA referral accepted — 11:38 AM';
+  }
+
+  function dashTab(name, el) {
+    document.querySelectorAll('.dash-tab-panel').forEach(p => p.style.display = 'none');
+    document.getElementById('dash-' + name).style.display = 'block';
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    if (el) el.classList.add('active');
+  }
+
+  function sendChat() {
+    const inp = document.getElementById('chat-input');
+    const msg = inp.value.trim();
+    if (!msg) return;
+    const container = document.getElementById('chat-messages');
+    const el = document.createElement('div');
+    el.className = 'chat-msg';
+    el.innerHTML = `<div class="chat-avatar police">PO</div><div><div style="font-size:10px;color:var(--slate-400);margin-bottom:3px">SI Perera · Now</div><div class="chat-bubble">${msg}</div></div>`;
+    container.appendChild(el);
+    inp.value = '';
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function sendPanelChat() {
+    const inp = document.getElementById('panel-chat-input');
+    const msg = inp.value.trim();
+    if (!msg) return;
+    const container = inp.closest('.chat-box').querySelector('.chat-messages');
+    const el = document.createElement('div');
+    el.className = 'chat-msg';
+    el.innerHTML = `<div class="chat-avatar police">PO</div><div><div style="font-size:10px;color:var(--slate-400);margin-bottom:3px">SI Perera · Now</div><div class="chat-bubble">${msg}</div></div>`;
+    container.appendChild(el);
+    inp.value = '';
+    container.scrollTop = container.scrollHeight;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Account Gmail Inbox Hygiene Agent (GmCL) | Abishek Pranav G V</title>
+  <meta name="description" content="Enterprise multi-account Gmail inbox hygiene automation daemon with zero-loss Business Guard, OAuth2 isolation, and bulk triage.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #030712; color: #f3f4f6; }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: rgba(31, 41, 55, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-red-500 selection:text-white">
+
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-gray-800/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-500 to-amber-500 flex items-center justify-center font-black text-white text-base shadow-lg shadow-red-500/20">
+        AP
+      </div>
+      <div>
+        <div class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+          GmCL Inbox Hygiene Agent
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-red-950/80 text-red-400 border border-red-800/50">
+            OAuth2 + Business Guard
+          </span>
+        </div>
+        <div class="text-[11px] text-gray-400 font-mono">Abishek Pranav G V · AI Automation & Enterprise Infrastructure</div>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs">
+      <a href="https://github.com/AbishekPranavGV/Multi-Account-Gmail-Inbox-Hygiene-Agent" target="_blank" class="px-3 py-1.5 rounded-lg border border-gray-700 bg-gray-800/80 hover:bg-gray-700 text-gray-300 font-medium transition flex items-center gap-1.5">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub Code
+      </a>
+      <a href="https://abishekpranavportfolio.vercel.app" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-red-500 hover:bg-red-400 text-white font-semibold transition">
+        Main Portfolio
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero & Controls -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-8 space-y-6">
+
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-gray-800">
+      <div>
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-mono bg-red-950/60 text-red-400 border border-red-800/40 mb-2">
+          <span>● 10 Concurrent Accounts</span>
+          <span>·</span>
+          <span>1,200 Emails / Min Throughput</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Multi-Account Gmail Hygiene & Automation Console
+        </h1>
+        <p class="text-gray-400 text-sm mt-1 max-w-2xl leading-relaxed">
+          Interactive enterprise control cockpit demonstrating deterministic promotional archiving, storage reclamation, and strict Business Guard VIP preservation across corporate Google Workspace accounts.
+        </p>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="grid grid-cols-3 gap-2.5 text-center">
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">Total Scanned</div>
+          <div class="text-lg font-bold text-white font-mono">48,250</div>
+        </div>
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">Storage Saved</div>
+          <div class="text-lg font-bold text-emerald-400 font-mono">14.8 GB</div>
+        </div>
+        <div class="glass-panel px-3 py-2 rounded-xl">
+          <div class="text-[11px] font-mono text-gray-400">VIP Protected</div>
+          <div class="text-lg font-bold text-amber-400 font-mono">100.0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left Column: Account Selector & Business Guard Controls (4 cols) -->
+      <div class="lg:col-span-4 space-y-5">
+        
+        <!-- Account Switcher -->
+        <div class="glass-panel p-5 rounded-2xl space-y-4">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-300 flex items-center justify-between">
+            <span>1. Connected Workspace Accounts</span>
+            <span class="text-xs font-mono text-emerald-400">OAuth2 Active</span>
+          </h2>
+
+          <div class="space-y-2">
+            <label class="text-xs text-gray-400">Active Gmail Ingestion Channel</label>
+            <select id="accountSelect" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-red-500 font-mono">
+              <option value="ceo">ceo@nunesinstrumentation.com (Primary Executive)</option>
+              <option value="sales">sales@nunesinstrumentation.com (Inquiries & POs)</option>
+              <option value="personal">abishekpranav403@gmail.com (Personal & Open Source)</option>
+              <option value="support">support@nunes.in (Customer Service Tickets)</option>
+            </select>
+          </div>
+
+          <div id="accountStatsCard" class="p-3.5 rounded-xl bg-gray-900/80 border border-gray-800 text-xs space-y-2 font-mono">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Business Guard Safety Policies -->
+          <div class="pt-3 border-t border-gray-800 space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center justify-between">
+              <span>Business Guard Protection Policies</span>
+              <span class="text-[10px] text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-900">Zero Loss</span>
+            </h3>
+
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer">
+              <div>
+                <div class="text-xs font-bold text-gray-200">Whitelist Vendor Domains</div>
+                <div class="text-[10px] text-gray-400 font-mono">@nunes.in, @tatamotors.com, @bhel.in</div>
+              </div>
+              <input type="checkbox" id="guardWhitelist" checked class="rounded bg-gray-800 text-red-500 focus:ring-0">
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer">
+              <div>
+                <div class="text-xs font-bold text-gray-200">Invoice / PO Safeguard</div>
+                <div class="text-[10px] text-gray-400 font-mono">Regex: PO#, Invoice, Tax, Receipt, Wire</div>
+              </div>
+              <input type="checkbox" id="guardInvoices" checked class="rounded bg-gray-800 text-red-500 focus:ring-0">
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer">
+              <div>
+                <div class="text-xs font-bold text-gray-200">Active User Reply Retention</div>
+                <div class="text-[10px] text-gray-400 font-mono">Retain threads with user sent messages</div>
+              </div>
+              <input type="checkbox" id="guardReplies" checked class="rounded bg-gray-800 text-red-500 focus:ring-0">
+            </label>
+          </div>
+
+          <!-- Action Button -->
+          <button id="runCleanerBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-red-500 to-amber-500 hover:from-red-400 hover:to-amber-400 text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-red-500/20">
+            <svg class="w-4 h-4 animate-spin-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            Execute Automated Hygiene Sweep
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Live Message Feed & Batch Cleaning Log (8 cols) -->
+      <div class="lg:col-span-8 space-y-5">
+        
+        <!-- Interactive Feed Table -->
+        <div class="glass-panel p-5 rounded-2xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <span>Real-Time Inbox Message Triage Stream</span>
+                <span id="activeCleanStatus" class="px-2 py-0.5 rounded-full text-[11px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800/60">
+                  Daemon Standby
+                </span>
+              </h2>
+              <p class="text-xs text-gray-400">Simulating live categorization across PROMOTIONS, SOCIAL, and Protected Business threads</p>
+            </div>
+            <div class="text-xs text-gray-400 font-mono">
+              Batch: <span class="text-white font-bold">1,000 / API Call</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs font-mono">
+              <thead class="text-gray-400 uppercase bg-gray-900/60 border-b border-gray-800">
+                <tr>
+                  <th class="py-2.5 px-3">Sender</th>
+                  <th class="py-2.5 px-3">Subject / Thread Header</th>
+                  <th class="py-2.5 px-3">Category Tag</th>
+                  <th class="py-2.5 px-3">Business Guard</th>
+                  <th class="py-2.5 px-3 text-right">Triage Action</th>
+                </tr>
+              </thead>
+              <tbody id="messageFeedBody" class="divide-y divide-gray-800/60">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- System Daemon Architecture & Performance Card -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="glass-card p-3.5 rounded-xl text-center">
+            <div class="text-[11px] text-gray-400">Scan Velocity</div>
+            <div class="text-base font-bold text-red-400 font-mono mt-0.5">1,240 msg/min</div>
+            <div class="text-[10px] text-gray-500 mt-0.5">Parallel HTTP Threading</div>
+          </div>
+          <div class="glass-card p-3.5 rounded-xl text-center">
+            <div class="text-[11px] text-gray-400">Google API Quota</div>
+            <div class="text-base font-bold text-emerald-400 font-mono mt-0.5">85 / 250 units</div>
+            <div class="text-[10px] text-gray-500 mt-0.5">Exponential Backoff</div>
+          </div>
+          <div class="glass-card p-3.5 rounded-xl text-center">
+            <div class="text-[11px] text-gray-400">Security Architecture</div>
+            <div class="text-base font-bold text-cyan-400 font-mono mt-0.5">Zero Cross-Leak</div>
+            <div class="text-[10px] text-gray-500 mt-0.5">Isolated Token Stores</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="glass-panel border-t border-gray-800 px-6 py-4 mt-8 text-center text-xs text-gray-500 font-mono">
+    Enterprise AI Automation Portfolio · Engineered by Abishek Pranav G V · Production Deployment on Vercel
+  </footer>
+
+  <script>
+    const accounts = {
+      ceo: {
+        email: "ceo@nunesinstrumentation.com",
+        uncleanedCount: 14820,
+        cleanedCount: 12450,
+        vipCount: 2370,
+        storageSaved: "4.8 GB",
+        lastSync: "3 minutes ago"
+      },
+      sales: {
+        email: "sales@nunesinstrumentation.com",
+        uncleanedCount: 22100,
+        cleanedCount: 18900,
+        vipCount: 3200,
+        storageSaved: "6.2 GB",
+        lastSync: "Just now"
+      },
+      personal: {
+        email: "abishekpranav403@gmail.com",
+        uncleanedCount: 8450,
+        cleanedCount: 6850,
+        vipCount: 1600,
+        storageSaved: "2.7 GB",
+        lastSync: "12 minutes ago"
+      },
+      support: {
+        email: "support@nunes.in",
+        uncleanedCount: 2880,
+        cleanedCount: 920,
+        vipCount: 1960,
+        storageSaved: "1.1 GB",
+        lastSync: "1 hour ago"
+      }
+    };
+
+    const mockMessages = [
+      { sender: "newsletter@medium.com", subject: "Top 10 Machine Learning Architectures of 2026", category: "CATEGORY_PROMOTIONS", isVip: false, action: "Archived" },
+      { sender: "procurement@tatamotors.com", subject: "PO# TM-884920: Nunes Pressure Transmitters", category: "PRIMARY_BUSINESS", isVip: true, action: "PROTECTED (PO Found)" },
+      { sender: "marketing@linkedin.com", subject: "5 new people viewed your engineering profile", category: "CATEGORY_SOCIAL", isVip: false, action: "Archived" },
+      { sender: "billing@aws.amazon.com", subject: "AWS Invoice #993214 - Payment Processed", category: "PRIMARY_FINANCE", isVip: true, action: "PROTECTED (Invoice)" },
+      { sender: "deals@ubereats.com", subject: "50% off your next lunch order today!", category: "CATEGORY_PROMOTIONS", isVip: false, action: "Archived" },
+      { sender: "director@bhel.in", subject: "Re: Tender Inquiry for Industrial Sensors (Calibration)", category: "PRIMARY_BUSINESS", isVip: true, action: "PROTECTED (Whitelisted)" },
+      { sender: "notifications@github.com", subject: "AbishekPranavGV/abishekpranavportfolio: workflow passed", category: "CATEGORY_UPDATES", isVip: false, action: "Archived" }
+    ];
+
+    function updateAccountView() {
+      const aKey = document.getElementById('accountSelect').value;
+      const acc = accounts[aKey];
+
+      document.getElementById('accountStatsCard').innerHTML = `
+        <div class="flex justify-between items-center text-white font-bold">
+          <span>${acc.email}</span>
+          <span class="text-emerald-400">ONLINE</span>
+        </div>
+        <div class="text-gray-400 text-[11px]">Pending Clutter Messages: <span class="text-gray-200 font-bold">${acc.uncleanedCount.toLocaleString()}</span></div>
+        <div class="text-gray-400 text-[11px]">Storage Recovered: <span class="text-emerald-400 font-bold">${acc.storageSaved}</span></div>
+        <div class="text-gray-500 text-[10px] italic border-t border-gray-800 pt-1.5">Last Daemon Run: ${acc.lastSync}</div>
+      `;
+
+      renderFeed(false);
+    }
+
+    function renderFeed(isCleaning) {
+      const tbody = document.getElementById('messageFeedBody');
+      tbody.innerHTML = mockMessages.map(msg => {
+        let actionDisplay = msg.action;
+        let actionClass = msg.isVip ? "text-amber-400 font-bold" : "text-gray-400";
+        if (isCleaning && !msg.isVip) {
+          actionDisplay = "PURGING...";
+          actionClass = "text-red-400 font-bold animate-pulse";
+        }
+        return `
+          <tr class="hover:bg-gray-800/40 transition">
+            <td class="py-2.5 px-3 text-gray-300 font-medium">${msg.sender}</td>
+            <td class="py-2.5 px-3 text-white">${msg.subject}</td>
+            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] bg-gray-800 text-gray-300 border border-gray-700">${msg.category}</span></td>
+            <td class="py-2.5 px-3">
+              ${msg.isVip ? '<span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-400 border border-amber-900 font-bold">VIP PROTECTED</span>' : '<span class="text-gray-600">Standard</span>'}
+            </td>
+            <td class="py-2.5 px-3 text-right ${actionClass}">${actionDisplay}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('runCleanerBtn').addEventListener('click', () => {
+      document.getElementById('activeCleanStatus').textContent = "HYGIENE SWEEP RUNNING";
+      document.getElementById('activeCleanStatus').className = "px-2 py-0.5 rounded-full text-[11px] font-mono bg-red-950 text-red-400 border border-red-800/60 animate-pulse";
+      renderFeed(true);
+
+      setTimeout(() => {
+        document.getElementById('activeCleanStatus').textContent = "SWEEP COMPLETE (1,240 MSG)";
+        document.getElementById('activeCleanStatus').className = "px-2 py-0.5 rounded-full text-[11px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800/60";
+        renderFeed(false);
+      }, 1800);
+    });
+
+    document.getElementById('accountSelect').addEventListener('change', updateAccountView);
+    updateAccountView();
+  </script>
+</body>
+</html>

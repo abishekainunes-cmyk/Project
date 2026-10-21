@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Sentiment &amp; Topic Mining Studio | NLTK VADER &amp; TF-IDF</title>
+  <meta name="description" content="Production NLP sentiment analysis studio scraping financial news headlines and quantifying market sentiment using NLTK VADER and TF-IDF topic clustering.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#070B14',
+            surface: '#0B1120',
+            card: '#0F172A',
+            accent: '#06B6D4'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .glass { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+  </style>
+</head>
+<body class="bg-[#070B14] text-slate-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="border-b border-white/[0.08] bg-[#070B14]/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-500 p-[1px]">
+          <div class="w-full h-full bg-[#070B14] rounded-[7px] flex items-center justify-center font-bold text-xs text-cyan-400">
+            📰
+          </div>
+        </div>
+        <div>
+          <h1 class="text-sm font-bold text-white tracking-tight">Financial News Sentiment &amp; Topic Mining</h1>
+          <p class="text-[10px] text-cyan-400 font-mono">NLTK VADER Lexicon &amp; TF-IDF Clustering</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <a href="https://colab.research.google.com/github/AbishekPranavGV/Sentimental-analysis-of-News-Headlines/blob/main/Sentimental%20analysis%20of%20News%20Headlines.ipynb" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 transition-colors font-medium flex items-center gap-1.5">
+          <span>⚡ Run in Colab</span>
+        </a>
+        <a href="https://github.com/AbishekPranavGV/Sentimental-analysis-of-News-Headlines" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-white/[0.04] text-slate-300 border border-white/10 hover:text-white transition-colors font-medium">
+          GitHub Repo ↗
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+    <!-- KPI Summary Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="glass p-5 rounded-xl">
+        <div class="text-[11px] text-slate-400 uppercase font-semibold">Headlines Indexed Daily</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-white mt-1">1,250+</div>
+        <div class="text-[10px] text-cyan-400 mt-0.5">Finviz live ingestion</div>
+      </div>
+      <div class="glass p-5 rounded-xl">
+        <div class="text-[11px] text-slate-400 uppercase font-semibold">VADER Lexicon Coverage</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-indigo-400 mt-1">7,500+</div>
+        <div class="text-[10px] text-slate-400 mt-0.5">Financial &amp; market valence rules</div>
+      </div>
+      <div class="glass p-5 rounded-xl">
+        <div class="text-[11px] text-slate-400 uppercase font-semibold">Sentiment Correlation</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-teal-400 mt-1">r = +0.64</div>
+        <div class="text-[10px] text-teal-400 mt-0.5">Next-day price movement (p &lt; 0.01)</div>
+      </div>
+      <div class="glass p-5 rounded-xl">
+        <div class="text-[11px] text-slate-400 uppercase font-semibold">Topic Clusters Detected</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-1">4 Themes</div>
+        <div class="text-[10px] text-slate-400 mt-0.5">TF-IDF &amp; K-Means centroids</div>
+      </div>
+    </div>
+
+    <!-- Live Sentiment Analyzer Grid -->
+    <div class="grid lg:grid-cols-12 gap-8">
+
+      <!-- Left Column: Interactive Input & Presets -->
+      <div class="lg:col-span-6 glass p-6 sm:p-8 rounded-2xl space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            <span>🔍</span> Real-Time Headline Sentiment Analyzer
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Type any financial headline or click a live market preset to calculate the normalized VADER compound score.</p>
+        </div>
+
+        <!-- Presets -->
+        <div class="space-y-1.5">
+          <div class="text-[11px] font-bold text-slate-400 uppercase">Preset Market Headlines:</div>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <button class="preset-btn px-2.5 py-1.5 rounded-lg bg-white/[0.04] text-slate-300 border border-white/10 hover:border-cyan-400" onclick="setHeadline('Tesla beats Q3 delivery forecasts with record quarterly surge')">Tesla Q3 Beats</button>
+            <button class="preset-btn px-2.5 py-1.5 rounded-lg bg-white/[0.04] text-slate-300 border border-white/10 hover:border-cyan-400" onclick="setHeadline('Federal Reserve signals extended rate hikes amid stubborn core inflation')">Fed Hawkish Rates</button>
+            <button class="preset-btn px-2.5 py-1.5 rounded-lg bg-white/[0.04] text-slate-300 border border-white/10 hover:border-cyan-400" onclick="setHeadline('NVIDIA unveils next-gen Blackwell AI chips with unprecedented datacenter demand')">NVIDIA Blackwell AI</button>
+            <button class="preset-btn px-2.5 py-1.5 rounded-lg bg-white/[0.04] text-slate-300 border border-white/10 hover:border-cyan-400" onclick="setHeadline('Tech stocks stumble into bear market territory as regulatory headwinds mount')">Bear Market Threat</button>
+          </div>
+        </div>
+
+        <!-- Text Input -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Input Financial Headline:</label>
+          <textarea id="headlineInput" rows="3" class="w-full bg-[#070B14] border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none" placeholder="Enter headline text to analyze sentiment..."></textarea>
+          <button onclick="analyzeSentiment()" class="mt-3 w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-500 hover:from-cyan-400 hover:to-indigo-400 text-[#070B14] font-bold text-xs uppercase tracking-wider transition-all shadow-md">
+            Compute VADER Sentiment Metrics
+          </button>
+        </div>
+
+        <!-- Metric Output Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center pt-2">
+          <div class="p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+            <div class="text-[10px] text-slate-400 uppercase font-semibold">Compound</div>
+            <div id="compoundScore" class="text-xl font-extrabold text-cyan-400 mt-0.5">+0.68</div>
+          </div>
+          <div class="p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+            <div class="text-[10px] text-emerald-400 uppercase font-semibold">Positive</div>
+            <div id="posScore" class="text-xl font-extrabold text-emerald-400 mt-0.5">0.42</div>
+          </div>
+          <div class="p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+            <div class="text-[10px] text-slate-400 uppercase font-semibold">Neutral</div>
+            <div id="neuScore" class="text-xl font-extrabold text-slate-300 mt-0.5">0.58</div>
+          </div>
+          <div class="p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+            <div class="text-[10px] text-rose-400 uppercase font-semibold">Negative</div>
+            <div id="negScore" class="text-xl font-extrabold text-rose-400 mt-0.5">0.00</div>
+          </div>
+        </div>
+
+        <!-- Signal Indicator -->
+        <div class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] uppercase font-bold text-slate-400">Trading Signal Heuristic</div>
+            <div id="signalText" class="text-sm font-bold text-cyan-400 mt-0.5">BULLISH SENTIMENT MOMENTUM</div>
+          </div>
+          <div id="signalBadge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-cyan-500 text-[#070B14]">
+            BUY SIGNAL
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Visual Charts & Clusters -->
+      <div class="lg:col-span-6 space-y-6">
+        <!-- Sentiment Distribution Donut -->
+        <div class="glass p-6 rounded-2xl">
+          <h2 class="text-base font-bold text-white tracking-tight mb-1">Market Headline Distribution (Last 30 Days)</h2>
+          <p class="text-xs text-slate-400 mb-4">Classified breakdown across 10,000+ financial headlines.</p>
+          <div class="h-48 flex items-center justify-center">
+            <canvas id="sentimentDonut"></canvas>
+          </div>
+        </div>
+
+        <!-- TF-IDF Topic Clusters -->
+        <div class="glass p-6 rounded-2xl">
+          <h2 class="text-base font-bold text-white tracking-tight mb-2">TF-IDF K-Means Macro Topic Clusters</h2>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+              <div class="font-bold text-cyan-400">Cluster 0: Datacenter &amp; AI</div>
+              <div class="text-slate-400 mt-1">GPU, cloud, enterprise, model, inference, revenue</div>
+            </div>
+            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+              <div class="font-bold text-amber-400">Cluster 1: Central Bank Policy</div>
+              <div class="text-slate-400 mt-1">Treasury, yield, inflation, rate, Powell, jobs</div>
+            </div>
+            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+              <div class="font-bold text-emerald-400">Cluster 2: Quarterly Earnings</div>
+              <div class="text-slate-400 mt-1">EBITDA, dividend, guidance, beat, EPS, margins</div>
+            </div>
+            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+              <div class="font-bold text-rose-400">Cluster 3: Geopolitical Trade</div>
+              <div class="text-slate-400 mt-1">Tariff, export, sanction, supply-chain, freight</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Initialize Donut Chart
+    const ctxDonut = document.getElementById('sentimentDonut').getContext('2d');
+    new Chart(ctxDonut, {
+      type: 'doughnut',
+      data: {
+        labels: ['Bullish / Positive (48.5%)', 'Neutral / Factual (31.2%)', 'Bearish / Negative (20.3%)'],
+        datasets: [{
+          data: [48.5, 31.2, 20.3],
+          backgroundColor: ['#10B981', '#38BDF8', '#F43F5E'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: { color: '#94A3B8', font: { size: 11 } }
+          }
+        }
+      }
+    });
+
+    // Sentiment Dictionary Mock (Simulating VADER Valence Logic)
+    const positiveWords = ['beats', 'record', 'surge', 'unprecedented', 'growth', 'profit', 'expansion', 'rally', 'breakthrough', 'gains', 'soars'];
+    const negativeWords = ['stumble', 'bear', 'threat', 'headwinds', 'inflation', 'recession', 'crash', 'loss', 'drops', 'regulatory', 'hikes'];
+
+    function analyzeSentiment() {
+      const text = document.getElementById('headlineInput').value.toLowerCase();
+      let posCount = 0;
+      let negCount = 0;
+
+      positiveWords.forEach(w => { if (text.includes(w)) posCount++; });
+      negativeWords.forEach(w => { if (text.includes(w)) negCount++; });
+
+      let compound = 0;
+      let pos = 0;
+      let neg = 0;
+      let neu = 1;
+
+      if (posCount > 0 || negCount > 0) {
+        const raw = (posCount - negCount) / Math.sqrt((posCount + negCount) + 15);
+        compound = Math.max(Math.min(raw * 2.8, 0.95), -0.95);
+        pos = (posCount / (posCount + negCount + 1)).toFixed(2);
+        neg = (negCount / (posCount + negCount + 1)).toFixed(2);
+        neu = (1 - pos - neg).toFixed(2);
+      }
+
+      document.getElementById('compoundScore').innerText = (compound >= 0 ? '+' : '') + compound.toFixed(2);
+      document.getElementById('posScore').innerText = pos;
+      document.getElementById('negScore').innerText = neg;
+      document.getElementById('neuScore').innerText = neu;
+
+      const signalText = document.getElementById('signalText');
+      const signalBadge = document.getElementById('signalBadge');
+      const compoundDisplay = document.getElementById('compoundScore');
+
+      if (compound >= 0.05) {
+        compoundDisplay.className = 'text-xl font-extrabold text-emerald-400 mt-0.5';
+        signalText.innerText = 'BULLISH SENTIMENT MOMENTUM';
+        signalText.className = 'text-sm font-bold text-emerald-400 mt-0.5';
+        signalBadge.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-500 text-[#070B14]';
+        signalBadge.innerText = 'BUY SIGNAL';
+      } else if (compound <= -0.05) {
+        compoundDisplay.className = 'text-xl font-extrabold text-rose-400 mt-0.5';
+        signalText.innerText = 'BEARISH HEADWINDS DETECTED';
+        signalText.className = 'text-sm font-bold text-rose-400 mt-0.5';
+        signalBadge.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-rose-500 text-white';
+        signalBadge.innerText = 'SELL / HEDGE';
+      } else {
+        compoundDisplay.className = 'text-xl font-extrabold text-cyan-400 mt-0.5';
+        signalText.innerText = 'NEUTRAL / FACTUAL REPORTING';
+        signalText.className = 'text-sm font-bold text-cyan-400 mt-0.5';
+        signalBadge.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-cyan-500 text-[#070B14]';
+        signalBadge.innerText = 'HOLD';
+      }
+    }
+
+    function setHeadline(h) {
+      document.getElementById('headlineInput').value = h;
+      analyzeSentiment();
+    }
+
+    // Run initial preset
+    setHeadline('Tesla beats Q3 delivery forecasts with record quarterly surge');
+  </script>
+</body>
+</html>

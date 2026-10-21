@@ -1,0 +1,120 @@
+{
+  "schema_version": 2,
+  "record_product_name": "Corona Generators",
+  "source": {
+    "source_row": "21",
+    "sheet_name": "final sheet",
+    "sheet_row": {
+      "AVAILABLE CATEGORIES": "No Match",
+      "Bitumen Testing Apparatus": "Corona Generators",
+      "Column 3": "",
+      "Column 4": "",
+      "Column 5": "",
+      "Product Name": "Corona Generators"
+    },
+    "product_name": "Corona Generators",
+    "model": "",
+    "selling_price": ""
+  },
+  "research": {
+    "found": false,
+    "title": "",
+    "source_url": "",
+    "discovery_url": "",
+    "description": "",
+    "specifications": [],
+    "company_details": {
+      "company_name": "",
+      "location": "",
+      "source_url": "",
+      "source_domain": ""
+    },
+    "image_urls": []
+  },
+  "approved": {
+    "listing_name": "Corona Generators",
+    "product_name": "Corona Generators",
+    "model": "",
+    "variant_name": "Corona Generators",
+    "description": "Corona Generators are specialized equipment designed for bitumen testing, offering precise and reliable performance in industrial settings. The product is engineered to meet rigorous quality standards, ensuring accurate results in material analysis. With a focus on durability and efficiency, it is suitable for use in laboratories and industrial facilities. The apparatus is equipped with advanced technology to facilitate consistent and repeatable testing processes, making it a valuable tool for professionals in the construction and material science industries.",
+    "key_features": [
+      "Precision Bitumen Testing",
+      "Advanced Testing Technology",
+      "Durability and Reliability",
+      "Consistent Results",
+      "Rigorous Quality Standards",
+      "Industrial-Grade Performance",
+      "Repeatable Testing Processes",
+      "Suitable for Laboratories and Industrial Facilities"
+    ],
+    "applications": [],
+    "specifications": [
+      {
+        "name": "AVAILABLE CATEGORIES",
+        "value": "No Match"
+      },
+      {
+        "name": "Bitumen Testing Apparatus",
+        "value": "Corona Generators"
+      }
+    ],
+    "company_details": {
+      "company_name": "",
+      "location": "",
+      "source_url": "",
+      "source_domain": ""
+    }
+  },
+  "ai": {
+    "provider": "ollama",
+    "model": "qwen3:1.7b",
+    "attempted": true,
+    "response_ok": true,
+    "mode": "QWEN_WITH_FALLBACK",
+    "label": "Qwen3 + Python Fallback",
+    "response_time_seconds": 43.07,
+    "ai_fields": [
+      "listing_name",
+      "variant_name",
+      "description",
+      "key_features"
+    ],
+    "fallback_fields": [
+      "applications"
+    ],
+    "error": "",
+    "raw_response_chars": 1020
+  },
+  "assets": {
+    "images": [
+      "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\product_1.jpg",
+      "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\product_2.jpg",
+      "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\product_3.jpg",
+      "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\product_4.jpg",
+      "\\\\192.168.29.88\\Common\\Completed\\Abishek\\NUNES_INDIAMART_AUTOMATION_V3_3_DROPDOWN_FIX\\outputs\\Corona_Generators\\images\\product_5.jpg"
+    ],
+    "image_web_urls": [
+      "/outputs/Corona_Generators/images/product_1.jpg",
+      "/outputs/Corona_Generators/images/product_2.jpg",
+      "/outputs/Corona_Generators/images/product_3.jpg",
+      "/outputs/Corona_Generators/images/product_4.jpg",
+      "/outputs/Corona_Generators/images/product_5.jpg"
+    ],
+    "image_source": "PENDING",
+    "pdf_path": "",
+    "pdf_web_url": ""
+  },
+  "indiamart": {
+    "decision": "",
+    "match": {},
+    "seller_status": "",
+    "seller_message": "",
+    "url": ""
+  },
+  "status": "REVIEW_READY",
+  "timestamps": {
+    "researched_at": "2026-09-02T08:46:14",
+    "ai_at": "2026-09-02T08:46:57",
+    "prepared_at": "2026-09-02T08:46:57"
+  }
+}
