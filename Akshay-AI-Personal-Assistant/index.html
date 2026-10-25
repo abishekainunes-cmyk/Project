@@ -6,7 +6,7 @@
   <title>AKSHAY // Autonomous AI Workstation, FinOS & Life Engine</title>
   <meta name="description" content="Akshay: Offline-capable, privacy-first personal AI assistant combining Jarvis automation, real-world daily workflows, Internet-in-a-Box knowledge, and FinOS.">
   <meta name="theme-color" content="#030712">
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="manifest.json">
   <style>
 
     /* Android 5.1 / Chrome 43 Compatibility Fallbacks */
@@ -593,7 +593,7 @@
     // -------------------------------------------------------------
     // 1. Live Server State & Synchronization
     // -------------------------------------------------------------
-    let liveLedger = { assets: 85000.00, expenses: 3250.00, netWorth: 81750.00 };
+    var liveLedger = { assets: 85000.00, expenses: 3250.00, netWorth: 81750.00 };
 
     function syncLedgerWithServer() {
       fetch('/api/ledger/summary')
@@ -612,8 +612,8 @@
     // -------------------------------------------------------------
     // 2. Option A: Voice Brain-Dump & Calendar .ICS Generator
     // -------------------------------------------------------------
-    let cachedIcsContent = "";
-    let cachedWhatsappDraft = "";
+    var cachedIcsContent = "";
+    var cachedWhatsappDraft = "";
 
     function executeBrainDump() {
       var text = document.getElementById('braindumpInput').value.trim();
@@ -645,38 +645,27 @@
     }
 
     function renderBrainDumpResults(artifacts) {
-      const container = document.getElementById('braindumpResults');
+      var container = document.getElementById('braindumpResults');
       container.innerHTML = '';
       artifacts.calendar_events.forEach(function(ev) {
-        const div = document.createElement('div');
+        var div = document.createElement('div');
         div.className = "action-item-card";
-        div.innerHTML = `
-          <div>
-            <span class="tag tag-medium">CALENDAR EVENT</span>
-            <strong style="font-size:0.8rem; margin-left:0.4rem; color:#fff;">${escapeHtml(ev.summary)}</strong>
-          </div>
-          <span style="font-size:0.7rem; color:var(--text-muted);">${ev.duration_minutes} mins</span>
-        `;
+        div.innerHTML = '<div><span class="tag tag-medium">CALENDAR EVENT</span><strong style="font-size:0.8rem; margin-left:0.4rem; color:#fff;">' + escapeHtml(ev.summary) + '</strong></div><span style="font-size:0.7rem; color:#94a3b8;">' + ev.duration_minutes + ' mins</span>';
         container.appendChild(div);
       });
       artifacts.tasks.forEach(function(t) {
-        const div = document.createElement('div');
+        var div = document.createElement('div');
         div.className = "action-item-card";
-        div.innerHTML = `
-          <div>
-            <span class="tag tag-assignee">TASK</span>
-            <strong style="font-size:0.8rem; margin-left:0.4rem; color:#fff;">${escapeHtml(t)}</strong>
-          </div>
-        `;
+        div.innerHTML = '<div><span class="tag tag-assignee">TASK</span><strong style="font-size:0.8rem; margin-left:0.4rem; color:#fff;">' + escapeHtml(t) + '</strong></div>';
         container.appendChild(div);
       });
     }
 
     function downloadCalendarIcs() {
       if (!cachedIcsContent) return;
-      const blob = new Blob([cachedIcsContent], {type: 'text/calendar;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      var blob = new Blob([cachedIcsContent], {type: 'text/calendar;charset=utf-8'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
       a.href = url;
       a.download = 'akshay_event.ics';
       a.click();
@@ -695,7 +684,7 @@
     // 3. Option B: Camera Receipt Scanner (Edge OCR)
     // -------------------------------------------------------------
     function simulateReceiptOCR() {
-      const resultBox = document.getElementById('ocrReceiptResult');
+      var resultBox = document.getElementById('ocrReceiptResult');
       resultBox.textContent = '[OCR SCANNING CAMERA FRAME...]\n✓ Merchant: Reliance Smart Supermarket\n✓ Date: 25-Oct-2026\n✓ Line Items: Milk (₹65), Eggs (₹85), Olive Oil (₹450)\n✓ GST (5%): ₹30.00\n✓ TOTAL EXTRACTED: ₹630.00\n➔ Transaction written to SQLite Double-Entry Ledger.';
       
       // Post live to ledger
@@ -779,9 +768,9 @@
       .catch(function() {});
     }
     // Web Audio API Emergency Siren
-    let audioCtx = null;
-    let sirenOsc = null;
-    let sirenInterval = null;
+    var audioCtx = null;
+    var sirenOsc = null;
+    var sirenInterval = null;
 
     function triggerSOSAlert() {
       document.getElementById('sosOutput').textContent = '🚨 [SOS SIREN ACTIVATED]\n• User: Abishek Pranav\n• Blood Group: O+ Positive\n• Emergency SMS Generated with GPS beacon\n• Siren sounding at maximum volume';
@@ -791,13 +780,13 @@
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
         sirenOsc = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
+        var gainNode = audioCtx.createGain();
         gainNode.gain.value = 0.5;
         sirenOsc.connect(gainNode);
         gainNode.connect(audioCtx.destination);
         sirenOsc.start();
 
-        let high = false;
+        var high = false;
         sirenInterval = setInterval(function() {
           if (sirenOsc) {
             sirenOsc.frequency.setValueAtTime(high ? 960 : 770, audioCtx.currentTime);
@@ -819,8 +808,8 @@
     // -------------------------------------------------------------
     // Focus Pomodoro Timer
     // -------------------------------------------------------------
-    let pomoSeconds = 25 * 60;
-    let pomoTimer = null;
+    var pomoSeconds = 25 * 60;
+    var pomoTimer = null;
 
     function startPomodoro() {
       if (pomoTimer) return;
@@ -842,21 +831,21 @@
     function pausePomodoro() { clearInterval(pomoTimer); pomoTimer = null; }
     function resetPomodoro() { pausePomodoro(); pomoSeconds = 25 * 60; updatePomoDisplay(); }
     function updatePomoDisplay() {
-      const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
-      const s = (pomoSeconds % 60).toString().padStart(2, '0');
-      document.getElementById('pomoDisplay').textContent = `${m}:${s}`;
+      var m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
+      var s = (pomoSeconds % 60).toString().padStart(2, '0');
+      document.getElementById('pomoDisplay').textContent = m + ':' + s;
     }
 
     // -------------------------------------------------------------
     // Voice Core & Chat Dispatcher
     // -------------------------------------------------------------
-    let isListening = false;
-    let recognition = null;
-    const orbCore = document.getElementById('orbCore');
-    const voiceStatus = document.getElementById('voiceStatus');
+    var isListening = false;
+    var recognition = null;
+    var orbCore = document.getElementById('orbCore');
+    var voiceStatus = document.getElementById('voiceStatus');
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRec();
       recognition.continuous = false;
       recognition.interimResults = false;
@@ -870,7 +859,7 @@
       };
 
       recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
+        var transcript = event.results[0][0].transcript;
         addChatMessage(transcript, 'user');
         processUserQuery(transcript);
       };
@@ -898,7 +887,7 @@
     function speakResponse(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
+        var utter = new SpeechSynthesisUtterance(text);
         utter.rate = 1.05;
         window.speechSynthesis.speak(utter);
       }
@@ -907,17 +896,17 @@
     document.getElementById('orbBtn').addEventListener('click', toggleSpeech);
 
     // Audio Waveform
-    const canvas = document.getElementById('waveformCanvas');
-    const ctx = canvas.getContext('2d');
+    var canvas = document.getElementById('waveformCanvas');
+    var ctx = canvas.getContext('2d');
     function drawWave(time = 0) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.lineWidth = 2;
       ctx.strokeStyle = isListening ? '#34d399' : '#38bdf8';
       ctx.beginPath();
-      const sliceWidth = canvas.width / 40;
-      let x = 0;
-      for (let i = 0; i < 40; i++) {
-        const v = isListening 
+      var sliceWidth = canvas.width / 40;
+      var x = 0;
+      for (var i = 0; i < 40; i++) {
+        var v = isListening 
           ? Math.sin((i * 0.35) + (time * 0.009)) * 14 + (canvas.height / 2)
           : Math.sin((i * 0.12) + (time * 0.002)) * 3 + (canvas.height / 2);
         if (i === 0) ctx.moveTo(x, v); else ctx.lineTo(x, v);
@@ -946,22 +935,19 @@
     }
 
     function addChatMessage(text, sender = 'akshay') {
-      const stream = document.getElementById('chatStream');
-      const msg = document.createElement('div');
+      var stream = document.getElementById('chatStream');
+      var msg = document.createElement('div');
       msg.className = 'chat-msg msg-' + sender;
-      msg.innerHTML = `
-        <span class="msg-sender">${sender === 'akshay' ? 'Akshay // System' : 'You'}</span>
-        <span>${escapeHtml(text)}</span>
-      `;
+      msg.innerHTML = '<span class="msg-sender">' + (sender === 'akshay' ? 'Akshay // System' : 'You') + '</span><span>' + escapeHtml(text) + '</span>';
       stream.appendChild(msg);
       stream.scrollTop = stream.scrollHeight;
-      logAudit('CHAT', `Input: ${text.substring(0, 35)}`);
+      logAudit('CHAT', 'Input: ' + text.substring(0, 35));
     }
 
     function handleFormSubmit(e) {
       e.preventDefault();
-      const input = document.getElementById('userInput');
-      const val = input.value.trim();
+      var input = document.getElementById('userInput');
+      var val = input.value.trim();
       if (!val) return;
       input.value = '';
       addChatMessage(val, 'user');
@@ -974,7 +960,7 @@
     }
 
     function processUserQuery(query) {
-      const q = query.toLowerCase();
+      var q = query.toLowerCase();
 
       if (q.includes('brain-dump') || q.includes('meeting with')) {
         document.getElementById('braindumpInput').value = query;
@@ -1012,8 +998,8 @@
     }
 
     function logAudit(eventType, action) {
-      const consoleEl = document.getElementById('auditConsole');
-      const now = new Date().toISOString().substring(11, 19);
+      var consoleEl = document.getElementById('auditConsole');
+      var now = new Date().toISOString().substring(11, 19);
       consoleEl.textContent = '[AUDIT][' + now + '] ' + eventType + ' - ' + action + '\n' + consoleEl.textContent;
     }
 
