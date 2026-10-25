@@ -165,37 +165,140 @@
       color: #fff;
     }
 
-    /* Fast Column Navigation Jump Bar */
+    /* Executive Top Tabs Navigation Rail (Pinned Sticky Header) */
     .col-nav-bar {
       display: flex;
-      gap: 0.45rem;
+      align-items: center;
+      gap: 0.4rem;
       overflow-x: auto;
-      padding: 0.3rem 0.1rem;
-      margin-bottom: 0.65rem;
+      padding: 0.35rem 0.35rem;
+      margin-bottom: 0.75rem;
       -webkit-overflow-scrolling: touch;
+      background: #0f172a;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.65);
     }
     .col-nav-btn {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #94a3b8;
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
       font-size: 0.72rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+      flex: 1 1 auto;
+      justify-content: center;
+      min-height: 40px;
     }
-    .col-nav-btn.active, .col-nav-btn:hover {
+    .col-nav-btn:hover {
       background: #1e293b;
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .col-nav-btn.active#tab_colBrainDump {
+      background: rgba(56, 189, 248, 0.2);
       color: #38bdf8;
       border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+    .col-nav-btn.active#tab_colFinos {
+      background: rgba(52, 211, 153, 0.2);
+      color: #34d399;
+      border-color: #34d399;
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+    }
+    .col-nav-btn.active#tab_colMedical {
+      background: rgba(248, 113, 113, 0.2);
+      color: #f87171;
+      border-color: #f87171;
+      box-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
+    }
+    .col-nav-btn.active#tab_colJobBot {
+      background: rgba(192, 132, 252, 0.2);
+      color: #c084fc;
+      border-color: #c084fc;
+      box-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
+    }
+    .tab-num {
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      line-height: 17px;
+      text-align: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      font-size: 0.6rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+    .view-toggle-btn {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.45rem 0.65rem;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      min-height: 40px;
     }
 
-    /* 4-COLUMN WORKSTATION CONTAINER */
-    .workstation-columns {
+    /* Page View Mode Styles (100% Fit to Screen & Separation) */
+    .workstation-columns.mode-page {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      padding-bottom: 1.5rem;
+      box-sizing: border-box;
+    }
+    .workstation-columns.mode-page .column-box {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: none !important;
+      box-sizing: border-box;
+      border-radius: 12px;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    }
+    .page-subgrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+      margin-top: 0.65rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .page-col-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (min-width: 720px) {
+      .page-subgrid-2col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Grid View Mode Styles (All 4 Side-by-Side) */
+    .workstation-columns.mode-grid {
       display: flex;
       flex-direction: row;
       gap: 0.85rem;
@@ -203,31 +306,22 @@
       padding-bottom: 1.5rem;
       -webkit-overflow-scrolling: touch;
       align-items: stretch;
-      flex: 1;
+      width: 100%;
     }
-
-    .column-box {
+    .workstation-columns.mode-grid .column-box {
       flex: 0 0 340px;
       width: 340px;
-      background: #0f172a;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 0.85rem;
-      display: flex;
+      display: flex !important;
       flex-direction: column;
       gap: 0.8rem;
-      box-sizing: border-box;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
-
     @media (min-width: 1520px) {
-      .workstation-columns {
+      .workstation-columns.mode-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         overflow-x: visible;
       }
-      .column-box {
+      .workstation-columns.mode-grid .column-box {
         width: 100%;
         flex: 1 1 auto;
       }
@@ -524,84 +618,105 @@
 
   </div>
 
-  <!-- Fast Column Navigation Jump Bar -->
-  <div class="col-nav-bar">
-    <button class="col-nav-btn active" onclick="jumpToColumn('colBrainDump', this)">🎙️ COL 1: BRAIN-DUMP (A)</button>
-    <button class="col-nav-btn" onclick="jumpToColumn('colFinos', this)">💳 COL 2: WEALTH &amp; TAX (B/C)</button>
-    <button class="col-nav-btn" onclick="jumpToColumn('colMedical', this)">💊 COL 3: CLINICAL &amp; SOS (D)</button>
-    <button class="col-nav-btn" onclick="jumpToColumn('colJobBot', this)">🤖 COL 4: AUTO APPLY JOB BOT</button>
+  <!-- Executive Top Tabs Navigation Rail -->
+  <div class="col-nav-bar" id="colNavBar">
+    <button class="col-nav-btn active" id="tab_colBrainDump" onclick="switchPage('colBrainDump')">
+      <span class="tab-num">1</span>
+      <span>🎙️ BRAIN-DUMP &amp; CHAT</span>
+    </button>
+    <button class="col-nav-btn" id="tab_colFinos" onclick="switchPage('colFinos')">
+      <span class="tab-num">2</span>
+      <span>💳 WEALTH &amp; TAX</span>
+    </button>
+    <button class="col-nav-btn" id="tab_colMedical" onclick="switchPage('colMedical')">
+      <span class="tab-num">3</span>
+      <span>💊 CLINICAL &amp; SOS</span>
+    </button>
+    <button class="col-nav-btn" id="tab_colJobBot" onclick="switchPage('colJobBot')">
+      <span class="tab-num">4</span>
+      <span>🤖 ATS JOB BOT</span>
+    </button>
+    <button class="view-toggle-btn" id="btnToggleLayout" onclick="toggleLayoutView()" title="Toggle between Full Page Fit and 4-Column Grid View">
+      <span id="viewIcon">📄</span> <span id="viewLabel">Page Fit</span>
+    </button>
   </div>
 
-  <!-- 4-COLUMN WORKSTATION CONTAINER -->
-  <main class="workstation-columns">
+  <!-- 4-COLUMN WORKSTATION CONTAINER (PAGE VIEW FIT BY DEFAULT) -->
+  <main class="workstation-columns mode-page" id="workstationContainer">
 
     <!-- ============================================================== -->
     <!-- COLUMN 1: EXECUTIVE BRAIN-DUMP & NLP (OPTION A)                -->
     <!-- ============================================================== -->
-    <section class="column-box" id="colBrainDump">
+    <section class="column-box page-active" id="colBrainDump">
       <div class="column-header">
-        <span class="col-title-1">🎙️ COL 1: EXECUTIVE BRAIN-DUMP</span>
-        <span style="font-size:0.65rem; color:#94a3b8;">RFC 5545 .ICS</span>
+        <span class="col-title-1">🎙️ PAGE 1: EXECUTIVE BRAIN-DUMP &amp; VOICE AI</span>
+        <span style="font-size:0.65rem; color:#94a3b8;">RFC 5545 .ICS &bull; 100% FIT</span>
       </div>
 
-      <!-- Dialogue Stream -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#38bdf8;">
-          <span>JARVIS CONVERSATIONAL STREAM</span>
-          <span style="font-size:0.62rem; color:#34d399;">✓ ACTIVE</span>
-        </div>
-        <div class="chat-container" id="chatStream">
-          <div class="chat-msg msg-akshay">
-            <span class="msg-sender">Akshay // System</span>
-            <span>Akshay v4.0 (100x Precision) loaded. 4-Column Workstation, Wealth Runway, SIP Compounding, Clinical Pharmacovigilance, and Multi-Style Job Bot online.</span>
-          </div>
-        </div>
-        <form class="input-bar" id="chatForm" onsubmit="handleFormSubmit(event)">
-          <input type="text" id="userInput" placeholder="Ask Akshay or enter command..." autocomplete="off">
-          <button type="submit" class="btn" style="white-space:nowrap;">Send</button>
-        </form>
-
-        <!-- Slow-Phase Voice Listening Station (Built for Thoughtful Speakers) -->
-        <div id="voiceControlPanel" style="margin-top:0.4rem; display:flex; flex-direction:column; gap:0.3rem;">
-          <div style="display:flex; gap:0.35rem; align-items:center;">
-            <button type="button" class="btn" id="btnSlowVoice" onclick="toggleSlowPhaseVoice()" style="flex:1; background:rgba(56,189,248,0.15); border-color:#38bdf8; color:#38bdf8; font-weight:600; font-size:0.75rem;">
-              🎙️ Tap to Speak (Slow-Phase Mode)
-            </button>
-            <button type="button" class="btn btn-secondary" id="btnDoneSpeaking" onclick="finalizeVoiceInput()" style="display:none; background:rgba(52,211,153,0.15); border-color:#34d399; color:#34d399; font-weight:600; font-size:0.75rem;">
-              ✓ Done Speaking
-            </button>
-            <button type="button" class="btn btn-secondary" id="btnCancelVoice" onclick="cancelVoiceInput()" style="display:none; color:#f87171; border-color:rgba(248,113,113,0.4); font-size:0.75rem;">
-              ✕
-            </button>
-          </div>
-          <div id="voiceLiveFeedback" style="display:none; padding:0.35rem 0.5rem; background:rgba(15,23,42,0.8); border:1px dashed #38bdf8; border-radius:6px; font-size:0.68rem; color:#cbd5e1;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
-              <span id="voiceStatusText" style="color:#38bdf8; font-weight:600;">🎙️ Listening... (Take your time, 5s pause window)</span>
-              <span id="voiceTimerBadge" style="color:#f59e0b; font-family:var(--font-mono); font-size:0.62rem;">Pause buffer: 5.0s</span>
+      <div class="page-subgrid page-subgrid-2col">
+        <div class="page-col-stack">
+          <!-- Dialogue Stream -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#38bdf8;">
+              <span>JARVIS CONVERSATIONAL STREAM</span>
+              <span style="font-size:0.62rem; color:#34d399;">✓ ACTIVE</span>
             </div>
-            <div id="voiceInterimText" style="font-style:italic; color:#94a3b8; min-height:1.2rem; word-break:break-word;">
-              Listening to your voice... Speak at your natural pace.
+            <div class="chat-container" id="chatStream">
+              <div class="chat-msg msg-akshay">
+                <span class="msg-sender">Akshay // System</span>
+                <span>Akshay v4.0 (100x Precision) loaded. 4-Column Workstation, Wealth Runway, SIP Compounding, Clinical Pharmacovigilance, and Multi-Style Job Bot online.</span>
+              </div>
+            </div>
+            <form class="input-bar" id="chatForm" onsubmit="handleFormSubmit(event)">
+              <input type="text" id="userInput" placeholder="Ask Akshay or enter command..." autocomplete="off">
+              <button type="submit" class="btn" style="white-space:nowrap;">Send</button>
+            </form>
+
+            <!-- Slow-Phase Voice Listening Station (Built for Thoughtful Speakers) -->
+            <div id="voiceControlPanel" style="margin-top:0.4rem; display:flex; flex-direction:column; gap:0.3rem;">
+              <div style="display:flex; gap:0.35rem; align-items:center;">
+                <button type="button" class="btn" id="btnSlowVoice" onclick="toggleSlowPhaseVoice()" style="flex:1; background:rgba(56,189,248,0.15); border-color:#38bdf8; color:#38bdf8; font-weight:600; font-size:0.75rem;">
+                  🎙️ Tap to Speak (Slow-Phase Mode)
+                </button>
+                <button type="button" class="btn btn-secondary" id="btnDoneSpeaking" onclick="finalizeVoiceInput()" style="display:none; background:rgba(52,211,153,0.15); border-color:#34d399; color:#34d399; font-weight:600; font-size:0.75rem;">
+                  ✓ Done Speaking
+                </button>
+                <button type="button" class="btn btn-secondary" id="btnCancelVoice" onclick="cancelVoiceInput()" style="display:none; color:#f87171; border-color:rgba(248,113,113,0.4); font-size:0.75rem;">
+                  ✕
+                </button>
+              </div>
+              <div id="voiceLiveFeedback" style="display:none; padding:0.35rem 0.5rem; background:rgba(15,23,42,0.8); border:1px dashed #38bdf8; border-radius:6px; font-size:0.68rem; color:#cbd5e1;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
+                  <span id="voiceStatusText" style="color:#38bdf8; font-weight:600;">🎙️ Listening... (Take your time, 5s pause window)</span>
+                  <span id="voiceTimerBadge" style="color:#f59e0b; font-family:var(--font-mono); font-size:0.62rem;">Pause buffer: 5.0s</span>
+                </div>
+                <div id="voiceInterimText" style="font-style:italic; color:#94a3b8; min-height:1.2rem; word-break:break-word;">
+                  Listening to your voice... Speak at your natural pace.
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Option A: Voice Brain-Dump -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#38bdf8;">
-          <span>OPTION A: UNSTRUCTURED SPEECH ➔ CALENDAR</span>
-        </div>
-        <p style="font-size:0.68rem; color:#94a3b8;">
-          Parses messy thoughts into ISO 8601 calendar events, prioritized action items, and WhatsApp drafts.
-        </p>
-        <textarea id="braindumpInput" rows="2" style="resize:none;" placeholder="Example: Meet Dr. Sharma tomorrow at 4 PM to review lab reports, submit quarterly GST filing by Friday, and pay electricity bill ₹2450"></textarea>
-        <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
-          <button class="btn" onclick="executeBrainDump()">⚡ Process Brain-Dump</button>
-          <button class="btn btn-secondary" id="btnDownloadIcs" style="display:none;" onclick="downloadCalendarIcs()">📅 .ICS</button>
-          <button class="btn btn-secondary" id="btnCopyWhatsapp" style="display:none;" onclick="copyWhatsappDraft()">💬 WhatsApp</button>
-        </div>
-        <div id="braindumpResults" style="display:flex; flex-direction:column; gap:0.3rem; max-height:160px; overflow-y:auto; margin-top:0.25rem;">
-          <!-- Dynamically populated -->
+        <div class="page-col-stack">
+          <!-- Option A: Voice Brain-Dump -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#38bdf8;">
+              <span>OPTION A: UNSTRUCTURED SPEECH ➔ CALENDAR</span>
+            </div>
+            <p style="font-size:0.68rem; color:#94a3b8;">
+              Parses messy thoughts into ISO 8601 calendar events, prioritized action items, and WhatsApp drafts.
+            </p>
+            <textarea id="braindumpInput" rows="2" style="resize:none;" placeholder="Example: Meet Dr. Sharma tomorrow at 4 PM to review lab reports, submit quarterly GST filing by Friday, and pay electricity bill ₹2450"></textarea>
+            <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+              <button class="btn" onclick="executeBrainDump()">⚡ Process Brain-Dump</button>
+              <button class="btn btn-secondary" id="btnDownloadIcs" style="display:none;" onclick="downloadCalendarIcs()">📅 .ICS</button>
+              <button class="btn btn-secondary" id="btnCopyWhatsapp" style="display:none;" onclick="copyWhatsappDraft()">💬 WhatsApp</button>
+            </div>
+            <div id="braindumpResults" style="display:flex; flex-direction:column; gap:0.3rem; max-height:160px; overflow-y:auto; margin-top:0.25rem;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -609,227 +724,244 @@
     <!-- ============================================================== -->
     <!-- COLUMN 2: FINOS WEALTH & PRECISION TAX (OPTIONS B & C)         -->
     <!-- ============================================================== -->
-    <section class="column-box" id="colFinos">
+    <section class="column-box" id="colFinos" style="display:none;">
       <div class="column-header">
-        <span class="col-title-2">💳 COL 2: FINOS WEALTH &amp; TAX</span>
-        <span style="font-size:0.65rem; color:#94a3b8;">DOUBLE-ENTRY</span>
+        <span class="col-title-2">💳 PAGE 2: FINOS WEALTH MANAGEMENT &amp; TAX OPTIMIZER</span>
+        <span style="font-size:0.65rem; color:#94a3b8;">DOUBLE-ENTRY &bull; SEC 115BAC</span>
       </div>
 
-      <!-- Ledger Summary -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#34d399;">
-          <span>LEDGER BALANCES (SQLite)</span>
-        </div>
-        <div class="balance-grid">
-          <div class="balance-cell">
-            <div style="font-size:0.62rem; color:#94a3b8;">TOTAL ASSETS</div>
-            <div class="balance-val" id="valAssets">₹85,000.00</div>
+      <div class="page-subgrid page-subgrid-2col">
+        <div class="page-col-stack">
+          <!-- Ledger Summary -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#34d399;">
+              <span>LEDGER BALANCES (SQLite)</span>
+            </div>
+            <div class="balance-grid">
+              <div class="balance-cell">
+                <div style="font-size:0.62rem; color:#94a3b8;">TOTAL ASSETS</div>
+                <div class="balance-val" id="valAssets">₹85,000.00</div>
+              </div>
+              <div class="balance-cell">
+                <div style="font-size:0.62rem; color:#94a3b8;">EXPENSES</div>
+                <div class="balance-val" id="valExpenses">₹3,250.00</div>
+              </div>
+            </div>
+            <div class="balance-cell" style="margin-top:0.2rem;">
+              <div style="font-size:0.62rem; color:#94a3b8;">NET WORTH</div>
+              <div class="balance-val" id="valNetWorth" style="color:#34d399;">₹81,750.00</div>
+            </div>
           </div>
-          <div class="balance-cell">
-            <div style="font-size:0.62rem; color:#94a3b8;">EXPENSES</div>
-            <div class="balance-val" id="valExpenses">₹3,250.00</div>
-          </div>
-        </div>
-        <div class="balance-cell" style="margin-top:0.2rem;">
-          <div style="font-size:0.62rem; color:#94a3b8;">NET WORTH</div>
-          <div class="balance-val" id="valNetWorth" style="color:#34d399;">₹81,750.00</div>
-        </div>
-      </div>
 
-      <!-- Option B: Camera Receipt Scanner -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#34d399;">
-          <span>OPTION B: CAMERA RECEIPT OCR</span>
+          <!-- Option B: Camera Receipt Scanner -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#34d399;">
+              <span>OPTION B: CAMERA RECEIPT OCR</span>
+            </div>
+            <p style="font-size:0.68rem; color:#94a3b8;">
+              Snap paper receipt using tablet/phone camera. Edge OCR parses line items into SQLite.
+            </p>
+            <div style="display:flex; gap:0.35rem; align-items:center;">
+              <input type="file" id="receiptFileInput" accept="image/*" capture="environment" style="font-size:0.65rem; padding:0.2rem;">
+              <button class="btn btn-secondary" onclick="simulateReceiptOCR()" style="white-space:nowrap;">Scan</button>
+            </div>
+            <div id="ocrReceiptResult" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap;"></div>
+          </div>
         </div>
-        <p style="font-size:0.68rem; color:#94a3b8;">
-          Snap paper receipt using tablet/phone camera. Edge OCR parses line items into SQLite.
-        </p>
-        <div style="display:flex; gap:0.35rem; align-items:center;">
-          <input type="file" id="receiptFileInput" accept="image/*" capture="environment" style="font-size:0.65rem; padding:0.2rem;">
-          <button class="btn btn-secondary" onclick="simulateReceiptOCR()" style="white-space:nowrap;">Scan</button>
-        </div>
-        <div id="ocrReceiptResult" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap;"></div>
-      </div>
 
-      <!-- Option C: Income Tax Calculator -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#34d399;">
-          <span>OPTION C: INCOME TAX (SEC 115BAC)</span>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
-          <div>
-            <label style="font-size:0.62rem; color:#94a3b8;">Gross CTC (₹)</label>
-            <input type="number" id="taxGross" value="1400000">
+        <div class="page-col-stack">
+          <!-- Option C: Income Tax Calculator -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#34d399;">
+              <span>OPTION C: INCOME TAX (SEC 115BAC)</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
+              <div>
+                <label style="font-size:0.62rem; color:#94a3b8;">Gross CTC (₹)</label>
+                <input type="number" id="taxGross" value="1400000">
+              </div>
+              <div>
+                <label style="font-size:0.62rem; color:#94a3b8;">80C Deductions</label>
+                <input type="number" id="tax80C" value="150000">
+              </div>
+            </div>
+            <button class="btn" style="margin-top:0.2rem;" onclick="calculateTaxComparison()">Compare Tax Regimes</button>
+            <div id="taxComparisonOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.25rem;"></div>
           </div>
-          <div>
-            <label style="font-size:0.62rem; color:#94a3b8;">80C Deductions</label>
-            <input type="number" id="tax80C" value="150000">
-          </div>
-        </div>
-        <button class="btn" style="margin-top:0.2rem;" onclick="calculateTaxComparison()">Compare Tax Regimes</button>
-        <div id="taxComparisonOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.25rem;"></div>
-      </div>
 
-      <!-- Advanced Wealth: Financial Runway & SIP Compounding -->
-      <div class="sub-card" style="border-color: rgba(52, 211, 153, 0.3);">
-        <div class="sub-card-title" style="color:#34d399;">
-          <span>FINANCIAL RUNWAY &amp; SIP COMPOUNDER</span>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
-          <div>
-            <label style="font-size:0.62rem; color:#94a3b8;">Monthly Burn (₹)</label>
-            <input type="number" id="runwayBurn" value="15000">
+          <!-- Advanced Wealth: Financial Runway & SIP Compounding -->
+          <div class="sub-card" style="border-color: rgba(52, 211, 153, 0.3);">
+            <div class="sub-card-title" style="color:#34d399;">
+              <span>FINANCIAL RUNWAY &amp; SIP COMPOUNDER</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
+              <div>
+                <label style="font-size:0.62rem; color:#94a3b8;">Monthly Burn (₹)</label>
+                <input type="number" id="runwayBurn" value="15000">
+              </div>
+              <div>
+                <label style="font-size:0.62rem; color:#94a3b8;">Monthly SIP (₹)</label>
+                <input type="number" id="sipMonthly" value="15000">
+              </div>
+            </div>
+            <div style="display:flex; gap:0.35rem; margin-top:0.25rem;">
+              <button class="btn btn-secondary" style="flex:1;" onclick="calculateRunway()">⏳ Runway</button>
+              <button class="btn btn-accent" style="flex:1;" onclick="calculateSip()">📈 SIP 10-Yr</button>
+            </div>
+            <div id="wealthOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.25rem;"></div>
           </div>
-          <div>
-            <label style="font-size:0.62rem; color:#94a3b8;">Monthly SIP (₹)</label>
-            <input type="number" id="sipMonthly" value="15000">
-          </div>
         </div>
-        <div style="display:flex; gap:0.35rem; margin-top:0.25rem;">
-          <button class="btn btn-secondary" style="flex:1;" onclick="calculateRunway()">⏳ Runway</button>
-          <button class="btn btn-accent" style="flex:1;" onclick="calculateSip()">📈 SIP 10-Yr</button>
-        </div>
-        <div id="wealthOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.25rem;"></div>
       </div>
     </section>
 
     <!-- ============================================================== -->
     <!-- COLUMN 3: CLINICAL PHARMACOVIGILANCE & SOS (OPTION D)          -->
     <!-- ============================================================== -->
-    <section class="column-box" id="colMedical">
+    <section class="column-box" id="colMedical" style="display:none;">
       <div class="column-header">
-        <span class="col-title-3">💊 COL 3: CLINICAL PHARMA &amp; SOS</span>
+        <span class="col-title-3">💊 PAGE 3: CLINICAL PHARMACOVIGILANCE &amp; EMERGENCY SOS</span>
         <span style="font-size:0.65rem; color:#f87171;">TRIAGE &amp; ALARM</span>
       </div>
 
-      <!-- Clinical Drug Interaction Checker -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#f87171;">
-          <span>OPTION D1: DRUG SAFETY &amp; MECHANISM</span>
+      <div class="page-subgrid page-subgrid-2col">
+        <div class="page-col-stack">
+          <!-- Clinical Drug Interaction Checker -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#f87171;">
+              <span>OPTION D1: DRUG SAFETY &amp; MECHANISM</span>
+            </div>
+            <p style="font-size:0.68rem; color:#94a3b8;">
+              Clinical pharmacology engine evaluating CYP450 induction, cGMP synergy, and contraindications.
+            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
+              <input type="text" id="drugA" value="Paracetamol" placeholder="Drug 1">
+              <input type="text" id="drugB" value="Ibuprofen" placeholder="Drug 2">
+            </div>
+            <div style="display:flex; gap:0.35rem; margin-top:0.2rem;">
+              <button class="btn btn-secondary" onclick="checkDrugSafety()">Check Interaction</button>
+              <button class="btn btn-danger" style="font-size:0.65rem;" onclick="testLethalDrugPair()">⚠️ Test Lethal</button>
+            </div>
+            <div id="drugSafetyOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
+          </div>
         </div>
-        <p style="font-size:0.68rem; color:#94a3b8;">
-          Clinical pharmacology engine evaluating CYP450 induction, cGMP synergy, and contraindications.
-        </p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
-          <input type="text" id="drugA" value="Paracetamol" placeholder="Drug 1">
-          <input type="text" id="drugB" value="Ibuprofen" placeholder="Drug 2">
-        </div>
-        <div style="display:flex; gap:0.35rem; margin-top:0.2rem;">
-          <button class="btn btn-secondary" onclick="checkDrugSafety()">Check Interaction</button>
-          <button class="btn btn-danger" style="font-size:0.65rem;" onclick="testLethalDrugPair()">⚠️ Test Lethal</button>
-        </div>
-        <div id="drugSafetyOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
-      </div>
 
-      <!-- Emergency SOS Beacon & Siren -->
-      <div class="sub-card" style="border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
-        <div class="sub-card-title" style="color:#f87171;">
-          <span>OPTION D2: EMERGENCY SOS SIREN</span>
-        </div>
-        <p style="font-size:0.68rem; color:#94a3b8;">
-          Dual-tone Web Audio warble siren (440Hz &harr; 880Hz) + GPS Emergency Medical SMS.
-        </p>
-        <div style="display:flex; gap:0.35rem;">
-          <button class="btn btn-danger" onclick="triggerSOSAlert()">🚨 SOUND SOS</button>
-          <button class="btn btn-secondary" onclick="stopSOSSiren()">Stop Siren</button>
-        </div>
-        <div id="sosOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
-      </div>
+        <div class="page-col-stack">
+          <!-- Emergency SOS Beacon & Siren -->
+          <div class="sub-card" style="border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
+            <div class="sub-card-title" style="color:#f87171;">
+              <span>OPTION D2: EMERGENCY SOS SIREN</span>
+            </div>
+            <p style="font-size:0.68rem; color:#94a3b8;">
+              Dual-tone Web Audio warble siren (440Hz &harr; 880Hz) + GPS Emergency Medical SMS.
+            </p>
+            <div style="display:flex; gap:0.35rem;">
+              <button class="btn btn-danger" onclick="triggerSOSAlert()">🚨 SOUND SOS</button>
+              <button class="btn btn-secondary" onclick="stopSOSSiren()">Stop Siren</button>
+            </div>
+            <div id="sosOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
+          </div>
 
-      <!-- Live Waveform & Telemetry -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#94a3b8;">
-          <span>AUDIO SENSOR SPECTRUM</span>
+          <!-- Live Waveform & Telemetry -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#94a3b8;">
+              <span>AUDIO SENSOR SPECTRUM</span>
+            </div>
+            <canvas id="waveformCanvas" width="300" height="42" style="width:100%; height:42px; background:rgba(0,0,0,0.4); border-radius:4px;"></canvas>
+          </div>
         </div>
-        <canvas id="waveformCanvas" width="300" height="42" style="width:100%; height:42px; background:rgba(0,0,0,0.4); border-radius:4px;"></canvas>
       </div>
     </section>
 
     <!-- ============================================================== -->
     <!-- COLUMN 4: PRECISION ATS 2.0 AUTO APPLY JOB BOT                 -->
     <!-- ============================================================== -->
-    <section class="column-box" id="colJobBot">
+    <section class="column-box" id="colJobBot" style="display:none;">
       <div class="column-header">
-        <span class="col-title-4">🤖 COL 4: PRECISION ATS 2.0 JOB BOT</span>
+        <span class="col-title-4">🤖 PAGE 4: PRECISION ATS 2.0 AUTO APPLY JOB BOT</span>
         <span class="match-badge" id="botBadge">IDLE</span>
       </div>
 
-      <!-- Candidate Profile Summary Card -->
-      <div class="sub-card" style="border-color: rgba(192, 132, 252, 0.3);">
-        <div class="sub-card-title" style="color:#c084fc;">
-          <span>CANDIDATE VAULT (ATS PROFILE)</span>
-          <span style="font-size:0.62rem; color:#34d399;">✓ ACTIVE</span>
-        </div>
-        <div style="font-size:0.75rem; font-weight:700; color:#fff;">Abishek Pranav</div>
-        <div style="font-size:0.67rem; color:#94a3b8;">Full Stack AI Engineer &bull; Exp: 4 Yrs &bull; Target: ₹24L</div>
-        <div class="skills-tag-row">
-          <span class="skill-tag skill-tag-matched">Python</span>
-          <span class="skill-tag skill-tag-matched">TypeScript</span>
-          <span class="skill-tag skill-tag-matched">React</span>
-          <span class="skill-tag skill-tag-matched">FastAPI</span>
-          <span class="skill-tag skill-tag-matched">SQLite</span>
-          <span class="skill-tag skill-tag-matched">Docker</span>
-          <span class="skill-tag skill-tag-matched">AWS</span>
-        </div>
-      </div>
+      <div class="page-subgrid page-subgrid-2col">
+        <div class="page-col-stack">
+          <!-- Candidate Profile Summary Card -->
+          <div class="sub-card" style="border-color: rgba(192, 132, 252, 0.3);">
+            <div class="sub-card-title" style="color:#c084fc;">
+              <span>CANDIDATE VAULT (ATS PROFILE)</span>
+              <span style="font-size:0.62rem; color:#34d399;">✓ ACTIVE</span>
+            </div>
+            <div style="font-size:0.75rem; font-weight:700; color:#fff;">Abishek Pranav</div>
+            <div style="font-size:0.67rem; color:#94a3b8;">Full Stack AI Engineer &bull; Exp: 4 Yrs &bull; Target: ₹24L</div>
+            <div class="skills-tag-row">
+              <span class="skill-tag skill-tag-matched">Python</span>
+              <span class="skill-tag skill-tag-matched">TypeScript</span>
+              <span class="skill-tag skill-tag-matched">React</span>
+              <span class="skill-tag skill-tag-matched">FastAPI</span>
+              <span class="skill-tag skill-tag-matched">SQLite</span>
+              <span class="skill-tag skill-tag-matched">Docker</span>
+              <span class="skill-tag skill-tag-matched">AWS</span>
+            </div>
+          </div>
 
-      <!-- Bot Action Controls & Style Switcher -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#c084fc;">
-          <span>AUTOMATION PIPELINE &amp; STYLE</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:0.67rem; color:#94a3b8;">Cover Letter Style:</span>
-          <div class="style-pill-row">
-            <span class="style-pill active" id="styleBalanced" onclick="selectLetterStyle('balanced')">Balanced</span>
-            <span class="style-pill" id="styleTechnical" onclick="selectLetterStyle('technical')">Tech</span>
-            <span class="style-pill" id="styleExecutive" onclick="selectLetterStyle('executive')">Exec</span>
+          <!-- Bot Action Controls & Style Switcher -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#c084fc;">
+              <span>AUTOMATION PIPELINE &amp; STYLE</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.67rem; color:#94a3b8;">Cover Letter Style:</span>
+              <div class="style-pill-row">
+                <span class="style-pill active" id="styleBalanced" onclick="selectLetterStyle('balanced')">Balanced</span>
+                <span class="style-pill" id="styleTechnical" onclick="selectLetterStyle('technical')">Tech</span>
+                <span class="style-pill" id="styleExecutive" onclick="selectLetterStyle('executive')">Exec</span>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
+              <span style="font-size:0.67rem; color:#94a3b8;">Min Match Threshold:</span>
+              <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:700; color:#34d399;" id="thresholdDisplay">75%</span>
+            </div>
+            <div style="display:flex; gap:0.35rem; margin-top:0.2rem;">
+              <button class="btn btn-purple" style="flex:1;" onclick="runBatchAutoApplyBot()">⚡ Run Auto-Apply Bot</button>
+              <button class="btn btn-secondary" onclick="loadJobStream()">↻</button>
+              <button class="btn btn-secondary" onclick="exportApplicationsCsv()" title="Download CSV">📥 CSV</button>
+            </div>
+            <div id="botStatusText" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1;"></div>
+          </div>
+
+          <!-- Applications Tracker -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#c084fc;">
+              <span>TRACKED APPLICATIONS (SQLite)</span>
+              <span class="match-badge" id="appliedCountBadge">0 APPLIED</span>
+            </div>
+            <div id="applicationsHistoryList" style="display:flex; flex-direction:column; gap:0.3rem; max-height:140px; overflow-y:auto;">
+              <!-- Dynamically populated -->
+            </div>
           </div>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
-          <span style="font-size:0.67rem; color:#94a3b8;">Min Match Threshold:</span>
-          <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:700; color:#34d399;" id="thresholdDisplay">75%</span>
-        </div>
-        <div style="display:flex; gap:0.35rem; margin-top:0.2rem;">
-          <button class="btn btn-purple" style="flex:1;" onclick="runBatchAutoApplyBot()">⚡ Run Auto-Apply Bot</button>
-          <button class="btn btn-secondary" onclick="loadJobStream()">↻</button>
-          <button class="btn btn-secondary" onclick="exportApplicationsCsv()" title="Download CSV">📥 CSV</button>
-        </div>
-        <div id="botStatusText" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1;"></div>
-      </div>
 
-      <!-- Cover Letter Preview Card -->
-      <div id="coverLetterBox">
-        <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
-          <strong style="color:#c084fc;" id="coverLetterTitle">TAILORED AI COVER LETTER</strong>
-          <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.62rem;" onclick="closeCoverLetter()">✕ Close</button>
-        </div>
-        <div id="coverLetterContent"></div>
-        <button class="btn btn-accent" style="margin-top:0.45rem; align-self:flex-start;" onclick="copyCoverLetter()">📋 Copy Letter</button>
-      </div>
+        <div class="page-col-stack">
+          <!-- Cover Letter Preview Card -->
+          <div id="coverLetterBox">
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
+              <strong style="color:#c084fc;" id="coverLetterTitle">TAILORED AI COVER LETTER</strong>
+              <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.62rem;" onclick="closeCoverLetter()">✕ Close</button>
+            </div>
+            <div id="coverLetterContent"></div>
+            <button class="btn btn-accent" style="margin-top:0.45rem; align-self:flex-start;" onclick="copyCoverLetter()">📋 Copy Letter</button>
+          </div>
 
-      <!-- Live Job Stream with Multi-Dimensional ATS Scores -->
-      <div class="sub-card" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
-        <div class="sub-card-title" style="color:#c084fc;">
-          <span>MATCHED POSITIONS &amp; ATS VECTORS</span>
-          <span style="font-size:0.65rem; color:#94a3b8;" id="jobStreamCount">5 Positions</span>
-        </div>
-        <div id="jobStreamContainer" style="display:flex; flex-direction:column; gap:0.45rem; overflow-y:auto; max-height:280px; margin-top:0.25rem;">
-          <!-- Dynamically populated -->
+          <!-- Live Job Stream with Multi-Dimensional ATS Scores -->
+          <div class="sub-card" style="display:flex; flex-direction:column;">
+            <div class="sub-card-title" style="color:#c084fc;">
+              <span>MATCHED POSITIONS &amp; ATS VECTORS</span>
+              <span style="font-size:0.65rem; color:#94a3b8;" id="jobStreamCount">5 Positions</span>
+            </div>
+            <div id="jobStreamContainer" style="display:flex; flex-direction:column; gap:0.45rem; overflow-y:auto; max-height:360px; margin-top:0.25rem;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- Applications Tracker -->
-      <div class="sub-card">
-        <div class="sub-card-title" style="color:#c084fc;">
-          <span>TRACKED APPLICATIONS (SQLite)</span>
-          <span class="match-badge" id="appliedCountBadge">0 APPLIED</span>
-        </div>
-        <div id="applicationsHistoryList" style="display:flex; flex-direction:column; gap:0.3rem; max-height:120px; overflow-y:auto;">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-
     </section>
 
   </main>
@@ -859,18 +991,82 @@
     }
 
     // -------------------------------------------------------------
-    // Fast Column Jump Navigation
+    // Page & Column View Navigation (Fit-to-Page Architecture)
     // -------------------------------------------------------------
+    var currentActivePage = 'colBrainDump';
+    var isPageViewMode = true; // Default: true for 100% viewport fit
+
+    function switchPage(pageId) {
+      currentActivePage = pageId;
+      applyLayoutView();
+
+      var navBtns = document.querySelectorAll('.col-nav-btn');
+      for (var i = 0; i < navBtns.length; i++) {
+        navBtns[i].classList.remove('active');
+      }
+      var activeTab = document.getElementById('tab_' + pageId);
+      if (activeTab) activeTab.classList.add('active');
+
+      try {
+        window.scrollTo(0, 0);
+        if (document.body) document.body.scrollTop = 0;
+        if (document.documentElement) document.documentElement.scrollTop = 0;
+      } catch (e) {}
+    }
+
     function jumpToColumn(colId, btn) {
-      var col = document.getElementById(colId);
-      if (col) {
-        col.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      switchPage(colId);
+    }
+
+    function applyLayoutView() {
+      var container = document.getElementById('workstationContainer');
+      var cols = [
+        document.getElementById('colBrainDump'),
+        document.getElementById('colFinos'),
+        document.getElementById('colMedical'),
+        document.getElementById('colJobBot')
+      ];
+      var viewLabel = document.getElementById('viewLabel');
+      var viewIcon = document.getElementById('viewIcon');
+
+      if (isPageViewMode) {
+        if (container) {
+          container.className = 'workstation-columns mode-page';
+        }
+        for (var i = 0; i < cols.length; i++) {
+          if (!cols[i]) continue;
+          if (cols[i].id === currentActivePage) {
+            cols[i].style.display = 'block';
+            cols[i].className = 'column-box page-active';
+          } else {
+            cols[i].style.display = 'none';
+            cols[i].className = 'column-box';
+          }
+        }
+        if (viewLabel) viewLabel.textContent = 'Page Fit';
+        if (viewIcon) viewIcon.textContent = '📄';
+      } else {
+        if (container) {
+          container.className = 'workstation-columns mode-grid';
+        }
+        for (var j = 0; j < cols.length; j++) {
+          if (!cols[j]) continue;
+          cols[j].style.display = 'flex';
+          cols[j].className = 'column-box';
+        }
+        if (viewLabel) viewLabel.textContent = '4-Col Grid';
+        if (viewIcon) viewIcon.textContent = '⊞';
+
+        var target = document.getElementById(currentActivePage);
+        if (target && target.scrollIntoView) {
+          target.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        }
       }
-      var btns = document.querySelectorAll('.col-nav-btn');
-      for (var i = 0; i < btns.length; i++) {
-        btns[i].classList.remove('active');
-      }
-      if (btn) btn.classList.add('active');
+    }
+
+    function toggleLayoutView() {
+      isPageViewMode = !isPageViewMode;
+      applyLayoutView();
     }
 
     // -------------------------------------------------------------
@@ -2128,7 +2324,17 @@
     }
 
     function exportApplicationsCsv() {
-      window.location.href = '/api/jobs/export-csv';
+      try {
+        var a = document.createElement('a');
+        a.href = '/api/jobs/export-csv';
+        a.setAttribute('download', 'akshay_job_applications.csv');
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (err) {
+        window.open('/api/jobs/export-csv', '_blank');
+      }
     }
 
     // Diagnostics Telemetry Update
@@ -2139,7 +2345,8 @@
       }).catch(function() {});
     }
 
-    // Initialize Job Stream on load
+    // Initialize Workstation on load
+    switchPage('colBrainDump');
     loadJobStream();
   </script>
 </body>

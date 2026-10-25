@@ -186,6 +186,14 @@ class JobBotManager:
             """)
             conn.commit()
 
+            # Self-healing migration for existing databases missing new v4.0 columns
+            try:
+                cursor.execute("ALTER TABLE job_applications ADD COLUMN letter_style TEXT NOT NULL DEFAULT 'balanced'")
+                conn.commit()
+            except sqlite3.OperationalError:
+                pass  # Column already exists
+
+
         self.get_profile()
 
     def get_profile(self) -> CandidateProfile:
