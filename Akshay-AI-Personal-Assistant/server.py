@@ -27,6 +27,9 @@ from akshay_core.workflows.daily_engine import (
     prioritize_tasks_eisenhower,
     get_first_aid_guide,
 )
+from akshay_core.workflows.braindump_engine import process_braindump
+from akshay_core.finos.tax_calculator import compare_tax_regimes
+from akshay_core.workflows.medical_emergency import check_drug_interaction, generate_sos_beacon
 from akshay_core.security.validator import sanitize_text, SecurityValidationError
 from akshay_core.security.audit_logger import get_audit_logger
 
@@ -172,6 +175,74 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                     self._send_json_response({"success": True, "guide": guide})
                 else:
                     self._send_json_response({"success": False, "error": f"No protocol for '{condition}'"}, status=404)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/braindump/process":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                text = data.get("text", "")
+                artifacts = process_braindump(text)
+                self._send_json_response({
+                    "success": True,
+                    "artifacts": artifacts.model_dump()
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/tax/compare":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                gross = Decimal(str(data.get("annual_gross", "1200000")))
+                c80 = Decimal(str(data.get("sec_80c", "150000")))
+                d80 = Decimal(str(data.get("sec_80d", "25000")))
+                hra = Decimal(str(data.get("hra", "0")))
+                res = compare_tax_regimes(annual_gross=gross, sec_80c=c80, sec_80d=d80, hra=hra)
+                self._send_json_response({
+                    "success": True,
+                    "comparison": res.model_dump()
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/medical/drug-interaction":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                drug1 = data.get("drug1", "")
+                drug2 = data.get("drug2", "")
+                res = check_drug_interaction(drug1, drug2)
+                self._send_json_response({
+                    "success": True,
+                    "interaction": res.model_dump()
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/medical/sos":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                beacon = generate_sos_beacon(
+                    user_name=data.get("user_name", "Abishek"),
+                    blood_group=data.get("blood_group", "O+ Positive"),
+                    lat=data.get("lat"),
+                    lon=data.get("lon"),
+                )
+                self._send_json_response({
+                    "success": True,
+                    "beacon": beacon.model_dump()
+                })
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
