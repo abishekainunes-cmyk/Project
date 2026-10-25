@@ -14,7 +14,7 @@ def temp_job_bot(tmp_path: Path) -> JobBotManager:
 
 def test_job_bot_initial_profile_and_stream(temp_job_bot: JobBotManager):
     profile = temp_job_bot.get_profile()
-    assert profile.name == "Abishek Pranav"
+    assert "Abishek Pranav" in profile.name
     assert "Python" in profile.skills
 
     jobs = temp_job_bot.get_job_stream()

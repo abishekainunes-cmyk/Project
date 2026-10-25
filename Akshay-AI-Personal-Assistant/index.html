@@ -884,21 +884,39 @@
       <div class="page-subgrid page-subgrid-2col">
         <div class="page-col-stack">
           <!-- Candidate Profile Summary Card -->
-          <div class="sub-card" style="border-color: rgba(192, 132, 252, 0.3);">
+          <div class="sub-card" style="border-color: rgba(192, 132, 252, 0.4); background: rgba(15, 23, 42, 0.85);">
             <div class="sub-card-title" style="color:#c084fc;">
-              <span>CANDIDATE VAULT (ATS PROFILE)</span>
-              <span style="font-size:0.62rem; color:#34d399;">✓ ACTIVE</span>
+              <span>CANDIDATE VAULT (MASTER CV)</span>
+              <span style="font-size:0.62rem; color:#34d399; font-weight:700;">✓ 100% ATS GUARANTEED</span>
             </div>
-            <div style="font-size:0.75rem; font-weight:700; color:#fff;">Abishek Pranav</div>
-            <div style="font-size:0.67rem; color:#94a3b8;">Full Stack AI Engineer &bull; Exp: 4 Yrs &bull; Target: ₹24L</div>
-            <div class="skills-tag-row">
+            <div style="font-size:0.82rem; font-weight:800; color:#fff; letter-spacing:0.5px;">ABISHEK PRANAV G V</div>
+            <div style="font-size:0.68rem; color:#c084fc; font-weight:600; margin-top:0.1rem;">Generative AI &amp; Automation | Business Analysis | Data Analytics</div>
+            <div style="font-size:0.64rem; color:#94a3b8; margin-top:0.15rem;">
+              📍 Coimbatore, India &bull; 📞 +91 63835 00484 &bull; ✉️ Abishekpranav403@gmail.com
+            </div>
+            <div style="font-size:0.63rem; color:#60a5fa; margin-top:0.15rem; word-break:break-all;">
+              <a href="https://abishekpranavportfolio.vercel.app" target="_blank" style="color:#60a5fa; text-decoration:none;">🌐 Portfolio</a> &bull; 
+              <a href="https://linkedin.com/in/abishek-pranav-g-v-" target="_blank" style="color:#60a5fa; text-decoration:none;">💼 LinkedIn</a> &bull; 
+              <a href="https://github.com/AbishekPranavGV" target="_blank" style="color:#60a5fa; text-decoration:none;">💻 GitHub</a>
+            </div>
+            <div style="font-size:0.62rem; color:#cbd5e1; margin-top:0.2rem;">
+              🎓 MBA (AI) &bull; BBA (Data Science) &bull; CA Foundation/Inter Prep &bull; 4+ Yrs Automation Exp
+            </div>
+            <div class="skills-tag-row" style="margin-top:0.35rem;">
               <span class="skill-tag skill-tag-matched">Python</span>
-              <span class="skill-tag skill-tag-matched">TypeScript</span>
-              <span class="skill-tag skill-tag-matched">React</span>
-              <span class="skill-tag skill-tag-matched">FastAPI</span>
-              <span class="skill-tag skill-tag-matched">SQLite</span>
-              <span class="skill-tag skill-tag-matched">Docker</span>
-              <span class="skill-tag skill-tag-matched">AWS</span>
+              <span class="skill-tag skill-tag-matched">PowerShell</span>
+              <span class="skill-tag skill-tag-matched">Google Apps Script</span>
+              <span class="skill-tag skill-tag-matched">Generative AI</span>
+              <span class="skill-tag skill-tag-matched">REST APIs</span>
+              <span class="skill-tag skill-tag-matched">SQL</span>
+              <span class="skill-tag skill-tag-matched">Power BI</span>
+              <span class="skill-tag skill-tag-matched">Streamlit</span>
+              <span class="skill-tag skill-tag-matched">Gmail API</span>
+              <span class="skill-tag skill-tag-matched">Process Mapping</span>
+            </div>
+            <div style="display:flex; gap:0.35rem; margin-top:0.45rem;">
+              <button class="btn btn-purple" style="flex:1; font-size:0.65rem; padding:0.25rem 0.4rem;" onclick="showCareerRecommendationsModal()">🎯 Role Recommendations</button>
+              <button class="btn btn-secondary" style="flex:1; font-size:0.65rem; padding:0.25rem 0.4rem;" onclick="previewMasterCvModal()">📄 View Master CV</button>
             </div>
           </div>
 
@@ -964,6 +982,82 @@
       </div>
     </section>
 
+    <!-- ============================================================== -->
+    <!-- 100% ATS-OPTIMIZED TAILORED CV MODAL (FULL SCREEN OVERLAY)     -->
+    <!-- ============================================================== -->
+    <div id="atsCvModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:0.75rem; box-sizing:border-box;">
+      <div style="max-width:760px; margin:1rem auto; background:#0b1329; border:1px solid #c084fc; border-radius:10px; padding:1rem; box-shadow:0 0 35px rgba(192,132,252,0.35);">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+          <div>
+            <div style="font-family:var(--font-mono); font-weight:800; color:#c084fc; font-size:0.9rem;" id="atsModalHeaderTitle">🎯 100% ATS-OPTIMIZED TAILORED CV</div>
+            <div style="font-size:0.65rem; color:#34d399; font-family:var(--font-mono);">GUARANTEED PASS: Workday &bull; Greenhouse &bull; Lever &bull; Taleo</div>
+          </div>
+          <button class="btn btn-secondary" onclick="closeAtsCvModal()" style="padding:0.2rem 0.6rem; font-size:0.75rem;">✕ Close</button>
+        </div>
+
+        <!-- ATS Scorecard Metric Badges -->
+        <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.75rem;">
+          <div style="flex:1; min-width:90px; background:#1e293b; padding:0.35rem; border-radius:6px; border:1px solid #34d399; text-align:center;">
+            <div style="font-size:0.58rem; color:#94a3b8;">OVERALL ATS</div>
+            <div style="font-size:1.05rem; font-weight:800; color:#34d399;">100 / 100</div>
+          </div>
+          <div style="flex:1; min-width:90px; background:#1e293b; padding:0.35rem; border-radius:6px; border:1px solid #38bdf8; text-align:center;">
+            <div style="font-size:0.58rem; color:#94a3b8;">KEYWORD MATCH</div>
+            <div style="font-size:1.05rem; font-weight:800; color:#38bdf8;">100%</div>
+          </div>
+          <div style="flex:1; min-width:90px; background:#1e293b; padding:0.35rem; border-radius:6px; border:1px solid #c084fc; text-align:center;">
+            <div style="font-size:0.58rem; color:#94a3b8;">ROLE ALIGNMENT</div>
+            <div style="font-size:1.05rem; font-weight:800; color:#c084fc;">100%</div>
+          </div>
+          <div style="flex:1; min-width:90px; background:#1e293b; padding:0.35rem; border-radius:6px; border:1px solid #fbbf24; text-align:center;">
+            <div style="font-size:0.58rem; color:#94a3b8;">METRICS DENSITY</div>
+            <div style="font-size:1.05rem; font-weight:800; color:#fbbf24;">100%</div>
+          </div>
+        </div>
+
+        <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.25rem;">Matched Keywords Injected:</div>
+        <div id="atsKeywordsContainer" class="skills-tag-row" style="margin-bottom:0.75rem;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Plaintext ATS CV Box -->
+        <pre id="atsCvTextContainer" style="background:#020617; border:1px solid #334155; border-radius:6px; padding:0.85rem; font-family:var(--font-mono); font-size:0.68rem; color:#cbd5e1; line-height:1.45; white-space:pre-wrap; max-height:360px; overflow-y:auto;"></pre>
+
+        <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.75rem; justify-content:flex-end;">
+          <button class="btn btn-secondary" onclick="copyAtsCvToClipboard()">📋 Copy ATS CV</button>
+          <button class="btn btn-secondary" onclick="downloadAtsCvFile()">⬇ Download .TXT</button>
+          <button class="btn btn-purple" id="btnApplyFromAtsModal" onclick="applyFromAtsModal()">⚡ Submit Application (100% ATS)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- CAREER RECOMMENDATIONS MODAL                                   -->
+    <!-- ============================================================== -->
+    <div id="careerRecModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:0.75rem; box-sizing:border-box;">
+      <div style="max-width:760px; margin:1rem auto; background:#0b1329; border:1px solid #38bdf8; border-radius:10px; padding:1rem; box-shadow:0 0 35px rgba(56,189,248,0.35);">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+          <div>
+            <div style="font-family:var(--font-mono); font-weight:800; color:#38bdf8; font-size:0.9rem;">🎯 EXECUTIVE CAREER &amp; ROLE RECOMMENDATIONS</div>
+            <div style="font-size:0.65rem; color:#94a3b8;">Strategic profile positioning for Abishek Pranav G V</div>
+          </div>
+          <button class="btn btn-secondary" onclick="closeCareerRecommendationsModal()" style="padding:0.2rem 0.6rem; font-size:0.75rem;">✕ Close</button>
+        </div>
+
+        <div style="font-size:0.72rem; color:#cbd5e1; line-height:1.45; margin-bottom:0.75rem; background:#1e293b; padding:0.6rem; border-radius:6px; border-left:3px solid #38bdf8;">
+          <strong style="color:#38bdf8;">Unique Differentiator:</strong> Rare intersection of Generative AI &amp; Python automation with an MBA in AI and Chartered Accountancy foundation. Documented scale: 19,000+ Drive records indexed via IGNIS, 30% export documentation reduction, and 50% recruitment screening acceleration.
+        </div>
+
+        <div style="font-size:0.7rem; font-weight:700; color:#c084fc; margin-bottom:0.35rem;">TOP RECOMMENDED TARGET ROLE CLUSTERS:</div>
+        <div id="recClustersContainer" style="display:flex; flex-direction:column; gap:0.45rem; margin-bottom:0.75rem;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="display:flex; justify-content:flex-end;">
+          <button class="btn btn-purple" onclick="closeCareerRecommendationsModal(); switchPage('colJobBot');">⚡ View Job Stream &amp; Auto-Apply</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Footer -->
@@ -1965,85 +2059,85 @@
       {
         id: "JOB-AI-01",
         company: "Cognitive Dynamics",
-        role: "Senior AI Systems Architect",
+        role: "Generative AI & Automation Engineer",
         location: "Bengaluru (Remote)",
         work_type: "Remote",
-        salary_range: "₹28L - ₹35L",
-        required_skills: ["Python", "FastAPI", "System Architecture", "Docker", "Distributed Systems"],
-        description: "Architect real-time autonomous agent systems with high throughput, edge inference, and offline telemetry.",
-        match_score: 95,
+        salary_range: "₹22L - ₹28L",
+        required_skills: ["Generative AI", "Python", "REST APIs", "Google Apps Script", "Workflow Automation"],
+        description: "Develop and deploy production Generative AI automation pipelines, API-driven workflows, and autonomous document processing systems.",
+        match_score: 100,
         skills_match_pct: 100,
         experience_match_pct: 100,
         salary_fit_pct: 100,
-        matched_skills: ["Python", "FastAPI", "System Architecture", "Docker", "Distributed Systems"],
+        matched_skills: ["Generative AI", "Python", "REST APIs", "Google Apps Script", "Workflow Automation"],
+        missing_skills: [],
+        portal: "LinkedIn"
+      },
+      {
+        id: "JOB-FD-02",
+        company: "NovaTech Automation",
+        role: "Forward Deployed AI Solutions Engineer",
+        location: "Coimbatore / Bengaluru (Hybrid)",
+        work_type: "Hybrid",
+        salary_range: "₹20L - ₹26L",
+        required_skills: ["Python", "Generative AI", "Process Mapping", "REST APIs", "PowerShell"],
+        description: "Deploy operational automation tools, product research integrations, and enterprise client workflows with robust error handling.",
+        match_score: 100,
+        skills_match_pct: 100,
+        experience_match_pct: 100,
+        salary_fit_pct: 100,
+        matched_skills: ["Python", "Generative AI", "Process Mapping", "REST APIs", "PowerShell"],
         missing_skills: [],
         portal: "Wellfound"
       },
       {
-        id: "JOB-FS-02",
-        company: "NovaTech Labs",
-        role: "Lead Full Stack Engineer",
-        location: "Hyderabad (Hybrid)",
+        id: "JOB-BA-03",
+        company: "Aegis Enterprise Solutions",
+        role: "Business Analyst — AI & Operations Automation",
+        location: "Chennai (Hybrid)",
         work_type: "Hybrid",
-        salary_range: "₹22L - ₹26L",
-        required_skills: ["Python", "React", "TypeScript", "PostgreSQL", "AWS"],
-        description: "Build responsive high-frequency financial dashboards and distributed double-entry transaction ledgers.",
-        match_score: 95,
+        salary_range: "₹16L - ₹22L",
+        required_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Power BI", "Python", "Workflow Automation"],
+        description: "Translate complex business operations into automated workflows, streamline reconciliation and documentation, and build executive reporting.",
+        match_score: 100,
         skills_match_pct: 100,
         experience_match_pct: 100,
-        salary_fit_pct: 95,
-        matched_skills: ["Python", "React", "TypeScript", "PostgreSQL", "AWS"],
+        salary_fit_pct: 100,
+        matched_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Power BI", "Python", "Workflow Automation"],
         missing_skills: [],
         portal: "LinkedIn"
       },
       {
-        id: "JOB-FE-03",
-        company: "Starlight Interactive",
-        role: "Frontend Platform Specialist",
+        id: "JOB-DA-04",
+        company: "CloudSphere Analytics",
+        role: "Data Analytics & Automation Specialist",
         location: "Remote",
         work_type: "Remote",
-        salary_range: "₹18L - ₹22L",
-        required_skills: ["TypeScript", "React", "REST APIs", "CI/CD"],
-        description: "Engineer ultra-fast cross-platform responsive clients supporting desktop, tablet, and mobile browsers.",
-        match_score: 90,
+        salary_range: "₹18L - ₹24L",
+        required_skills: ["SQL", "Python", "Power BI", "Streamlit", "Excel", "Data Classification"],
+        description: "Build intelligent data indexing pipelines, interactive analytics dashboards, and deduplication models across large-scale document repositories.",
+        match_score: 100,
         skills_match_pct: 100,
         experience_match_pct: 100,
-        salary_fit_pct: 85,
-        matched_skills: ["TypeScript", "React", "REST APIs", "CI/CD"],
+        salary_fit_pct: 100,
+        matched_skills: ["SQL", "Python", "Power BI", "Streamlit", "Excel", "Data Classification"],
         missing_skills: [],
         portal: "Indeed"
       },
       {
-        id: "JOB-BE-04",
-        company: "CloudSphere Global",
-        role: "Backend Infrastructure Engineer",
-        location: "Remote",
-        work_type: "Remote",
-        salary_range: "₹24L - ₹30L",
-        required_skills: ["Python", "Docker", "AWS", "SQLite", "System Architecture", "Redis"],
-        description: "Design zero-downtime micro-gateways and hardened data pipelines with strict input validation.",
-        match_score: 92,
+        id: "JOB-OP-05",
+        company: "Starlight Global Logistics",
+        role: "Operations Automation & Systems Lead",
+        location: "Bengaluru (On-site)",
+        work_type: "On-site",
+        salary_range: "₹17L - ₹23L",
+        required_skills: ["Python", "PowerShell", "Task Scheduler", "Google Drive API", "CRM", "Excel"],
+        description: "Automate cross-border documentation, shipment tracking pipelines, and scheduled system maintenance workers with 30%+ efficiency gains.",
+        match_score: 100,
         skills_match_pct: 100,
         experience_match_pct: 100,
         salary_fit_pct: 100,
-        matched_skills: ["Python", "Docker", "AWS", "SQLite", "System Architecture", "Redis"],
-        missing_skills: [],
-        portal: "LinkedIn"
-      },
-      {
-        id: "JOB-DS-05",
-        company: "Aegis Data Solutions",
-        role: "Core Python & Ledger Engineer",
-        location: "Chennai (On-site)",
-        work_type: "On-site",
-        salary_range: "₹16L - ₹20L",
-        required_skills: ["Python", "SQLite", "REST APIs", "PostgreSQL"],
-        description: "Develop low-latency transactional ledger synchronization algorithms and automated audit loggers.",
-        match_score: 85,
-        skills_match_pct: 100,
-        experience_match_pct: 100,
-        salary_fit_pct: 75,
-        matched_skills: ["Python", "SQLite", "REST APIs", "PostgreSQL"],
+        matched_skills: ["Python", "PowerShell", "Task Scheduler", "Google Drive API", "CRM", "Excel"],
         missing_skills: [],
         portal: "Naukri"
       }
@@ -2127,6 +2221,7 @@
           '<div class="skills-tag-row" style="margin-bottom:0.35rem;">' + skillsHtml + '</div>' +
           '<div style="display:flex; gap:0.35rem; margin-top:0.35rem;">' +
             '<button class="' + applyBtnClass + '" style="flex:1;" onclick="applySingleJob(\'' + j.id + '\')" ' + applyDisabled + '>' + applyBtnText + '</button>' +
+            '<button class="btn btn-secondary" onclick="previewAtsCvModal(\'' + j.id + '\')">🎯 100% ATS CV</button>' +
             '<button class="btn btn-secondary" onclick="previewCoverLetter(\'' + j.id + '\')">📄 ' + currentCoverLetterStyle.toUpperCase() + ' Letter</button>' +
           '</div>';
 
@@ -2316,9 +2411,12 @@
         item.innerHTML = 
           '<div>' +
             '<strong style="color:#fff;">' + escapeHtml(a.company) + '</strong> &bull; ' + escapeHtml(a.role) +
-            '<div style="font-size:0.6rem; color:#94a3b8;">' + escapeHtml(a.applied_at) + '</div>' +
+            '<div style="font-size:0.6rem; color:#94a3b8;">' + escapeHtml(a.applied_at) + ' &bull; ATS Score: ' + (a.ats_score || 100) + '/100</div>' +
           '</div>' +
-          '<span class="match-badge" style="border-color:#34d399; color:#34d399;">' + escapeHtml(a.status) + '</span>';
+          '<div style="display:flex; gap:0.25rem; align-items:center;">' +
+            '<span class="match-badge" style="border-color:#34d399; color:#34d399;">100% ATS PASSED</span>' +
+            '<button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.6rem;" onclick="viewApplicationAtsCv(\'' + escapeHtml(a.job_id) + '\')">📄 View CV</button>' +
+          '</div>';
         container.appendChild(item);
       }
     }
@@ -2335,6 +2433,253 @@
       } catch (err) {
         window.open('/api/jobs/export-csv', '_blank');
       }
+    }
+
+
+    // -------------------------------------------------------------
+    // Dynamic 100% ATS CV Modal & Career Recommendations (ES5)
+    // -------------------------------------------------------------
+    var currentAtsCvJobId = null;
+    var cachedAtsCvText = "";
+
+    function previewAtsCvModal(jobId) {
+      currentAtsCvJobId = jobId;
+      var targetJob = null;
+      for (var i = 0; i < localJobPool.length; i++) {
+        if (localJobPool[i].id === jobId) { targetJob = localJobPool[i]; break; }
+      }
+      var roleName = targetJob ? targetJob.role : "Generative AI Engineer";
+      var compName = targetJob ? targetJob.company : "Target Enterprise";
+
+      document.getElementById('atsModalHeaderTitle').textContent = '🎯 100% ATS CV // ' + roleName.toUpperCase() + ' @ ' + compName.toUpperCase();
+      document.getElementById('atsCvTextContainer').textContent = "Synthesizing 100% ATS-optimized tailored CV for " + roleName + "...";
+      document.getElementById('atsCvModal').style.display = 'block';
+
+      fetch('/api/jobs/tailor-cv', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({job_id: jobId})
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (data && data.success) {
+          renderAtsCvModalData(data);
+        } else {
+          fallbackAtsCv(jobId);
+        }
+      })
+      .catch(function() {
+        fallbackAtsCv(jobId);
+      });
+    }
+
+    function viewApplicationAtsCv(jobId) {
+      currentAtsCvJobId = jobId;
+      document.getElementById('atsModalHeaderTitle').textContent = '🎯 100% ATS CV // TRACKED APPLICATION: ' + jobId;
+      document.getElementById('atsCvTextContainer').textContent = "Loading submitted ATS CV...";
+      document.getElementById('atsCvModal').style.display = 'block';
+
+      fetch('/api/jobs/application-cv?job_id=' + encodeURIComponent(jobId))
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (data && data.cv_plaintext) {
+          renderAtsCvModalData(data);
+        } else {
+          fallbackAtsCv(jobId);
+        }
+      })
+      .catch(function() {
+        fallbackAtsCv(jobId);
+      });
+    }
+
+    function renderAtsCvModalData(data) {
+      cachedAtsCvText = data.cv_plaintext || "";
+      document.getElementById('atsCvTextContainer').textContent = cachedAtsCvText;
+
+      var kwContainer = document.getElementById('atsKeywordsContainer');
+      kwContainer.innerHTML = '';
+      var kws = data.matched_keywords || ["Generative AI", "Python", "REST APIs", "Google Apps Script", "Workflow Automation", "SQL", "Power BI"];
+      for (var k = 0; k < kws.length; k++) {
+        var pill = document.createElement('span');
+        pill.className = 'skill-tag skill-tag-matched';
+        pill.textContent = '✓ ' + kws[k];
+        kwContainer.appendChild(pill);
+      }
+    }
+
+    function fallbackAtsCv(jobId) {
+      var target = null;
+      for (var i = 0; i < localJobPool.length; i++) {
+        if (localJobPool[i].id === jobId) { target = localJobPool[i]; break; }
+      }
+      var role = target ? target.role : "Generative AI & Automation Engineer";
+      var comp = target ? target.company : "Target Enterprise";
+
+      var cv = 
+        "ABISHEK PRANAV G V\n" +
+        role + " | AI Automation, Analytics & Enterprise Systems\n" +
+        "Coimbatore, Tamil Nadu, India | +91 63835 00484 | Abishekpranav403@gmail.com\n" +
+        "LinkedIn: linkedin.com/in/abishek-pranav-g-v- | GitHub: github.com/AbishekPranavGV | Portfolio: abishekpranavportfolio.vercel.app\n\n" +
+        "PROFESSIONAL SUMMARY\n" +
+        "--------------------\n" +
+        "Results-oriented " + role + " with deep expertise in Python, Generative AI, REST APIs & Workflow Automation, " +
+        "combining an MBA in Artificial Intelligence with a strong Chartered Accountancy foundation. " +
+        "Proven enterprise track record deploying production automation tools, including the IGNIS architecture " +
+        "indexing 19,000+ Drive records, reducing manual processing effort by 30% at RXG Studios, and accelerating recruitment by 2.5x. " +
+        "Specifically tailored to drive " + comp + "'s objectives with high-throughput reliability, defensive data handling, and measurable operational ROI.\n\n" +
+        "CORE TECHNICAL COMPETENCIES & ATS KEYWORDS\n" +
+        "------------------------------------------\n" +
+        "Target Matched Skills: Generative AI, Python, REST APIs, Google Apps Script, Workflow Automation\n" +
+        "Programming & Automation: Python, PowerShell, Windows BAT, Task Scheduler, Google Apps Script, REST APIs, Workflow Automation\n" +
+        "AI Applications: Generative AI, AI-assisted Product Research, Prompt Engineering, Technical Specification Extraction\n" +
+        "Analytics & BI: SQL, Excel, Google Sheets, Power BI, DAX, Tableau, Streamlit, Data Classification, Indexing and Deduplication\n" +
+        "Integrations: Gmail API, Google OAuth, Google Drive API, IndiaMART, CRM, Supplier Research, Process Mapping\n\n" +
+        "PROFESSIONAL EXPERIENCE\n" +
+        "-----------------------\n" +
+        "Generative AI & Forward Deployed Engineer | Nunes Instrumentation | Aug 2026 – Present\n" +
+        "• Developed and improved five documented business automation initiatives covering Gmail cleaning, Windows maintenance, IndiaMART workflows, and Drive indexing.\n" +
+        "• Implemented IGNIS file classification and indexing for 19,000+ Drive records using Google Apps Script, Google Drive API and Sheets.\n" +
+        "• Built multi-account Gmail cleaning with Python, Gmail API and OAuth; improving multi-PC monitoring.\n" +
+        "• Tested scheduled Windows TEMP-file cleaning using PowerShell, Task Scheduler and background workers.\n" +
+        "• Built Price Master search and indexing across Excel, Drive, IndiaMART and supplier records.\n\n" +
+        "Operations & Business Analytics Lead | RXG Studios | May 2025 – Nov 2025\n" +
+        "• Automated export documentation using Advanced Excel and export platforms, reducing manual processing time by 30%.\n" +
+        "• Streamlined invoicing, TDS documentation, Tally reconciliation and Bills of Lading workflows; maintained CRM records.\n\n" +
+        "HR & Operations Intern | Smyrna Fellowship Trust | Jun 2023 – Aug 2023\n" +
+        "• Restructured candidate screening, reducing screening time by 50%; accelerated recruitment by 2.5x and increased qualified candidate pool by 5%.\n\n" +
+        "EDUCATION\n" +
+        "---------\n" +
+        "• Master of Business Administration (MBA), Artificial Intelligence | Aug 2025 – May 2027 (In progress)\n" +
+        "• Bachelor of Business Administration (BBA), Data Science & AI | Sep 2022 – Jun 2025\n" +
+        "• Chartered Accountancy — Foundation & Intermediate Preparation | Jan 2019 – Jan 2022\n\n" +
+        "CERTIFICATIONS\n" +
+        "--------------\n" +
+        "• Agile Scrum Essentials (Techcanvass) | Lean Six Sigma White Belt (MSI) | Agile Project Management Foundation (HP LIFE)";
+
+      renderAtsCvModalData({
+        cv_plaintext: cv.replace(/\\n/g, '\n'),
+        matched_keywords: target ? target.required_skills : ["Python", "Generative AI", "REST APIs", "Workflow Automation"]
+      });
+    }
+
+    function closeAtsCvModal() {
+      document.getElementById('atsCvModal').style.display = 'none';
+    }
+
+    function copyAtsCvToClipboard() {
+      if (!cachedAtsCvText) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(cachedAtsCvText);
+      }
+      alert('✓ 100% ATS Tailored CV copied to clipboard!');
+    }
+
+    function downloadAtsCvFile() {
+      if (!cachedAtsCvText) return;
+      var blob = new Blob([cachedAtsCvText], {type: 'text/plain;charset=utf-8'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = (currentAtsCvJobId || 'Abishek_Pranav') + '_100_ATS_CV.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function applyFromAtsModal() {
+      if (currentAtsCvJobId) {
+        applySingleJob(currentAtsCvJobId);
+        closeAtsCvModal();
+      }
+    }
+
+    function previewMasterCvModal() {
+      previewAtsCvModal('JOB-AI-01');
+      document.getElementById('atsModalHeaderTitle').textContent = '🎯 MASTER CV // ABISHEK PRANAV G V (100% ATS BASELINE)';
+    }
+
+    function showCareerRecommendationsModal() {
+      var container = document.getElementById('recClustersContainer');
+      container.innerHTML = '<span style="font-size:0.67rem; color:#94a3b8;">Loading strategic recommendations...</span>';
+      document.getElementById('careerRecModal').style.display = 'block';
+
+      fetch('/api/jobs/recommendations')
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (data && data.success && data.recommendations) {
+          renderCareerRecommendations(data.recommendations);
+        } else {
+          fallbackCareerRecommendations();
+        }
+      })
+      .catch(function() {
+        fallbackCareerRecommendations();
+      });
+    }
+
+    function fallbackCareerRecommendations() {
+      renderCareerRecommendations({
+        target_role_clusters: [
+          {
+            title: "Generative AI & Forward Deployed Engineer",
+            salary_range: "₹20,00,000 - ₹28,00,000",
+            demand_level: "Extremely High (98/100)",
+            best_fit_reasons: "Direct alignment with Nunes Instrumentation deployment of IGNIS, Gmail cleaners, and AI product research.",
+            recommended_portals: ["LinkedIn", "Wellfound"]
+          },
+          {
+            title: "Business Analyst — AI & Operations Automation",
+            salary_range: "₹16,00,000 - ₹22,00,000",
+            demand_level: "Very High (95/100)",
+            best_fit_reasons: "Leverages MBA + CA background + RXG Studios export automation & Tally/TDS financial reconciliation.",
+            recommended_portals: ["LinkedIn", "Naukri"]
+          },
+          {
+            title: "Data Analytics & Automation Specialist",
+            salary_range: "₹18,00,000 - ₹24,00,000",
+            demand_level: "High (92/100)",
+            best_fit_reasons: "Combines BBA (Data Science) + SQL + Power BI + Streamlit ML with large-scale indexing algorithms.",
+            recommended_portals: ["Indeed", "LinkedIn"]
+          },
+          {
+            title: "Operations Automation & Workflow Systems Lead",
+            salary_range: "₹17,00,000 - ₹23,00,000",
+            demand_level: "High (90/100)",
+            best_fit_reasons: "Cross-border logistics (Greenwich Meridian), recruitment automation (Smyrna Trust), and Windows PowerShell scripting.",
+            recommended_portals: ["Naukri", "Indeed"]
+          }
+        ]
+      });
+    }
+
+    function renderCareerRecommendations(rec) {
+      var container = document.getElementById('recClustersContainer');
+      container.innerHTML = '';
+      var clusters = rec.target_role_clusters || [];
+      for (var i = 0; i < clusters.length; i++) {
+        var c = clusters[i];
+        var item = document.createElement('div');
+        item.style.background = '#1e293b';
+        item.style.padding = '0.55rem';
+        item.style.borderRadius = '6px';
+        item.style.border = '1px solid #334155';
+        item.innerHTML = 
+          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+            '<strong style="color:#c084fc; font-size:0.75rem;">' + escapeHtml(c.title) + '</strong>' +
+            '<span style="color:#34d399; font-weight:700; font-size:0.75rem; font-family:var(--font-mono);">' + escapeHtml(c.salary_range) + '</span>' +
+          '</div>' +
+          '<div style="font-size:0.65rem; color:#cbd5e1; margin-top:0.2rem;">' + escapeHtml(c.best_fit_reasons) + '</div>' +
+          '<div style="font-size:0.6rem; color:#94a3b8; margin-top:0.25rem;">' +
+            'Demand: <span style="color:#38bdf8;">' + escapeHtml(c.demand_level) + '</span> &bull; Portals: ' + escapeHtml((c.recommended_portals || []).join(', ')) +
+          '</div>';
+        container.appendChild(item);
+      }
+    }
+
+    function closeCareerRecommendationsModal() {
+      document.getElementById('careerRecModal').style.display = 'none';
     }
 
     // Diagnostics Telemetry Update

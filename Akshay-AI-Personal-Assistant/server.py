@@ -108,6 +108,30 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
 
+        elif path == "/api/jobs/recommendations":
+            try:
+                from akshay_core.workflows.cv_tailor import CVTailorEngine
+                rec = CVTailorEngine.get_career_recommendations()
+                self._send_json_response({"success": True, "recommendations": rec})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/application-cv":
+            try:
+                query = urllib.parse.parse_qs(parsed_url.query)
+                job_id = query.get("job_id", [""])[0]
+                apps = job_bot_instance.get_applications()
+                app = next((a for a in apps if a.job_id == job_id), None)
+                if app and app.tailored_cv:
+                    self._send_json_response({"success": True, "job_id": job_id, "cv_plaintext": app.tailored_cv, "ats_score": app.ats_score, "status": app.status})
+                else:
+                    tailored = job_bot_instance.tailor_cv_for_job(job_id)
+                    self._send_json_response(tailored)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
         elif path == "/api/jobs/history":
             try:
                 apps = job_bot_instance.get_applications()
@@ -339,8 +363,21 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 data = json.loads(body)
                 job_id = data.get("job_id")
                 custom_letter = data.get("cover_letter")
-                app = job_bot_instance.apply_to_job(job_id, custom_letter)
+                style = data.get("letter_style", "balanced")
+                app = job_bot_instance.apply_to_job(job_id, custom_letter, style=style)
                 self._send_json_response({"success": True, "application": app.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/tailor-cv":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                job_id = data.get("job_id")
+                tailored = job_bot_instance.tailor_cv_for_job(job_id)
+                self._send_json_response(tailored)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
