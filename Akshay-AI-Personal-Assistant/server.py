@@ -28,7 +28,11 @@ from akshay_core.workflows.daily_engine import (
     get_first_aid_guide,
 )
 from akshay_core.workflows.braindump_engine import process_braindump
-from akshay_core.finos.tax_calculator import compare_tax_regimes
+from akshay_core.finos.tax_calculator import (
+    compare_tax_regimes,
+    calculate_financial_runway,
+    calculate_sip_compounding,
+)
 from akshay_core.workflows.medical_emergency import check_drug_interaction, generate_sos_beacon
 from akshay_core.workflows.job_bot import JobBotManager, CandidateProfile
 from akshay_core.security.validator import sanitize_text, SecurityValidationError
@@ -110,6 +114,20 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                     "success": True,
                     "applications": [a.model_dump() for a in apps]
                 })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/export-csv":
+            try:
+                csv_data = job_bot_instance.export_applications_csv()
+                payload = csv_data.encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "text/csv; charset=utf-8")
+                self.send_header("Content-Disposition", "attachment; filename=\"akshay_job_applications.csv\"")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
@@ -332,8 +350,36 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
                 data = json.loads(body) if body else {}
                 threshold = int(data.get("min_match_threshold", 70))
-                res = job_bot_instance.run_batch_auto_apply(min_match_threshold=threshold)
+                style = data.get("letter_style", "balanced")
+                res = job_bot_instance.run_batch_auto_apply(min_match_threshold=threshold, style=style)
                 self._send_json_response(res)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/wealth/runway":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                assets = Decimal(str(data.get("liquid_assets", "81750")))
+                burn = Decimal(str(data.get("monthly_burn", "15000")))
+                runway = calculate_financial_runway(assets, burn)
+                self._send_json_response({"success": True, "runway": runway.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/wealth/sip":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                monthly = Decimal(str(data.get("monthly_investment", "10000")))
+                cagr = Decimal(str(data.get("annual_cagr_pct", "12")))
+                years = int(data.get("years", 10))
+                sip = calculate_sip_compounding(monthly, cagr, years)
+                self._send_json_response({"success": True, "sip": sip.model_dump()})
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
