@@ -110,42 +110,81 @@ if ($authorized) {
         }
     }
 
+    # Dynamically detect current local IPv4
+    $localIp = "192.168.0.107"
+    try {
+        $ipObj = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | Where-Object { $_.InterfaceAlias -notmatch 'Loopback' -and $_.IPAddress -notmatch '^169\.' } | Select-Object -First 1
+        if ($ipObj) { $localIp = $ipObj.IPAddress }
+    } catch {}
+
+    # Push latest UI directly to tablet storage
+    $htmlCandidates = @(
+        (Join-Path $ScriptDir "index.html"),
+        "D:\Akshay_Personal_AI\index.html",
+        "C:\Users\abish\Documents\antigravity\quick-curie\Akshay-AI-Personal-Assistant\index.html"
+    )
+    foreach ($cand in $htmlCandidates) {
+        if (Test-Path $cand) {
+            & $adb shell "mkdir -p /sdcard/Download/Akshay_AI" 2>$null
+            & $adb push $cand /sdcard/Download/Akshay_AI/index.html 2>$null
+            Write-Host "[+] Synchronized latest UI directly to tablet storage (/sdcard/Download/Akshay_AI/index.html)" -ForegroundColor Green
+            break
+        }
+    }
+
     Write-Host "[*] Opening Akshay directly on your Galaxy Tab A screen..." -ForegroundColor Cyan
     & $adb shell am start -a android.intent.action.VIEW -d "http://localhost:8085"
     Write-Host ""
     Write-Host "==============================================================" -ForegroundColor Green
     Write-Host "[SUCCESS] Akshay is now live and running on your Galaxy Tab A!" -ForegroundColor Green
     Write-Host "==============================================================" -ForegroundColor Green
-    Write-Host "Tips:" -ForegroundColor White
-    Write-Host "  1. In the tablet browser, tap menu (3 dots) -> 'Install App' or 'Add to Home screen'." -ForegroundColor Cyan
-    Write-Host "  2. You can also access Akshay from any phone/laptop on Wi-Fi at:" -ForegroundColor White
-    Write-Host "     http://192.168.0.105:8085" -ForegroundColor Yellow
+    Write-Host "Connection Options for Galaxy Tab A:" -ForegroundColor White
+    Write-Host "  1. Direct USB Cable   : http://localhost:8085" -ForegroundColor Cyan
+    Write-Host "  2. Wi-Fi Local Network: http://$($localIp):8085" -ForegroundColor Yellow
+    Write-Host "  3. Global Cloud Tunnel: https://taste-double-exchanges-decisions.trycloudflare.com" -ForegroundColor Green
+    Write-Host "  4. 100% Offline File  : file:///sdcard/Download/Akshay_AI/index.html" -ForegroundColor Gray
     Write-Host "==============================================================" -ForegroundColor Green
     exit 0
 }
 elseif ($deviceFound -and -not $authorized) {
+    $localIp = "192.168.0.107"
+    try {
+        $ipObj = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | Where-Object { $_.InterfaceAlias -notmatch 'Loopback' -and $_.IPAddress -notmatch '^169\.' } | Select-Object -First 1
+        if ($ipObj) { $localIp = $ipObj.IPAddress }
+    } catch {}
+
     Write-Host ""
     Write-Host "[!] Galaxy Tab A was detected but not authorized in time." -ForegroundColor Yellow
     Write-Host "Unlock your tablet, accept the 'Allow USB debugging' popup, and run this file again." -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "Alternative: Open the browser on your tablet and type:" -ForegroundColor White
-    Write-Host "http://192.168.0.105:8085" -ForegroundColor Green
+    Write-Host "Alternative Options (No USB Debugging needed):" -ForegroundColor White
+    Write-Host "  * Wi-Fi Address : http://$($localIp):8085" -ForegroundColor Yellow
+    Write-Host "  * Cloud Tunnel  : https://taste-double-exchanges-decisions.trycloudflare.com" -ForegroundColor Green
     Write-Host "==============================================================" -ForegroundColor Cyan
     exit 1
 }
 else {
+    $localIp = "192.168.0.107"
+    try {
+        $ipObj = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | Where-Object { $_.InterfaceAlias -notmatch 'Loopback' -and $_.IPAddress -notmatch '^169\.' } | Select-Object -First 1
+        if ($ipObj) { $localIp = $ipObj.IPAddress }
+    } catch {}
+
     Write-Host "[!] No Galaxy Tab A detected in USB Debugging mode." -ForegroundColor Yellow
     Write-Host ""
     Write-Host "--------------------------------------------------------------" -ForegroundColor Cyan
-    Write-Host "HOW TO CONNECT YOUR GALAXY TAB A:" -ForegroundColor Cyan
+    Write-Host "HOW TO RUN AKSHAY ON YOUR GALAXY TAB A:" -ForegroundColor Cyan
     Write-Host "--------------------------------------------------------------" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "METHOD 1: INSTANT WI-FI (NO CABLE OR SPECIAL SETTINGS REQUIRED):" -ForegroundColor Green
+    Write-Host "METHOD 1: INSTANT WI-FI (NO CABLE REQUIRED):" -ForegroundColor Green
     Write-Host "  1. On your Galaxy Tab A, open Chrome or Samsung Internet."
     Write-Host "  2. Type this into the address bar:"
-    Write-Host "     http://192.168.0.105:8085" -ForegroundColor Yellow
+    Write-Host "     http://$($localIp):8085" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "METHOD 2: DIRECT USB HIGH-SPEED CABLE:" -ForegroundColor Green
+    Write-Host "METHOD 2: CLOUD TUNNEL (WORKS OVER ANY WI-FI OR MOBILE DATA):" -ForegroundColor Green
+    Write-Host "  Type: https://taste-double-exchanges-decisions.trycloudflare.com" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "METHOD 3: DIRECT USB HIGH-SPEED CABLE:" -ForegroundColor Green
     Write-Host "  1. On your Galaxy Tab A: Settings -> About tablet -> Software information."
     Write-Host "  2. Tap 'Build number' 7 times until Developer options is enabled."
     Write-Host "  3. Go to: Settings -> Developer options -> Turn ON 'USB debugging'."

@@ -306,6 +306,8 @@
       font-size: 0.7rem;
       line-height: 1.35;
       max-width: 92%;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
     .msg-akshay {
       background: rgba(56, 189, 248, 0.1);
@@ -360,6 +362,8 @@
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
+      margin-bottom: 0.55rem;
+      flex-shrink: 0;
     }
     .job-card:hover {
       border-color: #c084fc;
@@ -368,16 +372,19 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      margin-bottom: 0.25rem;
     }
     .job-company {
       font-size: 0.68rem;
       color: #94a3b8;
       font-family: 'Consolas', 'Courier New', monospace;
+      margin-bottom: 0.15rem;
     }
     .job-role {
       font-size: 0.78rem;
       font-weight: 700;
       color: #fff;
+      margin-bottom: 0.2rem;
     }
     .match-badge {
       background: rgba(52, 211, 153, 0.15);
@@ -396,6 +403,8 @@
       font-size: 0.62rem;
       font-family: 'Consolas', 'Courier New', monospace;
       color: #94a3b8;
+      margin-top: 0.15rem;
+      margin-bottom: 0.25rem;
     }
     .skills-tag-row {
       display: flex;
@@ -551,6 +560,30 @@
           <input type="text" id="userInput" placeholder="Ask Akshay or enter command..." autocomplete="off">
           <button type="submit" class="btn" style="white-space:nowrap;">Send</button>
         </form>
+
+        <!-- Slow-Phase Voice Listening Station (Built for Thoughtful Speakers) -->
+        <div id="voiceControlPanel" style="margin-top:0.4rem; display:flex; flex-direction:column; gap:0.3rem;">
+          <div style="display:flex; gap:0.35rem; align-items:center;">
+            <button type="button" class="btn" id="btnSlowVoice" onclick="toggleSlowPhaseVoice()" style="flex:1; background:rgba(56,189,248,0.15); border-color:#38bdf8; color:#38bdf8; font-weight:600; font-size:0.75rem;">
+              🎙️ Tap to Speak (Slow-Phase Mode)
+            </button>
+            <button type="button" class="btn btn-secondary" id="btnDoneSpeaking" onclick="finalizeVoiceInput()" style="display:none; background:rgba(52,211,153,0.15); border-color:#34d399; color:#34d399; font-weight:600; font-size:0.75rem;">
+              ✓ Done Speaking
+            </button>
+            <button type="button" class="btn btn-secondary" id="btnCancelVoice" onclick="cancelVoiceInput()" style="display:none; color:#f87171; border-color:rgba(248,113,113,0.4); font-size:0.75rem;">
+              ✕
+            </button>
+          </div>
+          <div id="voiceLiveFeedback" style="display:none; padding:0.35rem 0.5rem; background:rgba(15,23,42,0.8); border:1px dashed #38bdf8; border-radius:6px; font-size:0.68rem; color:#cbd5e1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
+              <span id="voiceStatusText" style="color:#38bdf8; font-weight:600;">🎙️ Listening... (Take your time, 5s pause window)</span>
+              <span id="voiceTimerBadge" style="color:#f59e0b; font-family:var(--font-mono); font-size:0.62rem;">Pause buffer: 5.0s</span>
+            </div>
+            <div id="voiceInterimText" style="font-style:italic; color:#94a3b8; min-height:1.2rem; word-break:break-word;">
+              Listening to your voice... Speak at your natural pace.
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Option A: Voice Brain-Dump -->
@@ -911,62 +944,348 @@
     function respond(text) {
       setTimeout(function() {
         addChatMessage(text, 'akshay');
-      }, 200);
+      }, 150);
     }
 
+    // -------------------------------------------------------------
+    // Slow-Phase Voice Engine (Continuous, 5.0s Pause Tolerance)
+    // -------------------------------------------------------------
+    var speechRec = null;
+    var isVoiceListening = false;
+    var accumulatedVoiceText = "";
+    var interimVoiceText = "";
+    var silenceCountdownTimer = null;
+    var silenceTicker = null;
+    var silenceRemainingMs = 5000;
+    var intentionallyStopped = false;
+
+    function initSpeechRecognition() {
+      var SpeechRecClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecClass) {
+        return null;
+      }
+      var rec = new SpeechRecClass();
+      rec.continuous = true;
+      rec.interimResults = true;
+      rec.lang = 'en-IN';
+      rec.maxAlternatives = 1;
+
+      rec.onstart = function() {
+        isVoiceListening = true;
+        updateVoiceUIState(true);
+        resetSilenceBuffer();
+      };
+
+      rec.onresult = function(event) {
+        resetSilenceBuffer();
+        interimVoiceText = "";
+        for (var i = event.resultIndex; i < event.results.length; i++) {
+          var transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            accumulatedVoiceText += (accumulatedVoiceText ? " " : "") + transcript.trim();
+          } else {
+            interimVoiceText += transcript;
+          }
+        }
+        var displayStr = (accumulatedVoiceText + " " + interimVoiceText).trim();
+        var interimEl = document.getElementById('voiceInterimText');
+        if (interimEl) {
+          interimEl.textContent = displayStr || "Listening to your voice...";
+        }
+      };
+
+      rec.onerror = function(event) {
+        if (event.error !== 'no-speech') {
+          console.warn("Speech recognition notice:", event.error);
+        }
+      };
+
+      rec.onend = function() {
+        // Auto-restart if not deliberately stopped by user or 5s silence timer
+        if (!intentionallyStopped && isVoiceListening) {
+          try {
+            rec.start();
+          } catch (e) {}
+        } else {
+          isVoiceListening = false;
+          updateVoiceUIState(false);
+        }
+      };
+
+      return rec;
+    }
+
+    function resetSilenceBuffer() {
+      if (silenceCountdownTimer) {
+        clearTimeout(silenceCountdownTimer);
+        silenceCountdownTimer = null;
+      }
+      if (silenceTicker) {
+        clearInterval(silenceTicker);
+        silenceTicker = null;
+      }
+      silenceRemainingMs = 5000;
+      updateSilenceBadge(5.0);
+
+      silenceTicker = setInterval(function() {
+        silenceRemainingMs -= 200;
+        if (silenceRemainingMs < 0) silenceRemainingMs = 0;
+        updateSilenceBadge((silenceRemainingMs / 1000).toFixed(1));
+      }, 200);
+
+      silenceCountdownTimer = setTimeout(function() {
+        finalizeVoiceInput();
+      }, 5000);
+    }
+
+    function updateSilenceBadge(secondsStr) {
+      var badge = document.getElementById('voiceTimerBadge');
+      if (badge) {
+        badge.textContent = "Pause buffer: " + secondsStr + "s";
+      }
+    }
+
+    function updateVoiceUIState(active) {
+      var btnSlow = document.getElementById('btnSlowVoice');
+      var btnDone = document.getElementById('btnDoneSpeaking');
+      var btnCancel = document.getElementById('btnCancelVoice');
+      var feedback = document.getElementById('voiceLiveFeedback');
+      var statusText = document.getElementById('voiceStatusText');
+
+      if (active) {
+        if (btnSlow) {
+          btnSlow.textContent = "🎙️ Listening (Patience Mode)...";
+          btnSlow.style.background = "rgba(56, 189, 248, 0.3)";
+        }
+        if (btnDone) btnDone.style.display = "inline-flex";
+        if (btnCancel) btnCancel.style.display = "inline-flex";
+        if (feedback) feedback.style.display = "block";
+        if (statusText) statusText.textContent = "🎙️ Listening... (Take your time, 5s pause window)";
+      } else {
+        if (btnSlow) {
+          btnSlow.textContent = "🎙️ Tap to Speak (Slow-Phase Mode)";
+          btnSlow.style.background = "rgba(56, 189, 248, 0.15)";
+        }
+        if (btnDone) btnDone.style.display = "none";
+        if (btnCancel) btnCancel.style.display = "none";
+        if (feedback) feedback.style.display = "none";
+        if (silenceCountdownTimer) { clearTimeout(silenceCountdownTimer); silenceCountdownTimer = null; }
+        if (silenceTicker) { clearInterval(silenceTicker); silenceTicker = null; }
+      }
+    }
+
+    function toggleSlowPhaseVoice() {
+      if (isVoiceListening) {
+        finalizeVoiceInput();
+        return;
+      }
+
+      if (!speechRec) {
+        speechRec = initSpeechRecognition();
+      }
+
+      if (!speechRec) {
+        alert("Web Speech API is not supported in this browser. You can type commands directly in the input box.");
+        return;
+      }
+
+      accumulatedVoiceText = "";
+      interimVoiceText = "";
+      intentionallyStopped = false;
+      var interimEl = document.getElementById('voiceInterimText');
+      if (interimEl) interimEl.textContent = "Listening to your voice... Speak at your natural pace.";
+
+      try {
+        speechRec.start();
+      } catch (e) {
+        try {
+          speechRec.stop();
+          setTimeout(function() { speechRec.start(); }, 150);
+        } catch (e2) {}
+      }
+    }
+
+    function finalizeVoiceInput() {
+      intentionallyStopped = true;
+      if (silenceCountdownTimer) { clearTimeout(silenceCountdownTimer); silenceCountdownTimer = null; }
+      if (silenceTicker) { clearInterval(silenceTicker); silenceTicker = null; }
+
+      if (speechRec && isVoiceListening) {
+        try { speechRec.stop(); } catch (e) {}
+      }
+      isVoiceListening = false;
+      updateVoiceUIState(false);
+
+      var finalText = (accumulatedVoiceText + " " + interimVoiceText).trim();
+      accumulatedVoiceText = "";
+      interimVoiceText = "";
+
+      if (finalText) {
+        addChatMessage(finalText, 'user');
+        processUserQuery(finalText);
+      }
+    }
+
+    function cancelVoiceInput() {
+      intentionallyStopped = true;
+      if (silenceCountdownTimer) { clearTimeout(silenceCountdownTimer); silenceCountdownTimer = null; }
+      if (silenceTicker) { clearInterval(silenceTicker); silenceTicker = null; }
+      if (speechRec && isVoiceListening) {
+        try { speechRec.stop(); } catch (e) {}
+      }
+      isVoiceListening = false;
+      accumulatedVoiceText = "";
+      interimVoiceText = "";
+      updateVoiceUIState(false);
+    }
+
+    // -------------------------------------------------------------
+    // Autonomous Conversational Solver (Zero Parroting / No Echoing)
+    // -------------------------------------------------------------
     function processUserQuery(query) {
+      if (!query || !query.trim()) return;
+      var q = query.trim();
+
+      // 1. Try Live Server Solver Endpoint (/api/chat/solve)
+      fetch('/api/chat/solve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q })
+      })
+      .then(function(res) {
+        if (res.ok) return res.json();
+        throw new Error('Server offline or HTTP error');
+      })
+      .then(function(data) {
+        if (data && data.success && data.result) {
+          handleSolverResult(data.result);
+        } else {
+          fallbackOfflineSolve(q);
+        }
+      })
+      .catch(function() {
+        fallbackOfflineSolve(q);
+      });
+    }
+
+    function handleSolverResult(result) {
+      // Direct, non-parroting response
+      if (result.solution) {
+        addChatMessage(result.solution, 'akshay');
+      }
+
+      var t = result.type || '';
+      if (t === 'tax_solution') {
+        jumpToColumn('colFinos');
+        if (result.data) {
+          var grossInput = document.getElementById('taxGross');
+          if (grossInput && result.data.annual_gross_income) {
+            grossInput.value = result.data.annual_gross_income;
+          }
+          var out = '✓ RECOMMENDED: ' + result.data.recommended_regime + ' (Saves ₹' + Math.round(result.data.tax_savings).toLocaleString('en-IN') + ')\n' +
+            '• New Regime Tax: ₹' + Math.round(result.data.new_regime_tax).toLocaleString('en-IN') + ' (Eff: ' + result.data.effective_tax_rate_new_pct + '%)\n' +
+            '• Old Regime Tax: ₹' + Math.round(result.data.old_regime_tax).toLocaleString('en-IN') + ' (Eff: ' + result.data.effective_tax_rate_old_pct + '%)\n' +
+            '• Monthly Take-Home (New): ₹' + Math.round(result.data.monthly_take_home_new).toLocaleString('en-IN') + '\n' +
+            '➔ ' + (result.data.breakdown_notes || 'Computed deterministically with Section 115BAC.');
+          var taxOutEl = document.getElementById('taxComparisonOutput');
+          if (taxOutEl) taxOutEl.textContent = out;
+        }
+      } else if (t === 'runway_solution') {
+        jumpToColumn('colFinos');
+        if (result.data) {
+          var rOut = '⏳ FINANCIAL RUNWAY: ' + result.data.runway_months + ' MONTHS (' + result.data.financial_status + ')\n' +
+            '• Total Liquid Net Worth: ₹' + Math.round(result.data.total_liquid_assets).toLocaleString('en-IN') + '\n' +
+            '• Monthly Burn Rate: ₹' + Math.round(result.data.monthly_burn_rate).toLocaleString('en-IN') + '\n' +
+            '➔ ' + result.data.recommendation;
+          var wOutEl = document.getElementById('wealthOutput');
+          if (wOutEl) wOutEl.textContent = rOut;
+        }
+      } else if (t === 'sip_solution') {
+        jumpToColumn('colFinos');
+        if (result.data) {
+          var yearsVal = result.data.investment_period_years || 10;
+          var cagrVal = result.data.annual_cagr_pct || 14.0;
+          var mult = (result.data.estimated_wealth_corpus / (result.data.total_invested || 1)).toFixed(1);
+          var sOut = '📈 SIP WEALTH PROJECTION (' + yearsVal + ' YEARS @ ' + cagrVal + '% CAGR):\n' +
+            '• Total Invested Principal: ₹' + Math.round(result.data.total_invested).toLocaleString('en-IN') + '\n' +
+            '• Estimated Wealth Corpus: ₹' + Math.round(result.data.estimated_wealth_corpus).toLocaleString('en-IN') + '\n' +
+            '• Total Wealth Gain: ₹' + Math.round(result.data.wealth_gain).toLocaleString('en-IN') + ' (Compounding ' + mult + 'x)';
+          var wOutEl2 = document.getElementById('wealthOutput');
+          if (wOutEl2) wOutEl2.textContent = sOut;
+        }
+      } else if (t === 'medical_solution' || t === 'drug_warning' || t === 'drug_safe') {
+        jumpToColumn('colMedical');
+        var drugBox = document.getElementById('drugSafetyOutput');
+        if (drugBox) drugBox.textContent = result.solution;
+      } else if (t === 'emergency_sos' || t === 'sos') {
+        jumpToColumn('colMedical');
+        triggerSOSAlert();
+      } else if (t === 'job_apply') {
+        jumpToColumn('colJobBot');
+        runBatchAutoApplyBot();
+      } else if (t === 'braindump_solution') {
+        jumpToColumn('colBrainDump');
+        if (result.data) {
+          renderBrainDumpResults(result.data);
+        }
+      }
+    }
+
+    function fallbackOfflineSolve(query) {
       var q = query.toLowerCase();
 
-      if (q.indexOf('brain-dump') !== -1 || q.indexOf('meeting with') !== -1) {
+      // Zero Echoing: Directly solve without parroting the user's sentence
+      if (q.indexOf('tax') !== -1 || q.indexOf('regime') !== -1 || q.indexOf('115bac') !== -1 || q.indexOf('ctc') !== -1) {
+        jumpToColumn('colFinos');
+        calculateTaxComparison();
+        return;
+      }
+
+      if (q.indexOf('runway') !== -1 || q.indexOf('survive') !== -1 || q.indexOf('burn rate') !== -1) {
+        jumpToColumn('colFinos');
+        calculateRunway();
+        return;
+      }
+
+      if (q.indexOf('sip') !== -1 || q.indexOf('compound') !== -1 || q.indexOf('mutual fund') !== -1 || q.indexOf('invest') !== -1) {
+        jumpToColumn('colFinos');
+        calculateSip();
+        return;
+      }
+
+      if (q.indexOf('lethal') !== -1 || q.indexOf('sildenafil') !== -1 || q.indexOf('viagra') !== -1 || q.indexOf('nitroglycerin') !== -1) {
+        jumpToColumn('colMedical');
+        testLethalDrugPair();
+        return;
+      }
+
+      if (q.indexOf('drug') !== -1 || q.indexOf('paracetamol') !== -1 || q.indexOf('medicine') !== -1) {
+        jumpToColumn('colMedical');
+        checkDrugSafety();
+        return;
+      }
+
+      if (q.indexOf('sos') !== -1 || q.indexOf('emergency') !== -1 || q.indexOf('siren') !== -1) {
+        jumpToColumn('colMedical');
+        triggerSOSAlert();
+        return;
+      }
+
+      if (q.indexOf('job') !== -1 || q.indexOf('apply') !== -1 || q.indexOf('bot') !== -1) {
+        jumpToColumn('colJobBot');
+        runBatchAutoApplyBot();
+        return;
+      }
+
+      if (q.indexOf('meet') !== -1 || q.indexOf('schedule') !== -1 || q.indexOf('calendar') !== -1 || q.indexOf('brain-dump') !== -1) {
         jumpToColumn('colBrainDump');
         document.getElementById('braindumpInput').value = query;
         executeBrainDump();
         return;
       }
 
-      if (q.indexOf('runway') !== -1) {
-        jumpToColumn('colFinos');
-        calculateRunway();
-        return;
-      }
-
-      if (q.indexOf('sip') !== -1 || q.indexOf('compound') !== -1) {
-        jumpToColumn('colFinos');
-        calculateSip();
-        return;
-      }
-
-      if (q.indexOf('tax') !== -1 || q.indexOf('regime') !== -1) {
-        jumpToColumn('colFinos');
-        calculateTaxComparison();
-        return;
-      }
-
-      if (q.indexOf('lethal') !== -1 || q.indexOf('sildenafil') !== -1 || q.indexOf('viagra') !== -1) {
-        jumpToColumn('colMedical');
-        testLethalDrugPair();
-        return;
-      }
-
-      if (q.indexOf('drug') !== -1 || q.indexOf('paracetamol') !== -1) {
-        jumpToColumn('colMedical');
-        checkDrugSafety();
-        return;
-      }
-
-      if (q.indexOf('sos') !== -1 || q.indexOf('emergency') !== -1) {
-        jumpToColumn('colMedical');
-        triggerSOSAlert();
-        return;
-      }
-
-      if (q.indexOf('job') !== -1 || q.indexOf('apply') !== -1) {
-        jumpToColumn('colJobBot');
-        runBatchAutoApplyBot();
-        return;
-      }
-
-      respond('Executing command: "' + query + '". Processed with zero cloud latency.');
+      // General intelligent direct response (never repeating user prompt)
+      respond("Autonomous Solver Active: Ask for tax calculation, runway projection, SIP wealth compounding, lethal drug check, emergency SOS, or ATS auto apply.");
     }
 
     // -------------------------------------------------------------
@@ -1339,41 +1658,86 @@
 
     var audioCtx = null;
     var sirenOsc = null;
+    var sirenGain = null;
     var sirenInterval = null;
 
-    function triggerSOSAlert() {
-      if (!audioCtx) {
-        var AudioCtxClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtxClass) audioCtx = new AudioCtxClass();
+    function stopSOSSiren() {
+      // 1. Clear any recurring pitch interval immediately
+      if (sirenInterval) {
+        clearInterval(sirenInterval);
+        sirenInterval = null;
       }
+      // 2. Hardware-level gain ramp down to zero and disconnect
+      if (sirenGain && audioCtx) {
+        try {
+          sirenGain.gain.cancelScheduledValues(audioCtx.currentTime);
+          sirenGain.gain.setValueAtTime(0, audioCtx.currentTime);
+          sirenGain.disconnect();
+        } catch (e) {}
+        sirenGain = null;
+      }
+      // 3. Stop and disconnect oscillator
+      if (sirenOsc) {
+        try {
+          sirenOsc.stop(0);
+          sirenOsc.disconnect();
+        } catch (e) {}
+        sirenOsc = null;
+      }
+      // 4. Suspend audio context so background hardware stops completely
       if (audioCtx) {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        sirenOsc = audioCtx.createOscillator();
-        var gainNode = audioCtx.createGain();
-        sirenOsc.type = 'sawtooth';
-        sirenOsc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        gainNode.gain.setValueAtTime(0.35, audioCtx.currentTime);
-        sirenOsc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        sirenOsc.start();
-
-        var isHigh = false;
-        sirenInterval = setInterval(function() {
-          if (sirenOsc && audioCtx) {
-            sirenOsc.frequency.setValueAtTime(isHigh ? 440 : 880, audioCtx.currentTime);
-            isHigh = !isHigh;
-          }
-        }, 320);
+        try {
+          if (audioCtx.state === 'running') audioCtx.suspend();
+        } catch (e) {}
       }
-
-      document.getElementById('sosOutput').textContent = "🚨 [SOS SIREN ACTIVATED]\n• User: Abishek Pranav\n• Blood Group: O+ Positive\n• Emergency SMS Generated with GPS beacon\n• Siren sounding at maximum volume";
-      respond("EMERGENCY SOS: Siren activated. Medical ID broadcast ready.");
+      var out = document.getElementById('sosOutput');
+      if (out) out.textContent = "✓ SOS Siren completely silenced.";
     }
 
-    function stopSOSSiren() {
-      if (sirenInterval) { clearInterval(sirenInterval); sirenInterval = null; }
-      if (sirenOsc) { try { sirenOsc.stop(); sirenOsc.disconnect(); } catch (e) {} sirenOsc = null; }
-      document.getElementById('sosOutput').textContent = "✓ SOS Siren silenced.";
+    function triggerSOSAlert() {
+      // Step 1: Cleanly terminate any prior oscillator, gain node, or interval
+      stopSOSSiren();
+
+      try {
+        var AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx && AudioCtxClass) {
+          audioCtx = new AudioCtxClass();
+        }
+        if (audioCtx) {
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+          sirenGain = audioCtx.createGain();
+          sirenGain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+          sirenGain.connect(audioCtx.destination);
+
+          sirenOsc = audioCtx.createOscillator();
+          sirenOsc.type = 'sawtooth';
+          sirenOsc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          sirenOsc.connect(sirenGain);
+          sirenOsc.start(0);
+
+          var isHigh = false;
+          sirenInterval = setInterval(function() {
+            if (sirenOsc && audioCtx && sirenGain) {
+              var targetFreq = isHigh ? 440 : 880;
+              try {
+                sirenOsc.frequency.setValueAtTime(targetFreq, audioCtx.currentTime);
+              } catch (e) {}
+              isHigh = !isHigh;
+            } else {
+              clearInterval(sirenInterval);
+              sirenInterval = null;
+            }
+          }, 320);
+        }
+      } catch (e) {}
+
+      var out = document.getElementById('sosOutput');
+      if (out) {
+        out.textContent = "🚨 [SOS SIREN ACTIVATED]\n• User: Abishek Pranav\n• Blood Group: O+ Positive\n• Emergency SMS Generated with GPS beacon\n• Siren sounding (Tap 'Stop Siren' to mute)";
+      }
+      respond("EMERGENCY SOS: Siren activated. Medical ID broadcast ready.");
     }
 
     // Audio Waveform Visualizer
@@ -1559,12 +1923,12 @@
             '<span>Exp: ' + (j.experience_match_pct || 100) + '%</span> &bull; ' +
             '<span>Pay: ' + (j.salary_fit_pct || 95) + '%</span>' +
           '</div>' +
-          '<div style="font-size:0.67rem; color:#cbd5e1; display:flex; justify-content:space-between;">' +
+          '<div style="font-size:0.67rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-top:0.25rem; margin-bottom:0.25rem;">' +
             '<span>📍 ' + escapeHtml(j.location) + '</span>' +
             '<span style="color:#34d399; font-weight:700;">' + escapeHtml(j.salary_range) + '</span>' +
           '</div>' +
-          '<div style="font-size:0.65rem; color:#94a3b8;">' + escapeHtml(j.description) + '</div>' +
-          '<div class="skills-tag-row">' + skillsHtml + '</div>' +
+          '<div style="font-size:0.65rem; color:#94a3b8; line-height:1.3; margin-bottom:0.3rem;">' + escapeHtml(j.description) + '</div>' +
+          '<div class="skills-tag-row" style="margin-bottom:0.35rem;">' + skillsHtml + '</div>' +
           '<div style="display:flex; gap:0.35rem; margin-top:0.35rem;">' +
             '<button class="' + applyBtnClass + '" style="flex:1;" onclick="applySingleJob(\'' + j.id + '\')" ' + applyDisabled + '>' + applyBtnText + '</button>' +
             '<button class="btn btn-secondary" onclick="previewCoverLetter(\'' + j.id + '\')">📄 ' + currentCoverLetterStyle.toUpperCase() + ' Letter</button>' +

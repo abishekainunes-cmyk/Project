@@ -35,6 +35,7 @@ from akshay_core.finos.tax_calculator import (
 )
 from akshay_core.workflows.medical_emergency import check_drug_interaction, generate_sos_beacon
 from akshay_core.workflows.job_bot import JobBotManager, CandidateProfile
+from akshay_core.workflows.conversational_solver import solve_user_request
 from akshay_core.security.validator import sanitize_text, SecurityValidationError
 from akshay_core.security.audit_logger import get_audit_logger
 
@@ -380,6 +381,18 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 years = int(data.get("years", 10))
                 sip = calculate_sip_compounding(monthly, cagr, years)
                 self._send_json_response({"success": True, "sip": sip.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/chat/solve":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                query = data.get("query", "")
+                result = solve_user_request(query)
+                self._send_json_response({"success": True, "result": result})
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
