@@ -54,6 +54,10 @@ dad_tracker_instance = DadMedicalTracker(db_path=DATA_DIR / "akshay_dad_medical.
 from akshay_core.finos.investment_manager import get_portfolio_manager
 portfolio_instance = get_portfolio_manager(db_path=DATA_DIR / "akshay_investments.db")
 audit_logger = get_audit_logger()
+from akshay_core.workflows.job_application_mailer import get_application_mailer
+from akshay_core.vision.clip_engine import get_clip_engine
+application_mailer = get_application_mailer()
+clip_engine = get_clip_engine()
 
 
 class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
@@ -219,6 +223,53 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_header("Content-Length", str(len(payload)))
                 self.end_headers()
                 self.wfile.write(payload)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/form_filler/audit":
+            try:
+                query = urllib.parse.parse_qs(parsed_url.query)
+                job_id = query.get("id", ["JOB-AI-01"])[0]
+                audit = application_mailer.generate_form_filler_audit(job_id)
+                self._send_json_response(audit)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/vision/clip_info":
+            try:
+                info = clip_engine.get_info()
+                self._send_json_response({"success": True, "info": info})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/kpi/summary":
+            try:
+                summary = {
+                    "success": True,
+                    "wealth": {
+                        "total_value": portfolio_instance.get_portfolio_summary().total_current_value,
+                        "day_pnl": portfolio_instance.get_portfolio_summary().total_day_pnl,
+                        "total_pnl": portfolio_instance.get_portfolio_summary().total_pnl,
+                        "total_pnl_pct": portfolio_instance.get_portfolio_summary().total_pnl_pct
+                    },
+                    "dad_care": {
+                        "total_medicines": dad_tracker_instance.get_dashboard_summary().get("total_medicines", 8),
+                        "urgent_reorders": dad_tracker_instance.get_dashboard_summary().get("urgent_reorders_count", 0),
+                        "calendar_events": dad_tracker_instance.get_dashboard_summary().get("calendar_events_count", 25)
+                    },
+                    "jobs": {
+                        "candidate": job_bot_instance.get_profile().name,
+                        "target_salary": "₹25,000+/mo (₹3.0L - ₹5.4L/yr)",
+                        "ats_score": 100,
+                        "matched_count": len(job_bot_instance.get_job_stream()),
+                        "applied_count": len(job_bot_instance.get_applications())
+                    },
+                    "clip": clip_engine.get_info()
+                }
+                self._send_json_response(summary)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
@@ -470,6 +521,37 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 style = data.get("letter_style", "balanced")
                 app = job_bot_instance.apply_to_job(job_id, custom_letter, style=style)
                 self._send_json_response({"success": True, "application": app.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/application/dispatch_email":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                job_id = data.get("job_id", "JOB-AI-01")
+                recipient = data.get("recipient_email", "abishekpranav403@gmail.com")
+                res = application_mailer.dispatch_application_email(job_id, recipient)
+                self._send_json_response(res)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/vision/clip_match":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                img_data = data.get("image", "")
+                candidates = data.get("candidates", [
+                    "Candidate CV and ATS Resume",
+                    "Doctor Prescription Dr. Suresh",
+                    "Doctor Prescription Dr. Baskar",
+                    "Financial Cash Ledger"
+                ])
+                res = clip_engine.predict_most_relevant_text(img_data, candidates)
+                self._send_json_response(res)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return

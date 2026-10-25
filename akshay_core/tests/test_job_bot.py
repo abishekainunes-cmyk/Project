@@ -96,3 +96,43 @@ def test_sql_injection_defense_in_job_profile(temp_job_bot: JobBotManager):
         cursor = conn.cursor()
         cursor.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='job_applications'")
         assert cursor.fetchone()[0] == 1
+
+
+def test_form_filler_audit_and_receipt():
+    from akshay_core.workflows.job_application_mailer import get_application_mailer
+    mailer = get_application_mailer()
+    audit = mailer.generate_form_filler_audit('JOB-AI-01')
+    assert audit['success'] is True
+    assert len(audit['form_steps']) == 5
+    assert audit['last_page_receipt']['ats_score'] == 100
+    assert 'Abishek Pranav' in audit['last_page_receipt']['candidate_name']
+    assert 'abishekpranav403@gmail.com' in audit['last_page_receipt']['candidate_email'].lower()
+
+
+def test_application_email_dispatch():
+    from akshay_core.workflows.job_application_mailer import get_application_mailer
+    mailer = get_application_mailer()
+    res = mailer.dispatch_application_email('JOB-AI-01', 'abishekpranav403@gmail.com')
+    assert res['success'] is True
+    assert res['recipient'] == 'abishekpranav403@gmail.com'
+    assert 'JOB APPLICATION CONFIRMED' in res['subject']
+    assert Path(res['html_receipt_path']).exists()
+
+
+def test_openai_clip_engine_local_inference():
+    from akshay_core.vision.clip_engine import get_clip_engine
+    from PIL import Image
+
+    clip_engine = get_clip_engine()
+    info = clip_engine.get_info()
+    assert info['api_key_required'] is False
+    assert 'OpenAI CLIP' in info['engine']
+    assert len(info['available_models']) >= 5
+
+    # Test local text prediction
+    test_img = Image.new('RGB', (100, 100), color=(25, 40, 80))
+    candidates = ['software engineer resume', 'doctor prescription', 'bank statement']
+    pred = clip_engine.predict_most_relevant_text(test_img, candidates)
+    assert pred['success'] is True
+    assert pred['api_key_required'] is False
+    assert len(pred['rankings']) == 3
