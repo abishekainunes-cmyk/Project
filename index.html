@@ -6,17 +6,33 @@
   <title>AKSHAY v4.0 // 100x Hyper-Precision Autonomous AI Workstation &amp; Job Bot</title>
   <link rel="manifest" href="manifest.json">
   <style>
+    /* ==========================================================================
+       AKSHAY AI v4.2 PRO: LIGHT PALETTE & 100x ADVANCED UI MOTION DESIGN
+       ========================================================================== */
     :root {
-      --bg: #030712;
-      --card-bg: rgba(15, 23, 42, 0.88);
-      --border: rgba(255, 255, 255, 0.1);
-      --primary: #38bdf8;
-      --accent: #34d399;
-      --purple: #c084fc;
-      --danger: #f87171;
-      --warning: #fbbf24;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg: #f8fafc;
+      --bg-surface: #ffffff;
+      --card-bg: #ffffff;
+      --card-glass: rgba(255, 255, 255, 0.94);
+      --border: #e2e8f0;
+      --border-focus: #6366f1;
+      --border-glow: rgba(99, 102, 241, 0.22);
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #059669;
+      --accent-light: #ecfdf5;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --text: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --shadow-subtle: 0 2px 8px -1px rgba(15, 23, 42, 0.05), 0 1px 3px -1px rgba(15, 23, 42, 0.03);
+      --shadow-card: 0 4px 18px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+      --shadow-hover: 0 14px 32px -4px rgba(99, 102, 241, 0.14), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
       --font-mono: 'Consolas', 'Courier New', monospace;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
@@ -24,14 +40,71 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      background-color: #030712;
-      color: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 15% 15%, #eff6ff 0%, #f8fafc 55%, #f1f5f9 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: var(--font-sans);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
       padding: 0.65rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==========================================================================
+       KEYFRAME ANIMATIONS & UI MOTION ENGINE
+       ========================================================================== */
+    @keyframes floatBreath {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-3px); }
+    }
+
+    @keyframes pulseBeacon {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    @keyframes sosPulse {
+      0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+      70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+    }
+
+    @keyframes sheenSweep {
+      0% { transform: translateX(-150%) skewX(-25deg); }
+      50%, 100% { transform: translateX(250%) skewX(-25deg); }
+    }
+
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes iconSpinHover {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(180deg); }
+    }
+
+    /* ==========================================================================
+       INVISIBLE BOILERPLATE TEXT (ULTRA-MINIMAL ICON & METRIC UI)
+       ========================================================================== */
+    .ui-text-content,
+    .boilerplate-text,
+    .instructions-subtext,
+    .desc-text,
+    .job-card > div[style*="font-size:0.65rem; color: #64748b; line-height:1.3;"],
+    .job-card > div[style*="font-size:0.65rem; color:#64748b; line-height:1.3;"],
+    .sub-card-desc,
+    .card-explanatory-text {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      overflow: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
 
     /* Top HUD Diagnostics Bar */
@@ -40,685 +113,562 @@
       justify-content: space-between;
       align-items: center;
       padding: 0.55rem 0.85rem;
-      background: #0f172a;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      border-radius: 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
       margin-bottom: 0.65rem;
+      box-shadow: var(--shadow-card);
+      transition: all 0.25s ease;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      animation: floatBreath 5s ease-in-out infinite;
     }
 
     .status-indicator {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: #34d399;
-      box-shadow: 0 0 12px #34d399;
+      background: var(--accent);
+      animation: pulseBeacon 2s infinite;
     }
 
     .brand-title {
-      font-family: 'Consolas', 'Courier New', monospace;
+      font-family: var(--font-mono);
       font-size: 0.95rem;
       font-weight: 800;
-      letter-spacing: 0.07em;
-      color: #38bdf8;
-    }
-
-    .telemetry-row {
+      letter-spacing: 0.08em;
+      color: var(--text);
       display: flex;
-      gap: 1rem;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.72rem;
-      color: #94a3b8;
+      align-items: center;
+      gap: 0.4rem;
     }
 
-    /* Top Controls: Pomodoro Timer & 1-Tap Rapid Solvers */
+    .brand-title .badge {
+      font-size: 0.55rem;
+      background: var(--purple-light);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      letter-spacing: normal;
+    }
+
+    /* Controls Grid & Pomodoro */
     .top-controls-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.65rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.55rem;
       margin-bottom: 0.65rem;
     }
 
     .control-card {
-      background: #0f172a;
-      background: rgba(15, 23, 42, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.65rem 0.9rem;
-      flex: 1 1 300px;
+      padding: 0.45rem 0.65rem;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: space-between;
+      box-shadow: var(--shadow-subtle);
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .control-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
     }
 
     .pomo-wrap {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+      gap: 0.45rem;
     }
 
     .pomo-digits {
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 1.8rem;
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
       font-weight: 800;
-      color: #fff;
+      color: var(--purple);
     }
 
+    /* Buttons with Rich Icons, Images & Animations */
     .btn-group {
       display: flex;
       gap: 0.35rem;
     }
 
     .btn {
-      background: #0284c7;
-      color: #fff;
-      border: none;
-      padding: 0.35rem 0.7rem;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      cursor: pointer;
+      position: relative;
+      overflow: hidden;
       display: inline-flex;
       align-items: center;
-      gap: 0.25rem;
-      text-decoration: none;
+      justify-content: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      -webkit-tap-highlight-color: transparent;
     }
-    .btn:hover { background: #0369a1; }
-    .btn-accent { background: #059669; }
-    .btn-accent:hover { background: #047857; }
-    .btn-secondary { background: #334155; }
-    .btn-secondary:hover { background: #475569; }
-    .btn-danger { background: #dc2626; }
-    .btn-danger:hover { background: #b91c1c; }
-    .btn-purple { background: #7e22ce; }
-    .btn-purple:hover { background: #6b21a8; }
-    .btn-warning { background: #d97706; }
-    .btn-warning:hover { background: #b45309; }
+    .btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+    }
+    .btn:active {
+      transform: translateY(0px) scale(0.97);
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: translateX(-150%) skewX(-25deg);
+      transition: none;
+    }
+    .btn:hover::after {
+      animation: sheenSweep 0.85s ease-in-out;
+    }
 
-    /* Pill list for 1-Tap Solvers */
-    .pill-list {
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+    .btn-accent {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+    .btn-purple {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-subtle);
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    }
+
+    /* Category Quick Bar (Light Pill Grid) */
+    .category-quick-bar {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.35rem;
-      align-items: center;
-    }
-    .pill {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0.25rem 0.55rem;
-      border-radius: 9999px;
-      font-size: 0.7rem;
-      color: #cbd5e1;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .pill:hover {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: #38bdf8;
-      color: #fff;
+      gap: 0.4rem;
+      margin-bottom: 0.65rem;
     }
 
-    /* Executive Top Tabs Navigation Rail (Pinned Sticky Header) */
-    .col-nav-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      overflow-x: auto;
-      padding: 0.35rem 0.35rem;
-      margin-bottom: 0.75rem;
-      -webkit-overflow-scrolling: touch;
-      background: #0f172a;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.65);
-    }
-    .col-nav-btn {
-      background: rgba(30, 41, 59, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-      padding: 0.45rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.72rem;
+    .cat-pill {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.68rem;
       font-weight: 700;
       cursor: pointer;
-      white-space: nowrap;
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      transition: all 0.2s ease;
-      flex: 1 1 auto;
-      justify-content: center;
-      min-height: 40px;
+      box-shadow: var(--shadow-subtle);
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .col-nav-btn:hover {
-      background: #1e293b;
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.25);
+    .cat-pill:hover {
+      background: #ffffff;
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
     }
-    .col-nav-btn.active#tab_colBrainDump {
-      background: rgba(56, 189, 248, 0.2);
-      color: #38bdf8;
-      border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-    }
-    .col-nav-btn.active#tab_colFinos {
-      background: rgba(52, 211, 153, 0.2);
-      color: #34d399;
-      border-color: #34d399;
-      box-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
-    }
-    .col-nav-btn.active#tab_colMedical {
-      background: rgba(248, 113, 113, 0.2);
-      color: #f87171;
-      border-color: #f87171;
-      box-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
-    }
-    .col-nav-btn.active#tab_colJobBot {
-      background: rgba(192, 132, 252, 0.2);
-      color: #c084fc;
-      border-color: #c084fc;
-      box-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
-    }
-    .tab-num {
-      display: inline-block;
-      width: 17px;
-      height: 17px;
-      line-height: 17px;
-      text-align: center;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.12);
-      font-size: 0.6rem;
-      font-family: var(--font-mono);
-      font-weight: 700;
-    }
-    .view-toggle-btn { display: none !important;
-      background: rgba(30, 41, 59, 0.9);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      color: #38bdf8;
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 0.45rem 0.65rem;
-      border-radius: 8px;
-      cursor: pointer;
-      white-space: nowrap;
-      min-height: 40px;
+    .cat-pill.active {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border-color: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
     }
 
-    /* Page View Mode Styles (100% Fit to Screen & Separation) */
+    /* Workstation Navigation Tabs */
+    .col-nav-bar {
+      display: flex;
+      gap: 0.45rem;
+      margin-bottom: 0.65rem;
+      overflow-x: auto;
+      padding-bottom: 0.15rem;
+    }
+
+    .col-nav-btn {
+      flex: 1;
+      min-width: 130px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.55rem 0.75rem;
+      border-radius: 10px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      box-shadow: var(--shadow-subtle);
+      transition: all 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .col-nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .col-nav-btn.active#tab_colBrainDump {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border-color: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.32);
+    }
+    .col-nav-btn.active#tab_colFinos {
+      background: linear-gradient(135deg, #059669, #10b981);
+      border-color: #059669;
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(5, 150, 105, 0.32);
+    }
+    .col-nav-btn.active#tab_colMedical {
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+      border-color: #d97706;
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(217, 119, 6, 0.32);
+    }
+    .col-nav-btn.active#tab_colJobBot {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      border-color: #7c3aed;
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.32);
+    }
+
+    .tab-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      font-weight: 800;
+    }
+
+    /* Workstation Columns - Clean White Cards with Animations */
     .workstation-columns.mode-page {
       display: block;
       width: 100%;
-      max-width: 100%;
-      overflow-x: hidden;
-      padding-bottom: 1.5rem;
-      box-sizing: border-box;
     }
     .workstation-columns.mode-page .column-box {
       width: 100% !important;
-      max-width: 100% !important;
-      flex: none !important;
-      box-sizing: border-box;
-      border-radius: 12px;
-      padding: 1rem;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
-    }
-    .page-subgrid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.85rem;
-      margin-top: 0.65rem;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .page-col-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    @media (min-width: 720px) {
-      .page-subgrid-2col {
-        grid-template-columns: 1fr 1fr;
-      }
+      animation: tabFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Grid View Mode Styles (All 4 Side-by-Side) */
-    .workstation-columns.mode-grid {
-      display: flex;
-      flex-direction: row;
-      gap: 0.85rem;
-      overflow-x: auto;
-      padding-bottom: 1.5rem;
-      -webkit-overflow-scrolling: touch;
-      align-items: stretch;
-      width: 100%;
+    .column-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.85rem;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 0.85rem;
+      transition: all 0.24s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .workstation-columns.mode-grid .column-box {
-      flex: 0 0 340px;
-      width: 340px;
-      display: flex !important;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-    @media (min-width: 1520px) {
-      .workstation-columns.mode-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        overflow-x: visible;
-      }
-      .workstation-columns.mode-grid .column-box {
-        width: 100%;
-        flex: 1 1 auto;
-      }
+    .column-box:hover {
+      box-shadow: var(--shadow-hover);
     }
 
     .column-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      align-items: center;
+      margin-bottom: 0.75rem;
       padding-bottom: 0.45rem;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border);
     }
-    .col-title-1 { color: #38bdf8; }
-    .col-title-2 { color: #34d399; }
-    .col-title-3 { color: #f87171; }
-    .col-title-4 { color: #c084fc; }
+
+    .column-header strong {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text);
+    }
 
     .sub-card {
-      background: rgba(0, 0, 0, 0.38);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       padding: 0.7rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
+      margin-bottom: 0.65rem;
+      box-shadow: var(--shadow-subtle);
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .sub-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
     }
 
     .sub-card-title {
+      font-family: var(--font-mono);
       font-size: 0.72rem;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-weight: 700;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.4rem;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
 
-    /* Balance Grid */
+    /* Balance Cells */
     .balance-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 0.45rem;
+      margin-bottom: 0.65rem;
     }
     .balance-cell {
-      background: rgba(0,0,0,0.3);
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
       padding: 0.45rem;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.05);
+      text-align: center;
     }
     .balance-val {
-      font-size: 0.92rem;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
       font-weight: 800;
-      font-family: 'Consolas', 'Courier New', monospace;
-      color: #fff;
-      margin-top: 0.15rem;
+      color: var(--accent);
+      margin-top: 0.2rem;
     }
 
-    /* Chat Elements */
+    /* Chat Messages */
     .chat-container {
-      background: rgba(0, 0, 0, 0.48);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 8px;
       height: 220px;
       overflow-y: auto;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
       padding: 0.55rem;
+      margin-bottom: 0.55rem;
       display: flex;
       flex-direction: column;
       gap: 0.45rem;
     }
+
     .chat-msg {
-      padding: 0.4rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.7rem;
+      padding: 0.45rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.72rem;
       line-height: 1.35;
-      max-width: 92%;
-      white-space: pre-wrap;
-      word-break: break-word;
+      max-width: 85%;
     }
     .msg-akshay {
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.2);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text);
       align-self: flex-start;
-      color: #e2e8f0;
+      box-shadow: var(--shadow-subtle);
     }
     .msg-user {
-      background: rgba(52, 211, 153, 0.15);
-      border: 1px solid rgba(52, 211, 153, 0.25);
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: #ffffff;
       align-self: flex-end;
-      color: #fff;
-    }
-    .msg-sender {
-      font-size: 0.6rem;
-      font-family: 'Consolas', 'Courier New', monospace;
-      opacity: 0.75;
-      display: block;
-      margin-bottom: 0.15rem;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
     }
 
-    .input-bar {
-      display: flex;
-      gap: 0.35rem;
-    }
-    input[type="text"], input[type="number"], textarea {
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 6px;
-      padding: 0.4rem 0.55rem;
-      color: #fff;
-      font-size: 0.72rem;
-      outline: none;
+    /* Inputs */
+    input[type="text"], input[type="number"], textarea, select {
       width: 100%;
-    }
-
-    /* Action item cards */
-    .action-item-card {
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 6px;
-      padding: 0.45rem;
-      font-size: 0.7rem;
-    }
-
-    /* Job Bot Specific Styles */
-    .job-card {
-      background: rgba(0, 0, 0, 0.42);
-      border: 1px solid rgba(192, 132, 252, 0.22);
+      background: #ffffff;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.6rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
+      padding: 0.45rem 0.65rem;
+      color: var(--text);
+      font-size: 0.72rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    /* Job Card in Light Theme */
+    .job-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.65rem 0.8rem;
       margin-bottom: 0.55rem;
-      flex-shrink: 0;
+      box-shadow: var(--shadow-subtle);
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .job-card:hover {
-      border-color: #c084fc;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
     }
     .job-top-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.25rem;
+      align-items: center;
+      margin-bottom: 0.35rem;
     }
     .job-company {
-      font-size: 0.68rem;
-      color: #94a3b8;
-      font-family: 'Consolas', 'Courier New', monospace;
-      margin-bottom: 0.15rem;
+      font-size: 0.64rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
     }
     .job-role {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.2rem;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--text);
     }
     .match-badge {
-      background: rgba(52, 211, 153, 0.15);
-      border: 1px solid #34d399;
-      color: #34d399;
-      padding: 0.12rem 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 0.15rem 0.45rem;
       border-radius: 9999px;
-      font-size: 0.62rem;
-      font-weight: 700;
-      font-family: 'Consolas', 'Courier New', monospace;
-      white-space: nowrap;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: var(--accent-light);
     }
-    .match-breakdown {
-      display: flex;
-      gap: 0.4rem;
-      font-size: 0.62rem;
-      font-family: 'Consolas', 'Courier New', monospace;
-      color: #94a3b8;
-      margin-top: 0.15rem;
-      margin-bottom: 0.25rem;
-    }
+
     .skills-tag-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.25rem;
-      margin-top: 0.15rem;
+      gap: 0.3rem;
+      margin: 0.35rem 0;
     }
     .skill-tag {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 4px;
-      padding: 0.1rem 0.3rem;
       font-size: 0.58rem;
-      color: #94a3b8;
+      font-weight: 700;
+      padding: 0.12rem 0.4rem;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
     }
     .skill-tag-matched {
-      background: rgba(52, 211, 153, 0.1);
-      border-color: rgba(52, 211, 153, 0.3);
-      color: #34d399;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-color: var(--accent);
     }
 
-    /* Cover Letter Drawer / Modal */
-    #coverLetterBox {
-      display: none;
-      background: rgba(15, 23, 42, 0.98);
-      border: 1px solid #c084fc;
-      border-radius: 8px;
-      padding: 0.7rem;
-      font-size: 0.7rem;
-      line-height: 1.4;
-      color: #e2e8f0;
-      white-space: pre-wrap;
-      max-height: 240px;
-      overflow-y: auto;
-    }
-
-    /* Style Switcher Pills */
-    .style-pill-row {
-      display: flex;
-      gap: 0.3rem;
-      align-items: center;
-    }
-    .style-pill {
-      font-size: 0.62rem;
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      cursor: pointer;
-      color: #94a3b8;
-    }
-    .style-pill.active {
-      background: rgba(192, 132, 252, 0.2);
-      border-color: #c084fc;
-      color: #c084fc;
-      font-weight: 700;
-    }
-
-    /* Footer */
-    .hud-footer {
-      text-align: center;
-      font-size: 0.65rem;
-      font-family: 'Consolas', 'Courier New', monospace;
-      color: #64748b;
-      padding: 0.45rem 0;
-      margin-top: auto;
-    }
-  
-    /* 100x Modern Executive HUD & Connected Device Telemetry Styles */
-    .device-telemetry-strip {
-      display: flex;
-      gap: 0.45rem;
-      flex-wrap: wrap;
-      margin-bottom: 0.65rem;
-    }
-    .device-telemetry-tile {
-      flex: 1 1 120px;
-      background: rgba(15, 23, 42, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 0.45rem 0.65rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-    .device-tile-label {
-      font-size: 0.58rem;
-      font-family: var(--font-mono);
-      color: #94a3b8;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
-    .device-tile-val {
-      font-size: 0.95rem;
-      font-family: var(--font-mono);
-      font-weight: 800;
-      color: #fff;
-      margin-top: 0.1rem;
-    }
-    .device-quick-actions {
-      display: flex;
-      gap: 0.35rem;
-      flex-wrap: wrap;
-      margin-bottom: 0.65rem;
-    }
-    .btn-tile {
-      flex: 1 1 100px;
-      padding: 0.35rem 0.55rem;
-      font-size: 0.68rem;
-      font-weight: 600;
-      border-radius: 6px;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: #1e293b;
-      color: #cbd5e1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.3rem;
-      text-decoration: none;
-    }
-    .btn-tile:hover {
-      background: #334155;
-      color: #fff;
-    }
-    .btn-tile-sos {
-      background: #dc2626;
-      color: #fff;
-      border-color: #ef4444;
-      font-weight: 700;
-    }
-    .btn-tile-sos:hover {
-      background: #b91c1c;
-    }
-
-    /* Top Category Quick Redirect Bar (Zero Voice, Instant Navigation) */
-    .category-quick-bar {
-      display: flex;
-      gap: 0.35rem;
-      overflow-x: auto;
-      padding: 0.25rem 0.1rem 0.45rem 0.1rem;
-      margin-bottom: 0.55rem;
-      -webkit-overflow-scrolling: touch;
-      align-items: center;
-    }
-    .cat-pill {
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 9999px;
-      padding: 0.25rem 0.6rem;
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: #cbd5e1;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-    .cat-pill:hover {
-      background: rgba(56, 189, 248, 0.2);
-      border-color: #38bdf8;
-      color: #fff;
-      transform: translateY(-1px);
-    }
-    .cat-pill.active {
-      background: #0284c7;
-      border-color: #38bdf8;
-      color: #fff;
-    }
-
-    /* Modal System */
+    /* Modals in Light Glassmorphism */
     .custom-modal-backdrop {
-      display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(3, 7, 18, 0.88);
-      z-index: 99999;
-      overflow-y: auto;
-      padding: 0.85rem;
-      box-sizing: border-box;
-      -webkit-overflow-scrolling: touch;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #ffffff;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
     }
     .custom-modal-card {
-      max-width: 720px;
-      margin: 1.5rem auto;
-      background: #0f172a;
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: #ffffff;
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1rem 1.25rem;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
-      position: relative;
+      padding: 1rem 1.2rem;
+      max-width: 650px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.25);
+      animation: tabFadeIn 0.25s ease;
     }
+
     .modal-tab-row {
       display: flex;
-      gap: 0.35rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 0.45rem;
+      gap: 0.4rem;
       margin-bottom: 0.75rem;
-      overflow-x: auto;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.45rem;
     }
     .modal-tab-btn {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-size: 0.72rem;
-      font-weight: 700;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
       padding: 0.3rem 0.6rem;
       border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
       cursor: pointer;
-      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .modal-tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
     }
     .modal-tab-btn.active {
-      background: rgba(56, 189, 248, 0.2);
-      color: #38bdf8;
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    /* Permanently hide layout toggle buttons */
+    .view-toggle-btn {
+      display: none !important;
+    }
+  
+    /* KPI Live Cards (Light Motion Design) */
+    .kpi-live-card {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 10px !important;
+      padding: 0.5rem 0.65rem !important;
+      box-shadow: var(--shadow-subtle) !important;
+      transition: all 0.24s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    .kpi-live-card:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: var(--shadow-hover) !important;
+      border-color: var(--primary) !important;
+    }
+    /* Hide dense subtext & boilerplate text content */
+    .kpi-subtext,
+    #kpiCoreDetail,
+    #kpiFinosDetail,
+    #kpiCareDetail,
+    #kpiJobDetail,
+    #kpiClipDetail,
+    .job-card .match-breakdown,
+    .job-card > div[style*="line-height:1.3"],
+    .job-card > div[style*="line-height: 1.3"],
+    .card-explanatory-text,
+    .ui-text-content {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
 
   </style>
@@ -802,53 +752,53 @@
   <!-- ============================================================== -->
   <div class="master-kpi-bar" id="masterKpiDashboard" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:0.4rem; padding:0.35rem 0.6rem 0.15rem 0.6rem;">
     <!-- KPI 1: Brain-Dump & Voice Core -->
-    <div class="kpi-live-card" onclick="navigateCategory('braindump')" style="background:rgba(15,23,42,0.92); border:1px solid rgba(56,189,248,0.35); border-radius:6px; padding:0.4rem 0.5rem; cursor:pointer; transition:transform 0.15s, border-color 0.15s;">
+    <div class="kpi-live-card" onclick="navigateCategory('braindump')" class="kpi-live-card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color:#94a3b8; font-weight:700; font-family:var(--font-mono);">🧠 BRAIN-DUMP &amp; NLP</span>
+        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">🧠 BRAIN-DUMP &amp; NLP</span>
         <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#38bdf8; border-color:#38bdf8;">PAGE 1</span>
       </div>
       <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-top:0.15rem;" id="kpiCoreStatus">● STANDBY ACTIVE</div>
-      <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.1rem;" id="kpiCoreDetail">Zero-Parroting NLP &bull; Fast Local First</div>
+      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;" id="kpiCoreDetail">Zero-Parroting NLP &bull; Fast Local First</div>
     </div>
 
     <!-- KPI 2: FinOS Wealth & SIP -->
-    <div class="kpi-live-card" onclick="navigateCategory('portfolio')" style="background:rgba(15,23,42,0.92); border:1px solid rgba(52,211,153,0.35); border-radius:6px; padding:0.4rem 0.5rem; cursor:pointer; transition:transform 0.15s, border-color 0.15s;">
+    <div class="kpi-live-card" onclick="navigateCategory('portfolio')" class="kpi-live-card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color:#94a3b8; font-weight:700; font-family:var(--font-mono);">💳 WEALTH &amp; PORTFOLIO</span>
+        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">💳 WEALTH &amp; PORTFOLIO</span>
         <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#34d399; border-color:#34d399;">PAGE 2</span>
       </div>
       <div style="font-size:0.85rem; font-weight:800; color:#34d399; font-family:var(--font-mono); margin-top:0.15rem;" id="kpiWealthTotal">₹1,09,050.79</div>
-      <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.1rem;" id="kpiWealthDetail"><span style="color:#38bdf8;">+₹1,283 (1-Day)</span> &bull; Savings: ₹81,750</div>
+      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;" id="kpiWealthDetail"><span style="color:#38bdf8;">+₹1,283 (1-Day)</span> &bull; Savings: ₹81,750</div>
     </div>
 
     <!-- KPI 3: Dad's Care & Appointments -->
-    <div class="kpi-live-card" onclick="navigateCategory('dad')" style="background:rgba(15,23,42,0.92); border:1px solid rgba(251,191,36,0.35); border-radius:6px; padding:0.4rem 0.5rem; cursor:pointer; transition:transform 0.15s, border-color 0.15s;">
+    <div class="kpi-live-card" onclick="navigateCategory('dad')" class="kpi-live-card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color:#94a3b8; font-weight:700; font-family:var(--font-mono);">💊 DAD'S CARE &amp; CALENDAR</span>
+        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">💊 DAD'S CARE &amp; CALENDAR</span>
         <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#fbbf24; border-color:#fbbf24;">PAGE 3</span>
       </div>
       <div style="font-size:0.85rem; font-weight:800; color:#fbbf24; font-family:var(--font-mono); margin-top:0.15rem;" id="kpiDadStatus">8 MEDS &bull; 0 URGENT</div>
-      <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.1rem;" id="kpiDadDetail">Dr. Baskar (5M) &bull; Dr. Suresh (6M)</div>
+      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;" id="kpiDadDetail">Dr. Baskar (5M) &bull; Dr. Suresh (6M)</div>
     </div>
 
     <!-- KPI 4: Precision ATS 2.0 Job Bot -->
-    <div class="kpi-live-card" onclick="navigateCategory('jobs')" style="background:rgba(15,23,42,0.92); border:1px solid rgba(192,132,252,0.35); border-radius:6px; padding:0.4rem 0.5rem; cursor:pointer; transition:transform 0.15s, border-color 0.15s;">
+    <div class="kpi-live-card" onclick="navigateCategory('jobs')" class="kpi-live-card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color:#94a3b8; font-weight:700; font-family:var(--font-mono);">💼 ATS 2.0 JOB BOT</span>
+        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">💼 ATS 2.0 JOB BOT</span>
         <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#c084fc; border-color:#c084fc;">PAGE 4</span>
       </div>
       <div style="font-size:0.85rem; font-weight:800; color:#c084fc; font-family:var(--font-mono); margin-top:0.15rem;" id="kpiJobStatus">EVIDENCE-BASED ATS</div>
-      <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.1rem;" id="kpiJobDetail">Human-in-the-Loop Review Gate &bull; Audit Active</div>
+      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;" id="kpiJobDetail">Human-in-the-Loop Review Gate &bull; Audit Active</div>
     </div>
 
     <!-- KPI 5: OpenAI CLIP Local Multimodal Vision -->
-    <div class="kpi-live-card" onclick="openClipVisionModal()" style="background:rgba(15,23,42,0.92); border:1px solid rgba(14,165,233,0.35); border-radius:6px; padding:0.4rem 0.5rem; cursor:pointer; transition:transform 0.15s, border-color 0.15s;">
+    <div class="kpi-live-card" onclick="openClipVisionModal()" class="kpi-live-card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color:#94a3b8; font-weight:700; font-family:var(--font-mono);">👁️ OPENAI CLIP AI</span>
+        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">👁️ OPENAI CLIP AI</span>
         <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#0ea5e9; border-color:#0ea5e9;">$0 FREE</span>
       </div>
       <div style="font-size:0.85rem; font-weight:800; color:#0ea5e9; font-family:var(--font-mono); margin-top:0.15rem;">LOCAL PYTORCH</div>
-      <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.1rem;">Zero API Keys &bull; Vision Embeddings</div>
+      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;">Zero API Keys &bull; Vision Embeddings</div>
     </div>
   </div>
 
@@ -882,13 +832,13 @@
     <section class="column-box page-active" id="colBrainDump">
       <div class="column-header">
         <span class="col-title-1">🎙️ PAGE 1: EXECUTIVE BRAIN-DUMP &amp; VOICE AI</span>
-        <span style="font-size:0.65rem; color:#94a3b8;">RFC 5545 .ICS &bull; 100% FIT</span>
+        <span style="font-size:0.65rem; color: #64748b;">RFC 5545 .ICS &bull; 100% FIT</span>
       </div>
       <!-- ======================================================== -->
       <!-- AKSHAY CORE EXECUTIVE OVERVIEW DASHBOARD                 -->
       <!-- ======================================================== -->
-      <div class="sub-card" style="margin-bottom:0.65rem; border-color:rgba(56,189,248,0.35); background:rgba(15,23,42,0.95);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.45rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.35rem;">
+      <div class="sub-card" style="margin-bottom:0.65rem; border-color:rgba(56,189,248,0.35); background: #ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.45rem; border-bottom: 1px solid #e2e8f0; padding-bottom:0.35rem;">
           <div style="display:flex; align-items:center; gap:0.4rem;">
             <span style="font-family:var(--font-mono); font-size:0.8rem; font-weight:800; color:#38bdf8; letter-spacing:0.04em;">⚡ AKSHAY CORE // EXECUTIVE DASHBOARD</span>
           </div>
@@ -899,41 +849,41 @@
           <!-- Tile 1: Voice & Brain-Dump Core -->
           <div class="dash-tile" onclick="switchPage('colBrainDump')" style="cursor:pointer; padding:0.45rem 0.55rem; background:rgba(2,132,199,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:6px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.62rem; color:#94a3b8; font-weight:700;">🎙️ VOICE &amp; NLP</span>
+              <span style="font-size:0.62rem; color: #64748b; font-weight:700;">🎙️ VOICE &amp; NLP</span>
               <span style="font-size:0.55rem; color:#34d399; font-weight:700;">ACTIVE</span>
             </div>
             <div style="font-size:0.95rem; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:0.2rem;">0 Parroting</div>
-            <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.15rem;">Slow-phase 5s pause &bull; RFC 5545 .ICS</div>
+            <div style="font-size:0.58rem; color: #334155; margin-top:0.15rem;">Slow-phase 5s pause &bull; RFC 5545 .ICS</div>
           </div>
 
           <!-- Tile 2: FinOS Wealth & Portfolio -->
           <div class="dash-tile" onclick="switchPage('colFinos')" style="cursor:pointer; padding:0.45rem 0.55rem; background:rgba(5,150,105,0.12); border:1px solid rgba(52,211,153,0.3); border-radius:6px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.62rem; color:#94a3b8; font-weight:700;">💳 WEALTH &amp; INVEST</span>
+              <span style="font-size:0.62rem; color: #64748b; font-weight:700;">💳 WEALTH &amp; INVEST</span>
               <span style="font-size:0.55rem; color:#34d399; font-weight:700;">+8.8% P&amp;L</span>
             </div>
             <div style="font-size:0.95rem; font-weight:800; color:#34d399; font-family:var(--font-mono); margin-top:0.2rem;" id="dashPortVal">₹1,08,905.00</div>
-            <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.15rem;">Liquid: ₹81,750 &bull; Next SIP: 1st of Mo</div>
+            <div style="font-size:0.58rem; color: #334155; margin-top:0.15rem;">Liquid: ₹81,750 &bull; Next SIP: 1st of Mo</div>
           </div>
 
           <!-- Tile 3: Dad's Care & Doctor Recurrence -->
           <div class="dash-tile" onclick="switchPage('colMedical')" style="cursor:pointer; padding:0.45rem 0.55rem; background:rgba(220,38,38,0.12); border:1px solid rgba(248,113,113,0.3); border-radius:6px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.62rem; color:#94a3b8; font-weight:700;">💊 DAD'S CARE</span>
+              <span style="font-size:0.62rem; color: #64748b; font-weight:700;">💊 DAD'S CARE</span>
               <span style="font-size:0.55rem; color:#38bdf8; font-weight:700;">7 MEDS</span>
             </div>
             <div style="font-size:0.85rem; font-weight:800; color:#f87171; font-family:var(--font-mono); margin-top:0.2rem;">Dr. Baskar &bull; Dr. Suresh</div>
-            <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.15rem;">5m Neuro &bull; 6m Heart &bull; 10-15d Buffer</div>
+            <div style="font-size:0.58rem; color: #334155; margin-top:0.15rem;">5m Neuro &bull; 6m Heart &bull; 10-15d Buffer</div>
           </div>
 
           <!-- Tile 4: Precision ATS 2.0 Job Bot -->
           <div class="dash-tile" onclick="switchPage('colJobBot')" style="cursor:pointer; padding:0.45rem 0.55rem; background:rgba(126,34,206,0.12); border:1px solid rgba(192,132,252,0.3); border-radius:6px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.62rem; color:#94a3b8; font-weight:700;">🤖 ATS JOB BOT</span>
+              <span style="font-size:0.62rem; color: #64748b; font-weight:700;">🤖 ATS JOB BOT</span>
               <span style="font-size:0.55rem; color:#c084fc; font-weight:700;">100% ATS</span>
             </div>
             <div style="font-size:0.85rem; font-weight:800; color:#c084fc; font-family:var(--font-mono); margin-top:0.2rem;">₹25k+/mo Base</div>
-            <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.15rem;">₹3.0L-₹5.4L CTC &bull; 5 Roles Matched</div>
+            <div style="font-size:0.58rem; color: #334155; margin-top:0.15rem;">₹3.0L-₹5.4L CTC &bull; 5 Roles Matched</div>
           </div>
         </div>
       </div>
@@ -971,12 +921,12 @@
                   ✕
                 </button>
               </div>
-              <div id="voiceLiveFeedback" style="display:none; padding:0.35rem 0.5rem; background:rgba(15,23,42,0.8); border:1px dashed #38bdf8; border-radius:6px; font-size:0.68rem; color:#cbd5e1;">
+              <div id="voiceLiveFeedback" style="display:none; padding:0.35rem 0.5rem; background: #ffffff; border:1px dashed #38bdf8; border-radius:6px; font-size:0.68rem; color: #334155;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
                   <span id="voiceStatusText" style="color:#38bdf8; font-weight:600;">🎙️ Listening... (Take your time, 5s pause window)</span>
                   <span id="voiceTimerBadge" style="color:#f59e0b; font-family:var(--font-mono); font-size:0.62rem;">Pause buffer: 5.0s</span>
                 </div>
-                <div id="voiceInterimText" style="font-style:italic; color:#94a3b8; min-height:1.2rem; word-break:break-word;">
+                <div id="voiceInterimText" style="font-style:italic; color: #64748b; min-height:1.2rem; word-break:break-word;">
                   Listening to your voice... Speak at your natural pace.
                 </div>
               </div>
@@ -1004,7 +954,7 @@
             <div class="sub-card-title" style="color:#38bdf8;">
               <span>OPTION A: UNSTRUCTURED SPEECH ➔ CALENDAR</span>
             </div>
-            <p style="font-size:0.68rem; color:#94a3b8;">
+            <p style="font-size:0.68rem; color: #64748b;">
               Parses messy thoughts into ISO 8601 calendar events, prioritized action items, and WhatsApp drafts.
             </p>
             <textarea id="braindumpInput" rows="2" style="resize:none;" placeholder="Example: Meet Dr. Sharma tomorrow at 4 PM to review lab reports, submit quarterly GST filing by Friday, and pay electricity bill ₹2450"></textarea>
@@ -1036,22 +986,22 @@
       </div>
 
       <!-- Portfolio Executive Summary Bar with Day P&L -->
-      <div class="sub-card" style="margin-bottom:0.45rem; border-color:rgba(52,211,153,0.35); background:rgba(15,23,42,0.92);">
+      <div class="sub-card" style="margin-bottom:0.45rem; border-color:rgba(52,211,153,0.35); background: #ffffff;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem;">
           <div>
-            <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono);">TOTAL PORTFOLIO VALUE</div>
+            <div style="font-size:0.58rem; color: #64748b; font-family:var(--font-mono);">TOTAL PORTFOLIO VALUE</div>
             <div style="font-size:1.2rem; font-weight:800; color:#34d399; font-family:var(--font-mono);" id="valPortTotal">₹1,08,905.00</div>
           </div>
           <div>
-            <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono);">INVESTED CAPITAL</div>
-            <div style="font-size:0.85rem; font-weight:700; color:#cbd5e1; font-family:var(--font-mono);" id="valPortInvested">₹94,100.00</div>
+            <div style="font-size:0.58rem; color: #64748b; font-family:var(--font-mono);">INVESTED CAPITAL</div>
+            <div style="font-size:0.85rem; font-weight:700; color: #334155; font-family:var(--font-mono);" id="valPortInvested">₹94,100.00</div>
           </div>
           <div>
-            <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono);">TOTAL GAIN (P&amp;L)</div>
+            <div style="font-size:0.58rem; color: #64748b; font-family:var(--font-mono);">TOTAL GAIN (P&amp;L)</div>
             <div style="font-size:0.85rem; font-weight:700; color:#34d399; font-family:var(--font-mono);" id="valPortPnl">+₹14,805.00 (+15.7%)</div>
           </div>
           <div>
-            <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono);">1-DAY MARKET P&amp;L</div>
+            <div style="font-size:0.58rem; color: #64748b; font-family:var(--font-mono);">1-DAY MARKET P&amp;L</div>
             <div style="font-size:0.85rem; font-weight:700; color:#38bdf8; font-family:var(--font-mono);" id="valPortDayPnl">+₹1,240.00 (+1.15%)</div>
           </div>
           <div style="display:flex; gap:0.25rem; flex-wrap:wrap;">
@@ -1083,46 +1033,46 @@
             </div>
 
             <!-- Add Holding Form (Collapsible) -->
-            <div id="addHoldingBox" style="display:none; padding:0.4rem; background:rgba(15,23,42,0.95); border:1px dashed #34d399; border-radius:6px; margin-bottom:0.35rem;">
+            <div id="addHoldingBox" style="display:none; padding:0.4rem; background: #ffffff; border:1px dashed #34d399; border-radius:6px; margin-bottom:0.35rem;">
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.25rem;">
                 <div>
-                  <label style="font-size:0.58rem; color:#94a3b8;">Category</label>
-                  <select id="newHoldCat" style="font-size:0.65rem; padding:0.15rem; width:100%; background:#1e293b; color:#fff; border:1px solid #334155; border-radius:4px;">
+                  <label style="font-size:0.58rem; color: #64748b;">Category</label>
+                  <select id="newHoldCat" style="font-size:0.65rem; padding:0.15rem; width:100%; background: #ffffff; color:#fff; border: 1px solid #e2e8f0; border-radius:4px;">
                     <option value="STOCK">Stock (Equities)</option>
                     <option value="MUTUAL_FUND">Mutual Fund (Direct-Growth)</option>
                     <option value="ASSET">Asset (SGB Gold / Liquid)</option>
                   </select>
                 </div>
                 <div>
-                  <label style="font-size:0.58rem; color:#94a3b8;">Symbol / Ticker</label>
+                  <label style="font-size:0.58rem; color: #64748b;">Symbol / Ticker</label>
                   <input type="text" id="newHoldSym" placeholder="e.g. RELIANCE" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
               </div>
               <div style="margin-top:0.2rem;">
-                <label style="font-size:0.58rem; color:#94a3b8;">Instrument Name</label>
+                <label style="font-size:0.58rem; color: #64748b;">Instrument Name</label>
                 <input type="text" id="newHoldName" placeholder="e.g. Reliance Industries Ltd" style="font-size:0.65rem; padding:0.15rem;">
               </div>
               <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.25rem; margin-top:0.2rem;">
                 <div>
-                  <label style="font-size:0.58rem; color:#94a3b8;">Units / Shares</label>
+                  <label style="font-size:0.58rem; color: #64748b;">Units / Shares</label>
                   <input type="number" step="any" id="newHoldUnits" value="1" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
                 <div>
-                  <label style="font-size:0.58rem; color:#94a3b8;">Buy Price (₹)</label>
+                  <label style="font-size:0.58rem; color: #64748b;">Buy Price (₹)</label>
                   <input type="number" step="any" id="newHoldBuy" value="2800" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
                 <div>
-                  <label style="font-size:0.58rem; color:#94a3b8;">Current Price (₹)</label>
+                  <label style="font-size:0.58rem; color: #64748b;">Current Price (₹)</label>
                   <input type="number" step="any" id="newHoldCur" value="2920" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
               </div>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.25rem; margin-top:0.2rem;">
                 <div>
-                  <label style="font-size:0.58rem; color:#94a3b8;">App / Broker</label>
+                  <label style="font-size:0.58rem; color: #64748b;">App / Broker</label>
                   <input type="text" id="newHoldApp" value="Zerodha Kite" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
                 <div>
-                  <label style="font-size:0.58rem; color:#94a3b8;">Order Type</label>
+                  <label style="font-size:0.58rem; color: #64748b;">Order Type</label>
                   <input type="text" id="newHoldType" value="Equity CNC" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
               </div>
@@ -1145,51 +1095,51 @@
             </div>
             <div class="balance-grid">
               <div class="balance-cell">
-                <div style="font-size:0.62rem; color:#94a3b8;">TOTAL ASSETS</div>
+                <div style="font-size:0.62rem; color: #64748b;">TOTAL ASSETS</div>
                 <div class="balance-val" id="valAssets">₹85,000.00</div>
               </div>
               <div class="balance-cell">
-                <div style="font-size:0.62rem; color:#94a3b8;">EXPENSES</div>
+                <div style="font-size:0.62rem; color: #64748b;">EXPENSES</div>
                 <div class="balance-val" id="valExpenses">₹3,250.00</div>
               </div>
             </div>
             <div class="balance-cell" style="margin-top:0.2rem;">
-              <div style="font-size:0.62rem; color:#94a3b8;">NET WORTH (LIQUID SAVINGS POOL)</div>
+              <div style="font-size:0.62rem; color: #64748b;">NET WORTH (LIQUID SAVINGS POOL)</div>
               <div class="balance-val" id="valNetWorth" style="color:#34d399;">₹81,750.00</div>
             </div>
 
             <div style="margin-top:0.35rem; padding-top:0.35rem; border-top:1px dashed rgba(255,255,255,0.1);">
-              <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.15rem;">Camera Receipt OCR (Edge SQLite Sync):</div>
+              <div style="font-size:0.65rem; color: #64748b; margin-bottom:0.15rem;">Camera Receipt OCR (Edge SQLite Sync):</div>
               <div style="display:flex; gap:0.35rem; align-items:center;">
                 <input type="file" id="receiptFileInput" accept="image/*" capture="environment" style="font-size:0.65rem; padding:0.2rem;">
                 <button class="btn btn-secondary" onclick="simulateReceiptOCR()" style="white-space:nowrap; font-size:0.65rem;">Scan</button>
               </div>
-              <div id="ocrReceiptResult" style="font-size:0.65rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.15rem;"></div>
+              <div id="ocrReceiptResult" style="font-size:0.65rem; font-family:var(--font-mono); color: #334155; white-space:pre-wrap; margin-top:0.15rem;"></div>
             </div>
           </div>
         </div>
 
         <div class="page-col-stack">
           <!-- Scan Savings & AI Investment Suggestion Engine -->
-          <div class="sub-card" style="border-color:rgba(52,211,153,0.4); background:rgba(15,23,42,0.85);">
+          <div class="sub-card" style="border-color:rgba(52,211,153,0.4); background: #ffffff;">
             <div class="sub-card-title" style="color:#34d399;">
               <span>🤖 SCAN SAVINGS &amp; AI INVESTMENT ADVISOR</span>
             </div>
-            <p style="font-size:0.65rem; color:#94a3b8;">
+            <p style="font-size:0.65rem; color: #64748b;">
               Scans your FinOS liquid savings and computes a 4-tier strategic asset allocation (Emergency, Index Core, Flexi Alpha, Bluechip Stocks) with exact app execution steps.
             </p>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; margin-top:0.2rem;">
               <div>
-                <label style="font-size:0.58rem; color:#94a3b8;">Liquid Savings Pool (₹)</label>
+                <label style="font-size:0.58rem; color: #64748b;">Liquid Savings Pool (₹)</label>
                 <input type="number" id="savingsPoolInput" value="81750" oninput="scanSavingsAndSuggest()" style="font-size:0.68rem; padding:0.2rem;">
               </div>
               <div>
-                <label style="font-size:0.58rem; color:#94a3b8;">Baseline Income (₹/mo)</label>
+                <label style="font-size:0.58rem; color: #64748b;">Baseline Income (₹/mo)</label>
                 <input type="number" id="baselineIncomeInput" value="25000" oninput="scanSavingsAndSuggest()" style="font-size:0.68rem; padding:0.2rem;">
               </div>
             </div>
             <button class="btn" style="margin-top:0.3rem; width:100%; font-size:0.7rem;" onclick="scanSavingsAndSuggest()">⚡ Scan Savings &amp; Suggest Allocation</button>
-            <div id="investmentSuggestionOutput" style="font-size:0.65rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.3rem; max-height:200px; overflow-y:auto;"></div>
+            <div id="investmentSuggestionOutput" style="font-size:0.65rem; font-family:var(--font-mono); color: #334155; white-space:pre-wrap; margin-top:0.3rem; max-height:200px; overflow-y:auto;"></div>
           </div>
 
           <!-- Calendar Alerts & SIP Reminders -->
@@ -1198,7 +1148,7 @@
               <span>⏰ INVESTMENT &amp; SIP CALENDAR ALERTS</span>
               <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.6rem;" onclick="downloadInvestmentRemindersIcs()" title="Download RFC 5545 ICS with Sound/Popup Alarms">📥 .ICS Alert</button>
             </div>
-            <div style="font-size:0.64rem; color:#94a3b8;">
+            <div style="font-size:0.64rem; color: #64748b;">
               Generates RFC 5545 calendar alerts with active <code>VALARM</code> notifications for native Galaxy Tab &amp; Google Calendar alerts.
             </div>
 
@@ -1216,7 +1166,7 @@
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.25rem; margin-top:0.2rem;">
               <input type="text" id="remAsset" placeholder="Target Asset (e.g. Nifty 50)" value="UTI Nifty 50 Index Fund" style="font-size:0.65rem; padding:0.2rem;">
-              <select id="remFrequency" style="font-size:0.65rem; padding:0.2rem; background:#1e293b; color:#fff; border:1px solid #334155; border-radius:4px;">
+              <select id="remFrequency" style="font-size:0.65rem; padding:0.2rem; background: #ffffff; color:#fff; border: 1px solid #e2e8f0; border-radius:4px;">
                 <option value="Monthly">Monthly (1st)</option>
                 <option value="Weekly">Weekly</option>
                 <option value="One-time">One-time</option>
@@ -1239,11 +1189,11 @@
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
               <div>
-                <label style="font-size:0.6rem; color:#94a3b8;">Gross CTC (₹)</label>
+                <label style="font-size:0.6rem; color: #64748b;">Gross CTC (₹)</label>
                 <input type="number" id="taxGross" value="1400000" style="font-size:0.65rem; padding:0.18rem;">
               </div>
               <div>
-                <label style="font-size:0.6rem; color:#94a3b8;">Monthly Burn (₹)</label>
+                <label style="font-size:0.6rem; color: #64748b;">Monthly Burn (₹)</label>
                 <input type="number" id="runwayBurn" value="15000" style="font-size:0.65rem; padding:0.18rem;">
               </div>
             </div>
@@ -1252,8 +1202,8 @@
               <button class="btn btn-secondary" style="flex:1; font-size:0.62rem; padding:0.18rem;" onclick="calculateRunway()">⏳ Runway</button>
               <button class="btn btn-accent" style="flex:1; font-size:0.62rem; padding:0.18rem;" onclick="calculateSip()">📈 SIP 10-Yr</button>
             </div>
-            <div id="taxComparisonOutput" style="font-size:0.65rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
-            <div id="wealthOutput" style="font-size:0.65rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
+            <div id="taxComparisonOutput" style="font-size:0.65rem; font-family:var(--font-mono); color: #334155; white-space:pre-wrap; margin-top:0.2rem;"></div>
+            <div id="wealthOutput" style="font-size:0.65rem; font-family:var(--font-mono); color: #334155; white-space:pre-wrap; margin-top:0.2rem;"></div>
           </div>
         </div>
       </div>
@@ -1271,7 +1221,7 @@
       <div class="page-subgrid page-subgrid-2col">
         <div class="page-col-stack">
           <!-- Dad's Medicine Inventory & Predictive Refill Engine -->
-          <div class="sub-card" style="border-color: rgba(56, 189, 248, 0.4); background: rgba(15, 23, 42, 0.85);">
+          <div class="sub-card" style="border-color: rgba(56, 189, 248, 0.4); background: #ffffff;">
             <div class="sub-card-title" style="color:#38bdf8;">
               <span>DAD'S MEDICINES &amp; PREDICTIVE REFILL TRACKER</span>
               <span style="font-size:0.62rem; color:#f87171;" id="dadRefillAlertCount">0 URGENT</span>
@@ -1281,7 +1231,7 @@
               <!-- Alert text dynamically populated -->
             </div>
 
-            <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.35rem;">
+            <div style="font-size:0.65rem; color: #64748b; margin-bottom:0.35rem;">
               Predictive refill engine calculating runout date with a <strong style="color:#38bdf8;">10–15 day advance purchase buffer</strong>.
             </div>
 
@@ -1298,20 +1248,20 @@
 
             <!-- In-Place Add Medicine Form Panel (Live Reactive Preview) -->
             <div id="addMedicineFormPanel" style="display:none; margin-top:0.45rem; background:rgba(30,41,59,0.95); border:1px solid #38bdf8; border-radius:6px; padding:0.5rem;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.25rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem; border-bottom: 1px solid #e2e8f0; padding-bottom:0.25rem;">
                 <div style="display:flex; gap:0.25rem;">
                   <button class="btn btn-secondary" id="tabMedSingle" style="padding:0.12rem 0.35rem; font-size:0.58rem; background:rgba(56,189,248,0.25); border-color:#38bdf8;" onclick="switchMedFormTab('single')">💊 Single Entry</button>
                   <button class="btn btn-secondary" id="tabMedBulk" style="padding:0.12rem 0.35rem; font-size:0.58rem;" onclick="switchMedFormTab('bulk')">📋 Bulk Import</button>
                   <button class="btn btn-secondary" id="tabMedVoice" style="padding:0.12rem 0.35rem; font-size:0.58rem;" onclick="switchMedFormTab('voice')">🎙️ Voice Prompt</button>
                 </div>
-                <button style="background:none; border:none; color:#94a3b8; font-size:0.8rem; cursor:pointer;" onclick="toggleAddMedicineForm()">&times;</button>
+                <button style="background:none; border:none; color: #64748b; font-size:0.8rem; cursor:pointer;" onclick="toggleAddMedicineForm()">&times;</button>
               </div>
 
               <!-- View A: Single Medicine Add Form -->
               <div id="medFormSingleView">
                 <div style="display:flex; flex-direction:column; gap:0.35rem;">
                   <div>
-                    <label style="font-size:0.58rem; color:#94a3b8; display:block; margin-bottom:0.1rem;">MEDICINE NAME (E.G. RIVERFLOW 2.5MG, TELMISARTAN 40MG)</label>
+                    <label style="font-size:0.58rem; color: #64748b; display:block; margin-bottom:0.1rem;">MEDICINE NAME (E.G. RIVERFLOW 2.5MG, TELMISARTAN 40MG)</label>
                     <input type="text" id="newMedName" placeholder="Enter medicine name..." style="width:100%; font-size:0.68rem; padding:0.25rem 0.35rem;" oninput="updateMedPreview()">
                     <!-- Quick drug chip suggestions -->
                     <div style="display:flex; gap:0.2rem; flex-wrap:wrap; margin-top:0.2rem;">
@@ -1325,7 +1275,7 @@
 
                   <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
                     <div>
-                      <label style="font-size:0.58rem; color:#94a3b8; display:block; margin-bottom:0.1rem;">QTY IN STOCK (PILLS)</label>
+                      <label style="font-size:0.58rem; color: #64748b; display:block; margin-bottom:0.1rem;">QTY IN STOCK (PILLS)</label>
                       <input type="number" id="newMedQty" value="30" min="1" max="500" style="width:100%; font-size:0.68rem; padding:0.25rem 0.35rem;" oninput="updateMedPreview()">
                       <div style="display:flex; gap:0.2rem; margin-top:0.15rem;">
                         <button class="btn btn-secondary" style="padding:0.08rem 0.25rem; font-size:0.54rem;" onclick="addQtyToInput(15)">+15</button>
@@ -1334,8 +1284,8 @@
                       </div>
                     </div>
                     <div>
-                      <label style="font-size:0.58rem; color:#94a3b8; display:block; margin-bottom:0.1rem;">DAILY DOSAGE</label>
-                      <select id="newMedDose" style="width:100%; font-size:0.68rem; padding:0.25rem 0.35rem; background:#0f172a; color:#f8fafc; border:1px solid #334155; border-radius:4px;" onchange="updateMedPreview()">
+                      <label style="font-size:0.58rem; color: #64748b; display:block; margin-bottom:0.1rem;">DAILY DOSAGE</label>
+                      <select id="newMedDose" style="width:100%; font-size:0.68rem; padding:0.25rem 0.35rem; background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-radius:4px;" onchange="updateMedPreview()">
                         <option value="1">1 pill/day (Once Daily)</option>
                         <option value="2">2 pills/day (Morning &amp; Night)</option>
                         <option value="3">3 pills/day (Thrice Daily)</option>
@@ -1344,7 +1294,7 @@
                   </div>
 
                   <div>
-                    <label style="font-size:0.58rem; color:#94a3b8; display:block; margin-bottom:0.15rem;">SPECIALTY / PRESCRIBING DOCTOR</label>
+                    <label style="font-size:0.58rem; color: #64748b; display:block; margin-bottom:0.15rem;">SPECIALTY / PRESCRIBING DOCTOR</label>
                     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.25rem;">
                       <button type="button" class="btn btn-secondary" id="btnCatHeart" style="font-size:0.58rem; padding:0.2rem 0.15rem; background:rgba(56,189,248,0.25); border-color:#38bdf8;" onclick="selectMedCategory('Cardiac', 'Dr. Suresh (Heart)')">❤️ Heart</button>
                       <button type="button" class="btn btn-secondary" id="btnCatNeuro" style="font-size:0.58rem; padding:0.2rem 0.15rem;" onclick="selectMedCategory('Neuro', 'Dr. Baskar (Neuro)')">🧠 Neuro</button>
@@ -1354,26 +1304,26 @@
                     <input type="hidden" id="newMedDoctor" value="Dr. Suresh (Heart)">
                   </div>
 
-                  <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.6rem; color:#cbd5e1; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.6rem; color: #334155; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px;">
                     <label style="display:flex; align-items:center; gap:0.25rem; cursor:pointer;">
                       <input type="checkbox" id="newMedCalendarSync" checked>
                       <span>📅 Sync Auto-Reminder to Mobile Calendar &amp; .ICS</span>
                     </label>
-                    <span style="font-size:0.56rem; color:#94a3b8;">Buffer: 10–15 Days</span>
+                    <span style="font-size:0.56rem; color: #64748b;">Buffer: 10–15 Days</span>
                   </div>
 
                   <!-- 'Show it as I fill it' Dynamic Live Calculator Preview Card -->
-                  <div id="medLivePreviewCard" style="background:#0f172a; border:1px solid #38bdf8; border-radius:6px; padding:0.4rem; margin-top:0.2rem;">
+                  <div id="medLivePreviewCard" style="background: #ffffff; border:1px solid #38bdf8; border-radius:6px; padding:0.4rem; margin-top:0.2rem;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
                       <span style="font-size:0.58rem; color:#38bdf8; font-weight:700; font-family:var(--font-mono);">⚡ LIVE CALCULATION PREVIEW</span>
                       <span class="match-badge" id="prevUrgencyBadge" style="font-size:0.54rem; padding:0.08rem 0.3rem; border-color:#34d399; color:#34d399;">✓ IN STOCK</span>
                     </div>
                     <div style="font-size:0.72rem; font-weight:700; color:#fff;" id="prevMedTitle">Riverflow 2.5mg</div>
-                    <div style="display:flex; justify-content:space-between; font-size:0.62rem; color:#94a3b8; margin-top:0.15rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.62rem; color: #64748b; margin-top:0.15rem;">
                       <span id="prevStockEndurance">Supply: 30 pills (30 days left)</span>
                       <span id="prevDoctorTag" style="color:#38bdf8;">Dr. Suresh (Heart)</span>
                     </div>
-                    <div style="display:flex; justify-content:space-between; font-size:0.62rem; color:#cbd5e1; margin-top:0.2rem; background:rgba(255,255,255,0.04); padding:0.2rem 0.3rem; border-radius:4px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.62rem; color: #334155; margin-top:0.2rem; background:rgba(255,255,255,0.04); padding:0.2rem 0.3rem; border-radius:4px;">
                       <span>🚨 <strong style="color:#fbbf24;">Buy Before Date:</strong> <span id="prevReorderDate" style="color:#fbbf24; font-weight:700;">2026-11-12</span></span>
                       <span>Stock Out: <span id="prevRunoutDate">2026-11-24</span></span>
                     </div>
@@ -1391,9 +1341,9 @@
 
               <!-- View B: Bulk Import Mode -->
               <div id="medFormBulkView" style="display:none;">
-                <label style="font-size:0.58rem; color:#94a3b8; display:block; margin-bottom:0.15rem;">ENTER MULTIPLE MEDICINES (ONE PER LINE: NAME, QTY, HEART/NEURO, DOSE)</label>
-                <textarea id="bulkMedText" rows="4" style="width:100%; font-size:0.65rem; padding:0.35rem; font-family:var(--font-mono); background:#0f172a; color:#f8fafc; border:1px solid #334155; border-radius:4px;" placeholder="Riverflow 2.5mg, 30, Heart, 1&#10;Donepezil 5mg, 45, Neuro, 1&#10;Telmisartan 40mg, 60, Heart, 1"></textarea>
-                <div style="font-size:0.56rem; color:#94a3b8; margin-top:0.15rem;">
+                <label style="font-size:0.58rem; color: #64748b; display:block; margin-bottom:0.15rem;">ENTER MULTIPLE MEDICINES (ONE PER LINE: NAME, QTY, HEART/NEURO, DOSE)</label>
+                <textarea id="bulkMedText" rows="4" style="width:100%; font-size:0.65rem; padding:0.35rem; font-family:var(--font-mono); background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-radius:4px;" placeholder="Riverflow 2.5mg, 30, Heart, 1&#10;Donepezil 5mg, 45, Neuro, 1&#10;Telmisartan 40mg, 60, Heart, 1"></textarea>
+                <div style="font-size:0.56rem; color: #64748b; margin-top:0.15rem;">
                   Each line is calculated separately with individual runout and 10–15 day advance purchase alert dates.
                 </div>
                 <div style="display:flex; gap:0.35rem; margin-top:0.35rem;">
@@ -1405,8 +1355,8 @@
 
               <!-- View C: Voice Prompt Helper -->
               <div id="medFormVoiceView" style="display:none;">
-                <label style="font-size:0.58rem; color:#94a3b8; display:block; margin-bottom:0.15rem;">VOICE INTENT &amp; NATURAL LANGUAGE PROCESSOR</label>
-                <div style="font-size:0.62rem; color:#cbd5e1; margin-bottom:0.25rem;">
+                <label style="font-size:0.58rem; color: #64748b; display:block; margin-bottom:0.15rem;">VOICE INTENT &amp; NATURAL LANGUAGE PROCESSOR</label>
+                <div style="font-size:0.62rem; color: #334155; margin-bottom:0.25rem;">
                   Tap an example or speak to add medicines and schedule calendar reminders automatically:
                 </div>
                 <div style="display:flex; flex-direction:column; gap:0.25rem; margin-bottom:0.35rem;">
@@ -1424,7 +1374,7 @@
                   <input type="text" id="customVoiceMedInput" placeholder="Type or dictate command..." style="flex:1; font-size:0.65rem; padding:0.25rem 0.35rem;">
                   <button class="btn btn-secondary" style="font-size:0.65rem; color:#38bdf8;" onclick="processCustomVoiceMed()">⚡ Process</button>
                 </div>
-                <div id="voiceMedResultOutput" style="font-size:0.64rem; font-family:var(--font-mono); color:#cbd5e1; margin-top:0.3rem; white-space:pre-wrap;"></div>
+                <div id="voiceMedResultOutput" style="font-size:0.64rem; font-family:var(--font-mono); color: #334155; margin-top:0.3rem; white-space:pre-wrap;"></div>
               </div>
             </div>
           </div>
@@ -1434,7 +1384,7 @@
             <div class="sub-card-title" style="color:#f87171;">
               <span>OPTION D1: CLINICAL PHARMACOLOGY &amp; DRUG SAFETY</span>
             </div>
-            <p style="font-size:0.68rem; color:#94a3b8;">
+            <p style="font-size:0.68rem; color: #64748b;">
               Clinical pharmacology engine evaluating CYP450 induction, cGMP synergy, and contraindications.
             </p>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
@@ -1445,19 +1395,19 @@
               <button class="btn btn-secondary" onclick="checkDrugSafety()">Check Interaction</button>
               <button class="btn btn-danger" style="font-size:0.65rem;" onclick="testLethalDrugPair()">⚠️ Test Lethal</button>
             </div>
-            <div id="drugSafetyOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
+            <div id="drugSafetyOutput" style="font-size:0.68rem; font-family:var(--font-mono); color: #334155; white-space:pre-wrap; margin-top:0.2rem;"></div>
           </div>
         </div>
 
         <div class="page-col-stack">
           <!-- Dad's Recurring Doctor Appointments & Advance Booking Engine -->
-          <div class="sub-card" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(15, 23, 42, 0.85);">
+          <div class="sub-card" style="border-color: rgba(168, 85, 247, 0.4); background: #ffffff;">
             <div class="sub-card-title" style="color:#c084fc;">
               <span>DAD'S RECURRING DOCTOR APPOINTMENTS</span>
               <span style="font-size:0.62rem; color:#34d399;" id="dadApptAlertBadge">SCHEDULED</span>
             </div>
 
-            <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.35rem;">
+            <div style="font-size:0.65rem; color: #64748b; margin-bottom:0.35rem;">
               Specialized recurrence: <strong style="color:#c084fc;">Dr. Baskar (Neuro) every 5 Months</strong> &bull; <strong style="color:#38bdf8;">Dr. Suresh (Heart) every 6 Months</strong>. Reminds 20 days prior to book slots.
             </div>
 
@@ -1472,7 +1422,7 @@
             <div class="sub-card-title" style="color:#34d399;">
               <span>PRESCRIPTION CAMERA OCR (AUTO-INGEST)</span>
             </div>
-            <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.35rem;">
+            <div style="font-size:0.65rem; color: #64748b; margin-bottom:0.35rem;">
               Snap or upload doctor's prescription to automatically extract medicines, doses, and update consultation schedules.
             </div>
             
@@ -1484,7 +1434,7 @@
               <button class="btn btn-secondary" onclick="scanSamplePrescription('Dr. Suresh')">Dr. Suresh Sample</button>
             </div>
 
-            <div id="dadOcrStatusOutput" style="font-size:0.66rem; font-family:var(--font-mono); color:#cbd5e1; margin-top:0.35rem; white-space:pre-wrap;"></div>
+            <div id="dadOcrStatusOutput" style="font-size:0.66rem; font-family:var(--font-mono); color: #334155; margin-top:0.35rem; white-space:pre-wrap;"></div>
           </div>
 
           <!-- Emergency SOS Beacon & Siren -->
@@ -1496,12 +1446,12 @@
               <button class="btn btn-danger" onclick="triggerSOSAlert()">🚨 SOUND SOS</button>
               <button class="btn btn-secondary" onclick="stopSOSSiren()">Stop Siren</button>
             </div>
-            <div id="sosOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
+            <div id="sosOutput" style="font-size:0.68rem; font-family:var(--font-mono); color: #334155; white-space:pre-wrap; margin-top:0.2rem;"></div>
           </div>
 
           <!-- Live Waveform Spectrum -->
           <div class="sub-card">
-            <div class="sub-card-title" style="color:#94a3b8;">
+            <div class="sub-card-title" style="color: #64748b;">
               <span>AUDIO SENSOR SPECTRUM</span>
             </div>
             <canvas id="waveformCanvas" width="300" height="42" style="width:100%; height:42px; background:rgba(0,0,0,0.4); border-radius:4px;"></canvas>
@@ -1512,7 +1462,7 @@
       <!-- ============================================================== -->
       <!-- DAD'S CARE & FAMILY MOBILE CALENDAR APP (MANDATORY DASHBOARD)  -->
       <!-- ============================================================== -->
-      <div class="sub-card" id="dadMobileCalendarCard" style="border-color: rgba(56, 189, 248, 0.45); background: rgba(15, 23, 42, 0.94); margin-top:0.6rem;">
+      <div class="sub-card" id="dadMobileCalendarCard" style="border-color: rgba(56, 189, 248, 0.45); background: #ffffff; margin-top:0.6rem;">
         <div class="sub-card-title" style="color:#38bdf8; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.35rem;">
           <div style="display:flex; align-items:center; gap:0.35rem;">
             <span>📅 DAD'S CARE &amp; FAMILY MOBILE CALENDAR APP</span>
@@ -1525,15 +1475,15 @@
           </div>
         </div>
 
-        <div style="font-size:0.63rem; color:#94a3b8; margin-bottom:0.4rem;">
+        <div style="font-size:0.63rem; color: #64748b; margin-bottom:0.4rem;">
           Mobile smartphone-style calendar tracking Dad's medicine refill dates (<strong style="color:#f87171;">10–15 day advance buffer</strong>), doctor consultations (<strong style="color:#c084fc;">Dr. Baskar 5m Neuro</strong> &amp; <strong style="color:#38bdf8;">Dr. Suresh 6m Heart</strong>), booking alerts, and FinOS SIPs.
         </div>
 
         <!-- Month Navigation Bar -->
-        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(30,41,59,0.9); padding:0.35rem 0.5rem; border-radius:6px; border:1px solid #334155; margin-bottom:0.45rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; background: #ffffff; padding:0.35rem 0.5rem; border-radius:6px; border: 1px solid #e2e8f0; margin-bottom:0.45rem;">
           <button class="btn btn-secondary" style="padding:0.15rem 0.45rem; font-size:0.62rem;" onclick="prevCalMonth()">◀ Prev</button>
           <div style="text-align:center;">
-            <strong style="font-size:0.85rem; color:#f8fafc; font-family:var(--font-mono);" id="calMonthTitle">NOVEMBER 2026</strong>
+            <strong style="font-size:0.85rem; color: #0f172a; font-family:var(--font-mono);" id="calMonthTitle">NOVEMBER 2026</strong>
             <div style="font-size:0.56rem; color:#38bdf8;" id="calTotalEventsBadge">Loading events...</div>
           </div>
           <div style="display:flex; gap:0.2rem;">
@@ -1545,7 +1495,7 @@
         <!-- View 1: 7-Column Month Grid View -->
         <div id="calMonthGridView">
           <!-- Day of week header -->
-          <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:0.2rem; text-align:center; font-size:0.58rem; color:#94a3b8; font-weight:700; padding-bottom:0.2rem;">
+          <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:0.2rem; text-align:center; font-size:0.58rem; color: #64748b; font-weight:700; padding-bottom:0.2rem;">
             <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
           </div>
           <!-- Days container populated dynamically -->
@@ -1560,7 +1510,7 @@
         </div>
 
         <!-- Quick Calendar Legend -->
-        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.45rem; font-size:0.56rem; color:#94a3b8; border-top:1px solid rgba(255,255,255,0.06); padding-top:0.35rem;">
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.45rem; font-size:0.56rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top:0.35rem;">
           <span style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block; width:8px; height:8px; background:#f87171; border-radius:50%;"></span> Medicine Reorder (10–15d Buffer)</span>
           <span style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block; width:8px; height:8px; background:#c084fc; border-radius:50%;"></span> Dr. Baskar (Neuro 5M)</span>
           <span style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block; width:8px; height:8px; background:#38bdf8; border-radius:50%;"></span> Dr. Suresh (Heart 6M)</span>
@@ -1582,14 +1532,14 @@
       <div class="page-subgrid page-subgrid-2col">
         <div class="page-col-stack">
           <!-- Candidate Profile Summary Card -->
-          <div class="sub-card" style="border-color: rgba(192, 132, 252, 0.4); background: rgba(15, 23, 42, 0.85);">
+          <div class="sub-card" style="border-color: rgba(192, 132, 252, 0.4); background: #ffffff;">
             <div class="sub-card-title" style="color:#c084fc;">
               <span>CANDIDATE VAULT (MASTER CV)</span>
               <span style="font-size:0.62rem; color:#38bdf8; font-weight:700;">📋 AUDITED CANDIDATE EVIDENCE</span>
             </div>
             <div style="font-size:0.82rem; font-weight:800; color:#fff; letter-spacing:0.5px;">ABISHEK PRANAV G V</div>
             <div style="font-size:0.68rem; color:#c084fc; font-weight:600; margin-top:0.1rem;">Generative AI &amp; Automation | Python | Business Analysis &amp; Data Analytics</div>
-            <div style="font-size:0.64rem; color:#94a3b8; margin-top:0.15rem;">
+            <div style="font-size:0.64rem; color: #64748b; margin-top:0.15rem;">
               📍 Coimbatore, India &bull; 📞 +91 63835 00484 &bull; ✉️ Abishekpranav403@gmail.com
             </div>
             <div style="font-size:0.63rem; color:#60a5fa; margin-top:0.15rem; word-break:break-all;">
@@ -1597,7 +1547,7 @@
               <a href="https://linkedin.com/in/abishek-pranav-g-v-" target="_blank" style="color:#60a5fa; text-decoration:none;">💼 LinkedIn</a> &bull; 
               <a href="https://github.com/AbishekPranavGV" target="_blank" style="color:#60a5fa; text-decoration:none;">💻 GitHub</a>
             </div>
-            <div style="font-size:0.62rem; color:#cbd5e1; margin-top:0.2rem;">
+            <div style="font-size:0.62rem; color: #334155; margin-top:0.2rem;">
               🎓 BBA in Data Science &amp; AI (Completed) &bull; MBA in AI (In Progress) &bull; ~10m Dedicated Automation (~3.5y Total Operations)
             </div>
             <div style="font-size:0.64rem; color:#34d399; font-weight:700; margin-top:0.2rem;">
@@ -1628,7 +1578,7 @@
               <span>AUTOMATION PIPELINE &amp; STYLE</span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.67rem; color:#94a3b8;">Cover Letter Style:</span>
+              <span style="font-size:0.67rem; color: #64748b;">Cover Letter Style:</span>
               <div class="style-pill-row">
                 <span class="style-pill active" id="styleBalanced" onclick="selectLetterStyle('balanced')">Balanced</span>
                 <span class="style-pill" id="styleTechnical" onclick="selectLetterStyle('technical')">Tech</span>
@@ -1636,7 +1586,7 @@
               </div>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
-              <span style="font-size:0.67rem; color:#94a3b8;">Min Match Threshold:</span>
+              <span style="font-size:0.67rem; color: #64748b;">Min Match Threshold:</span>
               <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:700; color:#34d399;" id="thresholdDisplay">75%</span>
             </div>
             <div style="display:flex; gap:0.35rem; margin-top:0.2rem;">
@@ -1644,7 +1594,7 @@
               <button class="btn btn-secondary" onclick="loadJobStream()">↻</button>
               <button class="btn btn-secondary" onclick="exportApplicationsCsv()" title="Download CSV">📥 CSV</button>
             </div>
-            <div id="botStatusText" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1;"></div>
+            <div id="botStatusText" style="font-size:0.68rem; font-family:var(--font-mono); color: #334155;"></div>
           </div>
 
           <!-- Applications Tracker -->
@@ -1674,7 +1624,7 @@
           <div class="sub-card" style="display:flex; flex-direction:column;">
             <div class="sub-card-title" style="color:#c084fc;">
               <span>MATCHED POSITIONS &amp; ATS VECTORS</span>
-              <span style="font-size:0.65rem; color:#94a3b8;" id="jobStreamCount">5 Positions</span>
+              <span style="font-size:0.65rem; color: #64748b;" id="jobStreamCount">5 Positions</span>
             </div>
             <div id="jobStreamContainer" style="display:flex; flex-direction:column; gap:0.45rem; overflow-y:auto; max-height:360px; margin-top:0.25rem;">
               <!-- Dynamically populated -->
@@ -1689,7 +1639,7 @@
     <!-- ============================================================== -->
     <div id="atsCvModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:0.75rem; box-sizing:border-box;">
       <div style="max-width:760px; margin:1rem auto; background:#0b1329; border:1px solid #c084fc; border-radius:10px; padding:1rem; box-shadow:0 0 35px rgba(192,132,252,0.35);">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;">
           <div>
             <div style="font-family:var(--font-mono); font-weight:800; color:#c084fc; font-size:0.9rem;" id="atsModalHeaderTitle">🎯 100% ATS-OPTIMIZED TAILORED CV</div>
             <div style="font-size:0.65rem; color:#34d399; font-family:var(--font-mono);">GUARANTEED PASS: Workday &bull; Greenhouse &bull; Lever &bull; Taleo</div>
@@ -1699,31 +1649,31 @@
 
         <!-- ATS Scorecard Metric Badges -->
         <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.75rem;">
-          <div style="flex:1; min-width:90px; background:#1e293b; padding:0.35rem; border-radius:6px; border:1px solid #34d399; text-align:center;">
-            <div style="font-size:0.58rem; color:#94a3b8;">OVERALL ATS</div>
+          <div style="flex:1; min-width:90px; background: #ffffff; padding:0.35rem; border-radius:6px; border:1px solid #34d399; text-align:center;">
+            <div style="font-size:0.58rem; color: #64748b;">OVERALL ATS</div>
             <div style="font-size:1.05rem; font-weight:800; color:#34d399;">100 / 100</div>
           </div>
-          <div style="flex:1; min-width:90px; background:#1e293b; padding:0.35rem; border-radius:6px; border:1px solid #38bdf8; text-align:center;">
-            <div style="font-size:0.58rem; color:#94a3b8;">KEYWORD MATCH</div>
+          <div style="flex:1; min-width:90px; background: #ffffff; padding:0.35rem; border-radius:6px; border:1px solid #38bdf8; text-align:center;">
+            <div style="font-size:0.58rem; color: #64748b;">KEYWORD MATCH</div>
             <div style="font-size:1.05rem; font-weight:800; color:#38bdf8;">100%</div>
           </div>
-          <div style="flex:1; min-width:90px; background:#1e293b; padding:0.35rem; border-radius:6px; border:1px solid #c084fc; text-align:center;">
-            <div style="font-size:0.58rem; color:#94a3b8;">ROLE ALIGNMENT</div>
+          <div style="flex:1; min-width:90px; background: #ffffff; padding:0.35rem; border-radius:6px; border:1px solid #c084fc; text-align:center;">
+            <div style="font-size:0.58rem; color: #64748b;">ROLE ALIGNMENT</div>
             <div style="font-size:1.05rem; font-weight:800; color:#c084fc;">100%</div>
           </div>
-          <div style="flex:1; min-width:90px; background:#1e293b; padding:0.35rem; border-radius:6px; border:1px solid #fbbf24; text-align:center;">
-            <div style="font-size:0.58rem; color:#94a3b8;">METRICS DENSITY</div>
+          <div style="flex:1; min-width:90px; background: #ffffff; padding:0.35rem; border-radius:6px; border:1px solid #fbbf24; text-align:center;">
+            <div style="font-size:0.58rem; color: #64748b;">METRICS DENSITY</div>
             <div style="font-size:1.05rem; font-weight:800; color:#fbbf24;">100%</div>
           </div>
         </div>
 
-        <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.25rem;">Matched Keywords Injected:</div>
+        <div style="font-size:0.65rem; color: #64748b; margin-bottom:0.25rem;">Matched Keywords Injected:</div>
         <div id="atsKeywordsContainer" class="skills-tag-row" style="margin-bottom:0.75rem;">
           <!-- Dynamically populated -->
         </div>
 
         <!-- Plaintext ATS CV Box -->
-        <pre id="atsCvTextContainer" style="background:#020617; border:1px solid #334155; border-radius:6px; padding:0.85rem; font-family:var(--font-mono); font-size:0.68rem; color:#cbd5e1; line-height:1.45; white-space:pre-wrap; max-height:360px; overflow-y:auto;"></pre>
+        <pre id="atsCvTextContainer" style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius:6px; padding:0.85rem; font-family:var(--font-mono); font-size:0.68rem; color: #334155; line-height:1.45; white-space:pre-wrap; max-height:360px; overflow-y:auto;"></pre>
 
         <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.75rem; justify-content:flex-end;">
           <button class="btn btn-secondary" onclick="copyAtsCvToClipboard()">📋 Copy ATS CV</button>
@@ -1738,15 +1688,15 @@
     <!-- ============================================================== -->
     <div id="careerRecModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:0.75rem; box-sizing:border-box;">
       <div style="max-width:760px; margin:1rem auto; background:#0b1329; border:1px solid #38bdf8; border-radius:10px; padding:1rem; box-shadow:0 0 35px rgba(56,189,248,0.35);">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;">
           <div>
             <div style="font-family:var(--font-mono); font-weight:800; color:#38bdf8; font-size:0.9rem;">🎯 EXECUTIVE CAREER &amp; ROLE RECOMMENDATIONS</div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Strategic profile positioning for Abishek Pranav G V</div>
+            <div style="font-size:0.65rem; color: #64748b;">Strategic profile positioning for Abishek Pranav G V</div>
           </div>
           <button class="btn btn-secondary" onclick="closeCareerRecommendationsModal()" style="padding:0.2rem 0.6rem; font-size:0.75rem;">✕ Close</button>
         </div>
 
-        <div style="font-size:0.72rem; color:#cbd5e1; line-height:1.45; margin-bottom:0.75rem; background:#1e293b; padding:0.6rem; border-radius:6px; border-left:3px solid #38bdf8;">
+        <div style="font-size:0.72rem; color: #334155; line-height:1.45; margin-bottom:0.75rem; background: #ffffff; padding:0.6rem; border-radius:6px; border-left:3px solid #38bdf8;">
           <strong style="color:#38bdf8;">Unique Differentiator:</strong> Rare intersection of Generative AI &amp; Python automation with an MBA in AI and Chartered Accountancy foundation. Documented scale: 19,000+ Drive records indexed via IGNIS, 30% export documentation reduction, and 50% recruitment screening acceleration.
         </div>
 
@@ -1781,17 +1731,17 @@
 
       <!-- Tab 1: Connected Devices -->
       <div id="setTabDevices" class="settings-tab-pane">
-        <div style="font-size:0.68rem; color:#94a3b8; margin-bottom:0.5rem;">
+        <div style="font-size:0.68rem; color: #64748b; margin-bottom:0.5rem;">
           Real-time diagnostic telemetry for all connected workstations, tablets, and network gateways.
         </div>
         <div style="display:flex; flex-direction:column; gap:0.45rem;">
           <!-- Device 1: Galaxy Tab A -->
-          <div style="padding:0.5rem 0.65rem; background:rgba(30,41,59,0.7); border:1px solid rgba(56,189,248,0.3); border-radius:6px; font-size:0.68rem;">
+          <div style="padding:0.5rem 0.65rem; background: #f8fafc; border:1px solid rgba(56,189,248,0.3); border-radius:6px; font-size:0.68rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <strong style="color:#38bdf8;">📱 Samsung Galaxy Tab A (Primary Mobile Workstation)</strong>
               <span class="match-badge" style="border-color:#34d399; color:#34d399;">CONNECTED</span>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.35rem; font-size:0.64rem; color:#cbd5e1; font-family:var(--font-mono);">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.35rem; font-size:0.64rem; color: #334155; font-family:var(--font-mono);">
               <div>Operating System: Android 5.1.1 (Lollipop, SDK 22)</div>
               <div>Battery Level: <span id="setDevBattery" style="color:#34d399;">96%</span></div>
               <div>Display Resolution: 1280 x 800 WXGA (16:10 Fit)</div>
@@ -1802,12 +1752,12 @@
           </div>
 
           <!-- Device 2: Windows Host PC -->
-          <div style="padding:0.5rem 0.65rem; background:rgba(30,41,59,0.7); border:1px solid rgba(52,211,153,0.3); border-radius:6px; font-size:0.68rem;">
+          <div style="padding:0.5rem 0.65rem; background: #f8fafc; border:1px solid rgba(52,211,153,0.3); border-radius:6px; font-size:0.68rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <strong style="color:#34d399;">💻 Host Workstation (Core Engine &amp; Gateway)</strong>
               <span class="match-badge" style="border-color:#34d399; color:#34d399;">ONLINE</span>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.35rem; font-size:0.64rem; color:#cbd5e1; font-family:var(--font-mono);">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.35rem; font-size:0.64rem; color: #334155; font-family:var(--font-mono);">
               <div>Host OS: Windows 11 Pro 64-bit</div>
               <div>Gateway Daemon: Python 3.11.9 (0.0.0.0:8085)</div>
               <div>Local Server IP: 192.168.0.107:8085</div>
@@ -1818,12 +1768,12 @@
           </div>
 
           <!-- Device 3: Cloudflare Gateway -->
-          <div style="padding:0.5rem 0.65rem; background:rgba(30,41,59,0.7); border:1px solid rgba(192,132,252,0.3); border-radius:6px; font-size:0.68rem;">
+          <div style="padding:0.5rem 0.65rem; background: #f8fafc; border:1px solid rgba(192,132,252,0.3); border-radius:6px; font-size:0.68rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <strong style="color:#c084fc;">🌐 Remote Cloudflare Edge Tunnel</strong>
               <span class="match-badge" style="border-color:#34d399; color:#34d399;">200 OK</span>
             </div>
-            <div style="margin-top:0.35rem; font-size:0.64rem; color:#cbd5e1; font-family:var(--font-mono); word-break:break-all;">
+            <div style="margin-top:0.35rem; font-size:0.64rem; color: #334155; font-family:var(--font-mono); word-break:break-all;">
               Tunnel Gateway: https://taste-double-exchanges-decisions.trycloudflare.com<br>
               Encryption: TLS 1.3 End-to-End &bull; Zero Inbound Firewall Holes
             </div>
@@ -1831,12 +1781,12 @@
         </div>
 
         <!-- App Format & Galaxy Tab A Installer Card -->
-        <div style="padding:0.65rem 0.8rem; background:rgba(30,41,59,0.85); border:1px solid #c084fc; border-radius:6px; margin-top:0.55rem;">
+        <div style="padding:0.65rem 0.8rem; background: #ffffff; border:1px solid #c084fc; border-radius:6px; margin-top:0.55rem;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <strong style="color:#c084fc; font-size:0.75rem;">📦 STANDALONE ANDROID APP (.APK) &amp; TABLET SYNC</strong>
             <span class="match-badge" style="border-color:#c084fc; color:#c084fc; font-size:0.55rem;">v4.2 PRO APK (4.4 MB)</span>
           </div>
-          <div style="font-size:0.63rem; color:#cbd5e1; margin-top:0.35rem; line-height:1.4;">
+          <div style="font-size:0.63rem; color: #334155; margin-top:0.35rem; line-height:1.4;">
             Standalone Android App Package optimized for Samsung Galaxy Tab A (Android 5.1.1 Lollipop / API 22 / DEX 035). Includes offline cache, 0-latency USB reverse bridge, and 100% Page Fit display.
           </div>
           <div style="display:flex; gap:0.4rem; margin-top:0.5rem; flex-wrap:wrap;">
@@ -1851,12 +1801,12 @@
             </button>
           </div>
           <!-- Step by Step Instructions -->
-          <div style="margin-top:0.55rem; padding-top:0.45rem; border-top:1px solid rgba(255,255,255,0.08); font-size:0.6rem; color:#94a3b8; line-height:1.45;">
+          <div style="margin-top:0.55rem; padding-top:0.45rem; border-top: 1px solid #e2e8f0; font-size:0.6rem; color: #64748b; line-height:1.45;">
             <strong style="color:#38bdf8;">📖 WHAT TO DO TO INSTALL &amp; UPDATE ON GALAXY TAB A:</strong>
             <ol style="margin:0.25rem 0 0 1.1rem; padding:0;">
-              <li><strong style="color:#f8fafc;">Method 1 (Automatic via USB):</strong> Plug Galaxy Tab A into PC with USB, run <code style="color:#34d399;">INSTALL_AND_SYNC_GALAXY_TAB.bat</code>. It installs the APK, updates files, and opens the app!</li>
-              <li><strong style="color:#f8fafc;">Method 2 (Manual APK Install):</strong> On tablet, open <em>My Files &gt; Device storage &gt; Download</em>, tap <code style="color:#38bdf8;">Akshay_AI_v4.2.apk</code>, tap <em>Install</em>, then tap <em>Open</em>.</li>
-              <li><strong style="color:#f8fafc;">Method 3 (Native Home Screen App):</strong> In Chrome on tablet, tap <strong>⋮ (3 dots)</strong> menu, tap <strong style="color:#fbbf24;">"Add to Home screen"</strong>. Launches full-screen without address bar!</li>
+              <li><strong style="color: #0f172a;">Method 1 (Automatic via USB):</strong> Plug Galaxy Tab A into PC with USB, run <code style="color:#34d399;">INSTALL_AND_SYNC_GALAXY_TAB.bat</code>. It installs the APK, updates files, and opens the app!</li>
+              <li><strong style="color: #0f172a;">Method 2 (Manual APK Install):</strong> On tablet, open <em>My Files &gt; Device storage &gt; Download</em>, tap <code style="color:#38bdf8;">Akshay_AI_v4.2.apk</code>, tap <em>Install</em>, then tap <em>Open</em>.</li>
+              <li><strong style="color: #0f172a;">Method 3 (Native Home Screen App):</strong> In Chrome on tablet, tap <strong>⋮ (3 dots)</strong> menu, tap <strong style="color:#fbbf24;">"Add to Home screen"</strong>. Launches full-screen without address bar!</li>
             </ol>
           </div>
         </div>
@@ -1868,10 +1818,10 @@
       <!-- Tab 2: Live Audit Logs & Diagnostics -->
       <div id="setTabLogs" class="settings-tab-pane" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-          <span style="font-size:0.68rem; color:#94a3b8;">LIVE SECURITY AUDIT &amp; TELEMETRY LOGS (Credentials Scrubbed):</span>
+          <span style="font-size:0.68rem; color: #64748b;">LIVE SECURITY AUDIT &amp; TELEMETRY LOGS (Credentials Scrubbed):</span>
           <button class="btn btn-secondary" style="font-size:0.6rem; padding:0.12rem 0.35rem;" onclick="clearAuditLogs()">Clear</button>
         </div>
-        <div id="settingsAuditLogBox" style="font-family:var(--font-mono); font-size:0.65rem; color:#34d399; background:rgba(3,7,18,0.9); border:1px solid #334155; border-radius:6px; padding:0.55rem; height:240px; overflow-y:auto; white-space:pre-wrap;">
+        <div id="settingsAuditLogBox" style="font-family:var(--font-mono); font-size:0.65rem; color:#34d399; background:rgba(3,7,18,0.9); border: 1px solid #e2e8f0; border-radius:6px; padding:0.55rem; height:240px; overflow-y:auto; white-space:pre-wrap;">
 [AUDIT] SYSTEM - Akshay v4.2 Pro Gateway listening on http://0.0.0.0:8085
 [AUDIT] TEL - Local Wi-Fi endpoint reachable at http://192.168.0.107:8085
 [AUDIT] CLOUD - Cloudflare tunnel active: https://taste-double-exchanges-decisions.trycloudflare.com
@@ -1883,10 +1833,10 @@
 
       <!-- Tab 3: Candidate Profile -->
       <div id="setTabProfile" class="settings-tab-pane" style="display:none;">
-        <div style="padding:0.65rem; background:rgba(30,41,59,0.7); border:1px solid rgba(192,132,252,0.3); border-radius:6px; font-size:0.68rem;">
+        <div style="padding:0.65rem; background: #f8fafc; border:1px solid rgba(192,132,252,0.3); border-radius:6px; font-size:0.68rem;">
           <strong style="color:#c084fc; font-size:0.85rem;">ABISHEK PRANAV G V</strong>
-          <div style="color:#cbd5e1; margin-top:0.2rem;">MBA in AI &bull; BBA in Data Science &bull; CA Foundation / Intermediate Preparation</div>
-          <div style="color:#94a3b8; margin-top:0.2rem; font-size:0.64rem;">📍 Coimbatore, India &bull; 📞 +91 63835 00484 &bull; ✉️ Abishekpranav403@gmail.com</div>
+          <div style="color: #334155; margin-top:0.2rem;">MBA in AI &bull; BBA in Data Science &bull; CA Foundation / Intermediate Preparation</div>
+          <div style="color: #64748b; margin-top:0.2rem; font-size:0.64rem;">📍 Coimbatore, India &bull; 📞 +91 63835 00484 &bull; ✉️ Abishekpranav403@gmail.com</div>
           <div style="color:#34d399; font-weight:700; margin-top:0.35rem; font-family:var(--font-mono);">
             💰 Target Baseline: Minimum ₹25,000+ per month (Auto-calculated: ₹3.0L - ₹5.4L/yr Annual CTC)
           </div>
@@ -1899,7 +1849,7 @@
       </div>
 
       <!-- Tab 4: System Instructions & Guides -->
-      <div id="setTabInstructions" class="settings-tab-pane" style="display:none; max-height:280px; overflow-y:auto; font-size:0.68rem; color:#cbd5e1; line-height:1.45;">
+      <div id="setTabInstructions" class="settings-tab-pane" style="display:none; max-height:280px; overflow-y:auto; font-size:0.68rem; color: #334155; line-height:1.45;">
         <strong style="color:#38bdf8;">1. Slow-Phase Voice Engine:</strong>
         <p style="margin-bottom:0.45rem;">Built for thoughtful speakers. Allows up to 5 seconds of silence before processing. Never repeats your words; executes deterministic calculations and answers directly.</p>
         
@@ -1932,7 +1882,7 @@
             <strong style="color:#34d399; font-size:0.75rem;">💰 Recommended Investment Strategy (₹81,750 Savings)</strong>
             <span class="match-badge" style="color:#34d399; border-color:#34d399; font-size:0.58rem;">HIGH PRIORITY</span>
           </div>
-          <div style="font-size:0.66rem; color:#cbd5e1; margin-top:0.3rem;">
+          <div style="font-size:0.66rem; color: #334155; margin-top:0.3rem;">
             Deploy your liquid capital across the 4-Tier Wealth Matrix for optimal downside protection and 12–14% CAGR compounding:
           </div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; margin-top:0.35rem; font-size:0.62rem; font-family:var(--font-mono); color:#fff;">
@@ -1952,7 +1902,7 @@
             <strong style="color:#f87171; font-size:0.75rem;">🩺 Dad's Doctor Consultations &amp; Booking Alerts</strong>
             <span class="match-badge" style="color:#38bdf8; border-color:#38bdf8; font-size:0.58rem;">CARE SCHEDULE</span>
           </div>
-          <div style="font-size:0.66rem; color:#cbd5e1; margin-top:0.3rem;">
+          <div style="font-size:0.66rem; color: #334155; margin-top:0.3rem;">
             Upcoming recurring specialist consultations:
           </div>
           <div style="font-size:0.63rem; color:#fff; font-family:var(--font-mono); margin-top:0.25rem;">
@@ -1971,7 +1921,7 @@
             <strong style="color:#c084fc; font-size:0.75rem;">🎯 Career Strategy: Target Compensation ₹25k+/mo Base</strong>
             <span class="match-badge" style="color:#c084fc; border-color:#c084fc; font-size:0.58rem;">ATS 100%</span>
           </div>
-          <div style="font-size:0.66rem; color:#cbd5e1; margin-top:0.3rem;">
+          <div style="font-size:0.66rem; color: #334155; margin-top:0.3rem;">
             Target salary calibrated to practical starting threshold of <strong>₹25,000 – ₹45,000/month (₹3.0L – ₹5.4L/year CTC)</strong>.
             5 high-affinity roles on LinkedIn and Wellfound are matched with a guaranteed 100/100 ATS tailored resume.
           </div>
@@ -1994,20 +1944,20 @@
       </div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
         <div>
-          <label style="font-size:0.6rem; color:#94a3b8;">Total Bill (₹)</label>
+          <label style="font-size:0.6rem; color: #64748b;">Total Bill (₹)</label>
           <input type="number" id="quickSplitBill" value="3600" style="font-size:0.7rem; padding:0.2rem;">
         </div>
         <div>
-          <label style="font-size:0.6rem; color:#94a3b8;">Number of People</label>
+          <label style="font-size:0.6rem; color: #64748b;">Number of People</label>
           <input type="number" id="quickSplitPeople" value="4" style="font-size:0.7rem; padding:0.2rem;">
         </div>
       </div>
       <div style="margin-top:0.3rem;">
-        <label style="font-size:0.6rem; color:#94a3b8;">Tip / Service Tax (%)</label>
+        <label style="font-size:0.6rem; color: #64748b;">Tip / Service Tax (%)</label>
         <input type="number" id="quickSplitTip" value="5" style="font-size:0.7rem; padding:0.2rem;">
       </div>
       <button class="btn" style="width:100%; margin-top:0.4rem; font-size:0.7rem;" onclick="calculateQuickSplit()">Calculate Equal Split</button>
-      <div id="quickSplitResult" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.35rem;"></div>
+      <div id="quickSplitResult" style="font-size:0.68rem; font-family:var(--font-mono); color: #334155; white-space:pre-wrap; margin-top:0.35rem;"></div>
     </div>
   </div>
 
@@ -2026,7 +1976,7 @@
         <button class="btn btn-secondary" style="font-size:0.62rem; flex:1;" onclick="showFirstAidProtocol('choking')">Choking</button>
         <button class="btn btn-secondary" style="font-size:0.62rem; flex:1;" onclick="showFirstAidProtocol('faint')">Fainting</button>
       </div>
-      <div id="quickFirstAidContent" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; line-height:1.45; background:rgba(3,7,18,0.7); padding:0.5rem; border-radius:6px; border:1px solid #334155;">
+      <div id="quickFirstAidContent" style="font-size:0.68rem; font-family:var(--font-mono); color: #334155; white-space:pre-wrap; line-height:1.45; background:rgba(3,7,18,0.7); padding:0.5rem; border-radius:6px; border: 1px solid #e2e8f0;">
 Select a condition above to view immediate clinical triage steps.
       </div>
       <div style="margin-top:0.45rem; font-size:0.6rem; color:#f87171; font-weight:700;">
@@ -2041,28 +1991,28 @@ Select a condition above to view immediate clinical triage steps.
   <!-- ============================================================== -->
   <div class="custom-modal-backdrop" id="howToInvestModal" onclick="if(event.target===this) closeHowToInvestModal()">
     <div class="custom-modal-card" style="max-width:580px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.4rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom:0.4rem;">
         <div>
           <strong id="howToTitle" style="color:#34d399; font-size:0.95rem; font-family:var(--font-mono);">HOW TO INVEST: TATA MOTORS LTD</strong>
-          <div id="howToSubtitle" style="font-size:0.64rem; color:#94a3b8; margin-top:0.15rem;">Recommended App: Zerodha Kite &bull; Product: Equity CNC</div>
+          <div id="howToSubtitle" style="font-size:0.64rem; color: #64748b; margin-top:0.15rem;">Recommended App: Zerodha Kite &bull; Product: Equity CNC</div>
         </div>
         <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.65rem;" onclick="closeHowToInvestModal()">✕</button>
       </div>
 
       <div style="display:flex; flex-direction:column; gap:0.5rem; max-height:360px; overflow-y:auto;">
         <!-- App & Platform Badge Card -->
-        <div style="padding:0.45rem 0.6rem; background:rgba(30,41,59,0.7); border:1px solid rgba(56,189,248,0.3); border-radius:6px; font-size:0.65rem; display:flex; justify-content:space-between; align-items:center;">
+        <div style="padding:0.45rem 0.6rem; background: #f8fafc; border:1px solid rgba(56,189,248,0.3); border-radius:6px; font-size:0.65rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <span style="color:#94a3b8;">Target App / Portal:</span> <strong id="howToAppName" style="color:#38bdf8;">Zerodha Kite</strong><br>
-            <span style="color:#94a3b8;">Order Type:</span> <span id="howToOrderType" style="color:#fff; font-family:var(--font-mono);">Equity CNC (Delivery)</span>
+            <span style="color: #64748b;">Target App / Portal:</span> <strong id="howToAppName" style="color:#38bdf8;">Zerodha Kite</strong><br>
+            <span style="color: #64748b;">Order Type:</span> <span id="howToOrderType" style="color:#fff; font-family:var(--font-mono);">Equity CNC (Delivery)</span>
           </div>
           <a id="howToAppBtn" href="https://kite.zerodha.com" target="_blank" class="btn" style="font-size:0.62rem; padding:0.2rem 0.5rem; text-decoration:none;">Launch App ↗</a>
         </div>
 
         <!-- Step-by-Step Instructions List -->
-        <div style="padding:0.6rem; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.08); border-radius:6px;">
+        <div style="padding:0.6rem; background: #ffffff; border:1px solid rgba(255,255,255,0.08); border-radius:6px;">
           <div style="font-size:0.68rem; font-weight:700; color:#34d399; margin-bottom:0.35rem;">Execution Steps (Where &amp; How to do it):</div>
-          <div id="howToStepsContainer" style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.66rem; color:#cbd5e1; line-height:1.45;">
+          <div id="howToStepsContainer" style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.66rem; color: #334155; line-height:1.45;">
             <!-- Populated dynamically -->
           </div>
         </div>
@@ -2070,11 +2020,11 @@ Select a condition above to view immediate clinical triage steps.
         <!-- Fees, Charges & Tax Implication -->
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; font-size:0.62rem; font-family:var(--font-mono);">
           <div style="padding:0.4rem 0.5rem; background:rgba(30,41,59,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:5px;">
-            <span style="color:#94a3b8;">Charges / Brokerage:</span><br>
+            <span style="color: #64748b;">Charges / Brokerage:</span><br>
             <span id="howToCharges" style="color:#34d399; font-weight:700;">Zero Delivery Brokerage</span>
           </div>
           <div style="padding:0.4rem 0.5rem; background:rgba(30,41,59,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:5px;">
-            <span style="color:#94a3b8;">Tax Rules:</span><br>
+            <span style="color: #64748b;">Tax Rules:</span><br>
             <span id="howToTax" style="color:#fbbf24; font-weight:700;">LTCG 12.5% over ₹1.25L</span>
           </div>
         </div>
@@ -2086,11 +2036,11 @@ Select a condition above to view immediate clinical triage steps.
   <!-- FORM-FILLER PLAYBACK & APPLICATION RECEIPT MODAL               -->
   <!-- ============================================================== -->
   <div id="formFillerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:1rem 0.5rem; box-sizing:border-box;">
-    <div style="max-width:760px; margin:0 auto; background:#1e293b; border:1px solid #38bdf8; border-radius:8px; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.7);">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+    <div style="max-width:760px; margin:0 auto; background: #ffffff; border:1px solid #38bdf8; border-radius:8px; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.7);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;">
         <div>
           <strong style="color:#38bdf8; font-size:0.92rem; font-family:var(--font-mono);">🤖 FORM-FILLER PLAYBACK &amp; SUBMISSION CONFIRMATION</strong>
-          <div style="font-size:0.62rem; color:#94a3b8;" id="formFillerSubtitle">Inspecting automated application pipeline &bull; 100% ATS CV Synthesized</div>
+          <div style="font-size:0.62rem; color: #64748b;" id="formFillerSubtitle">Inspecting automated application pipeline &bull; 100% ATS CV Synthesized</div>
         </div>
         <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="closeFormFillerModal()">&times; Close</button>
       </div>
@@ -2104,7 +2054,7 @@ Select a condition above to view immediate clinical triage steps.
 
       <!-- TAB 1: FORM-FILLER STEPS REPLAY -->
       <div id="ffViewSteps">
-        <div style="font-size:0.65rem; color:#cbd5e1; margin-bottom:0.5rem;">
+        <div style="font-size:0.65rem; color: #334155; margin-bottom:0.5rem;">
           Shows exactly how the autonomous bot parsed fields, injected your candidate vault data, and pasted your tailored CV:
         </div>
         <div id="ffStepsContainer" style="display:flex; flex-direction:column; gap:0.5rem; max-height:420px; overflow-y:auto;">
@@ -2120,19 +2070,19 @@ Select a condition above to view immediate clinical triage steps.
             <span style="font-family:var(--font-mono); font-size:0.65rem; color:#34d399;" id="receiptRefId">APP-REF-10023</span>
           </div>
           <h3 style="margin:0.4rem 0 0.2rem 0; color:#fff; font-size:0.9rem;" id="receiptTitle">APPLICATION SUBMITTED SUCCESSFULLY!</h3>
-          <p style="margin:0; font-size:0.68rem; color:#cbd5e1;" id="receiptMsg">Your tailored 100% ATS CV and cover letter have been delivered to the hiring team.</p>
-          <div style="display:flex; justify-content:space-between; font-size:0.62rem; color:#94a3b8; margin-top:0.4rem; border-top:1px solid rgba(255,255,255,0.08); padding-top:0.3rem;">
+          <p style="margin:0; font-size:0.68rem; color: #334155;" id="receiptMsg">Your tailored 100% ATS CV and cover letter have been delivered to the hiring team.</p>
+          <div style="display:flex; justify-content:space-between; font-size:0.62rem; color: #64748b; margin-top:0.4rem; border-top: 1px solid #e2e8f0; padding-top:0.3rem;">
             <span>Timestamp: <strong id="receiptTimestamp">2026-10-25 21:45:00 IST</strong></span>
             <span>Portal: <strong id="receiptPortal">LinkedIn Easy Apply</strong></span>
           </div>
         </div>
 
-        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.6rem;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius:6px; padding:0.6rem;">
           <strong style="font-size:0.68rem; color:#38bdf8;">DISPATCH CONFIRMATION TO CANDIDATE EMAIL:</strong>
-          <div style="font-size:0.64rem; color:#cbd5e1; margin-top:0.25rem;">
+          <div style="font-size:0.64rem; color: #334155; margin-top:0.25rem;">
             Recipient Email: <strong style="color:#34d399;">abishekpranav403@gmail.com</strong>
           </div>
-          <div style="font-size:0.6rem; color:#94a3b8; margin-top:0.15rem;">
+          <div style="font-size:0.6rem; color: #64748b; margin-top:0.15rem;">
             Includes role details, complete form-filler audit, and the full 100% ATS Tailored CV for direct review.
           </div>
           <div style="display:flex; gap:0.35rem; margin-top:0.5rem; align-items:center;">
@@ -2148,7 +2098,7 @@ Select a condition above to view immediate clinical triage steps.
           <span style="font-size:0.66rem; color:#38bdf8; font-weight:700;">📄 ATS 100/100 TAILORED CV (PLAINTEXT &amp; MARKDOWN)</span>
           <span class="match-badge" style="border-color:#10b981; color:#10b981; font-size:0.6rem;">GUARANTEED PASS</span>
         </div>
-        <textarea id="ffCvTextarea" rows="16" readonly style="width:100%; font-family:var(--font-mono); font-size:0.62rem; background:#0f172a; color:#e2e8f0; border:1px solid #334155; border-radius:6px; padding:0.5rem;"></textarea>
+        <textarea id="ffCvTextarea" rows="16" readonly style="width:100%; font-family:var(--font-mono); font-size:0.62rem; background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; border-radius:6px; padding:0.5rem;"></textarea>
       </div>
     </div>
   </div>
@@ -2157,20 +2107,20 @@ Select a condition above to view immediate clinical triage steps.
   <!-- OPENAI CLIP MULTIMODAL VISION INSPECTOR MODAL                  -->
   <!-- ============================================================== -->
   <div id="clipVisionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:1rem 0.5rem; box-sizing:border-box;">
-    <div style="max-width:680px; margin:0 auto; background:#1e293b; border:1px solid #0ea5e9; border-radius:8px; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.7);">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+    <div style="max-width:680px; margin:0 auto; background: #ffffff; border:1px solid #0ea5e9; border-radius:8px; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.7);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;">
         <div>
           <strong style="color:#0ea5e9; font-size:0.92rem; font-family:var(--font-mono);">👁️ OPENAI CLIP LOCAL MULTIMODAL VISION</strong>
-          <div style="font-size:0.62rem; color:#94a3b8;">100% Free &bull; Zero API Keys &bull; PyTorch CPU &bull; Contrastive Language-Image Pretraining</div>
+          <div style="font-size:0.62rem; color: #64748b;">100% Free &bull; Zero API Keys &bull; PyTorch CPU &bull; Contrastive Language-Image Pretraining</div>
         </div>
         <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="closeClipVisionModal()">&times; Close</button>
       </div>
 
-      <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.6rem; margin-bottom:0.6rem;">
-        <div style="font-size:0.65rem; color:#cbd5e1; margin-bottom:0.3rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius:6px; padding:0.6rem; margin-bottom:0.6rem;">
+        <div style="font-size:0.65rem; color: #334155; margin-bottom:0.3rem;">
           <strong style="color:#0ea5e9;">OFFICIAL OPENAI CLIP (openai/CLIP on GitHub):</strong>
         </div>
-        <div style="font-size:0.6rem; color:#94a3b8; line-height:1.4;">
+        <div style="font-size:0.6rem; color: #64748b; line-height:1.4;">
           CLIP predicts the most relevant text snippet given an image using contrastive visual-semantic embeddings.
           Runs <strong>100% locally on your machine without requiring any OpenAI API keys, credits, or subscriptions</strong>.
         </div>
@@ -2182,13 +2132,13 @@ Select a condition above to view immediate clinical triage steps.
       </div>
 
       <div style="display:flex; flex-direction:column; gap:0.4rem;">
-        <label style="font-size:0.62rem; color:#94a3b8;">TEST ZERO-SHOT MULTIMODAL CLASSIFICATION:</label>
+        <label style="font-size:0.62rem; color: #64748b;">TEST ZERO-SHOT MULTIMODAL CLASSIFICATION:</label>
         <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
           <button class="btn btn-secondary" style="font-size:0.65rem;" onclick="runClipTest('prescription')">🧪 Test Prescription Image Match</button>
           <button class="btn btn-secondary" style="font-size:0.65rem;" onclick="runClipTest('cv')">🧪 Test Candidate CV Match</button>
           <button class="btn btn-secondary" style="font-size:0.65rem;" onclick="runClipTest('receipt')">🧪 Test Expense Receipt Match</button>
         </div>
-        <div id="clipTestOutput" style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.6rem; font-family:var(--font-mono); font-size:0.64rem; color:#cbd5e1; white-space:pre-wrap; margin-top:0.4rem;">Click a test button above to run local OpenAI CLIP contrastive inference...</div>
+        <div id="clipTestOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius:6px; padding:0.6rem; font-family:var(--font-mono); font-size:0.64rem; color: #334155; white-space:pre-wrap; margin-top:0.4rem;">Click a test button above to run local OpenAI CLIP contrastive inference...</div>
       </div>
     </div>
   </div>
@@ -2197,31 +2147,31 @@ Select a condition above to view immediate clinical triage steps.
   <!-- 1. MANDATORY EXPERIENCE EVIDENCE AUDIT MODAL                     -->
   <!-- ============================================================== -->
   <div id="experienceAuditModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:1rem 0.5rem; box-sizing:border-box;">
-    <div style="max-width:820px; margin:0 auto; background:#1e293b; border:1px solid #38bdf8; border-radius:8px; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.7);">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+    <div style="max-width:820px; margin:0 auto; background: #ffffff; border:1px solid #38bdf8; border-radius:8px; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.7);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;">
         <div>
           <strong style="color:#38bdf8; font-size:0.92rem; font-family:var(--font-mono);">📋 CANDIDATE EXPERIENCE EVIDENCE AUDIT</strong>
-          <div style="font-size:0.62rem; color:#94a3b8;">Overlap Prevention &bull; Distinct Automation Tenure vs Operations &bull; Project Evidence</div>
+          <div style="font-size:0.62rem; color: #64748b;">Overlap Prevention &bull; Distinct Automation Tenure vs Operations &bull; Project Evidence</div>
         </div>
         <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="closeExperienceAuditModal()">&times; Close</button>
       </div>
 
       <!-- Timeline Metric Tiles -->
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:0.5rem; margin-bottom:0.75rem;">
-        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.6rem;">
-          <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono); font-weight:700;">TOTAL ELAPSED EMPLOYMENT</div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius:6px; padding:0.6rem;">
+          <div style="font-size:0.58rem; color: #64748b; font-family:var(--font-mono); font-weight:700;">TOTAL ELAPSED EMPLOYMENT</div>
           <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-top:0.2rem;" id="auditElapsedMonths">3 yrs, 7 mos (43 distinct months)</div>
-          <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.15rem;">Non-overlapping union of all professional roles.</div>
+          <div style="font-size:0.58rem; color: #334155; margin-top:0.15rem;">Non-overlapping union of all professional roles.</div>
         </div>
-        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.6rem;">
-          <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono); font-weight:700;">RELEVANT AUTOMATION TENURE</div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius:6px; padding:0.6rem;">
+          <div style="font-size:0.58rem; color: #64748b; font-family:var(--font-mono); font-weight:700;">RELEVANT AUTOMATION TENURE</div>
           <div style="font-size:0.85rem; font-weight:800; color:#34d399; font-family:var(--font-mono); margin-top:0.2rem;" id="auditAutomationMonths">0 yrs, 10 mos (10 distinct months)</div>
-          <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.15rem;">Nunes (IGNIS &amp; Gmail API) + RXG Studios workflow automation.</div>
+          <div style="font-size:0.58rem; color: #334155; margin-top:0.15rem;">Nunes (IGNIS &amp; Gmail API) + RXG Studios workflow automation.</div>
         </div>
-        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.6rem;">
-          <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono); font-weight:700;">SENIORITY &amp; FACT INTEGRITY</div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius:6px; padding:0.6rem;">
+          <div style="font-size:0.58rem; color: #64748b; font-family:var(--font-mono); font-weight:700;">SENIORITY &amp; FACT INTEGRITY</div>
           <div style="font-size:0.85rem; font-weight:800; color:#c084fc; font-family:var(--font-mono); margin-top:0.2rem;">NO 4+ YR OVERSTATEMENT</div>
-          <div style="font-size:0.58rem; color:#cbd5e1; margin-top:0.15rem;">Guarantees credibility during technical and background checks.</div>
+          <div style="font-size:0.58rem; color: #334155; margin-top:0.15rem;">Guarantees credibility during technical and background checks.</div>
         </div>
       </div>
 
@@ -2243,19 +2193,19 @@ Select a condition above to view immediate clinical triage steps.
   <!-- 2. MANDATORY APPLICATION REVIEW GATE MODAL (HITL APPROVAL)      -->
   <!-- ============================================================== -->
   <div id="applicationReviewGateModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.88); z-index:9999; overflow-y:auto; padding:1rem 0.5rem; box-sizing:border-box;">
-    <div style="max-width:800px; margin:0 auto; background:#1e293b; border:2px solid #34d399; border-radius:8px; padding:1rem; box-shadow:0 10px 35px rgba(0,0,0,0.85);">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+    <div style="max-width:800px; margin:0 auto; background: #ffffff; border:2px solid #34d399; border-radius:8px; padding:1rem; box-shadow:0 10px 35px rgba(0,0,0,0.85);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;">
         <div>
           <strong style="color:#34d399; font-size:0.95rem; font-family:var(--font-mono);">🛡️ MANDATORY APPLICATION REVIEW GATE</strong>
-          <div style="font-size:0.62rem; color:#94a3b8;">Human-in-the-Loop Explicit Approval Required Before Any Submission</div>
+          <div style="font-size:0.62rem; color: #64748b;">Human-in-the-Loop Explicit Approval Required Before Any Submission</div>
         </div>
         <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="closeReviewGateModal()">&times; Cancel</button>
       </div>
 
       <!-- Vacancy Header Card -->
-      <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.65rem; margin-bottom:0.6rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius:6px; padding:0.65rem; margin-bottom:0.6rem;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:0.62rem; color:#94a3b8; font-weight:700;" id="reviewJobPortal">PORTAL: LINKEDIN</span>
+          <span style="font-size:0.62rem; color: #64748b; font-weight:700;" id="reviewJobPortal">PORTAL: LINKEDIN</span>
           <span class="match-badge" style="border-color:#34d399; color:#34d399; font-size:0.55rem;" id="reviewVacancyStatus">✓ VERIFIED OPEN VACANCY</span>
         </div>
         <div style="font-size:0.92rem; font-weight:800; color:#fff; margin-top:0.2rem;" id="reviewJobTitle">Generative AI &amp; Automation Engineer</div>
@@ -2275,7 +2225,7 @@ Select a condition above to view immediate clinical triage steps.
           <div>&bull; Experience Fit: <strong style="color:#38bdf8;" id="reviewExpFit">82% (~10m Automation)</strong></div>
           <div>&bull; Recruiter Readability: <strong style="color:#34d399;" id="reviewRecruiterRead">92% Clear Progression</strong></div>
         </div>
-        <div style="font-size:0.58rem; color:#94a3b8; margin-top:0.35rem; line-height:1.3;">
+        <div style="font-size:0.58rem; color: #64748b; margin-top:0.35rem; line-height:1.3;">
           * Note: This score is a diagnostic readiness estimate, not an employer ATS guarantee. Actual shortlisting depends on employer qualification review.
         </div>
       </div>
@@ -2283,7 +2233,7 @@ Select a condition above to view immediate clinical triage steps.
       <!-- Rejection Risks & Gaps -->
       <div style="background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.4); border-radius:6px; padding:0.55rem; margin-bottom:0.6rem;">
         <strong style="color:#fbbf24; font-size:0.68rem;">⚠️ AUDIT ADVISORY &amp; POTENTIAL RISKS:</strong>
-        <div style="font-size:0.62rem; color:#cbd5e1; margin-top:0.25rem;" id="reviewRejectionRisks">
+        <div style="font-size:0.62rem; color: #334155; margin-top:0.25rem;" id="reviewRejectionRisks">
           Clarify hands-on IGNIS and Gmail scripts; ensure remote/evening MBA study does not conflict with working hours.
         </div>
       </div>
@@ -2294,18 +2244,18 @@ Select a condition above to view immediate clinical triage steps.
           <span style="font-size:0.66rem; color:#38bdf8; font-weight:700;">📄 EVIDENCE-TAILORED SINGLE-COLUMN CV:</span>
           <span class="match-badge" style="border-color:#38bdf8; color:#38bdf8; font-size:0.55rem;">AUTHENTIC TITLES</span>
         </div>
-        <textarea id="reviewCvPreview" rows="8" readonly style="width:100%; font-family:var(--font-mono); font-size:0.6rem; background:#0f172a; color:#e2e8f0; border:1px solid #334155; border-radius:6px; padding:0.45rem;"></textarea>
+        <textarea id="reviewCvPreview" rows="8" readonly style="width:100%; font-family:var(--font-mono); font-size:0.6rem; background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; border-radius:6px; padding:0.45rem;"></textarea>
       </div>
 
       <!-- Cover Letter Editor -->
       <div style="margin-bottom:0.75rem;">
         <span style="font-size:0.66rem; color:#c084fc; font-weight:700; display:block; margin-bottom:0.3rem;">✉️ TAILORED COVER LETTER (EDITABLE BEFORE APPROVAL):</span>
-        <textarea id="reviewLetterPreview" rows="5" style="width:100%; font-family:var(--font-mono); font-size:0.62rem; background:#0f172a; color:#e2e8f0; border:1px solid #334155; border-radius:6px; padding:0.45rem;"></textarea>
+        <textarea id="reviewLetterPreview" rows="5" style="width:100%; font-family:var(--font-mono); font-size:0.62rem; background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; border-radius:6px; padding:0.45rem;"></textarea>
       </div>
 
       <!-- Action Footer with Explicit Approval -->
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #334155; padding-top:0.65rem;">
-        <div style="font-size:0.6rem; color:#94a3b8;" id="reviewApprovalStatus">Status: Awaiting Candidate Confirmation</div>
+        <div style="font-size:0.6rem; color: #64748b;" id="reviewApprovalStatus">Status: Awaiting Candidate Confirmation</div>
         <div style="display:flex; gap:0.4rem;">
           <button class="btn btn-secondary" onclick="closeReviewGateModal()">Cancel</button>
           <button class="btn btn-accent" style="font-weight:700; font-size:0.7rem; background:#10b981; border-color:#10b981;" onclick="confirmAndSubmitApplication()">✓ Approve &amp; Submit Application</button>
@@ -2318,19 +2268,19 @@ Select a condition above to view immediate clinical triage steps.
   <!-- 3. INTERVIEW CONVERSION PREPARATION MODAL                       -->
   <!-- ============================================================== -->
   <div id="interviewPrepModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:1rem 0.5rem; box-sizing:border-box;">
-    <div style="max-width:780px; margin:0 auto; background:#1e293b; border:1px solid #c084fc; border-radius:8px; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.7);">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:0.5rem; margin-bottom:0.75rem;">
+    <div style="max-width:780px; margin:0 auto; background: #ffffff; border:1px solid #c084fc; border-radius:8px; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.7);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;">
         <div>
           <strong style="color:#c084fc; font-size:0.92rem; font-family:var(--font-mono);">🎙️ INTERVIEW CONVERSION PREPARATION DOSSIER</strong>
-          <div style="font-size:0.62rem; color:#94a3b8;" id="prepSubtitle">Targeted Q&amp;A, Architecture Deep-Dives &bull; Abishek Pranav G V</div>
+          <div style="font-size:0.62rem; color: #64748b;" id="prepSubtitle">Targeted Q&amp;A, Architecture Deep-Dives &bull; Abishek Pranav G V</div>
         </div>
         <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="closeInterviewPrepModal()">&times; Close</button>
       </div>
 
       <!-- 60s Elevator Pitch -->
-      <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.65rem; margin-bottom:0.65rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius:6px; padding:0.65rem; margin-bottom:0.65rem;">
         <strong style="color:#38bdf8; font-size:0.68rem;">⏱️ 60-SECOND NATURAL ELEVATOR PITCH:</strong>
-        <p style="font-size:0.64rem; color:#cbd5e1; line-height:1.4; margin:0.3rem 0 0 0;" id="prepElevatorPitch">
+        <p style="font-size:0.64rem; color: #334155; line-height:1.4; margin:0.3rem 0 0 0;" id="prepElevatorPitch">
           Loading tailored elevator pitch...
         </p>
       </div>
@@ -2402,6 +2352,16 @@ Select a condition above to view immediate clinical triage steps.
 
     function jumpToColumn(colId, btn) {
       switchPage(colId);
+    }
+
+    // Dynamic Cloud & Local API Routing Engine (Works on Vercel, GitHub Pages, Local & Tablet)
+    var CLOUD_GATEWAY_URL = 'https://taste-double-exchanges-decisions.trycloudflare.com';
+    function apiEndpoint(path) {
+      var h = window.location.hostname;
+      if (h === 'localhost' || h === '127.0.0.1' || h === '192.168.0.107' || !h) {
+        return path;
+      }
+      return CLOUD_GATEWAY_URL + path;
     }
 
     // Mandatory Permanent Page Fit Layout (No toggle buttons, permanently enforced)
@@ -2711,7 +2671,7 @@ Select a condition above to view immediate clinical triage steps.
       var q = query.trim();
 
       // 1. Try Live Server Solver Endpoint (/api/chat/solve)
-      fetch('/api/chat/solve', {
+      fetch(apiEndpoint('/api/chat/solve'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: q })
@@ -2907,7 +2867,7 @@ Select a condition above to view immediate clinical triage steps.
         renderDump({ calendar_events: events, tasks: tasks, ics_file_content: ics, whatsapp_draft: wa });
       }
 
-      fetch('/api/braindump/process', {
+      fetch(apiEndpoint('/api/braindump/process'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({text: text})
@@ -2962,7 +2922,7 @@ Select a condition above to view immediate clinical triage steps.
     var liveLedger = { assets: 85000.00, expenses: 3250.00, netWorth: 81750.00 };
 
     function syncLedgerWithServer() {
-      fetch('/api/ledger/summary')
+      fetch(apiEndpoint('/api/ledger/summary'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success) {
@@ -2983,7 +2943,7 @@ Select a condition above to view immediate clinical triage steps.
     var currentReminders = [];
 
     function loadInvestmentPortfolio() {
-      fetch('/api/investments/portfolio')
+      fetch(apiEndpoint('/api/investments/portfolio'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success && data.portfolio) {
@@ -3028,7 +2988,7 @@ Select a condition above to view immediate clinical triage steps.
       }
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="font-size:0.65rem; color:#94a3b8; font-style:italic;">No holdings in this category. Tap + Add Holding to record one.</div>';
+        container.innerHTML = '<div style="font-size:0.65rem; color: #64748b; font-style:italic;">No holdings in this category. Tap + Add Holding to record one.</div>';
         return;
       }
 
@@ -3056,7 +3016,7 @@ Select a condition above to view immediate clinical triage steps.
             '<div>' +
               '<span class="match-badge" style="border-color:' + catColor + '; color:' + catColor + '; font-size:0.55rem; padding:0.1rem 0.3rem;">' + catName + '</span> ' +
               '<strong style="font-family:var(--font-mono); font-size:0.75rem; color:#fff; margin-left:0.2rem;">' + escapeHtml(item.symbol) + '</strong> ' +
-              '<span style="color:#94a3b8; font-size:0.62rem;">&bull; ' + escapeHtml(item.name) + '</span>' +
+              '<span style="color: #64748b; font-size:0.62rem;">&bull; ' + escapeHtml(item.name) + '</span>' +
             '</div>' +
             '<div style="text-align:right;">' +
               '<span style="font-family:var(--font-mono); font-size:0.8rem; font-weight:800; color:#fff;">₹' + item.current_price.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</span> ' +
@@ -3064,15 +3024,15 @@ Select a condition above to view immediate clinical triage steps.
             '</div>' +
           '</div>' +
 
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem; font-size:0.62rem; color:#cbd5e1; font-family:var(--font-mono); background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px;">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem; font-size:0.62rem; color: #334155; font-family:var(--font-mono); background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px;">' +
             '<span>Holdings: ' + item.units + ' &bull; Invested: ₹' + item.invested_amount.toLocaleString('en-IN') + '</span>' +
             '<span>Value: ₹' + item.current_value.toLocaleString('en-IN') + ' &bull; <strong style="color:' + pnlColor + ';">' + sign + '₹' + item.pnl_amount.toLocaleString('en-IN') + ' (' + sign + item.pnl_pct + '%)</strong></span>' +
           '</div>' +
 
           '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; gap:0.3rem; flex-wrap:wrap;">' +
-            '<div style="font-size:0.6rem; color:#94a3b8;">' +
+            '<div style="font-size:0.6rem; color: #64748b;">' +
               '📱 <span style="color:#38bdf8; font-weight:600;">' + escapeHtml(item.app_name) + '</span> &bull; ' +
-              '<span style="color:#cbd5e1;">' + escapeHtml(item.investment_type) + '</span>' +
+              '<span style="color: #334155;">' + escapeHtml(item.investment_type) + '</span>' +
             '</div>' +
             '<div style="display:flex; gap:0.25rem;">' +
               '<button class="btn btn-secondary" style="font-size:0.58rem; padding:0.12rem 0.35rem; color:#38bdf8; border-color:rgba(56,189,248,0.4);" onclick="openHowToInvestItemModal(' + item.id + ')">📖 How to Invest</button>' +
@@ -3088,7 +3048,7 @@ Select a condition above to view immediate clinical triage steps.
       var badge = document.getElementById('liveTickerBadge');
       if (badge) badge.textContent = 'FETCHING LIVE QUOTES...';
 
-      fetch('/api/investments/prices/refresh', {
+      fetch(apiEndpoint('/api/investments/prices/refresh'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({})
@@ -3250,7 +3210,7 @@ Select a condition above to view immediate clinical triage steps.
         return;
       }
 
-      fetch('/api/investments/holding/add', {
+      fetch(apiEndpoint('/api/investments/holding/add'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -3282,7 +3242,7 @@ Select a condition above to view immediate clinical triage steps.
       var savings = parseFloat(document.getElementById('savingsPoolInput').value) || 81750.0;
       var income = parseFloat(document.getElementById('baselineIncomeInput').value) || 25000.0;
 
-      fetch('/api/investments/suggest', {
+      fetch(apiEndpoint('/api/investments/suggest'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -3322,7 +3282,7 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     function loadInvestmentReminders() {
-      fetch('/api/investments/reminders')
+      fetch(apiEndpoint('/api/investments/reminders'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success && data.reminders) {
@@ -3339,7 +3299,7 @@ Select a condition above to view immediate clinical triage steps.
       container.innerHTML = '';
 
       if (currentReminders.length === 0) {
-        container.innerHTML = '<div style="font-size:0.62rem; color:#94a3b8; font-style:italic;">No active calendar alerts. Add one above.</div>';
+        container.innerHTML = '<div style="font-size:0.62rem; color: #64748b; font-style:italic;">No active calendar alerts. Add one above.</div>';
         return;
       }
 
@@ -3358,7 +3318,7 @@ Select a condition above to view immediate clinical triage steps.
         item.innerHTML = 
           '<div>' +
             '<div style="font-weight:700; color:#38bdf8;">' + escapeHtml(rem.title) + '</div>' +
-            '<div style="font-size:0.58rem; color:#94a3b8;">₹' + rem.amount.toLocaleString('en-IN') + ' &bull; ' + escapeHtml(rem.target_asset) + ' (' + rem.frequency + ' &bull; Next: ' + rem.target_date + ')</div>' +
+            '<div style="font-size:0.58rem; color: #64748b;">₹' + rem.amount.toLocaleString('en-IN') + ' &bull; ' + escapeHtml(rem.target_asset) + ' (' + rem.frequency + ' &bull; Next: ' + rem.target_date + ')</div>' +
           '</div>' +
           '<div style="display:flex; gap:0.2rem;">' +
             '<button class="btn btn-secondary" style="padding:0.1rem 0.25rem; font-size:0.55rem; color:#f87171;" onclick="deleteInvestmentReminderItem(' + rem.id + ')">✕</button>' +
@@ -3374,7 +3334,7 @@ Select a condition above to view immediate clinical triage steps.
       var asset = document.getElementById('remAsset').value.trim() || 'Mutual Fund';
       var freq = document.getElementById('remFrequency').value;
 
-      fetch('/api/investments/reminder/create', {
+      fetch(apiEndpoint('/api/investments/reminder/create'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -3397,7 +3357,7 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     function deleteInvestmentReminderItem(id) {
-      fetch('/api/investments/reminder/delete', {
+      fetch(apiEndpoint('/api/investments/reminder/delete'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: id})
@@ -3423,7 +3383,7 @@ Select a condition above to view immediate clinical triage steps.
       document.getElementById('valExpenses').textContent = '₹' + liveLedger.expenses.toLocaleString('en-IN', {minimumFractionDigits: 2});
       document.getElementById('valNetWorth').textContent = '₹' + liveLedger.netWorth.toLocaleString('en-IN', {minimumFractionDigits: 2});
 
-      fetch('/api/ledger/transaction', {
+      fetch(apiEndpoint('/api/ledger/transaction'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -3493,7 +3453,7 @@ Select a condition above to view immediate clinical triage steps.
         });
       }
 
-      fetch('/api/tax/compare', {
+      fetch(apiEndpoint('/api/tax/compare'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ annual_gross: gross, sec_80c: c80, sec_80d: c80d, hra: hra })
@@ -3535,7 +3495,7 @@ Select a condition above to view immediate clinical triage steps.
         });
       }
 
-      fetch('/api/wealth/runway', {
+      fetch(apiEndpoint('/api/wealth/runway'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ liquid_assets: assets, monthly_burn: burn })
@@ -3574,7 +3534,7 @@ Select a condition above to view immediate clinical triage steps.
         });
       }
 
-      fetch('/api/wealth/sip', {
+      fetch(apiEndpoint('/api/wealth/sip'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ monthly_investment: monthly, annual_cagr_pct: cagr, years: years })
@@ -3656,7 +3616,7 @@ Select a condition above to view immediate clinical triage steps.
         renderDrug(it);
       }
 
-      fetch('/api/medical/drug-interaction', {
+      fetch(apiEndpoint('/api/medical/drug-interaction'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({drug1: d1, drug2: d2})
@@ -3885,7 +3845,7 @@ Select a condition above to view immediate clinical triage steps.
 
     function loadJobStream() {
       // First fetch history to populate appliedJobsMap, then render positions
-      fetch('/api/jobs/history')
+      fetch(apiEndpoint('/api/jobs/history'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(histData) {
           if (histData && histData.success && histData.applications) {
@@ -3894,7 +3854,7 @@ Select a condition above to view immediate clinical triage steps.
             }
             renderHistory(histData.applications);
           }
-          return fetch('/api/jobs/stream');
+          return fetch(apiEndpoint('/api/jobs/stream'));
         })
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
@@ -3951,7 +3911,7 @@ Select a condition above to view immediate clinical triage steps.
       queueBanner.innerHTML = 
         '<div>' +
           '<span style="font-size:0.65rem; color:#38bdf8; font-weight:700;">⚡ AUTO-ADVANCE PIPELINE:</span> ' +
-          '<span style="font-size:0.62rem; color:#cbd5e1;">Next: <strong style="color:#34d399;">' + escapeHtml(nextJobTitle) + '</strong></span>' +
+          '<span style="font-size:0.62rem; color: #334155;">Next: <strong style="color:#34d399;">' + escapeHtml(nextJobTitle) + '</strong></span>' +
         '</div>' +
         '<span class="match-badge" style="font-size:0.55rem; border-color:#34d399; color:#34d399;">' + unapplied.length + ' IN QUEUE</span>';
       container.appendChild(queueBanner);
@@ -3975,7 +3935,7 @@ Select a condition above to view immediate clinical triage steps.
         completeCard.style.marginBottom = '0.65rem';
         completeCard.innerHTML = 
           '<div style="font-size:0.95rem; font-weight:800; color:#34d399;">🎉 ALL POSITIONS APPLIED &amp; ARCHIVED!</div>' +
-          '<div style="font-size:0.65rem; color:#cbd5e1; margin-top:0.25rem;">Every vacancy has been submitted with a tailored ATS CV and saved into SQLite below.</div>';
+          '<div style="font-size:0.65rem; color: #334155; margin-top:0.25rem;">Every vacancy has been submitted with a tailored ATS CV and saved into SQLite below.</div>';
         container.appendChild(completeCard);
       }
 
@@ -3989,7 +3949,7 @@ Select a condition above to view immediate clinical triage steps.
         divider.style.padding = '0.2rem 0';
         divider.style.borderBottom = '1px solid #334155';
         divider.innerHTML = 
-          '<strong style="font-size:0.65rem; color:#94a3b8;">ARCHIVED APPLIED POSITIONS (' + applied.length + ' SAVED IN SQLITE BELOW):</strong>' +
+          '<strong style="font-size:0.65rem; color: #64748b;">ARCHIVED APPLIED POSITIONS (' + applied.length + ' SAVED IN SQLITE BELOW):</strong>' +
           '<span style="font-size:0.58rem; color:#34d399;">✓ Verified Saved</span>';
         container.appendChild(divider);
 
@@ -4032,7 +3992,7 @@ Select a condition above to view immediate clinical triage steps.
       var buttonsHtml = '';
       if (isApplied) {
         buttonsHtml = 
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:0.3rem;">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; border-top: 1px solid #e2e8f0; padding-top:0.3rem;">' +
             '<span style="font-size:0.58rem; color:#34d399;">✓ Saved in SQLite below &bull; Dispatched to abishekpranav403@gmail.com</span>' +
             '<div style="display:flex; gap:0.25rem;">' +
               '<button class="btn btn-secondary" style="font-size:0.58rem; padding:0.12rem 0.35rem;" onclick="previewAtsCvModal(\'' + j.id + '\')">📄 View CV</button>' +
@@ -4066,11 +4026,11 @@ Select a condition above to view immediate clinical triage steps.
           '<span>Exp: ' + (j.experience_match_pct || 100) + '%</span> &bull; ' +
           '<span>Pay: ' + (j.salary_fit_pct || 95) + '%</span>' +
         '</div>' +
-        '<div style="font-size:0.67rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-top:0.25rem; margin-bottom:0.25rem;">' +
+        '<div style="font-size:0.67rem; color: #334155; display:flex; justify-content:space-between; margin-top:0.25rem; margin-bottom:0.25rem;">' +
           '<span>📍 ' + escapeHtml(j.location) + '</span>' +
           '<span style="color:#34d399; font-weight:700;">' + escapeHtml(j.salary_range) + '</span>' +
         '</div>' +
-        '<div style="font-size:0.65rem; color:#94a3b8; line-height:1.3; margin-bottom:0.3rem;">' + escapeHtml(j.description) + '</div>' +
+        '<div style="font-size:0.65rem; color: #64748b; line-height:1.3; margin-bottom:0.3rem;">' + escapeHtml(j.description) + '</div>' +
         '<div class="skills-tag-row" style="margin-bottom:0.35rem;">' + skillsHtml + '</div>' +
         buttonsHtml;
 
@@ -4078,7 +4038,7 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     function previewCoverLetter(jobId) {
-      fetch('/api/jobs/cover-letter', {
+      fetch(apiEndpoint('/api/jobs/cover-letter'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({job_id: jobId, letter_style: currentCoverLetterStyle})
@@ -4154,7 +4114,7 @@ Select a condition above to view immediate clinical triage steps.
       var statusText = document.getElementById('botStatusText');
       if (statusText) statusText.textContent = 'Applying to ' + jobId + ', saving below in SQLite, and advancing to next position...';
 
-      fetch('/api/jobs/apply', {
+      fetch(apiEndpoint('/api/jobs/apply'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({job_id: jobId, letter_style: currentCoverLetterStyle})
@@ -4182,7 +4142,7 @@ Select a condition above to view immediate clinical triage steps.
       badge.style.color = '#fbbf24';
       document.getElementById('botStatusText').textContent = '🤖 Scanning job stream for matches >= 75% with ' + currentCoverLetterStyle.toUpperCase() + ' pitch...';
 
-      fetch('/api/jobs/auto-apply-batch', {
+      fetch(apiEndpoint('/api/jobs/auto-apply-batch'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({min_match_threshold: 75, letter_style: currentCoverLetterStyle})
@@ -4216,7 +4176,7 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     function loadJobHistory() {
-      fetch('/api/jobs/history')
+      fetch(apiEndpoint('/api/jobs/history'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success && data.applications) {
@@ -4271,7 +4231,7 @@ Select a condition above to view immediate clinical triage steps.
         item.innerHTML = 
           '<div>' +
             '<strong style="color:#fff;">' + escapeHtml(a.company) + '</strong> &bull; ' + escapeHtml(a.role) +
-            '<div style="font-size:0.6rem; color:#94a3b8;">' + escapeHtml(a.applied_at) + ' &bull; ATS Score: ' + (a.ats_score || 100) + '/100</div>' +
+            '<div style="font-size:0.6rem; color: #64748b;">' + escapeHtml(a.applied_at) + ' &bull; ATS Score: ' + (a.ats_score || 100) + '/100</div>' +
           '</div>' +
           '<div style="display:flex; gap:0.25rem; align-items:center;">' +
             '<span class="match-badge" style="border-color:#34d399; color:#34d399;">100% ATS PASSED</span>' +
@@ -4315,7 +4275,7 @@ Select a condition above to view immediate clinical triage steps.
       document.getElementById('atsCvTextContainer').textContent = "Synthesizing 100% ATS-optimized tailored CV for " + roleName + "...";
       document.getElementById('atsCvModal').style.display = 'block';
 
-      fetch('/api/jobs/tailor-cv', {
+      fetch(apiEndpoint('/api/jobs/tailor-cv'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({job_id: jobId})
@@ -4339,7 +4299,7 @@ Select a condition above to view immediate clinical triage steps.
       document.getElementById('atsCvTextContainer').textContent = "Loading submitted ATS CV...";
       document.getElementById('atsCvModal').style.display = 'block';
 
-      fetch('/api/jobs/application-cv?job_id=' + encodeURIComponent(jobId))
+      fetch(apiEndpoint('/api/jobs/application-cv?job_id=') + encodeURIComponent(jobId))
       .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
       .then(function(data) {
         if (data && data.cv_plaintext) {
@@ -4462,10 +4422,10 @@ Select a condition above to view immediate clinical triage steps.
 
     function showCareerRecommendationsModal() {
       var container = document.getElementById('recClustersContainer');
-      container.innerHTML = '<span style="font-size:0.67rem; color:#94a3b8;">Loading strategic recommendations...</span>';
+      container.innerHTML = '<span style="font-size:0.67rem; color: #64748b;">Loading strategic recommendations...</span>';
       document.getElementById('careerRecModal').style.display = 'block';
 
-      fetch('/api/jobs/recommendations')
+      fetch(apiEndpoint('/api/jobs/recommendations'))
       .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
       .then(function(data) {
         if (data && data.success && data.recommendations) {
@@ -4530,8 +4490,8 @@ Select a condition above to view immediate clinical triage steps.
             '<strong style="color:#c084fc; font-size:0.75rem;">' + escapeHtml(c.title) + '</strong>' +
             '<span style="color:#34d399; font-weight:700; font-size:0.75rem; font-family:var(--font-mono);">' + escapeHtml(c.salary_range) + '</span>' +
           '</div>' +
-          '<div style="font-size:0.65rem; color:#cbd5e1; margin-top:0.2rem;">' + escapeHtml(c.best_fit_reasons) + '</div>' +
-          '<div style="font-size:0.6rem; color:#94a3b8; margin-top:0.25rem;">' +
+          '<div style="font-size:0.65rem; color: #334155; margin-top:0.2rem;">' + escapeHtml(c.best_fit_reasons) + '</div>' +
+          '<div style="font-size:0.6rem; color: #64748b; margin-top:0.25rem;">' +
             'Demand: <span style="color:#38bdf8;">' + escapeHtml(c.demand_level) + '</span> &bull; Portals: ' + escapeHtml((c.recommended_portals || []).join(', ')) +
           '</div>';
         container.appendChild(item);
@@ -4561,7 +4521,7 @@ Select a condition above to view immediate clinical triage steps.
     ];
 
     function loadDadDashboard() {
-      fetch('/api/dad/dashboard')
+      fetch(apiEndpoint('/api/dad/dashboard'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success && data.dashboard) {
@@ -4615,11 +4575,11 @@ Select a condition above to view immediate clinical triage steps.
             '<strong style="color:#fff; font-size:0.73rem;">' + escapeHtml(m.name) + '</strong>' +
             '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
           '</div>' +
-          '<div style="display:flex; justify-content:space-between; font-size:0.63rem; color:#94a3b8;">' +
+          '<div style="display:flex; justify-content:space-between; font-size:0.63rem; color: #64748b;">' +
             '<span>Qty: <strong style="color:#38bdf8;">' + m.current_qty + ' pills</strong> (' + m.days_remaining + ' days left)</span>' +
             '<span>Dose: ' + m.daily_dose + '/day &bull; ' + escapeHtml(m.category) + '</span>' +
           '</div>' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.62rem; color:#cbd5e1; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px; margin-top:0.15rem;">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.62rem; color: #334155; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px; margin-top:0.15rem;">' +
             '<span>📅 <strong style="color:' + badgeColor + ';">Buy Before: ' + escapeHtml(m.reorder_date) + '</strong> (Buffer: 10-15d)</span>' +
             '<button class="btn btn-secondary" style="padding:0.1rem 0.35rem; font-size:0.6rem; color:#38bdf8;" onclick="refillDadMedicine(\'' + escapeHtml(m.id) + '\')">+ Refill (+30)</button>' +
           '</div>';
@@ -4664,15 +4624,15 @@ Select a condition above to view immediate clinical triage steps.
           '<div style="display:flex; justify-content:space-between; align-items:center;">' +
             '<div>' +
               '<strong style="color:#c084fc; font-size:0.75rem;">' + escapeHtml(a.doctor_name) + '</strong> ' +
-              '<span style="font-size:0.63rem; color:#94a3b8;">(' + escapeHtml(a.specialty) + ' &bull; Every ' + a.interval_months + ' Months)</span>' +
+              '<span style="font-size:0.63rem; color: #64748b;">(' + escapeHtml(a.specialty) + ' &bull; Every ' + a.interval_months + ' Months)</span>' +
             '</div>' +
             '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
           '</div>' +
-          '<div style="font-size:0.63rem; color:#cbd5e1; display:flex; justify-content:space-between;">' +
+          '<div style="font-size:0.63rem; color: #334155; display:flex; justify-content:space-between;">' +
             '<span>Last Visit: ' + escapeHtml(a.last_visit_date) + '</span>' +
             '<span>Due in: <strong style="color:#38bdf8;">' + a.days_until_due + ' days</strong></span>' +
           '</div>' +
-          '<div style="background:rgba(0,0,0,0.3); border-radius:4px; padding:0.3rem 0.4rem; font-size:0.62rem; color:#cbd5e1; margin-top:0.15rem;">' +
+          '<div style="background:rgba(0,0,0,0.3); border-radius:4px; padding:0.3rem 0.4rem; font-size:0.62rem; color: #334155; margin-top:0.15rem;">' +
             '<div style="color:#34d399; font-weight:700;">📅 Next Due Date: ' + escapeHtml(a.next_due_date) + '</div>' +
             '<div style="color:#fbbf24; margin-top:0.1rem;">🔔 Advance Booking Reminder: ' + escapeHtml(a.booking_reminder_date) + ' (Book 20d prior)</div>' +
           '</div>' +
@@ -4701,7 +4661,7 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     function refillDadMedicine(medId) {
-      fetch('/api/dad/medicine/refill', {
+      fetch(apiEndpoint('/api/dad/medicine/refill'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: medId, qty: 30})
@@ -4729,7 +4689,7 @@ Select a condition above to view immediate clinical triage steps.
 
     function markDoctorVisited(docId) {
       var todayStr = new Date().toISOString().split('T')[0];
-      fetch('/api/dad/appointment/visit', {
+      fetch(apiEndpoint('/api/dad/appointment/visit'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: docId, visit_date: todayStr})
@@ -4769,7 +4729,7 @@ Select a condition above to view immediate clinical triage steps.
       var reader = new FileReader();
       reader.onload = function(e) {
         // Send to backend OCR
-        fetch('/api/dad/prescription/ocr', {
+        fetch(apiEndpoint('/api/dad/prescription/ocr'), {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({text: "Dr. Baskar Neurology Prescription: Levetiracetam 500mg qty 60, Donepezil 5mg qty 30. Review in 5 months.", image_b64: e.target.result})
@@ -4795,7 +4755,7 @@ Select a condition above to view immediate clinical triage steps.
         ? "Neuro Care Institute. Consultant: Dr. Baskar (Neurology). Rx: Levetiracetam 500mg qty 60 tabs (1-0-1), Donepezil 5mg qty 30 tabs (0-0-1). Review after 5 months."
         : "Heart Rhythm & Cardiac Sciences. Consultant: Dr. Suresh (Cardiology). Rx: Telmisartan 40mg qty 30 tabs (1-0-0), Atorvastatin 20mg qty 30 tabs (0-0-1), Ecosprin 75mg qty 30 tabs (0-1-0). Review after 6 months.";
 
-      fetch('/api/dad/prescription/ocr', {
+      fetch(apiEndpoint('/api/dad/prescription/ocr'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({text: sampleText})
@@ -4992,7 +4952,7 @@ Select a condition above to view immediate clinical triage steps.
       var cat = (hiddenCat && hiddenCat.value) || 'Cardiac';
       var doc = (hiddenDoc && hiddenDoc.value) || 'Dr. Suresh (Heart)';
 
-      fetch('/api/dad/medicine/add', {
+      fetch(apiEndpoint('/api/dad/medicine/add'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -5027,7 +4987,7 @@ Select a condition above to view immediate clinical triage steps.
       var out = document.getElementById('bulkMedResultOutput');
       if (out) out.textContent = 'Processing bulk medicines...';
 
-      fetch('/api/dad/medicine/bulk_add', {
+      fetch(apiEndpoint('/api/dad/medicine/bulk_add'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bulk_text: text })
@@ -5050,7 +5010,7 @@ Select a condition above to view immediate clinical triage steps.
       var out = document.getElementById('voiceMedResultOutput');
       if (out) out.textContent = 'Processing voice intent: "' + cmd + '"...';
 
-      fetch('/api/dad/medicine/voice_command', {
+      fetch(apiEndpoint('/api/dad/medicine/voice_command'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ command: cmd })
@@ -5288,7 +5248,7 @@ Select a condition above to view immediate clinical triage steps.
       container.innerHTML = '';
 
       if (events.length === 0) {
-        container.innerHTML = '<div style="font-size:0.65rem; color:#94a3b8; text-align:center; padding:1rem;">No calendar events recorded yet.</div>';
+        container.innerHTML = '<div style="font-size:0.65rem; color: #64748b; text-align:center; padding:1rem;">No calendar events recorded yet.</div>';
         return;
       }
 
@@ -5415,7 +5375,7 @@ Select a condition above to view immediate clinical triage steps.
     // MASTER KPI REFRESHER & METRICS ENGINE (PURE ES5)
     // ==============================================================
     function refreshKpiSummary() {
-      fetch('/api/kpi/summary')
+      fetch(apiEndpoint('/api/kpi/summary'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (!data || !data.success) return;
@@ -5468,7 +5428,7 @@ Select a condition above to view immediate clinical triage steps.
       var statusText = document.getElementById('dispatchStatusText');
       if (statusText) statusText.textContent = '';
 
-      fetch('/api/jobs/form_filler/audit?id=' + encodeURIComponent(currentFormFillerJobId))
+      fetch(apiEndpoint('/api/jobs/form_filler/audit?id=') + encodeURIComponent(currentFormFillerJobId))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success) {
@@ -5599,7 +5559,7 @@ Select a condition above to view immediate clinical triage steps.
       var statusEl = document.getElementById('dispatchStatusText');
       if (statusEl) statusEl.textContent = 'Dispatching to abishekpranav403@gmail.com...';
 
-      fetch('/api/jobs/application/dispatch_email', {
+      fetch(apiEndpoint('/api/jobs/application/dispatch_email'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ job_id: jobId, recipient_email: 'abishekpranav403@gmail.com' })
@@ -5638,7 +5598,7 @@ Select a condition above to view immediate clinical triage steps.
         "Financial Cash Expense Receipt"
       ];
 
-      fetch('/api/vision/clip_match', {
+      fetch(apiEndpoint('/api/vision/clip_match'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: testType, candidates: candidates })
@@ -5682,7 +5642,7 @@ Select a condition above to view immediate clinical triage steps.
       var modal = document.getElementById('experienceAuditModal');
       if (modal) modal.style.display = 'block';
 
-      fetch('/api/jobs/experience_audit')
+      fetch(apiEndpoint('/api/jobs/experience_audit'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success) {
@@ -5769,10 +5729,10 @@ Select a condition above to view immediate clinical triage steps.
           pDiv.style.padding = '0.4rem';
           pDiv.innerHTML = '<div style="display:flex; justify-content:space-between;">' +
             '<strong style="color:#c084fc; font-size:0.68rem;">' + escapeHtml(pj.name) + '</strong>' +
-            '<span style="font-size:0.55rem; color:#94a3b8;">' + escapeHtml(pj.type) + '</span>' +
+            '<span style="font-size:0.55rem; color: #64748b;">' + escapeHtml(pj.type) + '</span>' +
           '</div>' +
-          '<div style="font-size:0.6rem; color:#cbd5e1; margin-top:0.15rem;">Tech: ' + escapeHtml(pj.tech) + '</div>' +
-          '<div style="font-size:0.58rem; color:#94a3b8; margin-top:0.1rem;">' + escapeHtml(pj.description) + '</div>';
+          '<div style="font-size:0.6rem; color: #334155; margin-top:0.15rem;">Tech: ' + escapeHtml(pj.tech) + '</div>' +
+          '<div style="font-size:0.58rem; color: #64748b; margin-top:0.1rem;">' + escapeHtml(pj.description) + '</div>';
           projCont.appendChild(pDiv);
         }
       }
@@ -5786,7 +5746,7 @@ Select a condition above to view immediate clinical triage steps.
       var statusEl = document.getElementById('reviewApprovalStatus');
       if (statusEl) statusEl.textContent = 'Status: Awaiting Candidate Confirmation';
 
-      fetch('/api/jobs/review_gate?id=' + encodeURIComponent(currentReviewJobId) + '&style=' + encodeURIComponent(currentCoverLetterStyle))
+      fetch(apiEndpoint('/api/jobs/review_gate?id=') + encodeURIComponent(currentReviewJobId) + '&style=' + encodeURIComponent(currentCoverLetterStyle))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success) {
@@ -5849,7 +5809,7 @@ Select a condition above to view immediate clinical triage steps.
       var letterEl = document.getElementById('reviewLetterPreview');
       if (letterEl) customLetter = letterEl.value;
 
-      fetch('/api/jobs/application/approve', {
+      fetch(apiEndpoint('/api/jobs/application/approve'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -5877,7 +5837,7 @@ Select a condition above to view immediate clinical triage steps.
       var statusText = document.getElementById('botStatusText');
       if (statusText) statusText.textContent = 'Running evidence-based screening audit across vacancies...';
 
-      fetch('/api/jobs/screening_audit')
+      fetch(apiEndpoint('/api/jobs/screening_audit'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success) {
@@ -5892,7 +5852,7 @@ Select a condition above to view immediate clinical triage steps.
       var modal = document.getElementById('interviewPrepModal');
       if (modal) modal.style.display = 'block';
 
-      fetch('/api/jobs/review_gate?id=' + encodeURIComponent(jobId || 'JOB-AI-01'))
+      fetch(apiEndpoint('/api/jobs/review_gate?id=') + encodeURIComponent(jobId || 'JOB-AI-01'))
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success && data.interview_prep) {
@@ -5966,7 +5926,7 @@ Select a condition above to view immediate clinical triage steps.
           '<div style="color:#c084fc; font-weight:700; font-size:0.68rem; margin-bottom:0.25rem;">' +
             'Q' + (i + 1) + ': ' + escapeHtml(it.question) +
           '</div>' +
-          '<div style="font-size:0.62rem; color:#cbd5e1; line-height:1.4; background:rgba(30,41,59,0.5); padding:0.4rem; border-radius:4px; border-left:2px solid #34d399;">' +
+          '<div style="font-size:0.62rem; color: #334155; line-height:1.4; background:rgba(30,41,59,0.5); padding:0.4rem; border-radius:4px; border-left:2px solid #34d399;">' +
             '<strong style="color:#34d399;">Model Answer &amp; Defense:</strong> ' + escapeHtml(it.model_answer) +
           '</div>';
         container.appendChild(itemDiv);
@@ -5998,7 +5958,7 @@ Select a condition above to view immediate clinical triage steps.
 
     function triggerTabletSyncAndLaunch() {
       respond('System: Triggering Galaxy Tab A APK sync and app launch over USB...');
-      fetch('/api/tablet/sync_and_launch', { method: 'POST' })
+      fetch(apiEndpoint('/api/tablet/sync_and_launch'), { method: 'POST' })
         .then(function(res) { return res.json(); })
         .then(function(data) {
           if (data && data.success) {
@@ -6205,7 +6165,7 @@ Select a condition above to view immediate clinical triage steps.
 
     function pingServerLatency() {
       var start = new Date().getTime();
-      fetch('/api/ledger/summary')
+      fetch(apiEndpoint('/api/ledger/summary'))
         .then(function() {
           var rtt = new Date().getTime() - start;
           var val = '<' + Math.max(1, rtt) + 'ms';
