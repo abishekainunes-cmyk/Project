@@ -5,6 +5,7 @@ __pycache__/
 .env
 dist/
 data/
+tools/
 *.log
 .DS_Store
 Thumbs.db
