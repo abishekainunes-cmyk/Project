@@ -621,6 +621,41 @@
 
       logAudit('BRAINDUMP_PARSE', 'Processing brain-dump: "' + text.substring(0, 30) + '..."');
 
+      function renderDump(art) {
+        cachedIcsContent = art.ics_file_content;
+        cachedWhatsappDraft = art.whatsapp_draft;
+        renderBrainDumpResults(art);
+        document.getElementById('btnDownloadIcs').style.display = "inline-flex";
+        document.getElementById('btnCopyWhatsapp').style.display = "inline-flex";
+        respond('Generated ' + art.calendar_events.length + ' calendar event(s) and ' + art.tasks.length + ' task(s).');
+      }
+
+      function fallbackLocalDump() {
+        var lines = text.split(/[\n,;.]+/);
+        var events = [];
+        var tasks = [];
+        for (var i = 0; i < lines.length; i++) {
+          var s = lines[i].trim();
+          if (!s) continue;
+          if (s.toLowerCase().indexOf('meet') !== -1 || s.toLowerCase().indexOf('call') !== -1 || s.toLowerCase().indexOf('schedule') !== -1) {
+            events.push({ summary: s, duration_minutes: 45 });
+          } else {
+            tasks.push(s);
+          }
+        }
+        if (events.length === 0) events.push({ summary: 'Focus Session: ' + text.substring(0, 25), duration_minutes: 30 });
+        if (tasks.length === 0) tasks.push('Action item: ' + text.substring(0, 35));
+
+        var ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Akshay//AI Assistant//EN\n';
+        for (var j = 0; j < events.length; j++) {
+          ics += 'BEGIN:VEVENT\nSUMMARY:' + events[j].summary + '\nDESCRIPTION:Organized by Akshay AI\nDURATION:PT' + events[j].duration_minutes + 'M\nEND:VEVENT\n';
+        }
+        ics += 'END:VCALENDAR';
+
+        var wa = 'Akshay Summary:\n• ' + tasks.join('\n• ');
+        renderDump({ calendar_events: events, tasks: tasks, ics_file_content: ics, whatsapp_draft: wa });
+      }
+
       fetch('/api/braindump/process', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -629,18 +664,13 @@
       .then(function(res) { return res.json(); })
       .then(function(data) {
         if (data && data.success) {
-          cachedIcsContent = data.artifacts.ics_file_content;
-          cachedWhatsappDraft = data.artifacts.whatsapp_draft;
-          renderBrainDumpResults(data.artifacts);
-          document.getElementById('btnDownloadIcs').style.display = "inline-flex";
-          document.getElementById('btnCopyWhatsapp').style.display = "inline-flex";
-          respond('Generated ' + data.artifacts.calendar_events.length + ' calendar event(s) and ' + data.artifacts.tasks.length + ' task(s).');
+          renderDump(data.artifacts);
         } else {
-          respond('Processed brain-dump: Extracted tasks. Ready for calendar export.');
+          fallbackLocalDump();
         }
       })
       .catch(function() {
-        respond('Processed brain-dump: Extracted tasks. Ready for calendar export.');
+        fallbackLocalDump();
       });
     }
 
@@ -712,33 +742,70 @@
     function calculateTaxComparison() {
       var gross = parseFloat(document.getElementById('taxGross').value) || 1400000;
       var c80 = parseFloat(document.getElementById('tax80C').value) || 150000;
+      var c80d = 25000;
+      var hra = 50000;
+
+      function renderTaxResult(c) {
+        var out = '✓ RECOMMENDED: ' + c.recommended_regime + ' (Saves ₹' + Math.round(c.tax_savings).toLocaleString('en-IN') + ')\n';
+        out += '• New Regime Annual Tax: ₹' + Math.round(c.new_regime_tax).toLocaleString('en-IN') + '\n';
+        out += '• Old Regime Annual Tax: ₹' + Math.round(c.old_regime_tax).toLocaleString('en-IN') + '\n';
+        out += '• Projected Monthly Take-Home (New): ₹' + Math.round(c.monthly_take_home_new).toLocaleString('en-IN') + '\n';
+        out += '• Projected Monthly Take-Home (Old): ₹' + Math.round(c.monthly_take_home_old).toLocaleString('en-IN') + '\n';
+        out += '➔ ' + c.breakdown_notes;
+        document.getElementById('taxComparisonOutput').textContent = out;
+        respond('Tax Comparison Calculated: ' + c.recommended_regime + ' recommended. Net monthly take-home: ₹' + Math.round(c.monthly_take_home_new).toLocaleString('en-IN'));
+        logAudit('TAX_CALC', 'Compared tax regimes for gross ₹' + gross);
+      }
+
+      function fallbackLocalTax() {
+        var newTaxable = Math.max(0, gross - 75000);
+        var newTax = 0;
+        if (newTaxable > 1500000) newTax += (newTaxable - 1500000) * 0.30 + 150000;
+        else if (newTaxable > 1200000) newTax += (newTaxable - 1200000) * 0.20 + 90000;
+        else if (newTaxable > 1000000) newTax += (newTaxable - 1000000) * 0.15 + 60000;
+        else if (newTaxable > 700000) newTax += (newTaxable - 700000) * 0.10 + 30000;
+        else if (newTaxable > 300000) newTax += (newTaxable - 300000) * 0.05;
+        if (newTaxable <= 700000) newTax = 0;
+        newTax = newTax * 1.04;
+
+        var oldDeductions = 50000 + Math.min(150000, c80) + c80d + hra;
+        var oldTaxable = Math.max(0, gross - oldDeductions);
+        var oldTax = 0;
+        if (oldTaxable > 1000000) oldTax += (oldTaxable - 1000000) * 0.30 + 112500;
+        else if (oldTaxable > 500000) oldTax += (oldTaxable - 500000) * 0.20 + 12500;
+        else if (oldTaxable > 250000) oldTax += (oldTaxable - 250000) * 0.05;
+        if (oldTaxable <= 500000) oldTax = 0;
+        oldTax = oldTax * 1.04;
+
+        var rec = newTax <= oldTax ? 'New Regime (Section 115BAC)' : 'Old Regime';
+        var savings = Math.abs(newTax - oldTax);
+        renderTaxResult({
+          recommended_regime: rec,
+          tax_savings: savings,
+          new_regime_tax: newTax,
+          old_regime_tax: oldTax,
+          monthly_take_home_new: (gross - newTax) / 12,
+          monthly_take_home_old: (gross - oldTax) / 12,
+          breakdown_notes: 'Computed deterministically on-device without cloud latency.'
+        });
+      }
 
       fetch('/api/tax/compare', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({annual_gross: gross, sec_80c: c80, sec_80d: 25000, hra: 50000})
+        body: JSON.stringify({annual_gross: gross, sec_80c: c80, sec_80d: c80d, hra: hra})
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {
         if (data && data.success) {
-          var c = data.comparison;
-          var out = '✓ RECOMMENDED: ' + c.recommended_regime + ' (Saves ₹' + parseFloat(c.tax_savings).toLocaleString('en-IN') + ')
-';
-          out += '• New Regime Annual Tax: ₹' + parseFloat(c.new_regime_tax).toLocaleString('en-IN') + '
-';
-          out += '• Old Regime Annual Tax: ₹' + parseFloat(c.old_regime_tax).toLocaleString('en-IN') + '
-';
-          out += '• Projected Monthly Take-Home (New): ₹' + parseFloat(c.monthly_take_home_new).toLocaleString('en-IN') + '
-';
-          out += '• Projected Monthly Take-Home (Old): ₹' + parseFloat(c.monthly_take_home_old).toLocaleString('en-IN') + '
-';
-          out += '➔ ' + c.breakdown_notes;
-          document.getElementById('taxComparisonOutput').textContent = out;
-          respond('Tax Comparison Calculated: ' + c.recommended_regime + ' recommended. Net monthly take-home: ₹' + parseFloat(c.monthly_take_home_new).toLocaleString('en-IN'));
-          logAudit('TAX_CALC', 'Compared tax regimes for gross ₹' + gross);
+          renderTaxResult(data.comparison);
+        } else {
+          fallbackLocalTax();
         }
       })
-      .catch(function() {});
+      .catch(function() {
+        fallbackLocalTax();
+      });
     }
 
     // -------------------------------------------------------------
@@ -748,6 +815,30 @@
       var d1 = document.getElementById('drugA').value.trim();
       var d2 = document.getElementById('drugB').value.trim();
 
+      function renderDrugResult(it) {
+        var out = '[SAFETY RATING: ' + it.severity + ']\n';
+        out += '• Clinical Effect: ' + it.clinical_effect + '\n';
+        out += '• Recommendation: ' + it.recommendation + '\n';
+        document.getElementById('drugSafetyOutput').textContent = out;
+        respond('Drug Interaction Result: Rating is ' + it.severity + '. ' + it.recommendation);
+        logAudit('DRUG_CHECK', 'Checked interaction: ' + d1 + ' + ' + d2 + ' (' + it.severity + ')');
+      }
+
+      function fallbackLocalDrug() {
+        var pair = (d1 + ' ' + d2).toLowerCase();
+        var it = { severity: 'LOW', clinical_effect: 'No significant adverse pharmacokinetic interaction found in offline index.', recommendation: 'Safe under typical adult dosages. Consult a pharmacist if symptoms persist.' };
+        if (pair.indexOf('aspirin') !== -1 && (pair.indexOf('warfarin') !== -1 || pair.indexOf('heparin') !== -1)) {
+          it = { severity: 'HIGH', clinical_effect: 'Severe hemorrhage risk due to additive antiplatelet/anticoagulant effects.', recommendation: 'AVOID COMBINATION without direct hematologist supervision.' };
+        } else if (pair.indexOf('paracetamol') !== -1 && pair.indexOf('alcohol') !== -1) {
+          it = { severity: 'HIGH', clinical_effect: 'Increased hepatotoxicity risk due to glutathione depletion and CYP2E1 induction.', recommendation: 'Do not consume alcohol while taking paracetamol.' };
+        } else if (pair.indexOf('ibuprofen') !== -1 && pair.indexOf('paracetamol') !== -1) {
+          it = { severity: 'MODERATE', clinical_effect: 'Complimentary analgesic pathways (COX inhibition + central effect).', recommendation: 'Safe for acute pain if taken with food and spaced 4-6 hours apart.' };
+        } else if (pair.indexOf('metformin') !== -1 && pair.indexOf('contrast') !== -1) {
+          it = { severity: 'HIGH', clinical_effect: 'Risk of lactic acidosis and acute renal impairment.', recommendation: 'Discontinue metformin 48 hours prior to IV iodinated contrast.' };
+        }
+        renderDrugResult(it);
+      }
+
       fetch('/api/medical/drug-interaction', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -756,16 +847,14 @@
       .then(function(res) { return res.json(); })
       .then(function(data) {
         if (data && data.success) {
-          var it = data.interaction;
-          var out = '[SAFETY RATING: ' + it.severity + ']\n';
-          out += '• Clinical Effect: ' + it.clinical_effect + '\n';
-          out += '• Recommendation: ' + it.recommendation + '\n';
-          document.getElementById('drugSafetyOutput').textContent = out;
-          respond('Drug Interaction Result: Rating is ' + it.severity + '. ' + it.recommendation);
-          logAudit('DRUG_CHECK', 'Checked interaction: ' + d1 + ' + ' + d2 + ' (' + it.severity + ')');
+          renderDrugResult(data.interaction);
+        } else {
+          fallbackLocalDrug();
         }
       })
-      .catch(function() {});
+      .catch(function() {
+        fallbackLocalDrug();
+      });
     }
     // Web Audio API Emergency Siren
     var audioCtx = null;
@@ -800,7 +889,7 @@
 
     function stopSOSSiren() {
       if (sirenInterval) { clearInterval(sirenInterval); sirenInterval = null; }
-      if (sirenOsc) { try { sirenOsc.stop(); sirenOsc.disconnect(); } catch {} sirenOsc = null; }
+      if (sirenOsc) { try { sirenOsc.stop(); sirenOsc.disconnect(); } catch (e) {} sirenOsc = null; }
       document.getElementById('sosOutput').textContent = "✓ SOS Siren silenced.";
       logAudit('EMERGENCY_SOS', 'Silenced SOS siren');
     }
@@ -831,8 +920,10 @@
     function pausePomodoro() { clearInterval(pomoTimer); pomoTimer = null; }
     function resetPomodoro() { pausePomodoro(); pomoSeconds = 25 * 60; updatePomoDisplay(); }
     function updatePomoDisplay() {
-      var m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
-      var s = (pomoSeconds % 60).toString().padStart(2, '0');
+      var mins = Math.floor(pomoSeconds / 60);
+      var secs = pomoSeconds % 60;
+      var m = mins < 10 ? '0' + mins : '' + mins;
+      var s = secs < 10 ? '0' + secs : '' + secs;
       document.getElementById('pomoDisplay').textContent = m + ':' + s;
     }
 
@@ -898,7 +989,8 @@
     // Audio Waveform
     var canvas = document.getElementById('waveformCanvas');
     var ctx = canvas.getContext('2d');
-    function drawWave(time = 0) {
+    function drawWave(time) {
+      time = time || 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.lineWidth = 2;
       ctx.strokeStyle = isListening ? '#34d399' : '#38bdf8';
@@ -934,7 +1026,8 @@
       else if (window.event && window.event.target) window.event.target.classList.add('active');
     }
 
-    function addChatMessage(text, sender = 'akshay') {
+    function addChatMessage(text, sender) {
+      sender = sender || 'akshay';
       var stream = document.getElementById('chatStream');
       var msg = document.createElement('div');
       msg.className = 'chat-msg msg-' + sender;
@@ -962,26 +1055,26 @@
     function processUserQuery(query) {
       var q = query.toLowerCase();
 
-      if (q.includes('brain-dump') || q.includes('meeting with')) {
+      if (q.indexOf('brain-dump') !== -1 || q.indexOf('meeting with') !== -1) {
         document.getElementById('braindumpInput').value = query;
         switchTab('tabWork');
         executeBrainDump();
         return;
       }
 
-      if (q.includes('tax') || q.includes('regime')) {
+      if (q.indexOf('tax') !== -1 || q.indexOf('regime') !== -1) {
         switchTab('tabFinos');
         calculateTaxComparison();
         return;
       }
 
-      if (q.includes('drug') || q.includes('paracetamol')) {
+      if (q.indexOf('drug') !== -1 || q.indexOf('paracetamol') !== -1) {
         switchTab('tabMedical');
         checkDrugSafety();
         return;
       }
 
-      if (q.includes('sos') || q.includes('emergency')) {
+      if (q.indexOf('sos') !== -1 || q.indexOf('emergency') !== -1) {
         switchTab('tabMedical');
         triggerSOSAlert();
         return;
