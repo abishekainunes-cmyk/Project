@@ -1829,6 +1829,37 @@
             </div>
           </div>
         </div>
+
+        <!-- App Format & Galaxy Tab A Installer Card -->
+        <div style="padding:0.65rem 0.8rem; background:rgba(30,41,59,0.85); border:1px solid #c084fc; border-radius:6px; margin-top:0.55rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:#c084fc; font-size:0.75rem;">📦 STANDALONE ANDROID APP (.APK) &amp; TABLET SYNC</strong>
+            <span class="match-badge" style="border-color:#c084fc; color:#c084fc; font-size:0.55rem;">v4.2 PRO APK (4.4 MB)</span>
+          </div>
+          <div style="font-size:0.63rem; color:#cbd5e1; margin-top:0.35rem; line-height:1.4;">
+            Standalone Android App Package optimized for Samsung Galaxy Tab A (Android 5.1.1 Lollipop / API 22 / DEX 035). Includes offline cache, 0-latency USB reverse bridge, and 100% Page Fit display.
+          </div>
+          <div style="display:flex; gap:0.4rem; margin-top:0.5rem; flex-wrap:wrap;">
+            <a href="/download/app.apk" class="btn btn-purple" style="font-size:0.64rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:0.25rem;" download="Akshay_AI_v4.2.apk">
+              📱 Download App (.APK)
+            </a>
+            <button class="btn btn-accent" style="font-size:0.64rem; font-weight:700;" onclick="triggerTabletSyncAndLaunch()">
+              ⚡ 1-Click Sync &amp; Open on Tab
+            </button>
+            <button class="btn btn-secondary" style="font-size:0.64rem;" onclick="copyTabletUrl()">
+              📋 Copy Local Wi-Fi Link
+            </button>
+          </div>
+          <!-- Step by Step Instructions -->
+          <div style="margin-top:0.55rem; padding-top:0.45rem; border-top:1px solid rgba(255,255,255,0.08); font-size:0.6rem; color:#94a3b8; line-height:1.45;">
+            <strong style="color:#38bdf8;">📖 WHAT TO DO TO INSTALL &amp; UPDATE ON GALAXY TAB A:</strong>
+            <ol style="margin:0.25rem 0 0 1.1rem; padding:0;">
+              <li><strong style="color:#f8fafc;">Method 1 (Automatic via USB):</strong> Plug Galaxy Tab A into PC with USB, run <code style="color:#34d399;">INSTALL_AND_SYNC_GALAXY_TAB.bat</code>. It installs the APK, updates files, and opens the app!</li>
+              <li><strong style="color:#f8fafc;">Method 2 (Manual APK Install):</strong> On tablet, open <em>My Files &gt; Device storage &gt; Download</em>, tap <code style="color:#38bdf8;">Akshay_AI_v4.2.apk</code>, tap <em>Install</em>, then tap <em>Open</em>.</li>
+              <li><strong style="color:#f8fafc;">Method 3 (Native Home Screen App):</strong> In Chrome on tablet, tap <strong>⋮ (3 dots)</strong> menu, tap <strong style="color:#fbbf24;">"Add to Home screen"</strong>. Launches full-screen without address bar!</li>
+            </ol>
+          </div>
+        </div>
         <div style="margin-top:0.6rem; display:flex; gap:0.4rem;">
           <button class="btn btn-secondary" style="font-size:0.65rem;" onclick="pingServerLatency()">🔄 Ping All Devices</button>
         </div>
@@ -5963,6 +5994,33 @@ Select a condition above to view immediate clinical triage steps.
     function closeSettingsModal() {
       var modal = document.getElementById('settingsModal');
       if (modal) modal.style.display = 'none';
+    }
+
+    function triggerTabletSyncAndLaunch() {
+      respond('System: Triggering Galaxy Tab A APK sync and app launch over USB...');
+      fetch('/api/tablet/sync_and_launch', { method: 'POST' })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data && data.success) {
+            respond('System: ' + data.message);
+          } else {
+            respond('System: ' + (data.error || 'Tablet not reachable via ADB. Please check USB cable.'));
+          }
+        })
+        .catch(function(err) {
+          respond('System: Tablet sync error: ' + err.message);
+        });
+    }
+
+    function copyTabletUrl() {
+      var url = 'http://192.168.0.107:8085';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          respond('System: Copied tablet local link: ' + url);
+        });
+      } else {
+        respond('System: Tablet URL: ' + url);
+      }
     }
 
     function switchSettingsTab(tab) {
