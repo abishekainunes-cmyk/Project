@@ -20,6 +20,13 @@ sys.path.insert(0, str(ROOT_DIR))
 
 from akshay_core.finos.ledger import FinOSLedger, LedgerIntegrityError
 from akshay_core.finos.models import TransactionCreate, AccountType
+from akshay_core.finos.bill_splitter import split_bill_equally, ExpenseParticipant, calculate_optimal_settlements
+from akshay_core.finos.sms_parser import parse_bank_sms
+from akshay_core.workflows.daily_engine import (
+    extract_action_items_from_text,
+    prioritize_tasks_eisenhower,
+    get_first_aid_guide,
+)
 from akshay_core.security.validator import sanitize_text, SecurityValidationError
 from akshay_core.security.audit_logger import get_audit_logger
 
@@ -104,6 +111,71 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
 
+        elif path == "/api/daily/action-items":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                raw_text = data.get("text", "")
+                items = extract_action_items_from_text(raw_text)
+                self._send_json_response({
+                    "success": True,
+                    "count": len(items),
+                    "items": [it.model_dump() for it in items]
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/daily/split-bill":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                total = Decimal(str(data.get("total", "0")))
+                payer = data.get("payer", "Self")
+                participants = data.get("participants", [payer])
+                result = split_bill_equally(total_amount=total, payer=payer, participants=participants)
+                self._send_json_response({
+                    "success": True,
+                    "total_bill": str(result.total_bill),
+                    "settlements": [s.model_dump() for s in result.settlements],
+                    "balances": {k: str(v) for k, v in result.balances.items()}
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/daily/sms-parse":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                sms = data.get("sms", "")
+                parsed = parse_bank_sms(sms)
+                self._send_json_response({
+                    "success": True,
+                    "parsed": parsed.model_dump()
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/daily/first-aid":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                condition = data.get("condition", "")
+                guide = get_first_aid_guide(condition)
+                if guide:
+                    self._send_json_response({"success": True, "guide": guide})
+                else:
+                    self._send_json_response({"success": False, "error": f"No protocol for '{condition}'"}, status=404)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
         self._send_json_response({"error": "Endpoint not found"}, status=404)
 
     def log_message(self, format, *args):
@@ -120,6 +192,7 @@ def run_server():
     print(f"[*] Network Access  : http://0.0.0.0:{PORT}")
     print("==========================================================")
 
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), AkshayAPIHandler) as httpd:
         try:
             httpd.serve_forever()
