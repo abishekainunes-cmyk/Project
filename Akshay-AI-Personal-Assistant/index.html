@@ -243,7 +243,7 @@
       font-family: var(--font-mono);
       font-weight: 700;
     }
-    .view-toggle-btn {
+    .view-toggle-btn { display: none !important;
       background: rgba(30, 41, 59, 0.9);
       border: 1px solid rgba(56, 189, 248, 0.4);
       color: #38bdf8;
@@ -743,9 +743,7 @@
       <button class="btn btn-secondary" style="font-size:0.68rem; padding:0.25rem 0.55rem; border-color:rgba(255,255,255,0.2);" onclick="openSettingsModal('devices')" title="Connected Devices & System Settings">
         ⚙️ Settings
       </button>
-      <button class="view-toggle-btn" id="btnToggleLayout" style="min-height:unset; padding:0.25rem 0.55rem;" onclick="toggleLayoutView()" title="Toggle between Full Page Fit and 4-Column Grid View">
-        <span id="viewIcon">📄</span> <span id="viewLabel">Page Fit</span>
-      </button>
+
     </div>
   </header>
 
@@ -872,9 +870,7 @@
       <span class="tab-num">4</span>
       <span>🤖 ATS JOB BOT</span>
     </button>
-    <button class="view-toggle-btn" id="btnToggleLayout" onclick="toggleLayoutView()" title="Toggle between Full Page Fit and 4-Column Grid View">
-      <span id="viewIcon">📄</span> <span id="viewLabel">Page Fit</span>
-    </button>
+
   </div>
 
   <!-- 4-COLUMN WORKSTATION CONTAINER (PAGE VIEW FIT BY DEFAULT) -->
@@ -2377,7 +2373,11 @@ Select a condition above to view immediate clinical triage steps.
       switchPage(colId);
     }
 
+    // Mandatory Permanent Page Fit Layout (No toggle buttons, permanently enforced)
+    var isPageViewMode = true;
+
     function applyLayoutView() {
+      isPageViewMode = true;
       var container = document.getElementById('workstationContainer');
       var cols = [
         document.getElementById('colBrainDump'),
@@ -2385,46 +2385,24 @@ Select a condition above to view immediate clinical triage steps.
         document.getElementById('colMedical'),
         document.getElementById('colJobBot')
       ];
-      var viewLabel = document.getElementById('viewLabel');
-      var viewIcon = document.getElementById('viewIcon');
 
-      if (isPageViewMode) {
-        if (container) {
-          container.className = 'workstation-columns mode-page';
-        }
-        for (var i = 0; i < cols.length; i++) {
-          if (!cols[i]) continue;
-          if (cols[i].id === currentActivePage) {
-            cols[i].style.display = 'block';
-            cols[i].className = 'column-box page-active';
-          } else {
-            cols[i].style.display = 'none';
-            cols[i].className = 'column-box';
-          }
-        }
-        if (viewLabel) viewLabel.textContent = 'Page Fit';
-        if (viewIcon) viewIcon.textContent = '📄';
-      } else {
-        if (container) {
-          container.className = 'workstation-columns mode-grid';
-        }
-        for (var j = 0; j < cols.length; j++) {
-          if (!cols[j]) continue;
-          cols[j].style.display = 'flex';
-          cols[j].className = 'column-box';
-        }
-        if (viewLabel) viewLabel.textContent = '4-Col Grid';
-        if (viewIcon) viewIcon.textContent = '⊞';
-
-        var target = document.getElementById(currentActivePage);
-        if (target && target.scrollIntoView) {
-          target.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      if (container) {
+        container.className = 'workstation-columns mode-page';
+      }
+      for (var i = 0; i < cols.length; i++) {
+        if (!cols[i]) continue;
+        if (cols[i].id === currentActivePage) {
+          cols[i].style.display = 'block';
+          cols[i].className = 'column-box page-active';
+        } else {
+          cols[i].style.display = 'none';
+          cols[i].className = 'column-box';
         }
       }
     }
 
     function toggleLayoutView() {
-      isPageViewMode = !isPageViewMode;
+      isPageViewMode = true;
       applyLayoutView();
     }
 
@@ -3875,10 +3853,22 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     function loadJobStream() {
-      fetch('/api/jobs/stream')
+      // First fetch history to populate appliedJobsMap, then render positions
+      fetch('/api/jobs/history')
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(histData) {
+          if (histData && histData.success && histData.applications) {
+            for (var a = 0; a < histData.applications.length; a++) {
+              appliedJobsMap[histData.applications[a].job_id] = true;
+            }
+            renderHistory(histData.applications);
+          }
+          return fetch('/api/jobs/stream');
+        })
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(data) {
           if (data && data.success && data.jobs) {
+            localJobPool = data.jobs;
             renderJobs(data.jobs);
           } else {
             renderJobs(localJobPool);
@@ -3887,62 +3877,173 @@ Select a condition above to view immediate clinical triage steps.
         .catch(function() {
           renderJobs(localJobPool);
         });
-      
-      loadJobHistory();
     }
 
+    var currentActiveNextJobId = null;
+
     function renderJobs(jobs) {
+      localJobPool = jobs || localJobPool;
       var container = document.getElementById('jobStreamContainer');
+      if (!container) return;
       container.innerHTML = '';
-      document.getElementById('jobStreamCount').textContent = jobs.length + ' Positions';
 
-      for (var i = 0; i < jobs.length; i++) {
-        var j = jobs[i];
-        var isApplied = appliedJobsMap[j.id];
-
-        var card = document.createElement('div');
-        card.className = 'job-card';
-        card.id = 'job_card_' + j.id;
-
-        var skillsHtml = '';
-        var skills = j.required_skills || [];
-        for (var s = 0; s < skills.length; s++) {
-          skillsHtml += '<span class="skill-tag skill-tag-matched">✓ ' + escapeHtml(skills[s]) + '</span>';
+      var unapplied = [];
+      var applied = [];
+      for (var i = 0; i < localJobPool.length; i++) {
+        var jb = localJobPool[i];
+        if (appliedJobsMap[jb.id]) {
+          applied.push(jb);
+        } else {
+          unapplied.push(jb);
         }
+      }
 
-        var applyBtnText = isApplied ? '✓ Applied' : '⚡ 1-Tap Apply';
-        var applyBtnClass = isApplied ? 'btn btn-secondary' : 'btn btn-purple';
-        var applyDisabled = isApplied ? 'disabled' : '';
+      currentActiveNextJobId = unapplied.length > 0 ? unapplied[0].id : null;
 
-        card.innerHTML = 
-          '<div class="job-top-row">' +
-            '<div>' +
-              '<div class="job-company">' + escapeHtml(j.company) + ' &bull; ' + escapeHtml(j.portal) + '</div>' +
-              '<div class="job-role">' + escapeHtml(j.role) + '</div>' +
+      var streamCountEl = document.getElementById('jobStreamCount');
+      if (streamCountEl) {
+        streamCountEl.textContent = unapplied.length + ' Pending • ' + applied.length + ' Saved Below';
+      }
+
+      // Live Application Queue Banner (Auto-Advance Indicator)
+      var queueBanner = document.createElement('div');
+      queueBanner.style.background = '#0f172a';
+      queueBanner.style.border = '1px solid #334155';
+      queueBanner.style.borderRadius = '6px';
+      queueBanner.style.padding = '0.45rem 0.6rem';
+      queueBanner.style.marginBottom = '0.55rem';
+      queueBanner.style.display = 'flex';
+      queueBanner.style.justifyContent = 'space-between';
+      queueBanner.style.alignItems = 'center';
+
+      var nextJobTitle = unapplied.length > 0 ? (unapplied[0].role + ' @ ' + unapplied[0].company) : 'All Matched Positions Applied!';
+      queueBanner.innerHTML = 
+        '<div>' +
+          '<span style="font-size:0.65rem; color:#38bdf8; font-weight:700;">⚡ AUTO-ADVANCE PIPELINE:</span> ' +
+          '<span style="font-size:0.62rem; color:#cbd5e1;">Next: <strong style="color:#34d399;">' + escapeHtml(nextJobTitle) + '</strong></span>' +
+        '</div>' +
+        '<span class="match-badge" style="font-size:0.55rem; border-color:#34d399; color:#34d399;">' + unapplied.length + ' IN QUEUE</span>';
+      container.appendChild(queueBanner);
+
+      // Render Active & Pending Unapplied Jobs First (Showing next automatically!)
+      for (var u = 0; u < unapplied.length; u++) {
+        var ju = unapplied[u];
+        var isNextSpotlight = (u === 0);
+        var cardU = createSingleJobCard(ju, false, isNextSpotlight, u + 1, unapplied.length);
+        container.appendChild(cardU);
+      }
+
+      // If all unapplied jobs are done, show completion congratulations card
+      if (unapplied.length === 0) {
+        var completeCard = document.createElement('div');
+        completeCard.style.background = 'rgba(16,185,129,0.12)';
+        completeCard.style.border = '1px solid #10b981';
+        completeCard.style.borderRadius = '6px';
+        completeCard.style.padding = '0.85rem';
+        completeCard.style.textAlign = 'center';
+        completeCard.style.marginBottom = '0.65rem';
+        completeCard.innerHTML = 
+          '<div style="font-size:0.95rem; font-weight:800; color:#34d399;">🎉 ALL POSITIONS APPLIED &amp; ARCHIVED!</div>' +
+          '<div style="font-size:0.65rem; color:#cbd5e1; margin-top:0.25rem;">Every vacancy has been submitted with a tailored ATS CV and saved into SQLite below.</div>';
+        container.appendChild(completeCard);
+      }
+
+      // Render Applied & Archived Jobs Below
+      if (applied.length > 0) {
+        var divider = document.createElement('div');
+        divider.style.display = 'flex';
+        divider.style.justifyContent = 'space-between';
+        divider.style.alignItems = 'center';
+        divider.style.margin = '0.75rem 0 0.35rem 0';
+        divider.style.padding = '0.2rem 0';
+        divider.style.borderBottom = '1px solid #334155';
+        divider.innerHTML = 
+          '<strong style="font-size:0.65rem; color:#94a3b8;">ARCHIVED APPLIED POSITIONS (' + applied.length + ' SAVED IN SQLITE BELOW):</strong>' +
+          '<span style="font-size:0.58rem; color:#34d399;">✓ Verified Saved</span>';
+        container.appendChild(divider);
+
+        for (var a = 0; a < applied.length; a++) {
+          var ja = applied[a];
+          var cardA = createSingleJobCard(ja, true, false, 0, 0);
+          container.appendChild(cardA);
+        }
+      }
+    }
+
+    function createSingleJobCard(j, isApplied, isNextSpotlight, posNum, totalPending) {
+      var card = document.createElement('div');
+      card.className = 'job-card' + (isApplied ? ' job-applied' : '');
+      card.id = 'job_card_' + j.id;
+
+      if (isNextSpotlight) {
+        card.style.border = '2px solid #38bdf8';
+        card.style.boxShadow = '0 0 16px rgba(56,189,248,0.35)';
+      } else if (isApplied) {
+        card.style.opacity = '0.82';
+        card.style.borderColor = '#10b981';
+        card.style.background = 'rgba(15,23,42,0.6)';
+      }
+
+      var skillsHtml = '';
+      var skills = j.required_skills || [];
+      for (var s = 0; s < skills.length; s++) {
+        skillsHtml += '<span class="skill-tag skill-tag-matched">✓ ' + escapeHtml(skills[s]) + '</span>';
+      }
+
+      var spotlightBadge = isNextSpotlight 
+        ? '<div style="background:rgba(56,189,248,0.18); border:1px solid #38bdf8; color:#38bdf8; font-size:0.56rem; font-weight:800; padding:0.15rem 0.4rem; border-radius:4px; display:inline-block; margin-bottom:0.35rem;">🎯 ACTIVE NEXT POSITION (Position ' + posNum + ' of ' + totalPending + ')</div>' 
+        : '';
+
+      var statusBadge = isApplied 
+        ? '<span class="match-badge" style="background:#10b981; color:#fff; border-color:#10b981; font-size:0.58rem;">✓ APPLIED &amp; SAVED BELOW</span>'
+        : '<span class="match-badge">' + j.match_score + '% ATS MATCH</span>';
+
+      var buttonsHtml = '';
+      if (isApplied) {
+        buttonsHtml = 
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:0.3rem;">' +
+            '<span style="font-size:0.58rem; color:#34d399;">✓ Saved in SQLite below &bull; Dispatched to abishekpranav403@gmail.com</span>' +
+            '<div style="display:flex; gap:0.25rem;">' +
+              '<button class="btn btn-secondary" style="font-size:0.58rem; padding:0.12rem 0.35rem;" onclick="previewAtsCvModal(\'' + j.id + '\')">📄 View CV</button>' +
+              '<button class="btn btn-secondary" style="font-size:0.58rem; color:#38bdf8; border-color:#38bdf8; padding:0.12rem 0.35rem;" onclick="openFormFillerModal(\'' + j.id + '\')">👁️ Receipt</button>' +
+              '<button class="btn btn-secondary" style="font-size:0.58rem; color:#34d399; border-color:#34d399; padding:0.12rem 0.35rem;" onclick="dispatchEmailForJob(\'' + j.id + '\')">📧 Re-Send</button>' +
             '</div>' +
-            '<span class="match-badge">' + j.match_score + '% ATS MATCH</span>' +
-          '</div>' +
-          '<div class="match-breakdown">' +
-            '<span>Skills: ' + (j.skills_match_pct || 100) + '%</span> &bull; ' +
-            '<span>Exp: ' + (j.experience_match_pct || 100) + '%</span> &bull; ' +
-            '<span>Pay: ' + (j.salary_fit_pct || 95) + '%</span>' +
-          '</div>' +
-          '<div style="font-size:0.67rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-top:0.25rem; margin-bottom:0.25rem;">' +
-            '<span>📍 ' + escapeHtml(j.location) + '</span>' +
-            '<span style="color:#34d399; font-weight:700;">' + escapeHtml(j.salary_range) + '</span>' +
-          '</div>' +
-          '<div style="font-size:0.65rem; color:#94a3b8; line-height:1.3; margin-bottom:0.3rem;">' + escapeHtml(j.description) + '</div>' +
-          '<div class="skills-tag-row" style="margin-bottom:0.35rem;">' + skillsHtml + '</div>' +
+          '</div>';
+      } else {
+        buttonsHtml = 
           '<div style="display:flex; gap:0.35rem; margin-top:0.35rem; flex-wrap:wrap;">' +
-            '<button class="btn btn-accent" style="flex:1; min-width:110px; font-size:0.64rem; font-weight:700;" onclick="openReviewGateModal(\'' + j.id + '\')">🛡️ Review Gate &amp; Submit</button>' +
-            '<button class="btn btn-secondary" style="font-size:0.62rem;" onclick="previewAtsCvModal(\'' + j.id + '\')">🎯 Tailored CV</button>' +
-            '<button class="btn btn-secondary" style="font-size:0.62rem; color:#c084fc; border-color:#c084fc;" onclick="openInterviewPrepModal(\'' + j.id + '\')">🎙️ Interview Prep</button>' +
-            '<button class="btn btn-secondary" style="font-size:0.62rem; color:#38bdf8; border-color:#38bdf8;" onclick="openFormFillerModal(\'' + j.id + '\')">👁️ Form Filler &amp; Receipt</button>' +
+            '<button class="btn btn-purple" style="flex:1; min-width:130px; font-size:0.66rem; font-weight:700;" onclick="applySingleJob(\'' + j.id + '\')">⚡ 1-Tap Apply &amp; Next</button>' +
+            '<button class="btn btn-accent" style="font-size:0.62rem;" onclick="openReviewGateModal(\'' + j.id + '\')">🛡️ Review Gate</button>' +
+            '<button class="btn btn-secondary" style="font-size:0.62rem;" onclick="previewAtsCvModal(\'' + j.id + '\')">🎯 100% ATS CV</button>' +
+            '<button class="btn btn-secondary" style="font-size:0.62rem;" onclick="previewCoverLetter(\'' + j.id + '\')">📄 Letter</button>' +
+            '<button class="btn btn-secondary" style="font-size:0.62rem; color:#38bdf8; border-color:#38bdf8;" onclick="openFormFillerModal(\'' + j.id + '\')">👁️ Receipt</button>' +
             '<button class="btn btn-secondary" style="font-size:0.62rem; color:#34d399; border-color:#34d399;" onclick="dispatchEmailForJob(\'' + j.id + '\')">📧 Email</button>' +
           '</div>';
-
-        container.appendChild(card);
       }
+
+      card.innerHTML = 
+        spotlightBadge +
+        '<div class="job-top-row">' +
+          '<div>' +
+            '<div class="job-company">' + escapeHtml(j.company) + ' &bull; ' + escapeHtml(j.portal) + '</div>' +
+            '<div class="job-role">' + escapeHtml(j.role) + '</div>' +
+          '</div>' +
+          statusBadge +
+        '</div>' +
+        '<div class="match-breakdown">' +
+          '<span>Skills: ' + (j.skills_match_pct || 100) + '%</span> &bull; ' +
+          '<span>Exp: ' + (j.experience_match_pct || 100) + '%</span> &bull; ' +
+          '<span>Pay: ' + (j.salary_fit_pct || 95) + '%</span>' +
+        '</div>' +
+        '<div style="font-size:0.67rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-top:0.25rem; margin-bottom:0.25rem;">' +
+          '<span>📍 ' + escapeHtml(j.location) + '</span>' +
+          '<span style="color:#34d399; font-weight:700;">' + escapeHtml(j.salary_range) + '</span>' +
+        '</div>' +
+        '<div style="font-size:0.65rem; color:#94a3b8; line-height:1.3; margin-bottom:0.3rem;">' + escapeHtml(j.description) + '</div>' +
+        '<div class="skills-tag-row" style="margin-bottom:0.35rem;">' + skillsHtml + '</div>' +
+        buttonsHtml;
+
+      return card;
     }
 
     function previewCoverLetter(jobId) {
@@ -4019,16 +4120,28 @@ Select a condition above to view immediate clinical triage steps.
 
     function applySingleJob(jobId) {
       appliedJobsMap[jobId] = true;
-      
+      var statusText = document.getElementById('botStatusText');
+      if (statusText) statusText.textContent = 'Applying to ' + jobId + ', saving below in SQLite, and advancing to next position...';
+
       fetch('/api/jobs/apply', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({job_id: jobId, letter_style: currentCoverLetterStyle})
       })
-      .then(function() { loadJobHistory(); loadJobStream(); })
-      .catch(function() { loadJobHistory(); loadJobStream(); });
-
-      respond('Precision ATS Bot: Submitted application for ' + jobId + ' (' + currentCoverLetterStyle.toUpperCase() + ' letter).');
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        // 1. Immediately save and update tracked applications below
+        loadJobHistory();
+        // 2. Refresh positions stream: applied position moves below, next position is spotlighted
+        loadJobStream();
+        // 3. Dispatch confirmation dossier to candidate email
+        dispatchEmailForJob(jobId);
+        respond('Autonomous Job Bot: Applied to ' + jobId + ', saved record in SQLite below, and auto-advanced to next position.');
+      })
+      .catch(function() {
+        loadJobHistory();
+        loadJobStream();
+      });
     }
 
     function runBatchAutoApplyBot() {
