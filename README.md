@@ -36,6 +36,7 @@ This central monorepo hosts the production-grade artificial intelligence, data e
 | 22 | [`NICMS-SriLanka-Strategic-Blueprint`](./NICMS-SriLanka-Strategic-Blueprint) | Strategic Logistics & Enterprise Planning | Strategy Engine |
 | 23 | [`NICMS-SriLanka-Strategic-Blueprint_Project`](./NICMS-SriLanka-Strategic-Blueprint_Project) | Enterprise Implementation Architecture | Enterprise Suite |
 | 24 | [`Streamlit`](./Streamlit) | Interactive Data Science & ML Prototype Hub | Interactive Hub |
+| 25 | [`Akshay-AI-Personal-Assistant`](./Akshay-AI-Personal-Assistant) | Autonomous Offline Personal AI, FinOS & Internet-in-a-Box | [Live Demo](https://akshay-ai-personal-assistant.vercel.app) |
 
 ---
 
