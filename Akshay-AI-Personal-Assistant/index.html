@@ -8,6 +8,73 @@
   <meta name="theme-color" content="#030712">
   <link rel="manifest" href="/manifest.json">
   <style>
+
+    /* Android 5.1 / Chrome 43 Compatibility Fallbacks */
+    html, body {
+      background-color: #030712 !important;
+      color: #f8fafc !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .card {
+      background-color: #0f172a !important;
+      border: 1px solid #1e293b !important;
+      color: #f8fafc !important;
+    }
+    .card-title {
+      color: #38bdf8 !important;
+      border-bottom: 1px solid #1e293b !important;
+    }
+    .telem-box {
+      background-color: #0b0f19 !important;
+      border: 1px solid #1e293b !important;
+      color: #f8fafc !important;
+    }
+    .telemetry-row {
+      display: -webkit-box !important;
+      display: -webkit-flex !important;
+      display: flex !important;
+      -webkit-box-orient: horizontal !important;
+      -webkit-flex-direction: row !important;
+      flex-direction: row !important;
+      gap: 0.5rem !important;
+    }
+    .telem-box {
+      -webkit-box-flex: 1 !important;
+      -webkit-flex: 1 !important;
+      flex: 1 !important;
+    }
+    .btn-secondary {
+      background: #1e293b !important;
+      border: 1px solid #334155 !important;
+      color: #ffffff !important;
+    }
+    .btn-accent {
+      background: #059669 !important;
+      color: #ffffff !important;
+    }
+    .btn-danger {
+      background: #dc2626 !important;
+      color: #ffffff !important;
+    }
+    .tab-btn {
+      color: #94a3b8 !important;
+    }
+    .tab-btn.active {
+      background: #0c4a6e !important;
+      color: #38bdf8 !important;
+      border: 1px solid #0284c7 !important;
+    }
+    .balance-card, .action-item-card, .ocr-preview, .audit-console {
+      background-color: #0b0f19 !important;
+      border: 1px solid #1e293b !important;
+      color: #f8fafc !important;
+    }
+    input, textarea, select {
+      background-color: #090d16 !important;
+      border: 1px solid #334155 !important;
+      color: #ffffff !important;
+    }
+
     :root {
       --bg: #030712;
       --card-bg: rgba(15, 23, 42, 0.82);
@@ -510,11 +577,17 @@
   </footer>
 
   <script>
+
+    // Polyfill for NodeList.prototype.forEach on Chrome < 51
+    if (!NodeList.prototype.forEach) {
+      NodeList.prototype.forEach = Array.prototype.forEach;
+    }
+
     // -------------------------------------------------------------
     // Register Service Worker for Galaxy Tab Offline PWA
     // -------------------------------------------------------------
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
+      navigator.serviceWorker.register('/sw.js').catch(function() {});
     }
 
     // -------------------------------------------------------------
@@ -522,17 +595,17 @@
     // -------------------------------------------------------------
     let liveLedger = { assets: 85000.00, expenses: 3250.00, netWorth: 81750.00 };
 
-    async function syncLedgerWithServer() {
-      try {
-        const res = await fetch('/api/ledger/summary');
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success) {
+    function syncLedgerWithServer() {
+      fetch('/api/ledger/summary')
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success) {
             liveLedger.netWorth = parseFloat(data.net_worth);
-            document.getElementById('valNetWorth').textContent = `₹${liveLedger.netWorth.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+            var el = document.getElementById('valNetWorth');
+            if (el) el.textContent = '₹' + liveLedger.netWorth.toLocaleString('en-IN', {minimumFractionDigits: 2});
           }
-        }
-      } catch (err) {}
+        })
+        .catch(function(err) {});
     }
     syncLedgerWithServer();
 
@@ -542,38 +615,39 @@
     let cachedIcsContent = "";
     let cachedWhatsappDraft = "";
 
-    async function executeBrainDump() {
-      const text = document.getElementById('braindumpInput').value.trim();
+    function executeBrainDump() {
+      var text = document.getElementById('braindumpInput').value.trim();
       if (!text) return;
 
-      logAudit('BRAINDUMP_PARSE', `Processing brain-dump: "${text.substring(0, 30)}..."`);
+      logAudit('BRAINDUMP_PARSE', 'Processing brain-dump: "' + text.substring(0, 30) + '..."');
 
-      try {
-        const res = await fetch('/api/braindump/process', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({text: text})
-        });
-        const data = await res.json();
-        if (data.success) {
+      fetch('/api/braindump/process', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({text: text})
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success) {
           cachedIcsContent = data.artifacts.ics_file_content;
           cachedWhatsappDraft = data.artifacts.whatsapp_draft;
           renderBrainDumpResults(data.artifacts);
           document.getElementById('btnDownloadIcs').style.display = "inline-flex";
           document.getElementById('btnCopyWhatsapp').style.display = "inline-flex";
-          respond(`Generated ${data.artifacts.calendar_events.length} calendar event(s) and ${data.artifacts.tasks.length} task(s).`);
-          return;
+          respond('Generated ' + data.artifacts.calendar_events.length + ' calendar event(s) and ' + data.artifacts.tasks.length + ' task(s).');
+        } else {
+          respond('Processed brain-dump: Extracted tasks. Ready for calendar export.');
         }
-      } catch {}
-
-      // Fallback
-      respond(`Processed brain-dump: Extracted tasks. Ready for calendar export.`);
+      })
+      .catch(function() {
+        respond('Processed brain-dump: Extracted tasks. Ready for calendar export.');
+      });
     }
 
     function renderBrainDumpResults(artifacts) {
       const container = document.getElementById('braindumpResults');
       container.innerHTML = '';
-      artifacts.calendar_events.forEach(ev => {
+      artifacts.calendar_events.forEach(function(ev) {
         const div = document.createElement('div');
         div.className = "action-item-card";
         div.innerHTML = `
@@ -585,7 +659,7 @@
         `;
         container.appendChild(div);
       });
-      artifacts.tasks.forEach(t => {
+      artifacts.tasks.forEach(function(t) {
         const div = document.createElement('div');
         div.className = "action-item-card";
         div.innerHTML = `
@@ -622,7 +696,7 @@
     // -------------------------------------------------------------
     function simulateReceiptOCR() {
       const resultBox = document.getElementById('ocrReceiptResult');
-      resultBox.textContent = `[OCR SCANNING CAMERA FRAME...]\n✓ Merchant: Reliance Smart Supermarket\n✓ Date: 25-Oct-2026\n✓ Line Items: Milk (₹65), Eggs (₹85), Olive Oil (₹450)\n✓ GST (5%): ₹30.00\n✓ TOTAL EXTRACTED: ₹630.00\n➔ Transaction written to SQLite Double-Entry Ledger.`;
+      resultBox.textContent = '[OCR SCANNING CAMERA FRAME...]\n✓ Merchant: Reliance Smart Supermarket\n✓ Date: 25-Oct-2026\n✓ Line Items: Milk (₹65), Eggs (₹85), Olive Oil (₹450)\n✓ GST (5%): ₹30.00\n✓ TOTAL EXTRACTED: ₹630.00\n➔ Transaction written to SQLite Double-Entry Ledger.';
       
       // Post live to ledger
       fetch('/api/ledger/transaction', {
@@ -637,7 +711,7 @@
           category: "Groceries",
           source: "camera_ocr"
         })
-      }).then(() => syncLedgerWithServer());
+      }).then(function() { syncLedgerWithServer(); });
 
       respond("Camera Receipt Scanned: Extracted ₹630.00 for Reliance Smart Supermarket. Ledger updated.");
       logAudit('OCR_RECEIPT', 'Processed receipt scan for ₹630.00');
@@ -646,67 +720,71 @@
     // -------------------------------------------------------------
     // 4. Option C: Offline Income Tax Optimizer
     // -------------------------------------------------------------
-    async function calculateTaxComparison() {
-      const gross = parseFloat(document.getElementById('taxGross').value) || 1400000;
-      const c80 = parseFloat(document.getElementById('tax80C').value) || 150000;
+    function calculateTaxComparison() {
+      var gross = parseFloat(document.getElementById('taxGross').value) || 1400000;
+      var c80 = parseFloat(document.getElementById('tax80C').value) || 150000;
 
-      try {
-        const res = await fetch('/api/tax/compare', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({annual_gross: gross, sec_80c: c80, sec_80d: 25000, hra: 50000})
-        });
-        const data = await res.json();
-        if (data.success) {
-          const c = data.comparison;
-          let out = `✓ RECOMMENDED: ${c.recommended_regime} (Saves ₹${parseFloat(c.tax_savings).toLocaleString('en-IN')})\n`;
-          out += `• New Regime Annual Tax: ₹${parseFloat(c.new_regime_tax).toLocaleString('en-IN')}\n`;
-          out += `• Old Regime Annual Tax: ₹${parseFloat(c.old_regime_tax).toLocaleString('en-IN')}\n`;
-          out += `• Projected Monthly Take-Home (New): ₹${parseFloat(c.monthly_take_home_new).toLocaleString('en-IN')}\n`;
-          out += `• Projected Monthly Take-Home (Old): ₹${parseFloat(c.monthly_take_home_old).toLocaleString('en-IN')}\n`;
-          out += `➔ ${c.breakdown_notes}`;
+      fetch('/api/tax/compare', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({annual_gross: gross, sec_80c: c80, sec_80d: 25000, hra: 50000})
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success) {
+          var c = data.comparison;
+          var out = '✓ RECOMMENDED: ' + c.recommended_regime + ' (Saves ₹' + parseFloat(c.tax_savings).toLocaleString('en-IN') + ')
+';
+          out += '• New Regime Annual Tax: ₹' + parseFloat(c.new_regime_tax).toLocaleString('en-IN') + '
+';
+          out += '• Old Regime Annual Tax: ₹' + parseFloat(c.old_regime_tax).toLocaleString('en-IN') + '
+';
+          out += '• Projected Monthly Take-Home (New): ₹' + parseFloat(c.monthly_take_home_new).toLocaleString('en-IN') + '
+';
+          out += '• Projected Monthly Take-Home (Old): ₹' + parseFloat(c.monthly_take_home_old).toLocaleString('en-IN') + '
+';
+          out += '➔ ' + c.breakdown_notes;
           document.getElementById('taxComparisonOutput').textContent = out;
-          respond(`Tax Comparison Calculated: ${c.recommended_regime} recommended. Net monthly take-home: ₹${parseFloat(c.monthly_take_home_new).toLocaleString('en-IN')}`);
-          logAudit('TAX_CALC', `Compared tax regimes for gross ₹${gross}`);
-          return;
+          respond('Tax Comparison Calculated: ' + c.recommended_regime + ' recommended. Net monthly take-home: ₹' + parseFloat(c.monthly_take_home_new).toLocaleString('en-IN'));
+          logAudit('TAX_CALC', 'Compared tax regimes for gross ₹' + gross);
         }
-      } catch {}
+      })
+      .catch(function() {});
     }
 
     // -------------------------------------------------------------
     // 5. Option D: Drug Interaction Safety & SOS Siren
     // -------------------------------------------------------------
-    async function checkDrugSafety() {
-      const d1 = document.getElementById('drugA').value.trim();
-      const d2 = document.getElementById('drugB').value.trim();
+    function checkDrugSafety() {
+      var d1 = document.getElementById('drugA').value.trim();
+      var d2 = document.getElementById('drugB').value.trim();
 
-      try {
-        const res = await fetch('/api/medical/drug-interaction', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({drug1: d1, drug2: d2})
-        });
-        const data = await res.json();
-        if (data.success) {
-          const it = data.interaction;
-          let out = `[SAFETY RATING: ${it.severity}]\n`;
-          out += `• Clinical Effect: ${it.clinical_effect}\n`;
-          out += `• Recommendation: ${it.recommendation}\n`;
+      fetch('/api/medical/drug-interaction', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({drug1: d1, drug2: d2})
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success) {
+          var it = data.interaction;
+          var out = '[SAFETY RATING: ' + it.severity + ']\n';
+          out += '• Clinical Effect: ' + it.clinical_effect + '\n';
+          out += '• Recommendation: ' + it.recommendation + '\n';
           document.getElementById('drugSafetyOutput').textContent = out;
-          respond(`Drug Interaction Result: Rating is ${it.severity}. ${it.recommendation}`);
-          logAudit('DRUG_CHECK', `Checked interaction: ${d1} + ${d2} (${it.severity})`);
-          return;
+          respond('Drug Interaction Result: Rating is ' + it.severity + '. ' + it.recommendation);
+          logAudit('DRUG_CHECK', 'Checked interaction: ' + d1 + ' + ' + d2 + ' (' + it.severity + ')');
         }
-      } catch {}
+      })
+      .catch(function() {});
     }
-
     // Web Audio API Emergency Siren
     let audioCtx = null;
     let sirenOsc = null;
     let sirenInterval = null;
 
     function triggerSOSAlert() {
-      document.getElementById('sosOutput').textContent = `🚨 [SOS SIREN ACTIVATED]\n• User: Abishek Pranav\n• Blood Group: O+ Positive\n• Emergency SMS Generated with GPS beacon\n• Siren sounding at maximum volume`;
+      document.getElementById('sosOutput').textContent = '🚨 [SOS SIREN ACTIVATED]\n• User: Abishek Pranav\n• Blood Group: O+ Positive\n• Emergency SMS Generated with GPS beacon\n• Siren sounding at maximum volume';
       
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -720,7 +798,7 @@
         sirenOsc.start();
 
         let high = false;
-        sirenInterval = setInterval(() => {
+        sirenInterval = setInterval(function() {
           if (sirenOsc) {
             sirenOsc.frequency.setValueAtTime(high ? 960 : 770, audioCtx.currentTime);
             high = !high;
@@ -746,7 +824,7 @@
 
     function startPomodoro() {
       if (pomoTimer) return;
-      pomoTimer = setInterval(() => {
+      pomoTimer = setInterval(function() {
         if (pomoSeconds > 0) {
           pomoSeconds--;
           updatePomoDisplay();
@@ -784,21 +862,21 @@
       recognition.interimResults = false;
       recognition.lang = 'en-US';
 
-      recognition.onstart = () => {
+      recognition.onstart = function() {
         isListening = true;
         orbCore.classList.add('active');
         voiceStatus.textContent = "LISTENING...";
         voiceStatus.style.color = "var(--accent)";
       };
 
-      recognition.onresult = (event) => {
+      recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
         addChatMessage(transcript, 'user');
         processUserQuery(transcript);
       };
 
-      recognition.onerror = () => stopListening();
-      recognition.onend = () => stopListening();
+      recognition.onerror = function() { stopListening(); };
+      recognition.onend = function() { stopListening(); };
     }
 
     function toggleSpeech() {
@@ -848,21 +926,29 @@
       ctx.stroke();
       requestAnimationFrame(drawWave);
     }
-    window.addEventListener('resize', () => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; });
+    window.addEventListener('resize', function() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; });
     canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
     drawWave();
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      event.target.classList.add('active');
+    function switchTab(tabId, btn) {
+      var panes = document.querySelectorAll('.tab-pane');
+      for (var i = 0; i < panes.length; i++) {
+        panes[i].classList.remove('active');
+      }
+      var btns = document.querySelectorAll('.tab-btn');
+      for (var j = 0; j < btns.length; j++) {
+        btns[j].classList.remove('active');
+      }
+      var target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      if (btn) btn.classList.add('active');
+      else if (window.event && window.event.target) window.event.target.classList.add('active');
     }
 
     function addChatMessage(text, sender = 'akshay') {
       const stream = document.getElementById('chatStream');
       const msg = document.createElement('div');
-      msg.className = `chat-msg msg-${sender}`;
+      msg.className = 'chat-msg msg-' + sender;
       msg.innerHTML = `
         <span class="msg-sender">${sender === 'akshay' ? 'Akshay // System' : 'You'}</span>
         <span>${escapeHtml(text)}</span>
@@ -915,11 +1001,11 @@
         return;
       }
 
-      respond(`Executing command: "${query}". Zero cloud latency.`);
+      respond('Executing command: "' + query + '". Zero cloud latency.');
     }
 
     function respond(text) {
-      setTimeout(() => {
+      setTimeout(function() {
         addChatMessage(text, 'akshay');
         speakResponse(text);
       }, 250);
@@ -928,7 +1014,7 @@
     function logAudit(eventType, action) {
       const consoleEl = document.getElementById('auditConsole');
       const now = new Date().toISOString().substring(11, 19);
-      consoleEl.textContent = `[AUDIT][${now}] ${eventType} - ${action}\n` + consoleEl.textContent;
+      consoleEl.textContent = '[AUDIT][' + now + '] ' + eventType + ' - ' + action + '\n' + consoleEl.textContent;
     }
 
     function clearAuditLog() {
