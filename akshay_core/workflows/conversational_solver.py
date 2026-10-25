@@ -86,6 +86,79 @@ def solve_user_request(user_input: str) -> Dict[str, Any]:
             "data": res.model_dump()
         }
 
+    # 2B. INVESTMENT ADVISOR, PORTFOLIO & CALENDAR ALERTS
+    if any(k in q for k in ["invest", "stock", "portfolio", "mutual fund", "asset", "sgb", "gold", "share"]) and any(k in q for k in ["suggest", "recommend", "scan", "saving", "remind", "calendar", "alert", "buy", "holding", "manage"]):
+        from akshay_core.finos.investment_manager import get_portfolio_manager
+        pm = get_portfolio_manager()
+
+        # Check if user is asking for a calendar reminder
+        if any(k in q for k in ["remind", "calendar", "alert"]):
+            nums = [float(n.replace(",", "")) for n in re.findall(r"\b\d+(?:,\d+)?\b", q)]
+            amt = nums[0] if nums and nums[0] >= 100 else 5000.0
+
+            asset = "UTI Nifty 50 Index Fund"
+            if "stock" in q:
+                asset = "Tata Motors / HDFC Bank Stocks"
+            elif "gold" in q or "sgb" in q or "asset" in q:
+                asset = "Sovereign Gold Bonds (SGB)"
+            elif "flexi" in q:
+                asset = "Parag Parikh Flexi Cap Fund"
+
+            freq = "Monthly"
+            if "week" in q or "sunday" in q:
+                freq = "Weekly"
+
+            reminder = pm.create_reminder(
+                title=f"{freq} Investment: {asset}",
+                amount=amt,
+                frequency=freq,
+                target_asset=asset,
+                alert_time="09:00 AM"
+            )
+
+            solution = (
+                f"⏰ Investment Calendar Alert Added & Scheduled:\n\n"
+                f"• Event: '{reminder.title}'\n"
+                f"• Target Asset: {reminder.target_asset}\n"
+                f"• Amount: ₹{reminder.amount:,.2f} ({reminder.frequency})\n"
+                f"• Next Execution Date: {reminder.target_date} at {reminder.alert_time}\n"
+                f"• Notification: VALARM audio & popup alert set 15 minutes in advance\n"
+                f"➔ Synced to RFC 5545 calendar. Downloadable on Page 2 for native Galaxy Tab & Google Calendar alerts."
+            )
+            return {
+                "type": "investment_reminder_solution",
+                "solution": solution,
+                "data": reminder.model_dump()
+            }
+
+        # Otherwise, user wants investment suggestions from savings
+        nums = [float(n.replace(",", "")) for n in re.findall(r"\b\d+(?:,\d+)?\b", q)]
+        savings_pool = nums[0] if nums and nums[0] >= 1000 else 81750.0  # FinOS ledger balance default
+
+        rec = pm.scan_and_suggest_investment(savings_amount=savings_pool, monthly_income=25000.0)
+        summary = pm.get_portfolio_summary()
+
+        tier_lines = []
+        for t in rec["tiers"]:
+            tier_lines.append(
+                f"• {t['tier_name']} ({int(t['target_pct'])}% ➔ ₹{t['recommended_amount']:,.2f}):\n"
+                f"  - Target Instruments: {', '.join(t['instruments'])}\n"
+                f"  - Expected CAGR: {t['expected_cagr']} | Rationale: {t['rationale']}"
+            )
+
+        solution = (
+            f"📊 AI Investment Strategy & Asset Allocation (From ₹{rec['scanned_savings_pool']:,.2f} Liquid Savings):\n\n" +
+            "\n\n".join(tier_lines) +
+            f"\n\n💰 Recommended Monthly SIP: ₹{rec['recommended_monthly_sip']:,.2f}/month (based on ₹25,000/mo minimum starting compensation)\n" +
+            f"📈 Current Active Portfolio: ₹{summary.total_current_value:,.2f} (Returns: +₹{summary.total_pnl:,.2f} / +{summary.total_pnl_pct}%)\n" +
+            f"➔ Say 'Remind me to invest' or visit Page 2 to sync calendar alerts directly to your Galaxy Tab."
+        )
+        return {
+            "type": "investment_suggestion_solution",
+            "solution": solution,
+            "data": rec
+        }
+
     # 3. SIP & WEALTH COMPOUNDING
     if any(k in q for k in ["sip", "compound", "mutual fund", "invest", "cagr", "corpus"]):
         nums = [Decimal(n.replace(",", "")) for n in re.findall(r"\b\d+(?:,\d+)?\b", q)]

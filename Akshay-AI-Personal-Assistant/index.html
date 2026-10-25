@@ -613,6 +613,8 @@
         <div class="pill" onclick="sendQuickPrompt('SIP Compounding: Invest 15000 monthly at 14% CAGR for 10 years')">📈 SIP Wealth Compounding</div>
         <div class="pill" onclick="sendQuickPrompt('Check medicine safety: Can I take Sildenafil with Nitroglycerin?')">⚠️ Lethal Drug Check</div>
         <div class="pill" onclick="sendQuickPrompt('Run Auto-Apply Bot: Apply to all matching software engineering roles with match score over 75%')">🤖 Run Job Bot</div>
+        <div class="pill" onclick="sendQuickPrompt('Suggest me in what to invest from my savings and portfolio')">💡 AI Investment Advisor</div>
+        <div class="pill" onclick="sendQuickPrompt('Remind me to invest 5000 in Nifty 50 on calendar and alert me')">⏰ Investment Reminder Alert</div>
       </div>
     </div>
 
@@ -626,7 +628,7 @@
     </button>
     <button class="col-nav-btn" id="tab_colFinos" onclick="switchPage('colFinos')">
       <span class="tab-num">2</span>
-      <span>💳 WEALTH &amp; TAX</span>
+      <span>💳 WEALTH &amp; INVEST</span>
     </button>
     <button class="col-nav-btn" id="tab_colMedical" onclick="switchPage('colMedical')">
       <span class="tab-num">3</span>
@@ -722,20 +724,104 @@
     </section>
 
     <!-- ============================================================== -->
-    <!-- COLUMN 2: FINOS WEALTH & PRECISION TAX (OPTIONS B & C)         -->
+    <!-- COLUMN 2: FINOS WEALTH & AI INVESTMENT MANAGEMENT (OPTIONS B & C) -->
     <!-- ============================================================== -->
     <section class="column-box" id="colFinos" style="display:none;">
       <div class="column-header">
-        <span class="col-title-2">💳 PAGE 2: FINOS WEALTH MANAGEMENT &amp; TAX OPTIMIZER</span>
-        <span style="font-size:0.65rem; color:#94a3b8;">DOUBLE-ENTRY &bull; SEC 115BAC</span>
+        <span class="col-title-2">💳 PAGE 2: FINOS WEALTH &amp; AI INVESTMENT PORTFOLIO</span>
+        <span class="match-badge" id="investBadge" style="border-color:#34d399; color:#34d399;">PORTFOLIO ACTIVE</span>
+      </div>
+
+      <!-- Portfolio Executive Summary Bar -->
+      <div class="sub-card" style="margin-bottom:0.45rem; border-color:rgba(52,211,153,0.35); background:rgba(15,23,42,0.85);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.35rem;">
+          <div>
+            <div style="font-size:0.6rem; color:#94a3b8; font-family:var(--font-mono);">TOTAL PORTFOLIO VALUE</div>
+            <div style="font-size:1.15rem; font-weight:800; color:#34d399; font-family:var(--font-mono);" id="valPortTotal">₹1,02,340.00</div>
+          </div>
+          <div>
+            <div style="font-size:0.6rem; color:#94a3b8; font-family:var(--font-mono);">INVESTED CAPITAL</div>
+            <div style="font-size:0.85rem; font-weight:700; color:#cbd5e1; font-family:var(--font-mono);" id="valPortInvested">₹94,100.00</div>
+          </div>
+          <div>
+            <div style="font-size:0.6rem; color:#94a3b8; font-family:var(--font-mono);">TOTAL RETURNS (P&amp;L)</div>
+            <div style="font-size:0.85rem; font-weight:700; color:#34d399; font-family:var(--font-mono);" id="valPortPnl">+₹8,240.00 (+8.8%)</div>
+          </div>
+          <div style="display:flex; gap:0.25rem; flex-wrap:wrap;">
+            <span class="match-badge" id="badgeStocks" style="color:#60a5fa; border-color:#60a5fa; font-size:0.6rem;">STOCKS 34.2%</span>
+            <span class="match-badge" id="badgeMF" style="color:#a78bfa; border-color:#a78bfa; font-size:0.6rem;">MUTUAL FUNDS 41.5%</span>
+            <span class="match-badge" id="badgeAssets" style="color:#fbbf24; border-color:#fbbf24; font-size:0.6rem;">ASSETS/GOLD 24.3%</span>
+          </div>
+        </div>
       </div>
 
       <div class="page-subgrid page-subgrid-2col">
         <div class="page-col-stack">
-          <!-- Ledger Summary -->
+          <!-- Investment Holdings Management System -->
           <div class="sub-card">
             <div class="sub-card-title" style="color:#34d399;">
-              <span>LEDGER BALANCES (SQLite)</span>
+              <span>PORTFOLIO HOLDINGS (STOCKS, MFS, ASSETS)</span>
+              <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.6rem;" onclick="toggleAddHoldingForm()">+ Add Holding</button>
+            </div>
+            
+            <!-- Category Filter Pills -->
+            <div class="style-pill-row" style="margin-bottom:0.35rem;">
+              <span class="style-pill active" id="tabInvAll" onclick="filterHoldings('ALL')">All</span>
+              <span class="style-pill" id="tabInvStock" onclick="filterHoldings('STOCK')">Stocks</span>
+              <span class="style-pill" id="tabInvMF" onclick="filterHoldings('MUTUAL_FUND')">Mutual Funds</span>
+              <span class="style-pill" id="tabInvAsset" onclick="filterHoldings('ASSET')">Assets &amp; Gold</span>
+            </div>
+
+            <!-- Add Holding Form (Collapsible) -->
+            <div id="addHoldingBox" style="display:none; padding:0.35rem; background:rgba(15,23,42,0.95); border:1px dashed #34d399; border-radius:6px; margin-bottom:0.35rem;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.25rem;">
+                <div>
+                  <label style="font-size:0.58rem; color:#94a3b8;">Category</label>
+                  <select id="newHoldCat" style="font-size:0.65rem; padding:0.15rem; width:100%; background:#1e293b; color:#fff; border:1px solid #334155; border-radius:4px;">
+                    <option value="STOCK">Stock (Equities)</option>
+                    <option value="MUTUAL_FUND">Mutual Fund</option>
+                    <option value="ASSET">Asset / Gold / Liquid</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:0.58rem; color:#94a3b8;">Symbol / Ticker</label>
+                  <input type="text" id="newHoldSym" placeholder="e.g. TATAMOTORS" style="font-size:0.65rem; padding:0.15rem;">
+                </div>
+              </div>
+              <div style="margin-top:0.2rem;">
+                <label style="font-size:0.58rem; color:#94a3b8;">Holding Name</label>
+                <input type="text" id="newHoldName" placeholder="e.g. Tata Motors Ltd" style="font-size:0.65rem; padding:0.15rem;">
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.25rem; margin-top:0.2rem;">
+                <div>
+                  <label style="font-size:0.58rem; color:#94a3b8;">Units / Shares</label>
+                  <input type="number" step="any" id="newHoldUnits" value="1" style="font-size:0.65rem; padding:0.15rem;">
+                </div>
+                <div>
+                  <label style="font-size:0.58rem; color:#94a3b8;">Buy Price (₹)</label>
+                  <input type="number" step="any" id="newHoldBuy" value="1000" style="font-size:0.65rem; padding:0.15rem;">
+                </div>
+                <div>
+                  <label style="font-size:0.58rem; color:#94a3b8;">Current Price (₹)</label>
+                  <input type="number" step="any" id="newHoldCur" value="1050" style="font-size:0.65rem; padding:0.15rem;">
+                </div>
+              </div>
+              <div style="display:flex; gap:0.25rem; margin-top:0.3rem;">
+                <button class="btn" style="flex:1; font-size:0.65rem; padding:0.2rem;" onclick="saveNewHolding()">Save Holding</button>
+                <button class="btn btn-secondary" style="font-size:0.65rem; padding:0.2rem;" onclick="toggleAddHoldingForm()">Cancel</button>
+              </div>
+            </div>
+
+            <!-- Holdings List Container -->
+            <div id="holdingsListContainer" style="display:flex; flex-direction:column; gap:0.3rem; max-height:220px; overflow-y:auto;">
+              <!-- Populated dynamically via loadInvestmentPortfolio() -->
+            </div>
+          </div>
+
+          <!-- Double-Entry Ledger Summary & Camera Receipt OCR -->
+          <div class="sub-card">
+            <div class="sub-card-title" style="color:#34d399;">
+              <span>FINOS LIQUID CASH &amp; LEDGER</span>
             </div>
             <div class="balance-grid">
               <div class="balance-cell">
@@ -748,67 +834,106 @@
               </div>
             </div>
             <div class="balance-cell" style="margin-top:0.2rem;">
-              <div style="font-size:0.62rem; color:#94a3b8;">NET WORTH</div>
+              <div style="font-size:0.62rem; color:#94a3b8;">NET WORTH (LIQUID SAVINGS POOL)</div>
               <div class="balance-val" id="valNetWorth" style="color:#34d399;">₹81,750.00</div>
             </div>
-          </div>
 
-          <!-- Option B: Camera Receipt Scanner -->
-          <div class="sub-card">
-            <div class="sub-card-title" style="color:#34d399;">
-              <span>OPTION B: CAMERA RECEIPT OCR</span>
+            <div style="margin-top:0.35rem; padding-top:0.35rem; border-top:1px dashed rgba(255,255,255,0.1);">
+              <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.15rem;">Camera Receipt OCR (Edge SQLite Sync):</div>
+              <div style="display:flex; gap:0.35rem; align-items:center;">
+                <input type="file" id="receiptFileInput" accept="image/*" capture="environment" style="font-size:0.65rem; padding:0.2rem;">
+                <button class="btn btn-secondary" onclick="simulateReceiptOCR()" style="white-space:nowrap; font-size:0.65rem;">Scan</button>
+              </div>
+              <div id="ocrReceiptResult" style="font-size:0.65rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.15rem;"></div>
             </div>
-            <p style="font-size:0.68rem; color:#94a3b8;">
-              Snap paper receipt using tablet/phone camera. Edge OCR parses line items into SQLite.
-            </p>
-            <div style="display:flex; gap:0.35rem; align-items:center;">
-              <input type="file" id="receiptFileInput" accept="image/*" capture="environment" style="font-size:0.65rem; padding:0.2rem;">
-              <button class="btn btn-secondary" onclick="simulateReceiptOCR()" style="white-space:nowrap;">Scan</button>
-            </div>
-            <div id="ocrReceiptResult" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap;"></div>
           </div>
         </div>
 
         <div class="page-col-stack">
-          <!-- Option C: Income Tax Calculator -->
-          <div class="sub-card">
+          <!-- Scan Savings & AI Investment Suggestion Engine -->
+          <div class="sub-card" style="border-color:rgba(52,211,153,0.4); background:rgba(15,23,42,0.85);">
             <div class="sub-card-title" style="color:#34d399;">
-              <span>OPTION C: INCOME TAX (SEC 115BAC)</span>
+              <span>🤖 SCAN SAVINGS &amp; AI INVESTMENT ADVISOR</span>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
+            <p style="font-size:0.66rem; color:#94a3b8;">
+              Scans your FinOS liquid savings and computes a 4-tier strategic asset allocation (Emergency, Index Core, Flexi Alpha, Bluechip Stocks).
+            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; margin-top:0.2rem;">
               <div>
-                <label style="font-size:0.62rem; color:#94a3b8;">Gross CTC (₹)</label>
-                <input type="number" id="taxGross" value="1400000">
+                <label style="font-size:0.6rem; color:#94a3b8;">Liquid Savings Pool (₹)</label>
+                <input type="number" id="savingsPoolInput" value="81750" style="font-size:0.68rem; padding:0.2rem;">
               </div>
               <div>
-                <label style="font-size:0.62rem; color:#94a3b8;">80C Deductions</label>
-                <input type="number" id="tax80C" value="150000">
+                <label style="font-size:0.6rem; color:#94a3b8;">Baseline Income (₹/mo)</label>
+                <input type="number" id="baselineIncomeInput" value="25000" style="font-size:0.68rem; padding:0.2rem;">
               </div>
             </div>
-            <button class="btn" style="margin-top:0.2rem;" onclick="calculateTaxComparison()">Compare Tax Regimes</button>
-            <div id="taxComparisonOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.25rem;"></div>
+            <button class="btn" style="margin-top:0.3rem; width:100%; font-size:0.7rem;" onclick="scanSavingsAndSuggest()">⚡ Scan Savings &amp; Suggest Allocation</button>
+            <div id="investmentSuggestionOutput" style="font-size:0.66rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.3rem; max-height:180px; overflow-y:auto;"></div>
           </div>
 
-          <!-- Advanced Wealth: Financial Runway & SIP Compounding -->
-          <div class="sub-card" style="border-color: rgba(52, 211, 153, 0.3);">
+          <!-- Calendar Alerts & SIP Reminders -->
+          <div class="sub-card" style="border-color:rgba(56,189,248,0.35);">
+            <div class="sub-card-title" style="color:#38bdf8;">
+              <span>⏰ INVESTMENT &amp; SIP CALENDAR ALERTS</span>
+              <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.6rem;" onclick="downloadInvestmentRemindersIcs()" title="Download RFC 5545 ICS with Sound/Popup Alarms">📥 .ICS Alert</button>
+            </div>
+            <div style="font-size:0.65rem; color:#94a3b8;">
+              Generates RFC 5545 calendar alerts with active <code>VALARM</code> notifications for native Galaxy Tab &amp; Google Calendar alerts.
+            </div>
+
+            <!-- Quick Presets -->
+            <div style="display:flex; gap:0.25rem; flex-wrap:wrap; margin-top:0.25rem;">
+              <button class="btn btn-secondary" style="font-size:0.58rem; padding:0.12rem 0.3rem;" onclick="fillReminderPreset('Monthly Nifty 50 SIP', 5000, 'Monthly', 'UTI Nifty 50 Index Fund')">SIP 1st (₹5k)</button>
+              <button class="btn btn-secondary" style="font-size:0.58rem; padding:0.12rem 0.3rem;" onclick="fillReminderPreset('Weekly Bluechip Stock Buy', 2500, 'Weekly', 'Tata Motors / HDFC Bank')">Stocks Sun (₹2.5k)</button>
+              <button class="btn btn-secondary" style="font-size:0.58rem; padding:0.12rem 0.3rem;" onclick="fillReminderPreset('SGB Gold Allocation', 7500, 'One-time', 'Sovereign Gold Bonds')">Gold SGB (₹7.5k)</button>
+            </div>
+
+            <!-- Add Reminder Inputs -->
+            <div style="display:grid; grid-template-columns:2fr 1fr; gap:0.25rem; margin-top:0.25rem;">
+              <input type="text" id="remTitle" placeholder="Reminder Title (e.g. Monthly Nifty SIP)" style="font-size:0.65rem; padding:0.2rem;">
+              <input type="number" id="remAmount" placeholder="Amount ₹" value="5000" style="font-size:0.65rem; padding:0.2rem;">
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.25rem; margin-top:0.2rem;">
+              <input type="text" id="remAsset" placeholder="Target Asset (e.g. Nifty 50)" value="UTI Nifty 50 Index Fund" style="font-size:0.65rem; padding:0.2rem;">
+              <select id="remFrequency" style="font-size:0.65rem; padding:0.2rem; background:#1e293b; color:#fff; border:1px solid #334155; border-radius:4px;">
+                <option value="Monthly">Monthly (1st)</option>
+                <option value="Weekly">Weekly</option>
+                <option value="One-time">One-time</option>
+              </select>
+            </div>
+            <div style="display:flex; gap:0.3rem; margin-top:0.25rem;">
+              <button class="btn" style="flex:1; font-size:0.65rem; padding:0.2rem;" onclick="saveInvestmentReminder()">+ Set Calendar Alert</button>
+            </div>
+
+            <!-- Active Reminders List -->
+            <div id="remindersListContainer" style="display:flex; flex-direction:column; gap:0.25rem; max-height:120px; overflow-y:auto; margin-top:0.25rem;">
+              <!-- Populated dynamically via loadInvestmentReminders() -->
+            </div>
+          </div>
+
+          <!-- Tax Optimizer & Runway Sub-Card -->
+          <div class="sub-card">
             <div class="sub-card-title" style="color:#34d399;">
-              <span>FINANCIAL RUNWAY &amp; SIP COMPOUNDER</span>
+              <span>TAX REGIME (115BAC) &amp; RUNWAY</span>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem;">
               <div>
-                <label style="font-size:0.62rem; color:#94a3b8;">Monthly Burn (₹)</label>
-                <input type="number" id="runwayBurn" value="15000">
+                <label style="font-size:0.6rem; color:#94a3b8;">Gross CTC (₹)</label>
+                <input type="number" id="taxGross" value="1400000" style="font-size:0.65rem; padding:0.18rem;">
               </div>
               <div>
-                <label style="font-size:0.62rem; color:#94a3b8;">Monthly SIP (₹)</label>
-                <input type="number" id="sipMonthly" value="15000">
+                <label style="font-size:0.6rem; color:#94a3b8;">Monthly Burn (₹)</label>
+                <input type="number" id="runwayBurn" value="15000" style="font-size:0.65rem; padding:0.18rem;">
               </div>
             </div>
-            <div style="display:flex; gap:0.35rem; margin-top:0.25rem;">
-              <button class="btn btn-secondary" style="flex:1;" onclick="calculateRunway()">⏳ Runway</button>
-              <button class="btn btn-accent" style="flex:1;" onclick="calculateSip()">📈 SIP 10-Yr</button>
+            <div style="display:flex; gap:0.25rem; margin-top:0.2rem;">
+              <button class="btn btn-secondary" style="flex:1; font-size:0.62rem; padding:0.18rem;" onclick="calculateTaxComparison()">Tax 115BAC</button>
+              <button class="btn btn-secondary" style="flex:1; font-size:0.62rem; padding:0.18rem;" onclick="calculateRunway()">⏳ Runway</button>
+              <button class="btn btn-accent" style="flex:1; font-size:0.62rem; padding:0.18rem;" onclick="calculateSip()">📈 SIP 10-Yr</button>
             </div>
-            <div id="wealthOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.25rem;"></div>
+            <div id="taxComparisonOutput" style="font-size:0.65rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
+            <div id="wealthOutput" style="font-size:0.65rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
           </div>
         </div>
       </div>
@@ -961,6 +1086,9 @@
             </div>
             <div style="font-size:0.62rem; color:#cbd5e1; margin-top:0.2rem;">
               🎓 MBA (AI) &bull; BBA (Data Science) &bull; CA Foundation/Inter Prep &bull; 4+ Yrs Automation Exp
+            </div>
+            <div style="font-size:0.64rem; color:#34d399; font-weight:700; margin-top:0.2rem;">
+              💰 Target Compensation: ₹25,000+/mo baseline (Auto-calculated: ₹3.0L - ₹5.4L/yr Annual CTC)
             </div>
             <div class="skills-tag-row" style="margin-top:0.35rem;">
               <span class="skill-tag skill-tag-matched">Python</span>
@@ -1751,6 +1879,291 @@
     }
     syncLedgerWithServer();
 
+    // -------------------------------------------------------------
+    // FinOS AI Investment Portfolio & Calendar Alert System (Pure ES5)
+    // -------------------------------------------------------------
+    var currentInvestmentHoldings = [];
+    var currentHoldingsFilter = 'ALL';
+    var currentReminders = [];
+
+    function loadInvestmentPortfolio() {
+      fetch('/api/investments/portfolio')
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success && data.portfolio) {
+            var p = data.portfolio;
+            currentInvestmentHoldings = p.holdings || [];
+
+            var elTotal = document.getElementById('valPortTotal');
+            var elInv = document.getElementById('valPortInvested');
+            var elPnl = document.getElementById('valPortPnl');
+            if (elTotal) elTotal.textContent = '₹' + p.total_current_value.toLocaleString('en-IN', {minimumFractionDigits: 2});
+            if (elInv) elInv.textContent = '₹' + p.total_invested.toLocaleString('en-IN', {minimumFractionDigits: 2});
+            if (elPnl) {
+              var sign = p.total_pnl >= 0 ? '+' : '';
+              elPnl.textContent = sign + '₹' + p.total_pnl.toLocaleString('en-IN', {minimumFractionDigits: 2}) + ' (' + sign + p.total_pnl_pct + '%)';
+              elPnl.style.color = p.total_pnl >= 0 ? '#34d399' : '#f87171';
+            }
+
+            var bStock = document.getElementById('badgeStocks');
+            var bMF = document.getElementById('badgeMF');
+            var bAssets = document.getElementById('badgeAssets');
+            if (bStock) bStock.textContent = 'STOCKS ' + p.stocks_pct + '%';
+            if (bMF) bMF.textContent = 'MUTUAL FUNDS ' + p.mutual_funds_pct + '%';
+            if (bAssets) bAssets.textContent = 'ASSETS/GOLD ' + p.assets_pct + '%';
+
+            renderHoldingsList();
+          }
+        })
+        .catch(function(err) {});
+    }
+
+    function renderHoldingsList() {
+      var container = document.getElementById('holdingsListContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      var filtered = [];
+      for (var i = 0; i < currentInvestmentHoldings.length; i++) {
+        var h = currentInvestmentHoldings[i];
+        if (currentHoldingsFilter === 'ALL' || h.category === currentHoldingsFilter) {
+          filtered.push(h);
+        }
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="font-size:0.65rem; color:#94a3b8; font-style:italic;">No holdings in this category. Tap + Add Holding to add one.</div>';
+        return;
+      }
+
+      for (var j = 0; j < filtered.length; j++) {
+        var item = filtered[j];
+        var itemCard = document.createElement('div');
+        itemCard.style.padding = '0.35rem 0.45rem';
+        itemCard.style.background = 'rgba(15, 23, 42, 0.7)';
+        itemCard.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+        itemCard.style.borderRadius = '5px';
+        itemCard.style.fontSize = '0.65rem';
+
+        var catColor = item.category === 'STOCK' ? '#60a5fa' : (item.category === 'MUTUAL_FUND' ? '#a78bfa' : '#fbbf24');
+        var pnlColor = item.pnl_amount >= 0 ? '#34d399' : '#f87171';
+        var sign = item.pnl_amount >= 0 ? '+' : '';
+
+        itemCard.innerHTML = 
+          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+            '<div>' +
+              '<span style="font-family:var(--font-mono); font-weight:700; color:' + catColor + ';">' + escapeHtml(item.symbol) + '</span> ' +
+              '<span style="color:#94a3b8; font-size:0.6rem;">&bull; ' + escapeHtml(item.name) + '</span>' +
+            '</div>' +
+            '<div style="text-align:right;">' +
+              '<span style="font-family:var(--font-mono); font-weight:700; color:#fff;">₹' + item.current_value.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.15rem; font-size:0.6rem; color:#94a3b8;">' +
+            '<span>' + item.units + ' units @ ₹' + item.buy_price.toLocaleString('en-IN') + ' (Cur: ₹' + item.current_price.toLocaleString('en-IN') + ')</span>' +
+            '<span style="font-weight:700; color:' + pnlColor + ';">' + sign + '₹' + item.pnl_amount.toLocaleString('en-IN', {minimumFractionDigits: 2}) + ' (' + sign + item.pnl_pct + '%)</span>' +
+          '</div>';
+
+        container.appendChild(itemCard);
+      }
+    }
+
+    function filterHoldings(cat) {
+      currentHoldingsFilter = cat;
+      var pills = ['tabInvAll', 'tabInvStock', 'tabInvMF', 'tabInvAsset'];
+      for (var i = 0; i < pills.length; i++) {
+        var el = document.getElementById(pills[i]);
+        if (el) el.className = 'style-pill';
+      }
+      var activeId = cat === 'ALL' ? 'tabInvAll' : (cat === 'STOCK' ? 'tabInvStock' : (cat === 'MUTUAL_FUND' ? 'tabInvMF' : 'tabInvAsset'));
+      var activeEl = document.getElementById(activeId);
+      if (activeEl) activeEl.className = 'style-pill active';
+      renderHoldingsList();
+    }
+
+    function toggleAddHoldingForm() {
+      var box = document.getElementById('addHoldingBox');
+      if (!box) return;
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function saveNewHolding() {
+      var cat = document.getElementById('newHoldCat').value;
+      var sym = document.getElementById('newHoldSym').value.trim();
+      var name = document.getElementById('newHoldName').value.trim();
+      var units = parseFloat(document.getElementById('newHoldUnits').value) || 1;
+      var buy = parseFloat(document.getElementById('newHoldBuy').value) || 0;
+      var cur = parseFloat(document.getElementById('newHoldCur').value) || buy;
+
+      if (!sym || !name) {
+        alert('Please specify symbol and name for the investment.');
+        return;
+      }
+
+      fetch('/api/investments/holding/add', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          category: cat,
+          symbol: sym,
+          name: name,
+          units: units,
+          buy_price: buy,
+          current_price: cur
+        })
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (data && data.success) {
+          toggleAddHoldingForm();
+          loadInvestmentPortfolio();
+          respond('Added ' + sym + ' (' + name + ') to portfolio holdings.');
+        }
+      })
+      .catch(function(err) {
+        alert('Error saving holding: ' + err.message);
+      });
+    }
+
+    function scanSavingsAndSuggest() {
+      var outBox = document.getElementById('investmentSuggestionOutput');
+      if (outBox) outBox.textContent = 'Scanning FinOS liquid reserves and running 4-Tier Strategic Asset Allocation...';
+
+      var savings = parseFloat(document.getElementById('savingsPoolInput').value) || 81750.0;
+      var income = parseFloat(document.getElementById('baselineIncomeInput').value) || 25000.0;
+
+      fetch('/api/investments/suggest', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          savings_amount: savings,
+          monthly_income: income
+        })
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (data && data.success && data.suggestion) {
+          var s = data.suggestion;
+          var lines = [];
+          lines.push('✓ AI STRATEGIC ALLOCATION FOR ₹' + s.scanned_savings_pool.toLocaleString('en-IN') + ' SAVINGS:');
+          lines.push('• Recommended Monthly SIP: ₹' + s.recommended_monthly_sip.toLocaleString('en-IN') + '/month (from ₹' + s.monthly_income_baseline.toLocaleString('en-IN') + ' base)');
+          lines.push('');
+          for (var i = 0; i < s.tiers.length; i++) {
+            var t = s.tiers[i];
+            lines.push('【' + t.tier_name + '】: ₹' + t.recommended_amount.toLocaleString('en-IN') + ' (' + t.target_pct + '%)');
+            lines.push('  ➔ ' + t.instruments.join(' | '));
+            lines.push('  ➔ Expected: ' + t.expected_cagr + ' | ' + t.rationale);
+            lines.push('');
+          }
+          lines.push('➔ Tap "+ Set Calendar Alert" below to schedule automatic SIP reminders with audio alarms.');
+          if (outBox) outBox.textContent = lines.join('\n');
+        }
+      })
+      .catch(function(err) {
+        if (outBox) outBox.textContent = 'Error calculating suggestion: ' + err.message;
+      });
+    }
+
+    function fillReminderPreset(title, amount, freq, targetAsset) {
+      document.getElementById('remTitle').value = title;
+      document.getElementById('remAmount').value = amount;
+      document.getElementById('remFrequency').value = freq;
+      document.getElementById('remAsset').value = targetAsset;
+    }
+
+    function loadInvestmentReminders() {
+      fetch('/api/investments/reminders')
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success && data.reminders) {
+            currentReminders = data.reminders;
+            renderRemindersList();
+          }
+        })
+        .catch(function(err) {});
+    }
+
+    function renderRemindersList() {
+      var container = document.getElementById('remindersListContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (currentReminders.length === 0) {
+        container.innerHTML = '<div style="font-size:0.62rem; color:#94a3b8; font-style:italic;">No active calendar alerts. Add one above.</div>';
+        return;
+      }
+
+      for (var i = 0; i < currentReminders.length; i++) {
+        var rem = currentReminders[i];
+        var item = document.createElement('div');
+        item.style.padding = '0.25rem 0.35rem';
+        item.style.background = 'rgba(15, 23, 42, 0.7)';
+        item.style.border = '1px solid rgba(56, 189, 248, 0.2)';
+        item.style.borderRadius = '4px';
+        item.style.fontSize = '0.62rem';
+        item.style.display = 'flex';
+        item.style.justifyContent = 'space-between';
+        item.style.alignItems = 'center';
+
+        item.innerHTML = 
+          '<div>' +
+            '<div style="font-weight:700; color:#38bdf8;">' + escapeHtml(rem.title) + '</div>' +
+            '<div style="font-size:0.58rem; color:#94a3b8;">₹' + rem.amount.toLocaleString('en-IN') + ' &bull; ' + escapeHtml(rem.target_asset) + ' (' + rem.frequency + ' &bull; Next: ' + rem.target_date + ')</div>' +
+          '</div>' +
+          '<div style="display:flex; gap:0.2rem;">' +
+            '<button class="btn btn-secondary" style="padding:0.1rem 0.25rem; font-size:0.55rem; color:#f87171;" onclick="deleteInvestmentReminderItem(' + rem.id + ')">✕</button>' +
+          '</div>';
+
+        container.appendChild(item);
+      }
+    }
+
+    function saveInvestmentReminder() {
+      var title = document.getElementById('remTitle').value.trim() || 'Investment Reminder';
+      var amount = parseFloat(document.getElementById('remAmount').value) || 5000.0;
+      var asset = document.getElementById('remAsset').value.trim() || 'Mutual Fund';
+      var freq = document.getElementById('remFrequency').value;
+
+      fetch('/api/investments/reminder/create', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          title: title,
+          amount: amount,
+          target_asset: asset,
+          frequency: freq
+        })
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (data && data.success) {
+          loadInvestmentReminders();
+          respond('Scheduled Calendar Reminder: "' + title + '" (₹' + amount.toLocaleString('en-IN') + ' ' + freq + '). Audio alarm active.');
+        }
+      })
+      .catch(function(err) {
+        alert('Error creating reminder: ' + err.message);
+      });
+    }
+
+    function deleteInvestmentReminderItem(id) {
+      fetch('/api/investments/reminder/delete', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: id})
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function() {
+        loadInvestmentReminders();
+      })
+      .catch(function() {});
+    }
+
+    function downloadInvestmentRemindersIcs() {
+      window.location.href = '/api/investments/reminder/ics';
+    }
+
+
     function simulateReceiptOCR() {
       var resultBox = document.getElementById('ocrReceiptResult');
       resultBox.textContent = '[OCR SCANNING FRAME...]\n✓ Merchant: Reliance Smart\n✓ Extracted: ₹630.00 (Groceries)\n➔ Written to SQLite Ledger.';
@@ -2122,7 +2535,7 @@
         role: "Generative AI & Automation Engineer",
         location: "Bengaluru (Remote)",
         work_type: "Remote",
-        salary_range: "₹22L - ₹28L",
+        salary_range: "₹30,000 - ₹45,000/mo (₹3.6L - ₹5.4L/yr)",
         required_skills: ["Generative AI", "Python", "REST APIs", "Google Apps Script", "Workflow Automation"],
         description: "Develop and deploy production Generative AI automation pipelines, API-driven workflows, and autonomous document processing systems.",
         match_score: 100,
@@ -2139,7 +2552,7 @@
         role: "Forward Deployed AI Solutions Engineer",
         location: "Coimbatore / Bengaluru (Hybrid)",
         work_type: "Hybrid",
-        salary_range: "₹20L - ₹26L",
+        salary_range: "₹28,000 - ₹40,000/mo (₹3.4L - ₹4.8L/yr)",
         required_skills: ["Python", "Generative AI", "Process Mapping", "REST APIs", "PowerShell"],
         description: "Deploy operational automation tools, product research integrations, and enterprise client workflows with robust error handling.",
         match_score: 100,
@@ -2156,7 +2569,7 @@
         role: "Business Analyst — AI & Operations Automation",
         location: "Chennai (Hybrid)",
         work_type: "Hybrid",
-        salary_range: "₹16L - ₹22L",
+        salary_range: "₹25,000 - ₹35,000/mo (₹3.0L - ₹4.2L/yr)",
         required_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Power BI", "Python", "Workflow Automation"],
         description: "Translate complex business operations into automated workflows, streamline reconciliation and documentation, and build executive reporting.",
         match_score: 100,
@@ -2173,7 +2586,7 @@
         role: "Data Analytics & Automation Specialist",
         location: "Remote",
         work_type: "Remote",
-        salary_range: "₹18L - ₹24L",
+        salary_range: "₹26,000 - ₹38,000/mo (₹3.1L - ₹4.6L/yr)",
         required_skills: ["SQL", "Python", "Power BI", "Streamlit", "Excel", "Data Classification"],
         description: "Build intelligent data indexing pipelines, interactive analytics dashboards, and deduplication models across large-scale document repositories.",
         match_score: 100,
@@ -2190,7 +2603,7 @@
         role: "Operations Automation & Systems Lead",
         location: "Bengaluru (On-site)",
         work_type: "On-site",
-        salary_range: "₹17L - ₹23L",
+        salary_range: "₹25,000 - ₹36,000/mo (₹3.0L - ₹4.3L/yr)",
         required_skills: ["Python", "PowerShell", "Task Scheduler", "Google Drive API", "CRM", "Excel"],
         description: "Automate cross-border documentation, shipment tracking pipelines, and scheduled system maintenance workers with 30%+ efficiency gains.",
         match_score: 100,
@@ -2684,28 +3097,28 @@
         target_role_clusters: [
           {
             title: "Generative AI & Forward Deployed Engineer",
-            salary_range: "₹20,00,000 - ₹28,00,000",
+            salary_range: "₹30,000 - ₹45,000/mo (₹3.6L - ₹5.4L/yr)",
             demand_level: "Extremely High (98/100)",
             best_fit_reasons: "Direct alignment with Nunes Instrumentation deployment of IGNIS, Gmail cleaners, and AI product research.",
             recommended_portals: ["LinkedIn", "Wellfound"]
           },
           {
             title: "Business Analyst — AI & Operations Automation",
-            salary_range: "₹16,00,000 - ₹22,00,000",
+            salary_range: "₹25,000 - ₹35,000/mo (₹3.0L - ₹4.2L/yr)",
             demand_level: "Very High (95/100)",
             best_fit_reasons: "Leverages MBA + CA background + RXG Studios export automation & Tally/TDS financial reconciliation.",
             recommended_portals: ["LinkedIn", "Naukri"]
           },
           {
             title: "Data Analytics & Automation Specialist",
-            salary_range: "₹18,00,000 - ₹24,00,000",
+            salary_range: "₹26,000 - ₹38,000/mo (₹3.1L - ₹4.6L/yr)",
             demand_level: "High (92/100)",
             best_fit_reasons: "Combines BBA (Data Science) + SQL + Power BI + Streamlit ML with large-scale indexing algorithms.",
             recommended_portals: ["Indeed", "LinkedIn"]
           },
           {
             title: "Operations Automation & Workflow Systems Lead",
-            salary_range: "₹17,00,000 - ₹23,00,000",
+            salary_range: "₹25,000 - ₹36,000/mo (₹3.0L - ₹4.3L/yr)",
             demand_level: "High (90/100)",
             best_fit_reasons: "Cross-border logistics (Greenwich Meridian), recruitment automation (Smyrna Trust), and Windows PowerShell scripting.",
             recommended_portals: ["Naukri", "Indeed"]
@@ -2905,6 +3318,8 @@
       .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
       .then(function(data) {
         loadDadDashboard();
+    loadInvestmentPortfolio();
+    loadInvestmentReminders();
         respond('Dad\'s Medical Tracker: Refilled +30 pills for ' + (data && data.medicine ? data.medicine.name : medId) + '. Reorder schedule updated.');
       })
       .catch(function() {

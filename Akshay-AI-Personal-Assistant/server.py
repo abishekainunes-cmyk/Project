@@ -51,6 +51,8 @@ ledger_instance = FinOSLedger(db_path=DB_PATH)
 job_bot_instance = JobBotManager(db_path=DATA_DIR / "akshay_jobs.db")
 from akshay_core.workflows.dad_medical_tracker import DadMedicalTracker
 dad_tracker_instance = DadMedicalTracker(db_path=DATA_DIR / "akshay_dad_medical.db")
+from akshay_core.finos.investment_manager import get_portfolio_manager
+portfolio_instance = get_portfolio_manager(db_path=DATA_DIR / "akshay_investments.db")
 audit_logger = get_audit_logger()
 
 
@@ -192,6 +194,36 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(200)
                 self.send_header("Content-Type", "text/calendar; charset=utf-8")
                 self.send_header("Content-Disposition", f"attachment; filename=\"dad_{doc_id.lower()}_booking.ics\"")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/portfolio":
+            try:
+                summary = portfolio_instance.get_portfolio_summary()
+                self._send_json_response({"success": True, "portfolio": summary.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/reminders":
+            try:
+                reminders = portfolio_instance.get_reminders()
+                self._send_json_response({"success": True, "reminders": [r.model_dump() for r in reminders]})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/reminder/ics":
+            try:
+                ics_data = portfolio_instance.generate_reminders_ics()
+                payload = ics_data.encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "text/calendar; charset=utf-8")
+                self.send_header("Content-Disposition", "attachment; filename=\"investment_sip_reminders.ics\"")
                 self.send_header("Content-Length", str(len(payload)))
                 self.end_headers()
                 self.wfile.write(payload)
@@ -531,6 +563,81 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 image_b64 = data.get("image_b64")
                 ocr_result = dad_tracker_instance.process_prescription_ocr(text_snippet=text_snippet, image_b64=image_b64)
                 self._send_json_response(ocr_result)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/suggest":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                res = portfolio_instance.scan_and_suggest_investment(
+                    savings_amount=data.get("savings_amount"),
+                    monthly_income=data.get("monthly_income")
+                )
+                self._send_json_response({"success": True, "suggestion": res})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/holding/add":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                holding = portfolio_instance.add_holding(
+                    category=data.get("category", "STOCK"),
+                    symbol=data.get("symbol", ""),
+                    name=data.get("name", ""),
+                    units=float(data.get("units", 1.0)),
+                    buy_price=float(data.get("buy_price", 0.0)),
+                    current_price=float(data.get("current_price", data.get("buy_price", 0.0))),
+                    notes=data.get("notes", "")
+                )
+                self._send_json_response({"success": True, "holding": holding.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/holding/delete":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                holding_id = int(data.get("id", 0))
+                deleted = portfolio_instance.delete_holding(holding_id)
+                self._send_json_response({"success": deleted})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/reminder/create":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                rem = portfolio_instance.create_reminder(
+                    title=data.get("title", "Investment Reminder"),
+                    amount=float(data.get("amount", 5000.0)),
+                    frequency=data.get("frequency", "Monthly"),
+                    target_date=data.get("target_date"),
+                    target_asset=data.get("target_asset", "Mutual Fund"),
+                    alert_time=data.get("alert_time", "09:00 AM")
+                )
+                self._send_json_response({"success": True, "reminder": rem.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/reminder/delete":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                rem_id = int(data.get("id", 0))
+                deleted = portfolio_instance.delete_reminder(rem_id)
+                self._send_json_response({"success": deleted})
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return

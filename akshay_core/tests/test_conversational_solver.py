@@ -49,3 +49,19 @@ def test_solver_braindump_direct_solution():
     assert "Calendar Event:" in res["solution"]
     assert "Action Tasks:" in res["solution"]
     assert ".ICS calendar file ready" in res["solution"]
+
+
+def test_solver_investment_suggestion():
+    res = solve_user_request("Suggest me in what to invest from my savings")
+    assert res["type"] == "investment_suggestion_solution"
+    assert "AI Investment Strategy & Asset Allocation" in res["solution"]
+    assert "Tier 1: Emergency & Capital Preservation" in res["solution"]
+    assert "Nifty 50 Index" in res["solution"]
+
+
+def test_solver_investment_reminder_calendar():
+    res = solve_user_request("Remind me to invest 5000 in Nifty 50 mutual fund on calendar and alert me")
+    assert res["type"] == "investment_reminder_solution"
+    assert "Investment Calendar Alert Added & Scheduled" in res["solution"]
+    assert "5,000.00" in res["solution"]
+    assert "VALARM" in res["solution"]

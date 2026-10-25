@@ -20,7 +20,9 @@ def test_career_recommendations():
     assert len(recs["target_role_clusters"]) >= 4
     first_cluster = recs["target_role_clusters"][0]
     assert "Generative AI" in first_cluster["title"]
-    assert "20,00,000" in first_cluster["salary_range"]
+    assert "30,000" in first_cluster["salary_range"]
+    assert "mo" in first_cluster["salary_range"]
+    assert "yr" in first_cluster["salary_range"]
 
 
 def test_tailor_cv_100_ats_score():

@@ -166,6 +166,20 @@ class ATSScoreBreakdown(BaseModel):
     tailored_headline: str = ""
 
 
+def format_monthly_to_annual_compensation(monthly_min: int, monthly_max: int) -> Dict[str, Any]:
+    """Calculates annual CTC automatically from monthly compensation (baseline starting from ₹25,000+/month)."""
+    annual_min = monthly_min * 12
+    annual_max = monthly_max * 12
+    formatted = f"₹{monthly_min:,} - ₹{monthly_max:,}/mo (₹{annual_min/100000:.1f}L - ₹{annual_max/100000:.1f}L/yr)"
+    return {
+        "monthly_min": monthly_min,
+        "monthly_max": monthly_max,
+        "annual_min": annual_min,
+        "annual_max": annual_max,
+        "formatted": formatted
+    }
+
+
 class CVTailorEngine:
     """Dynamic ATS 100% Resume Synthesis & Career Recommendation Engine."""
 
@@ -179,31 +193,40 @@ class CVTailorEngine:
                 "Proven enterprise record: 19,000+ records indexed in IGNIS, 30% reduction in manual export processing, 50% recruitment acceleration",
                 "Deep API experience: Google Workspace APIs, Gmail API OAuth, Google Drive API, REST APIs, and PowerShell automation"
             ],
+            "baseline_compensation": "₹25,000+ per month minimum (₹3,00,000+ Annual CTC starting base)",
             "target_role_clusters": [
                 {
                     "title": "Generative AI & Forward Deployed Engineer",
-                    "salary_range": "₹20,00,000 - ₹28,00,000",
+                    "monthly_range": "₹30,000 - ₹45,000/mo",
+                    "salary_range": "₹30,000 - ₹45,000/mo (₹3.6L - ₹5.4L/yr)",
+                    "annual_ctc_inr": 450000,
                     "demand_level": "Extremely High (98/100)",
                     "best_fit_reasons": "Direct alignment with Nunes Instrumentation deployment of IGNIS, Gmail cleaners, and AI product research.",
                     "recommended_portals": ["LinkedIn", "Wellfound"]
                 },
                 {
                     "title": "Business Analyst — AI & Operations Automation",
-                    "salary_range": "₹16,00,000 - ₹22,00,000",
+                    "monthly_range": "₹25,000 - ₹35,000/mo",
+                    "salary_range": "₹25,000 - ₹35,000/mo (₹3.0L - ₹4.2L/yr)",
+                    "annual_ctc_inr": 360000,
                     "demand_level": "Very High (95/100)",
                     "best_fit_reasons": "Leverages MBA + CA background + RXG Studios export automation & Tally/TDS financial reconciliation.",
                     "recommended_portals": ["LinkedIn", "Naukri"]
                 },
                 {
                     "title": "Data Analytics & Automation Specialist",
-                    "salary_range": "₹18,00,000 - ₹24,00,000",
+                    "monthly_range": "₹26,000 - ₹38,000/mo",
+                    "salary_range": "₹26,000 - ₹38,000/mo (₹3.1L - ₹4.6L/yr)",
+                    "annual_ctc_inr": 384000,
                     "demand_level": "High (92/100)",
                     "best_fit_reasons": "Combines BBA (Data Science) + SQL + Power BI + Streamlit ML with large-scale indexing algorithms.",
                     "recommended_portals": ["Indeed", "LinkedIn"]
                 },
                 {
                     "title": "Operations Automation & Workflow Systems Lead",
-                    "salary_range": "₹17,00,000 - ₹23,00,000",
+                    "monthly_range": "₹25,000 - ₹36,000/mo",
+                    "salary_range": "₹25,000 - ₹36,000/mo (₹3.0L - ₹4.3L/yr)",
+                    "annual_ctc_inr": 360000,
                     "demand_level": "High (90/100)",
                     "best_fit_reasons": "Cross-border logistics (Greenwich Meridian), recruitment automation (Smyrna Trust), and Windows PowerShell scripting.",
                     "recommended_portals": ["Naukri", "Indeed"]
