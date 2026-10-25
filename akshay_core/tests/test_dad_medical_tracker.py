@@ -103,3 +103,53 @@ def test_ics_export(temp_tracker: DadMedicalTracker):
     assert "Dr. Suresh" in ics
     assert "Cardiology" in ics
     assert "VALARM" in ics
+
+
+def test_voice_medicine_command_parsing(temp_tracker: DadMedicalTracker):
+    cmd = "remind me to add riverflow 2.5mg qty 30 , for heart"
+    res = temp_tracker.parse_voice_medicine_command(cmd)
+    assert res["success"] is True
+    med = res["medicine"]
+    assert "Riverflow" in med["name"] or "riverflow" in med["name"].lower()
+    assert med["current_qty"] == 30
+    assert med["category"] == "Cardiac"
+    assert "Suresh" in med["prescribed_by"]
+    assert res["reorder_alert_date"] < res["runout_date"]
+    assert "VALARM" in res["voice_response"] or "Calendar" in res["voice_response"]
+
+
+def test_bulk_medicine_addition(temp_tracker: DadMedicalTracker):
+    bulk_input = """
+    Riverflow 2.5mg, 30, Heart, 1
+    Donepezil 5mg, 45, Neuro, 1
+    Telmisartan 40mg, 60, Heart, 1
+    """
+    added = temp_tracker.parse_and_add_bulk_text(bulk_input)
+    assert len(added) == 3
+
+    rf = next(m for m in added if "Riverflow" in m.name)
+    assert rf.current_qty == 30
+    assert rf.category == "Cardiac"
+
+    dp = next(m for m in added if "Donepezil" in m.name)
+    assert dp.current_qty == 45
+    assert dp.category == "Neuro"
+
+
+def test_unified_calendar_and_master_ics(temp_tracker: DadMedicalTracker):
+    # Add a medicine
+    temp_tracker.parse_voice_medicine_command("remind me to add riverflow 2.5mg qty 30 , for heart")
+    events = temp_tracker.get_unified_calendar_events()
+    assert len(events) >= 3
+
+    # Check event types
+    event_types = {e["type"] for e in events}
+    assert "MEDICINE_REORDER" in event_types
+    assert "DOCTOR_BOOKING_OPEN" in event_types
+    assert "DOCTOR_CONSULTATION" in event_types
+
+    ics = temp_tracker.generate_unified_calendar_ics()
+    assert "BEGIN:VCALENDAR" in ics
+    assert "BEGIN:VEVENT" in ics
+    assert "BEGIN:VALARM" in ics
+    assert "Riverflow" in ics or "reorder" in ics.lower()

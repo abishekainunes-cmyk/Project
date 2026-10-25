@@ -65,3 +65,15 @@ def test_solver_investment_reminder_calendar():
     assert "Investment Calendar Alert Added & Scheduled" in res["solution"]
     assert "5,000.00" in res["solution"]
     assert "VALARM" in res["solution"]
+
+
+def test_solver_dad_medicine_voice_add():
+    res = solve_user_request("remind me to add riverflow 2.5mg qty 30 , for heart")
+    assert res["type"] == "dad_medicine_voice_add"
+    assert "Riverflow" in res["solution"] or "riverflow" in res["solution"].lower()
+    assert "30 pills" in res["solution"]
+    assert "Dr. Suresh (Heart)" in res["solution"]
+    assert "VALARM" in res["solution"] or "Calendar" in res["solution"]
+    # Ensure no parroting of the prompt
+    assert "Executing command:" not in res["solution"]
+

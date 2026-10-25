@@ -201,6 +201,28 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
 
+        elif path == "/api/dad/calendar/events":
+            try:
+                events = dad_tracker_instance.get_unified_calendar_events()
+                self._send_json_response({"success": True, "events": events, "count": len(events)})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/calendar/ics":
+            try:
+                ics_data = dad_tracker_instance.generate_unified_calendar_ics()
+                payload = ics_data.encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "text/calendar; charset=utf-8")
+                self.send_header("Content-Disposition", "attachment; filename=\"dad_family_care_calendar.ics\"")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
         elif path == "/api/investments/portfolio":
             try:
                 summary = portfolio_instance.get_portfolio_summary()
@@ -544,6 +566,34 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                     notes=data.get("notes", "")
                 )
                 self._send_json_response({"success": True, "medicine": new_med.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/medicine/bulk_add":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                bulk_text = data.get("bulk_text", "")
+                added = dad_tracker_instance.parse_and_add_bulk_text(bulk_text)
+                self._send_json_response({
+                    "success": True,
+                    "medicines": [m.model_dump() for m in added],
+                    "count": len(added)
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/medicine/voice_command":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                cmd = data.get("command", "")
+                res = dad_tracker_instance.parse_voice_medicine_command(cmd)
+                self._send_json_response(res)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return

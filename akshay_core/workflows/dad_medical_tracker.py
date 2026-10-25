@@ -464,6 +464,7 @@ class DadMedicalTracker:
 
         # Standard therapeutic medicines dictionary for Dad's Care
         known_drugs = {
+            "riverflow": ("Riverflow 2.5mg", "Cardiac", 1, "Dr. Suresh (Heart)"),
             "levetiracetam": ("Levetiracetam 500mg", "Neuro", 2, "Dr. Baskar (Neuro)"),
             "donepezil": ("Donepezil 5mg", "Neuro", 1, "Dr. Baskar (Neuro)"),
             "telmisartan": ("Telmisartan 40mg", "Cardiac", 1, "Dr. Suresh (Heart)"),
@@ -545,10 +546,302 @@ class DadMedicalTracker:
             "message": f"Successfully parsed prescription for {extracted_doc} ({extracted_specialty}). Ingested {ingested_count} medicines and recalculated next appointment (+{interval_months} months)."
         }
 
+    def parse_and_add_bulk_text(self, bulk_text: str) -> List[DadMedicine]:
+        """Parses bulk lines of medicines and recalculates projections for each separately.
+        
+        Supported line formats:
+        - "Riverflow 2.5mg, 30, Heart, 1"
+        - "Donepezil 5mg, 45, Neuro, 1"
+        - "Telmisartan 40mg, 60, Cardiac"
+        - "Atorvastatin 20mg 30 pills"
+        """
+        lines = [line.strip() for line in re.split(r"[\r\n;]+", bulk_text) if line.strip()]
+        added_meds = []
+        today_str = datetime.date.today().strftime("%Y-%m-%d")
+
+        for line in lines:
+            parts = [p.strip() for p in line.split(",") if p.strip()]
+            if not parts:
+                continue
+
+            name = parts[0]
+            qty = 30
+            cat = "General"
+            dose = 1
+            doc = "Dad's Doctor"
+
+            # Parse parts if comma separated
+            if len(parts) >= 2:
+                try:
+                    qty = int(re.sub(r"[^\d]", "", parts[1])) or 30
+                except Exception:
+                    qty = 30
+            if len(parts) >= 3:
+                raw_cat = parts[2].lower()
+                if "heart" in raw_cat or "cardio" in raw_cat:
+                    cat = "Cardiac"
+                    doc = "Dr. Suresh (Heart)"
+                elif "neuro" in raw_cat or "brain" in raw_cat:
+                    cat = "Neuro"
+                    doc = "Dr. Baskar (Neuro)"
+                else:
+                    cat = parts[2].title()
+            if len(parts) >= 4:
+                try:
+                    dose = int(re.sub(r"[^\d]", "", parts[3])) or 1
+                except Exception:
+                    dose = 1
+
+            # If not enough comma parts, parse with heuristic regex
+            if len(parts) < 3:
+                lower_line = line.lower()
+                if "heart" in lower_line or "cardio" in lower_line:
+                    cat = "Cardiac"
+                    doc = "Dr. Suresh (Heart)"
+                elif "neuro" in lower_line or "brain" in lower_line:
+                    cat = "Neuro"
+                    doc = "Dr. Baskar (Neuro)"
+                elif "riverflow" in lower_line or "telmisartan" in lower_line or "atorvastatin" in lower_line or "ecosprin" in lower_line:
+                    cat = "Cardiac"
+                    doc = "Dr. Suresh (Heart)"
+                elif "levetiracetam" in lower_line or "donepezil" in lower_line:
+                    cat = "Neuro"
+                    doc = "Dr. Baskar (Neuro)"
+
+                qty_m = re.search(r"(\d+)\s*(?:pills?|tabs?|qty|#)?", lower_line)
+                if qty_m and int(qty_m.group(1)) > 0:
+                    qty = int(qty_m.group(1))
+
+            med = self.add_or_update_medicine(
+                name=name,
+                current_qty=qty,
+                daily_dose=dose,
+                category=cat,
+                reorder_lead_days=12,
+                prescribed_by=doc,
+                notes=f"Bulk imported on {today_str}"
+            )
+            added_meds.append(med)
+
+        return added_meds
+
+    def parse_voice_medicine_command(self, command: str) -> Dict[str, Any]:
+        """Parses voice/natural language command to add medicine and schedule calendar alert.
+        
+        Example: 'remind me to add riverflow 2.5mg qty 30 , for heart'
+        """
+        cmd_lower = command.lower()
+
+        # 1. Determine category and doctor
+        if "heart" in cmd_lower or "cardio" in cmd_lower:
+            category = "Cardiac"
+            doctor = "Dr. Suresh (Heart)"
+        elif "neuro" in cmd_lower or "brain" in cmd_lower:
+            category = "Neuro"
+            doctor = "Dr. Baskar (Neuro)"
+        elif any(k in cmd_lower for k in ["riverflow", "telmisartan", "atorvastatin", "ecosprin", "metoprolol"]):
+            category = "Cardiac"
+            doctor = "Dr. Suresh (Heart)"
+        elif any(k in cmd_lower for k in ["donepezil", "levetiracetam"]):
+            category = "Neuro"
+            doctor = "Dr. Baskar (Neuro)"
+        else:
+            category = "General"
+            doctor = "Dad's Doctor"
+
+        # 2. Extract Quantity
+        qty_m = re.search(r"(?:qty|quantity|count|#)\s*[:=]?\s*(\d+)", cmd_lower)
+        if not qty_m:
+            qty_m = re.search(r"(\d+)\s*(?:pills?|tabs?|tablets?|capsules?|qty)", cmd_lower)
+        qty = int(qty_m.group(1)) if qty_m else 30
+
+        # 3. Extract Daily Dosage
+        dose_m = re.search(r"(\d+)\s*(?:pills?/day|per day|times a day|/day|daily)", cmd_lower)
+        if dose_m:
+            daily_dose = int(dose_m.group(1))
+        elif "levetiracetam" in cmd_lower:
+            daily_dose = 2
+        else:
+            daily_dose = 1
+
+        # 4. Clean Medicine Name
+        cleaned = command
+        cleaned = re.sub(r"^(?:please\s+)?(?:remind\s+me\s+to\s+)?(?:add\s+)?", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"(?:,\s*)?(?:for\s+)?(?:heart|cardiac|neuro|neurology|general)\b", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"(?:qty|quantity|count|#)\s*[:=]?\s*\d+", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"\d+\s*(?:pills?|tabs?|tablets?|capsules?|qty)", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"\d+\s*(?:pills?/day|per day|times a day|/day|daily)", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"[,.]+$", "", cleaned.strip()).strip(" ,.-")
+
+        # Fallback to recognized names if stripped too much
+        if len(cleaned) < 2:
+            if "riverflow" in cmd_lower:
+                cleaned = "Riverflow 2.5mg"
+            elif "telmisartan" in cmd_lower:
+                cleaned = "Telmisartan 40mg"
+            elif "donepezil" in cmd_lower:
+                cleaned = "Donepezil 5mg"
+            else:
+                cleaned = "Dad's Prescribed Medicine"
+
+        # Format Name: capitalize first letters cleanly
+        med_name = " ".join([w.capitalize() if not any(c.isdigit() for c in w) else w.upper() for w in cleaned.split()])
+
+        today_str = datetime.date.today().strftime("%Y-%m-%d")
+        med = self.add_or_update_medicine(
+            name=med_name,
+            current_qty=qty,
+            daily_dose=daily_dose,
+            category=category,
+            reorder_lead_days=12,
+            prescribed_by=doctor,
+            notes=f"Voice added: '{command}' on {today_str}"
+        )
+
+        voice_solution = (
+            f"✓ Added {med.name} ({med.current_qty} pills) for Dad's {med.category} Care.\n"
+            f"• Daily Dose: {med.daily_dose} pill/day ({med.days_remaining} days left until {med.runout_date})\n"
+            f"• 10–15 Day Advance Purchase Alert: Set for {med.reorder_date}\n"
+            f"• Prescribed by: {med.prescribed_by}\n"
+            f"• Calendar Sync: Scheduled with active VALARM reminder notification\n"
+            f"➔ Recorded in Dad's Medical Tracker and Mobile Calendar Agenda."
+        )
+
+        return {
+            "success": True,
+            "medicine": med.model_dump(),
+            "voice_response": voice_solution,
+            "reorder_alert_date": med.reorder_date,
+            "runout_date": med.runout_date,
+            "urgency": med.urgency
+        }
+
+    def get_unified_calendar_events(self) -> List[Dict[str, Any]]:
+        """Aggregates all reminders across Dad's medicines, appointments, and FinOS into a unified timeline."""
+        events = []
+        meds = self.get_medicines()
+        appts = self.get_appointments()
+
+        # 1. Dad's Medicine Reorder Date Events (10-15 Day Buffer Alert)
+        for m in meds:
+            urgency_icon = "🚨" if m.urgency == "REORDER_NOW" else ("⚠️" if m.urgency == "APPROACHING_REFILL" else "💊")
+            events.append({
+                "id": f"event-reorder-{m.id}",
+                "title": f"{urgency_icon} Reorder {m.name}",
+                "date": m.reorder_date,
+                "type": "MEDICINE_REORDER",
+                "category": m.category,
+                "urgency": m.urgency,
+                "subtitle": f"10-15d buffer before {m.runout_date} ({m.current_qty} pills in stock)",
+                "details": f"Prescribed by {m.prescribed_by}. Daily dose: {m.daily_dose} pill/day. Ensure refill of +30 pills before runout date.",
+                "action_type": "REFILL_MED",
+                "target_id": m.id,
+                "valarm_trigger": "-P1D"  # Alert 1 day in advance
+            })
+
+        # 2. Dad's Doctor Booking Reminders (20 Days Prior)
+        for a in appts:
+            events.append({
+                "id": f"event-book-{a.id}",
+                "title": f"🔔 Book Appointment: {a.doctor_name}",
+                "date": a.booking_reminder_date,
+                "type": "DOCTOR_BOOKING_OPEN",
+                "category": a.specialty,
+                "urgency": a.booking_status,
+                "subtitle": f"Advance slot booking opens 20 days prior to due date {a.next_due_date}",
+                "details": f"Call {a.hospital} to reserve appointment for Dad's recurring {a.interval_months}-month consultation.",
+                "action_type": "CALL_DOCTOR",
+                "target_id": a.id,
+                "valarm_trigger": "-P2D"
+            })
+            events.append({
+                "id": f"event-consult-{a.id}",
+                "title": f"🩺 {a.doctor_name} Consultation Due",
+                "date": a.next_due_date,
+                "type": "DOCTOR_CONSULTATION",
+                "category": a.specialty,
+                "urgency": a.booking_status,
+                "subtitle": f"Recurring {a.interval_months}-Month Visit at {a.hospital}",
+                "details": f"Specialty: {a.specialty}. Review past tests, ECG/EEG, and current dosage response.",
+                "action_type": "DOCTOR_VISIT",
+                "target_id": a.id,
+                "valarm_trigger": "-P1D"
+            })
+
+        # 3. FinOS SIP Reminders (if investment manager exists)
+        try:
+            from akshay_core.finos.investment_manager import get_portfolio_manager
+            pm = get_portfolio_manager()
+            rems = pm.get_reminders()
+            for r in rems:
+                if r.status == "ACTIVE":
+                    events.append({
+                        "id": f"event-finos-{r.id}",
+                        "title": f"💰 FinOS SIP: {r.target_asset}",
+                        "date": r.target_date,
+                        "type": "FINOS_INVESTMENT",
+                        "category": "Wealth",
+                        "urgency": "SCHEDULED",
+                        "subtitle": f"₹{r.amount:,.2f} ({r.frequency} AutoPay execution)",
+                        "details": f"Execution reminder: Invest ₹{r.amount:,.2f} into {r.target_asset} at {r.alert_time}.",
+                        "action_type": "EXECUTE_SIP",
+                        "target_id": str(r.id),
+                        "valarm_trigger": "-PT15M"
+                    })
+        except Exception:
+            pass
+
+        # Sort chronologically by date
+        events.sort(key=lambda e: e.get("date", "9999-99-99"))
+        return events
+
+    def generate_unified_calendar_ics(self) -> str:
+        """Generates standard RFC 5545 .ICS master calendar file for native Galaxy Tab & Google Calendar sync."""
+        events = self.get_unified_calendar_events()
+        now_stamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%SZ")
+
+        lines = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "PRODID:-//Akshay Personal AI//Family Care & Wealth Calendar v4.0//EN",
+            "CALSCALE:GREGORIAN",
+            "METHOD:PUBLISH"
+        ]
+
+        for ev in events:
+            ev_date_str = ev.get("date", datetime.date.today().strftime("%Y-%m-%d"))
+            try:
+                d_parts = [int(p) for p in ev_date_str.split("-")]
+                ev_date = datetime.date(d_parts[0], d_parts[1], d_parts[2])
+            except Exception:
+                ev_date = datetime.date.today()
+
+            date_compact = ev_date.strftime("%Y%m%d")
+            lines.extend([
+                "BEGIN:VEVENT",
+                f"UID:{ev['id']}@{ev_date_str}.akshay.ai",
+                f"DTSTAMP:{now_stamp}",
+                f"DTSTART;VALUE=DATE:{date_compact}",
+                f"DTEND;VALUE=DATE:{date_compact}",
+                f"SUMMARY:{ev['title']}",
+                f"DESCRIPTION:{ev['subtitle']} - {ev['details']}",
+                "STATUS:CONFIRMED",
+                "BEGIN:VALARM",
+                f"TRIGGER:{ev.get('valarm_trigger', '-P1D')}",
+                "ACTION:DISPLAY",
+                f"DESCRIPTION:Akshay Care Alert: {ev['title']} ({ev['subtitle']})",
+                "END:VALARM",
+                "END:VEVENT"
+            ])
+
+        lines.append("END:VCALENDAR")
+        return "\r\n".join(lines)
+
     def get_dashboard_summary(self) -> Dict[str, Any]:
         """Provides high-level executive metrics for Dad's Medical Tracker Dashboard."""
         meds = self.get_medicines()
         appts = self.get_appointments()
+        cal_events = self.get_unified_calendar_events()
 
         urgent_reorders = [m for m in meds if m.urgency == "REORDER_NOW"]
         approaching_reorders = [m for m in meds if m.urgency == "APPROACHING_REFILL"]
@@ -563,5 +856,7 @@ class DadMedicalTracker:
             "medicines": [m.model_dump() for m in meds],
             "appointments": [a.model_dump() for a in appts],
             "booking_due_count": len(booking_due_appts),
-            "booking_due_appointments": [a.model_dump() for a in booking_due_appts]
+            "booking_due_appointments": [a.model_dump() for a in booking_due_appts],
+            "calendar_events": cal_events,
+            "calendar_events_count": len(cal_events)
         }

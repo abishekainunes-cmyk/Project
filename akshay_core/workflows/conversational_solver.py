@@ -180,6 +180,18 @@ def solve_user_request(user_input: str) -> Dict[str, Any]:
             "data": res.model_dump()
         }
 
+    # 3B. DAD'S MEDICINE TRACKER - VOICE ADD, REFILL & CALENDAR REMINDER
+    if (("remind" in q or "please" in q or "schedule" in q) and ("add" in q or "buy" in q or "stock" in q) and any(k in q for k in ["medicine", "qty", "heart", "neuro", "cardiac", "pill", "tablet", "riverflow", "donepezil", "telmisartan", "levetiracetam", "atorvastatin", "mg"])) or \
+       (any(k in q for k in ["add medicine", "refill medicine", "new medicine"]) or ("add" in q and any(k in q for k in ["riverflow", "donepezil", "telmisartan", "atorvastatin", "ecosprin", "levetiracetam"]))):
+        from akshay_core.workflows.dad_medical_tracker import DadMedicalTracker
+        tracker = DadMedicalTracker()
+        parsed = tracker.parse_voice_medicine_command(clean_text)
+        return {
+            "type": "dad_medicine_voice_add",
+            "solution": parsed["voice_response"],
+            "data": parsed
+        }
+
     # 4. CLINICAL DRUG SAFETY & INTERACTION
     if any(k in q for k in ["drug", "medicine", "tablet", "paracetamol", "ibuprofen", "aspirin", "viagra", "sildenafil", "nitroglycerin", "alcohol"]):
         drugs = []
