@@ -49,6 +49,8 @@ DB_PATH = DATA_DIR / "akshay_ledger.db"
 
 ledger_instance = FinOSLedger(db_path=DB_PATH)
 job_bot_instance = JobBotManager(db_path=DATA_DIR / "akshay_jobs.db")
+from akshay_core.workflows.dad_medical_tracker import DadMedicalTracker
+dad_tracker_instance = DadMedicalTracker(db_path=DATA_DIR / "akshay_dad_medical.db")
 audit_logger = get_audit_logger()
 
 
@@ -150,6 +152,46 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(200)
                 self.send_header("Content-Type", "text/csv; charset=utf-8")
                 self.send_header("Content-Disposition", "attachment; filename=\"akshay_job_applications.csv\"")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/dashboard":
+            try:
+                summary = dad_tracker_instance.get_dashboard_summary()
+                self._send_json_response({"success": True, "dashboard": summary})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/medicines":
+            try:
+                meds = dad_tracker_instance.get_medicines()
+                self._send_json_response({"success": True, "medicines": [m.model_dump() for m in meds]})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/appointments":
+            try:
+                appts = dad_tracker_instance.get_appointments()
+                self._send_json_response({"success": True, "appointments": [a.model_dump() for a in appts]})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/appointment/ics":
+            try:
+                query = urllib.parse.parse_qs(parsed_url.query)
+                doc_id = query.get("id", ["DOC-NEURO"])[0]
+                ics_data = dad_tracker_instance.generate_appointment_ics(doc_id)
+                payload = ics_data.encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "text/calendar; charset=utf-8")
+                self.send_header("Content-Disposition", f"attachment; filename=\"dad_{doc_id.lower()}_booking.ics\"")
                 self.send_header("Content-Length", str(len(payload)))
                 self.end_headers()
                 self.wfile.write(payload)
@@ -430,6 +472,65 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 query = data.get("query", "")
                 result = solve_user_request(query)
                 self._send_json_response({"success": True, "result": result})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/medicine/refill":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                med_id = data.get("id")
+                qty = int(data.get("qty", 30))
+                updated = dad_tracker_instance.refill_medicine(med_id, qty_added=qty)
+                self._send_json_response({"success": True, "medicine": updated.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/medicine/add":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                new_med = dad_tracker_instance.add_or_update_medicine(
+                    name=data.get("name", "New Medicine"),
+                    current_qty=int(data.get("current_qty", 30)),
+                    daily_dose=int(data.get("daily_dose", 1)),
+                    category=data.get("category", "General"),
+                    reorder_lead_days=int(data.get("reorder_lead_days", 12)),
+                    prescribed_by=data.get("prescribed_by", ""),
+                    notes=data.get("notes", "")
+                )
+                self._send_json_response({"success": True, "medicine": new_med.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/appointment/visit":
+            try:
+                import datetime
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                doc_id = data.get("id", "DOC-NEURO")
+                visit_date = data.get("visit_date", datetime.date.today().strftime("%Y-%m-%d"))
+                updated = dad_tracker_instance.update_appointment_visit(doc_id, visit_date)
+                self._send_json_response({"success": True, "appointment": updated.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/prescription/ocr":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                text_snippet = data.get("text")
+                image_b64 = data.get("image_b64")
+                ocr_result = dad_tracker_instance.process_prescription_ocr(text_snippet=text_snippet, image_b64=image_b64)
+                self._send_json_response(ocr_result)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return

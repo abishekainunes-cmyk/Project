@@ -132,6 +132,55 @@ def solve_user_request(user_input: str) -> Dict[str, Any]:
             "data": res.model_dump()
         }
 
+    # 4B. DAD'S MEDICAL TRACKER & APPOINTMENTS (NEURO 5M & HEART 6M)
+    if any(k in q for k in ["dad", "father", "baskar", "suresh", "neuro", "heart", "cardiolog", "neurolog", "refill", "buy medicine", "appointment date"]):
+        from akshay_core.workflows.dad_medical_tracker import DadMedicalTracker
+        tracker = DadMedicalTracker()
+        
+        # Doctor appointments check
+        if any(k in q for k in ["appointment", "doctor", "baskar", "suresh", "visit", "book"]):
+            appts = tracker.get_appointments()
+            appt_lines = []
+            for a in appts:
+                status_icon = "🔴 BOOK NOW" if a.booking_status == "BOOK_NOW" else ("🟡 UPCOMING BOOKING" if a.booking_status == "UPCOMING_BOOKING" else "🟢 ON TRACK")
+                appt_lines.append(
+                    f"• {a.doctor_name} ({a.specialty} • Every {a.interval_months} Months):\n"
+                    f"  - Next Due Date: {a.next_due_date} ({a.days_until_due} days remaining)\n"
+                    f"  - Advance Booking Date: {a.booking_reminder_date} (Book 20 days prior!)\n"
+                    f"  - Status: {status_icon} at {a.hospital}"
+                )
+            solution = (
+                f"🩺 Dad's Doctor Appointments & Booking Engine:\n\n" +
+                "\n\n".join(appt_lines) +
+                f"\n\n➔ RFC 5545 calendar alerts and reminder triggers are active on Page 3."
+            )
+            return {
+                "type": "dad_medical_solution",
+                "solution": solution,
+                "data": [a.model_dump() for a in appts]
+            }
+
+        # Medicine stock & 10-15 day advance reorder check
+        meds = tracker.get_medicines()
+        med_lines = []
+        for m in meds:
+            urg_icon = "🚨 REORDER NOW" if m.urgency == "REORDER_NOW" else ("⚠️ REFILL SOON" if m.urgency == "APPROACHING_REFILL" else "✓ In Stock")
+            med_lines.append(
+                f"• {m.name} ({m.prescribed_by}): {m.current_qty} pills ({m.days_remaining} days left)\n"
+                f"  - Exact Reorder Date: {m.reorder_date} (10-15 days buffer before {m.runout_date})\n"
+                f"  - Status: {urg_icon}"
+            )
+        solution = (
+            f"💊 Dad's Medicine Inventory & Predictive Refill Tracker:\n\n" +
+            "\n".join(med_lines[:5]) +
+            f"\n\n➔ Refill orders can be logged directly on Page 3 (1-Tap Refill +30 pills)."
+        )
+        return {
+            "type": "dad_medical_solution",
+            "solution": solution,
+            "data": [m.model_dump() for m in meds]
+        }
+
     # 5. EMERGENCY FIRST AID
     if any(k in q for k in ["burn", "bleeding", "choking", "cut", "wound", "first aid", "faint"]):
         cond = "burn" if "burn" in q else ("bleeding" if "bleed" in q else "first_aid")

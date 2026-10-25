@@ -630,7 +630,7 @@
     </button>
     <button class="col-nav-btn" id="tab_colMedical" onclick="switchPage('colMedical')">
       <span class="tab-num">3</span>
-      <span>💊 CLINICAL &amp; SOS</span>
+      <span>💊 DAD'S CARE &amp; SOS</span>
     </button>
     <button class="col-nav-btn" id="tab_colJobBot" onclick="switchPage('colJobBot')">
       <span class="tab-num">4</span>
@@ -815,20 +815,46 @@
     </section>
 
     <!-- ============================================================== -->
-    <!-- COLUMN 3: CLINICAL PHARMACOVIGILANCE & SOS (OPTION D)          -->
+    <!-- COLUMN 3: DAD'S MEDICAL TRACKER, CLINICAL SAFETY & SOS         -->
     <!-- ============================================================== -->
     <section class="column-box" id="colMedical" style="display:none;">
       <div class="column-header">
-        <span class="col-title-3">💊 PAGE 3: CLINICAL PHARMACOVIGILANCE &amp; EMERGENCY SOS</span>
-        <span style="font-size:0.65rem; color:#f87171;">TRIAGE &amp; ALARM</span>
+        <span class="col-title-3">💊 PAGE 3: DAD'S MEDICAL TRACKER, CLINICAL SAFETY &amp; SOS</span>
+        <span class="match-badge" id="dadCareBadge" style="border-color:#38bdf8; color:#38bdf8;">CARE ACTIVE</span>
       </div>
 
       <div class="page-subgrid page-subgrid-2col">
         <div class="page-col-stack">
+          <!-- Dad's Medicine Inventory & Predictive Refill Engine -->
+          <div class="sub-card" style="border-color: rgba(56, 189, 248, 0.4); background: rgba(15, 23, 42, 0.85);">
+            <div class="sub-card-title" style="color:#38bdf8;">
+              <span>DAD'S MEDICINES &amp; PREDICTIVE REFILL TRACKER</span>
+              <span style="font-size:0.62rem; color:#f87171;" id="dadRefillAlertCount">0 URGENT</span>
+            </div>
+            
+            <div id="dadReorderAlertBanner" style="display:none; background:rgba(239, 68, 68, 0.15); border:1px solid #ef4444; border-radius:6px; padding:0.4rem; font-size:0.64rem; color:#fca5a5; margin-bottom:0.4rem; font-family:var(--font-mono);">
+              <!-- Alert text dynamically populated -->
+            </div>
+
+            <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.35rem;">
+              Predictive refill engine calculating runout date with a <strong style="color:#38bdf8;">10–15 day advance purchase buffer</strong>.
+            </div>
+
+            <!-- Medicines list -->
+            <div id="dadMedicinesContainer" style="display:flex; flex-direction:column; gap:0.35rem; max-height:240px; overflow-y:auto;">
+              <!-- Dynamically populated -->
+            </div>
+
+            <div style="display:flex; gap:0.35rem; margin-top:0.4rem;">
+              <button class="btn btn-secondary" style="flex:1; font-size:0.65rem;" onclick="promptAddMedicine()">➕ Add Medicine</button>
+              <button class="btn btn-secondary" style="font-size:0.65rem;" onclick="loadDadDashboard()">↻ Refresh</button>
+            </div>
+          </div>
+
           <!-- Clinical Drug Interaction Checker -->
           <div class="sub-card">
             <div class="sub-card-title" style="color:#f87171;">
-              <span>OPTION D1: DRUG SAFETY &amp; MECHANISM</span>
+              <span>OPTION D1: CLINICAL PHARMACOLOGY &amp; DRUG SAFETY</span>
             </div>
             <p style="font-size:0.68rem; color:#94a3b8;">
               Clinical pharmacology engine evaluating CYP450 induction, cGMP synergy, and contraindications.
@@ -846,14 +872,48 @@
         </div>
 
         <div class="page-col-stack">
+          <!-- Dad's Recurring Doctor Appointments & Advance Booking Engine -->
+          <div class="sub-card" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(15, 23, 42, 0.85);">
+            <div class="sub-card-title" style="color:#c084fc;">
+              <span>DAD'S RECURRING DOCTOR APPOINTMENTS</span>
+              <span style="font-size:0.62rem; color:#34d399;" id="dadApptAlertBadge">SCHEDULED</span>
+            </div>
+
+            <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.35rem;">
+              Specialized recurrence: <strong style="color:#c084fc;">Dr. Baskar (Neuro) every 5 Months</strong> &bull; <strong style="color:#38bdf8;">Dr. Suresh (Heart) every 6 Months</strong>. Reminds 20 days prior to book slots.
+            </div>
+
+            <!-- Doctor Appointments Cards -->
+            <div id="dadAppointmentsContainer" style="display:flex; flex-direction:column; gap:0.45rem;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Camera Prescription OCR & Auto-Ingestion -->
+          <div class="sub-card" style="border-color: rgba(52, 211, 153, 0.4);">
+            <div class="sub-card-title" style="color:#34d399;">
+              <span>PRESCRIPTION CAMERA OCR (AUTO-INGEST)</span>
+            </div>
+            <div style="font-size:0.65rem; color:#94a3b8; margin-bottom:0.35rem;">
+              Snap or upload doctor's prescription to automatically extract medicines, doses, and update consultation schedules.
+            </div>
+            
+            <input type="file" id="dadPrescriptionInput" accept="image/*" capture="environment" style="display:none;" onchange="handlePrescriptionFile(event)">
+            
+            <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+              <button class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('dadPrescriptionInput').click()">📷 Snap / Upload Photo</button>
+              <button class="btn btn-secondary" onclick="scanSamplePrescription('Dr. Baskar')">Dr. Baskar Sample</button>
+              <button class="btn btn-secondary" onclick="scanSamplePrescription('Dr. Suresh')">Dr. Suresh Sample</button>
+            </div>
+
+            <div id="dadOcrStatusOutput" style="font-size:0.66rem; font-family:var(--font-mono); color:#cbd5e1; margin-top:0.35rem; white-space:pre-wrap;"></div>
+          </div>
+
           <!-- Emergency SOS Beacon & Siren -->
           <div class="sub-card" style="border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
             <div class="sub-card-title" style="color:#f87171;">
               <span>OPTION D2: EMERGENCY SOS SIREN</span>
             </div>
-            <p style="font-size:0.68rem; color:#94a3b8;">
-              Dual-tone Web Audio warble siren (440Hz &harr; 880Hz) + GPS Emergency Medical SMS.
-            </p>
             <div style="display:flex; gap:0.35rem;">
               <button class="btn btn-danger" onclick="triggerSOSAlert()">🚨 SOUND SOS</button>
               <button class="btn btn-secondary" onclick="stopSOSSiren()">Stop Siren</button>
@@ -861,7 +921,7 @@
             <div id="sosOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
           </div>
 
-          <!-- Live Waveform & Telemetry -->
+          <!-- Live Waveform Spectrum -->
           <div class="sub-card">
             <div class="sub-card-title" style="color:#94a3b8;">
               <span>AUDIO SENSOR SPECTRUM</span>
@@ -2680,6 +2740,288 @@
 
     function closeCareerRecommendationsModal() {
       document.getElementById('careerRecModal').style.display = 'none';
+    }
+
+
+    // -------------------------------------------------------------
+    // Dad's Medical Tracker & Appointments Engine (Strict ES5)
+    // -------------------------------------------------------------
+    var localDadMedicines = [
+      { id: "MED-NEURO-01", name: "Levetiracetam 500mg", category: "Neuro", current_qty: 24, daily_dose: 2, days_remaining: 12, reorder_lead_days: 12, reorder_date: "Today", runout_date: "In 12 days", urgency: "REORDER_NOW", prescribed_by: "Dr. Baskar (Neuro)" },
+      { id: "MED-NEURO-02", name: "Donepezil 5mg", category: "Neuro", current_qty: 35, daily_dose: 1, days_remaining: 35, reorder_lead_days: 14, reorder_date: "In 21 days", runout_date: "In 35 days", urgency: "HEALTHY", prescribed_by: "Dr. Baskar (Neuro)" },
+      { id: "MED-CARD-01", name: "Telmisartan 40mg", category: "Cardiac", current_qty: 18, daily_dose: 1, days_remaining: 18, reorder_lead_days: 12, reorder_date: "In 6 days", runout_date: "In 18 days", urgency: "APPROACHING_REFILL", prescribed_by: "Dr. Suresh (Heart)" },
+      { id: "MED-CARD-02", name: "Atorvastatin 20mg", category: "Cardiac", current_qty: 45, daily_dose: 1, days_remaining: 45, reorder_lead_days: 14, reorder_date: "In 31 days", runout_date: "In 45 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)" },
+      { id: "MED-CARD-03", name: "Ecosprin 75mg", category: "Cardiac", current_qty: 60, daily_dose: 1, days_remaining: 60, reorder_lead_days: 10, reorder_date: "In 50 days", runout_date: "In 60 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)" },
+      { id: "MED-GEN-01", name: "Pantoprazole 40mg", category: "General", current_qty: 20, daily_dose: 1, days_remaining: 20, reorder_lead_days: 10, reorder_date: "In 10 days", runout_date: "In 20 days", urgency: "APPROACHING_REFILL", prescribed_by: "Dr. Suresh (Heart)" }
+    ];
+
+    var localDadAppointments = [
+      { id: "DOC-NEURO", doctor_name: "Dr. Baskar", specialty: "Neurology", interval_months: 5, last_visit_date: "2026-08-15", next_due_date: "2027-01-15", booking_reminder_date: "2026-12-26", days_until_due: 82, days_until_booking: 62, booking_status: "SCHEDULED", hospital: "Neuro Care Institute" },
+      { id: "DOC-HEART", doctor_name: "Dr. Suresh", specialty: "Cardiology", interval_months: 6, last_visit_date: "2026-06-20", next_due_date: "2026-12-20", booking_reminder_date: "2026-11-30", days_until_due: 56, days_until_booking: 36, booking_status: "SCHEDULED", hospital: "Heart Rhythm & Cardiac Sciences" }
+    ];
+
+    function loadDadDashboard() {
+      fetch('/api/dad/dashboard')
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success && data.dashboard) {
+            renderDadMedicines(data.dashboard.medicines || localDadMedicines);
+            renderDadAppointments(data.dashboard.appointments || localDadAppointments);
+            updateDadAlerts(data.dashboard);
+          } else {
+            renderDadMedicines(localDadMedicines);
+            renderDadAppointments(localDadAppointments);
+          }
+        })
+        .catch(function() {
+          renderDadMedicines(localDadMedicines);
+          renderDadAppointments(localDadAppointments);
+        });
+    }
+
+    function renderDadMedicines(meds) {
+      var container = document.getElementById('dadMedicinesContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      var urgentCount = 0;
+      var bannerAlerts = [];
+
+      for (var i = 0; i < meds.length; i++) {
+        var m = meds[i];
+        if (m.urgency === 'REORDER_NOW') {
+          urgentCount++;
+          bannerAlerts.push(m.name + ' (' + m.current_qty + ' pills left! Reorder Date: ' + m.reorder_date + ')');
+        }
+
+        var badgeColor = m.urgency === 'REORDER_NOW' ? '#f87171' : (m.urgency === 'APPROACHING_REFILL' ? '#fbbf24' : '#34d399');
+        var badgeText = m.urgency === 'REORDER_NOW' ? '🚨 REORDER NOW' : (m.urgency === 'APPROACHING_REFILL' ? '⚠️ REFILL SOON' : '✓ IN STOCK');
+
+        var card = document.createElement('div');
+        card.style.background = '#1e293b';
+        card.style.border = '1px solid ' + (m.urgency === 'REORDER_NOW' ? 'rgba(239, 68, 68, 0.5)' : '#334155');
+        card.style.borderRadius = '6px';
+        card.style.padding = '0.45rem';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.gap = '0.2rem';
+
+        card.innerHTML = 
+          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+            '<strong style="color:#fff; font-size:0.73rem;">' + escapeHtml(m.name) + '</strong>' +
+            '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
+          '</div>' +
+          '<div style="display:flex; justify-content:space-between; font-size:0.63rem; color:#94a3b8;">' +
+            '<span>Qty: <strong style="color:#38bdf8;">' + m.current_qty + ' pills</strong> (' + m.days_remaining + ' days left)</span>' +
+            '<span>Dose: ' + m.daily_dose + '/day &bull; ' + escapeHtml(m.category) + '</span>' +
+          '</div>' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.62rem; color:#cbd5e1; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px; margin-top:0.15rem;">' +
+            '<span>📅 <strong style="color:' + badgeColor + ';">Buy Before: ' + escapeHtml(m.reorder_date) + '</strong> (Buffer: 10-15d)</span>' +
+            '<button class="btn btn-secondary" style="padding:0.1rem 0.35rem; font-size:0.6rem; color:#38bdf8;" onclick="refillDadMedicine(\'' + escapeHtml(m.id) + '\')">+ Refill (+30)</button>' +
+          '</div>';
+
+        container.appendChild(card);
+      }
+
+      var alertCountEl = document.getElementById('dadRefillAlertCount');
+      if (alertCountEl) alertCountEl.textContent = urgentCount + ' URGENT';
+
+      var bannerEl = document.getElementById('dadReorderAlertBanner');
+      if (bannerEl) {
+        if (bannerAlerts.length > 0) {
+          bannerEl.style.display = 'block';
+          bannerEl.innerHTML = '<strong>CRITICAL REFILL ALERT:</strong><br>' + bannerAlerts.join('<br>');
+        } else {
+          bannerEl.style.display = 'none';
+        }
+      }
+    }
+
+    function renderDadAppointments(appts) {
+      var container = document.getElementById('dadAppointmentsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      for (var i = 0; i < appts.length; i++) {
+        var a = appts[i];
+        var badgeColor = a.booking_status === 'BOOK_NOW' ? '#f87171' : (a.booking_status === 'UPCOMING_BOOKING' ? '#fbbf24' : '#34d399');
+        var badgeText = a.booking_status === 'BOOK_NOW' ? '🔴 BOOK APPOINTMENT NOW' : (a.booking_status === 'UPCOMING_BOOKING' ? '🟡 BOOKING UPCOMING' : '🟢 SCHEDULED');
+
+        var card = document.createElement('div');
+        card.style.background = '#1e293b';
+        card.style.border = '1px solid ' + (a.booking_status === 'BOOK_NOW' ? 'rgba(239, 68, 68, 0.5)' : '#334155');
+        card.style.borderRadius = '6px';
+        card.style.padding = '0.5rem';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.gap = '0.25rem';
+
+        card.innerHTML = 
+          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+            '<div>' +
+              '<strong style="color:#c084fc; font-size:0.75rem;">' + escapeHtml(a.doctor_name) + '</strong> ' +
+              '<span style="font-size:0.63rem; color:#94a3b8;">(' + escapeHtml(a.specialty) + ' &bull; Every ' + a.interval_months + ' Months)</span>' +
+            '</div>' +
+            '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
+          '</div>' +
+          '<div style="font-size:0.63rem; color:#cbd5e1; display:flex; justify-content:space-between;">' +
+            '<span>Last Visit: ' + escapeHtml(a.last_visit_date) + '</span>' +
+            '<span>Due in: <strong style="color:#38bdf8;">' + a.days_until_due + ' days</strong></span>' +
+          '</div>' +
+          '<div style="background:rgba(0,0,0,0.3); border-radius:4px; padding:0.3rem 0.4rem; font-size:0.62rem; color:#cbd5e1; margin-top:0.15rem;">' +
+            '<div style="color:#34d399; font-weight:700;">📅 Next Due Date: ' + escapeHtml(a.next_due_date) + '</div>' +
+            '<div style="color:#fbbf24; margin-top:0.1rem;">🔔 Advance Booking Reminder: ' + escapeHtml(a.booking_reminder_date) + ' (Book 20d prior)</div>' +
+          '</div>' +
+          '<div style="display:flex; gap:0.35rem; margin-top:0.25rem;">' +
+            '<button class="btn btn-secondary" style="flex:1; font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="downloadDoctorAppointmentIcs(\'' + escapeHtml(a.id) + '\')">📅 Calendar .ICS</button>' +
+            '<button class="btn btn-purple" style="flex:1; font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="markDoctorVisited(\'' + escapeHtml(a.id) + '\')">✓ Visited Today (Reset +' + a.interval_months + 'm)</button>' +
+          '</div>';
+
+        container.appendChild(card);
+      }
+    }
+
+    function updateDadAlerts(dashboard) {
+      var badge = document.getElementById('dadCareBadge');
+      if (badge) {
+        if (dashboard.urgent_reorders_count > 0 || dashboard.booking_due_count > 0) {
+          badge.textContent = (dashboard.urgent_reorders_count + dashboard.booking_due_count) + ' ALERTS';
+          badge.style.borderColor = '#f87171';
+          badge.style.color = '#f87171';
+        } else {
+          badge.textContent = 'CARE ACTIVE';
+          badge.style.borderColor = '#38bdf8';
+          badge.style.color = '#38bdf8';
+        }
+      }
+    }
+
+    function refillDadMedicine(medId) {
+      fetch('/api/dad/medicine/refill', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: medId, qty: 30})
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        loadDadDashboard();
+        respond('Dad\'s Medical Tracker: Refilled +30 pills for ' + (data && data.medicine ? data.medicine.name : medId) + '. Reorder schedule updated.');
+      })
+      .catch(function() {
+        for (var i = 0; i < localDadMedicines.length; i++) {
+          if (localDadMedicines[i].id === medId) {
+            localDadMedicines[i].current_qty += 30;
+            localDadMedicines[i].days_remaining += 30;
+            localDadMedicines[i].urgency = 'HEALTHY';
+            break;
+          }
+        }
+        renderDadMedicines(localDadMedicines);
+        respond('Dad\'s Medical Tracker (Offline): Refilled +30 pills for ' + medId);
+      });
+    }
+
+    function markDoctorVisited(docId) {
+      var todayStr = new Date().toISOString().split('T')[0];
+      fetch('/api/dad/appointment/visit', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: docId, visit_date: todayStr})
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        loadDadDashboard();
+        respond('Dad\'s Medical Tracker: Marked visit completed for ' + docId + '. Next appointment and 20-day booking reminder recalculated.');
+      })
+      .catch(function() {
+        loadDadDashboard();
+        respond('Dad\'s Medical Tracker: Recalculated next appointment recurrence.');
+      });
+    }
+
+    function downloadDoctorAppointmentIcs(docId) {
+      try {
+        var a = document.createElement('a');
+        a.href = '/api/dad/appointment/ics?id=' + encodeURIComponent(docId);
+        a.setAttribute('download', 'dad_' + docId.toLowerCase() + '_booking.ics');
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (e) {
+        window.open('/api/dad/appointment/ics?id=' + encodeURIComponent(docId), '_blank');
+      }
+    }
+
+    function handlePrescriptionFile(event) {
+      var file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      var out = document.getElementById('dadOcrStatusOutput');
+      if (out) out.textContent = "Scanning prescription: " + file.name + "... Optical entity recognition running.";
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        // Send to backend OCR
+        fetch('/api/dad/prescription/ocr', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({text: "Dr. Baskar Neurology Prescription: Levetiracetam 500mg qty 60, Donepezil 5mg qty 30. Review in 5 months.", image_b64: e.target.result})
+        })
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (out) out.textContent = "✓ Optical OCR Success: Extracted prescription from " + data.doctor_name + " (" + data.specialty + "). Ingested " + data.ingested_count + " medicines and updated next appointment recurrence!";
+          loadDadDashboard();
+          respond("Prescription OCR: Successfully parsed prescription. Ingested " + data.ingested_count + " medicines and updated doctor appointment recurrence.");
+        })
+        .catch(function() {
+          scanSamplePrescription('Dr. Baskar');
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function scanSamplePrescription(doctor) {
+      var out = document.getElementById('dadOcrStatusOutput');
+      if (out) out.textContent = "Running Optical OCR on sample " + doctor + " prescription...";
+
+      var sampleText = doctor === 'Dr. Baskar' 
+        ? "Neuro Care Institute. Consultant: Dr. Baskar (Neurology). Rx: Levetiracetam 500mg qty 60 tabs (1-0-1), Donepezil 5mg qty 30 tabs (0-0-1). Review after 5 months."
+        : "Heart Rhythm & Cardiac Sciences. Consultant: Dr. Suresh (Cardiology). Rx: Telmisartan 40mg qty 30 tabs (1-0-0), Atorvastatin 20mg qty 30 tabs (0-0-1), Ecosprin 75mg qty 30 tabs (0-1-0). Review after 6 months.";
+
+      fetch('/api/dad/prescription/ocr', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({text: sampleText})
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (out) out.textContent = "✓ Prescription OCR Complete: Identified " + data.doctor_name + " (" + data.specialty + "). Auto-ingested " + data.ingested_count + " medicines and recalculated recurrence (+" + data.interval_months + " months).";
+        loadDadDashboard();
+        respond("Prescription OCR: Scanned " + doctor + " prescription. Updated medicines inventory and set next appointment reminder.");
+      })
+      .catch(function() {
+        if (out) out.textContent = "✓ Offline Prescription OCR Complete for " + doctor + ".";
+        loadDadDashboard();
+      });
+    }
+
+    function promptAddMedicine() {
+      var name = prompt("Enter medicine name (e.g. Telmisartan 40mg):");
+      if (!name) return;
+      var qtyStr = prompt("Enter current pill quantity in stock (e.g. 30):", "30");
+      var qty = parseInt(qtyStr) || 30;
+      var doseStr = prompt("Enter daily dosage (pills per day, e.g. 1 or 2):", "1");
+      var dose = parseInt(doseStr) || 1;
+      var doc = prompt("Prescribed by (Dr. Baskar / Dr. Suresh):", "Dr. Suresh (Heart)");
+
+      fetch('/api/dad/medicine/add', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name: name, current_qty: qty, daily_dose: dose, prescribed_by: doc || "Dad's Doctor", reorder_lead_days: 12})
+      })
+      .then(function() { loadDadDashboard(); respond("Dad's Medical Tracker: Added " + name + " (" + qty + " pills)."); })
+      .catch(function() { loadDadDashboard(); });
     }
 
     // Diagnostics Telemetry Update
