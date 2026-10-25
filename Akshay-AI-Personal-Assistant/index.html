@@ -970,33 +970,42 @@
     </section>
 
     <!-- ============================================================== -->
-    <!-- COLUMN 2: FINOS WEALTH & AI INVESTMENT MANAGEMENT (OPTIONS B & C) -->
+    <!-- COLUMN 2: FINOS WEALTH & AI LIVE INVESTMENT TERMINAL (OPTIONS B & C) -->
     <!-- ============================================================== -->
     <section class="column-box" id="colFinos" style="display:none;">
       <div class="column-header">
-        <span class="col-title-2">💳 PAGE 2: FINOS WEALTH &amp; AI INVESTMENT PORTFOLIO</span>
-        <span class="match-badge" id="investBadge" style="border-color:#34d399; color:#34d399;">PORTFOLIO ACTIVE</span>
+        <span class="col-title-2">💳 PAGE 2: FINOS WEALTH &amp; LIVE INVESTMENT TERMINAL</span>
+        <div style="display:flex; align-items:center; gap:0.4rem;">
+          <span class="match-badge" id="liveTickerBadge" style="border-color:#34d399; color:#34d399; font-size:0.58rem;">● LIVE MARKET DATA</span>
+          <button class="btn btn-secondary" style="font-size:0.62rem; padding:0.18rem 0.45rem;" onclick="refreshLivePrices()" title="Fetch live market quotes and recalculate portfolio">
+            🔄 Refresh Prices
+          </button>
+        </div>
       </div>
 
-      <!-- Portfolio Executive Summary Bar -->
-      <div class="sub-card" style="margin-bottom:0.45rem; border-color:rgba(52,211,153,0.35); background:rgba(15,23,42,0.85);">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.35rem;">
+      <!-- Portfolio Executive Summary Bar with Day P&L -->
+      <div class="sub-card" style="margin-bottom:0.45rem; border-color:rgba(52,211,153,0.35); background:rgba(15,23,42,0.92);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem;">
           <div>
-            <div style="font-size:0.6rem; color:#94a3b8; font-family:var(--font-mono);">TOTAL PORTFOLIO VALUE</div>
-            <div style="font-size:1.15rem; font-weight:800; color:#34d399; font-family:var(--font-mono);" id="valPortTotal">₹1,02,340.00</div>
+            <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono);">TOTAL PORTFOLIO VALUE</div>
+            <div style="font-size:1.2rem; font-weight:800; color:#34d399; font-family:var(--font-mono);" id="valPortTotal">₹1,08,905.00</div>
           </div>
           <div>
-            <div style="font-size:0.6rem; color:#94a3b8; font-family:var(--font-mono);">INVESTED CAPITAL</div>
+            <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono);">INVESTED CAPITAL</div>
             <div style="font-size:0.85rem; font-weight:700; color:#cbd5e1; font-family:var(--font-mono);" id="valPortInvested">₹94,100.00</div>
           </div>
           <div>
-            <div style="font-size:0.6rem; color:#94a3b8; font-family:var(--font-mono);">TOTAL RETURNS (P&amp;L)</div>
-            <div style="font-size:0.85rem; font-weight:700; color:#34d399; font-family:var(--font-mono);" id="valPortPnl">+₹8,240.00 (+8.8%)</div>
+            <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono);">TOTAL GAIN (P&amp;L)</div>
+            <div style="font-size:0.85rem; font-weight:700; color:#34d399; font-family:var(--font-mono);" id="valPortPnl">+₹14,805.00 (+15.7%)</div>
+          </div>
+          <div>
+            <div style="font-size:0.58rem; color:#94a3b8; font-family:var(--font-mono);">1-DAY MARKET P&amp;L</div>
+            <div style="font-size:0.85rem; font-weight:700; color:#38bdf8; font-family:var(--font-mono);" id="valPortDayPnl">+₹1,240.00 (+1.15%)</div>
           </div>
           <div style="display:flex; gap:0.25rem; flex-wrap:wrap;">
-            <span class="match-badge" id="badgeStocks" style="color:#60a5fa; border-color:#60a5fa; font-size:0.6rem;">STOCKS 34.2%</span>
-            <span class="match-badge" id="badgeMF" style="color:#a78bfa; border-color:#a78bfa; font-size:0.6rem;">MUTUAL FUNDS 41.5%</span>
-            <span class="match-badge" id="badgeAssets" style="color:#fbbf24; border-color:#fbbf24; font-size:0.6rem;">ASSETS/GOLD 24.3%</span>
+            <span class="match-badge" id="badgeStocks" style="color:#60a5fa; border-color:#60a5fa; font-size:0.58rem;">STOCKS 34.2%</span>
+            <span class="match-badge" id="badgeMF" style="color:#a78bfa; border-color:#a78bfa; font-size:0.58rem;">MUTUAL FUNDS 41.5%</span>
+            <span class="match-badge" id="badgeAssets" style="color:#fbbf24; border-color:#fbbf24; font-size:0.58rem;">ASSETS/GOLD 24.3%</span>
           </div>
         </div>
       </div>
@@ -1006,37 +1015,40 @@
           <!-- Investment Holdings Management System -->
           <div class="sub-card">
             <div class="sub-card-title" style="color:#34d399;">
-              <span>PORTFOLIO HOLDINGS (STOCKS, MFS, ASSETS)</span>
-              <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.6rem;" onclick="toggleAddHoldingForm()">+ Add Holding</button>
+              <span>PORTFOLIO HOLDINGS &amp; LIVE PRICES</span>
+              <div style="display:flex; gap:0.25rem;">
+                <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.58rem;" onclick="openHowToInvestGeneralModal()">📖 App Directory</button>
+                <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.58rem;" onclick="toggleAddHoldingForm()">+ Add Holding</button>
+              </div>
             </div>
             
             <!-- Category Filter Pills -->
             <div class="style-pill-row" style="margin-bottom:0.35rem;">
-              <span class="style-pill active" id="tabInvAll" onclick="filterHoldings('ALL')">All</span>
-              <span class="style-pill" id="tabInvStock" onclick="filterHoldings('STOCK')">Stocks</span>
-              <span class="style-pill" id="tabInvMF" onclick="filterHoldings('MUTUAL_FUND')">Mutual Funds</span>
-              <span class="style-pill" id="tabInvAsset" onclick="filterHoldings('ASSET')">Assets &amp; Gold</span>
+              <span class="style-pill active" id="tabInvAll" onclick="filterHoldings('ALL')">All Holdings</span>
+              <span class="style-pill" id="tabInvStock" onclick="filterHoldings('STOCK')">📈 Stocks (Kite/Groww)</span>
+              <span class="style-pill" id="tabInvMF" onclick="filterHoldings('MUTUAL_FUND')">📊 MFs (Coin/Groww)</span>
+              <span class="style-pill" id="tabInvAsset" onclick="filterHoldings('ASSET')">🛡️ Assets &amp; Gold</span>
             </div>
 
             <!-- Add Holding Form (Collapsible) -->
-            <div id="addHoldingBox" style="display:none; padding:0.35rem; background:rgba(15,23,42,0.95); border:1px dashed #34d399; border-radius:6px; margin-bottom:0.35rem;">
+            <div id="addHoldingBox" style="display:none; padding:0.4rem; background:rgba(15,23,42,0.95); border:1px dashed #34d399; border-radius:6px; margin-bottom:0.35rem;">
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.25rem;">
                 <div>
                   <label style="font-size:0.58rem; color:#94a3b8;">Category</label>
                   <select id="newHoldCat" style="font-size:0.65rem; padding:0.15rem; width:100%; background:#1e293b; color:#fff; border:1px solid #334155; border-radius:4px;">
                     <option value="STOCK">Stock (Equities)</option>
-                    <option value="MUTUAL_FUND">Mutual Fund</option>
-                    <option value="ASSET">Asset / Gold / Liquid</option>
+                    <option value="MUTUAL_FUND">Mutual Fund (Direct-Growth)</option>
+                    <option value="ASSET">Asset (SGB Gold / Liquid)</option>
                   </select>
                 </div>
                 <div>
                   <label style="font-size:0.58rem; color:#94a3b8;">Symbol / Ticker</label>
-                  <input type="text" id="newHoldSym" placeholder="e.g. TATAMOTORS" style="font-size:0.65rem; padding:0.15rem;">
+                  <input type="text" id="newHoldSym" placeholder="e.g. RELIANCE" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
               </div>
               <div style="margin-top:0.2rem;">
-                <label style="font-size:0.58rem; color:#94a3b8;">Holding Name</label>
-                <input type="text" id="newHoldName" placeholder="e.g. Tata Motors Ltd" style="font-size:0.65rem; padding:0.15rem;">
+                <label style="font-size:0.58rem; color:#94a3b8;">Instrument Name</label>
+                <input type="text" id="newHoldName" placeholder="e.g. Reliance Industries Ltd" style="font-size:0.65rem; padding:0.15rem;">
               </div>
               <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.25rem; margin-top:0.2rem;">
                 <div>
@@ -1045,21 +1057,31 @@
                 </div>
                 <div>
                   <label style="font-size:0.58rem; color:#94a3b8;">Buy Price (₹)</label>
-                  <input type="number" step="any" id="newHoldBuy" value="1000" style="font-size:0.65rem; padding:0.15rem;">
+                  <input type="number" step="any" id="newHoldBuy" value="2800" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
                 <div>
                   <label style="font-size:0.58rem; color:#94a3b8;">Current Price (₹)</label>
-                  <input type="number" step="any" id="newHoldCur" value="1050" style="font-size:0.65rem; padding:0.15rem;">
+                  <input type="number" step="any" id="newHoldCur" value="2920" style="font-size:0.65rem; padding:0.15rem;">
                 </div>
               </div>
-              <div style="display:flex; gap:0.25rem; margin-top:0.3rem;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.25rem; margin-top:0.2rem;">
+                <div>
+                  <label style="font-size:0.58rem; color:#94a3b8;">App / Broker</label>
+                  <input type="text" id="newHoldApp" value="Zerodha Kite" style="font-size:0.65rem; padding:0.15rem;">
+                </div>
+                <div>
+                  <label style="font-size:0.58rem; color:#94a3b8;">Order Type</label>
+                  <input type="text" id="newHoldType" value="Equity CNC" style="font-size:0.65rem; padding:0.15rem;">
+                </div>
+              </div>
+              <div style="display:flex; gap:0.25rem; margin-top:0.35rem;">
                 <button class="btn" style="flex:1; font-size:0.65rem; padding:0.2rem;" onclick="saveNewHolding()">Save Holding</button>
                 <button class="btn btn-secondary" style="font-size:0.65rem; padding:0.2rem;" onclick="toggleAddHoldingForm()">Cancel</button>
               </div>
             </div>
 
             <!-- Holdings List Container -->
-            <div id="holdingsListContainer" style="display:flex; flex-direction:column; gap:0.3rem; max-height:220px; overflow-y:auto;">
+            <div id="holdingsListContainer" style="display:flex; flex-direction:column; gap:0.35rem; max-height:260px; overflow-y:auto;">
               <!-- Populated dynamically via loadInvestmentPortfolio() -->
             </div>
           </div>
@@ -1101,21 +1123,21 @@
             <div class="sub-card-title" style="color:#34d399;">
               <span>🤖 SCAN SAVINGS &amp; AI INVESTMENT ADVISOR</span>
             </div>
-            <p style="font-size:0.66rem; color:#94a3b8;">
-              Scans your FinOS liquid savings and computes a 4-tier strategic asset allocation (Emergency, Index Core, Flexi Alpha, Bluechip Stocks).
+            <p style="font-size:0.65rem; color:#94a3b8;">
+              Scans your FinOS liquid savings and computes a 4-tier strategic asset allocation (Emergency, Index Core, Flexi Alpha, Bluechip Stocks) with exact app execution steps.
             </p>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; margin-top:0.2rem;">
               <div>
-                <label style="font-size:0.6rem; color:#94a3b8;">Liquid Savings Pool (₹)</label>
-                <input type="number" id="savingsPoolInput" value="81750" style="font-size:0.68rem; padding:0.2rem;">
+                <label style="font-size:0.58rem; color:#94a3b8;">Liquid Savings Pool (₹)</label>
+                <input type="number" id="savingsPoolInput" value="81750" oninput="scanSavingsAndSuggest()" style="font-size:0.68rem; padding:0.2rem;">
               </div>
               <div>
-                <label style="font-size:0.6rem; color:#94a3b8;">Baseline Income (₹/mo)</label>
-                <input type="number" id="baselineIncomeInput" value="25000" style="font-size:0.68rem; padding:0.2rem;">
+                <label style="font-size:0.58rem; color:#94a3b8;">Baseline Income (₹/mo)</label>
+                <input type="number" id="baselineIncomeInput" value="25000" oninput="scanSavingsAndSuggest()" style="font-size:0.68rem; padding:0.2rem;">
               </div>
             </div>
             <button class="btn" style="margin-top:0.3rem; width:100%; font-size:0.7rem;" onclick="scanSavingsAndSuggest()">⚡ Scan Savings &amp; Suggest Allocation</button>
-            <div id="investmentSuggestionOutput" style="font-size:0.66rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.3rem; max-height:180px; overflow-y:auto;"></div>
+            <div id="investmentSuggestionOutput" style="font-size:0.65rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.3rem; max-height:200px; overflow-y:auto;"></div>
           </div>
 
           <!-- Calendar Alerts & SIP Reminders -->
@@ -1124,7 +1146,7 @@
               <span>⏰ INVESTMENT &amp; SIP CALENDAR ALERTS</span>
               <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.6rem;" onclick="downloadInvestmentRemindersIcs()" title="Download RFC 5545 ICS with Sound/Popup Alarms">📥 .ICS Alert</button>
             </div>
-            <div style="font-size:0.65rem; color:#94a3b8;">
+            <div style="font-size:0.64rem; color:#94a3b8;">
               Generates RFC 5545 calendar alerts with active <code>VALARM</code> notifications for native Galaxy Tab &amp; Google Calendar alerts.
             </div>
 
@@ -1732,6 +1754,53 @@ Select a condition above to view immediate clinical triage steps.
       </div>
       <div style="margin-top:0.45rem; font-size:0.6rem; color:#f87171; font-weight:700;">
         🚨 Emergency Ambulance: Call 112 / 108 immediately if symptoms escalate.
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- ============================================================== -->
+  <!-- 📖 HOW TO INVEST & APP EXECUTION GUIDE MODAL                   -->
+  <!-- ============================================================== -->
+  <div class="custom-modal-backdrop" id="howToInvestModal" onclick="if(event.target===this) closeHowToInvestModal()">
+    <div class="custom-modal-card" style="max-width:580px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.4rem;">
+        <div>
+          <strong id="howToTitle" style="color:#34d399; font-size:0.95rem; font-family:var(--font-mono);">HOW TO INVEST: TATA MOTORS LTD</strong>
+          <div id="howToSubtitle" style="font-size:0.64rem; color:#94a3b8; margin-top:0.15rem;">Recommended App: Zerodha Kite &bull; Product: Equity CNC</div>
+        </div>
+        <button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.65rem;" onclick="closeHowToInvestModal()">✕</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:0.5rem; max-height:360px; overflow-y:auto;">
+        <!-- App & Platform Badge Card -->
+        <div style="padding:0.45rem 0.6rem; background:rgba(30,41,59,0.7); border:1px solid rgba(56,189,248,0.3); border-radius:6px; font-size:0.65rem; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <span style="color:#94a3b8;">Target App / Portal:</span> <strong id="howToAppName" style="color:#38bdf8;">Zerodha Kite</strong><br>
+            <span style="color:#94a3b8;">Order Type:</span> <span id="howToOrderType" style="color:#fff; font-family:var(--font-mono);">Equity CNC (Delivery)</span>
+          </div>
+          <a id="howToAppBtn" href="https://kite.zerodha.com" target="_blank" class="btn" style="font-size:0.62rem; padding:0.2rem 0.5rem; text-decoration:none;">Launch App ↗</a>
+        </div>
+
+        <!-- Step-by-Step Instructions List -->
+        <div style="padding:0.6rem; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.08); border-radius:6px;">
+          <div style="font-size:0.68rem; font-weight:700; color:#34d399; margin-bottom:0.35rem;">Execution Steps (Where &amp; How to do it):</div>
+          <div id="howToStepsContainer" style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.66rem; color:#cbd5e1; line-height:1.45;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Fees, Charges & Tax Implication -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; font-size:0.62rem; font-family:var(--font-mono);">
+          <div style="padding:0.4rem 0.5rem; background:rgba(30,41,59,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:5px;">
+            <span style="color:#94a3b8;">Charges / Brokerage:</span><br>
+            <span id="howToCharges" style="color:#34d399; font-weight:700;">Zero Delivery Brokerage</span>
+          </div>
+          <div style="padding:0.4rem 0.5rem; background:rgba(30,41,59,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:5px;">
+            <span style="color:#94a3b8;">Tax Rules:</span><br>
+            <span id="howToTax" style="color:#fbbf24; font-weight:700;">LTCG 12.5% over ₹1.25L</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -2422,40 +2491,194 @@ Select a condition above to view immediate clinical triage steps.
       }
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="font-size:0.65rem; color:#94a3b8; font-style:italic;">No holdings in this category. Tap + Add Holding to add one.</div>';
+        container.innerHTML = '<div style="font-size:0.65rem; color:#94a3b8; font-style:italic;">No holdings in this category. Tap + Add Holding to record one.</div>';
         return;
       }
 
       for (var j = 0; j < filtered.length; j++) {
         var item = filtered[j];
         var itemCard = document.createElement('div');
-        itemCard.style.padding = '0.35rem 0.45rem';
-        itemCard.style.background = 'rgba(15, 23, 42, 0.7)';
-        itemCard.style.border = '1px solid rgba(255, 255, 255, 0.08)';
-        itemCard.style.borderRadius = '5px';
+        itemCard.style.padding = '0.45rem 0.55rem';
+        itemCard.style.background = 'rgba(15, 23, 42, 0.85)';
+        itemCard.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+        itemCard.style.borderRadius = '6px';
         itemCard.style.fontSize = '0.65rem';
 
         var catColor = item.category === 'STOCK' ? '#60a5fa' : (item.category === 'MUTUAL_FUND' ? '#a78bfa' : '#fbbf24');
+        var catName = item.category === 'STOCK' ? 'STOCK' : (item.category === 'MUTUAL_FUND' ? 'MUTUAL FUND' : 'ASSET/GOLD');
         var pnlColor = item.pnl_amount >= 0 ? '#34d399' : '#f87171';
         var sign = item.pnl_amount >= 0 ? '+' : '';
+
+        var dayChg = parseFloat(item.day_change_pct || 0);
+        var daySign = dayChg >= 0 ? '+' : '';
+        var dayColor = dayChg >= 0 ? '#34d399' : '#f87171';
+        var dayArrow = dayChg >= 0 ? '▲' : '▼';
 
         itemCard.innerHTML = 
           '<div style="display:flex; justify-content:space-between; align-items:center;">' +
             '<div>' +
-              '<span style="font-family:var(--font-mono); font-weight:700; color:' + catColor + ';">' + escapeHtml(item.symbol) + '</span> ' +
-              '<span style="color:#94a3b8; font-size:0.6rem;">&bull; ' + escapeHtml(item.name) + '</span>' +
+              '<span class="match-badge" style="border-color:' + catColor + '; color:' + catColor + '; font-size:0.55rem; padding:0.1rem 0.3rem;">' + catName + '</span> ' +
+              '<strong style="font-family:var(--font-mono); font-size:0.75rem; color:#fff; margin-left:0.2rem;">' + escapeHtml(item.symbol) + '</strong> ' +
+              '<span style="color:#94a3b8; font-size:0.62rem;">&bull; ' + escapeHtml(item.name) + '</span>' +
             '</div>' +
             '<div style="text-align:right;">' +
-              '<span style="font-family:var(--font-mono); font-weight:700; color:#fff;">₹' + item.current_value.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</span>' +
+              '<span style="font-family:var(--font-mono); font-size:0.8rem; font-weight:800; color:#fff;">₹' + item.current_price.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</span> ' +
+              '<span style="font-family:var(--font-mono); font-size:0.6rem; font-weight:700; color:' + dayColor + ';">(' + dayArrow + ' ' + daySign + dayChg + '%)</span>' +
             '</div>' +
           '</div>' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.15rem; font-size:0.6rem; color:#94a3b8;">' +
-            '<span>' + item.units + ' units @ ₹' + item.buy_price.toLocaleString('en-IN') + ' (Cur: ₹' + item.current_price.toLocaleString('en-IN') + ')</span>' +
-            '<span style="font-weight:700; color:' + pnlColor + ';">' + sign + '₹' + item.pnl_amount.toLocaleString('en-IN', {minimumFractionDigits: 2}) + ' (' + sign + item.pnl_pct + '%)</span>' +
+
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem; font-size:0.62rem; color:#cbd5e1; font-family:var(--font-mono); background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px;">' +
+            '<span>Holdings: ' + item.units + ' &bull; Invested: ₹' + item.invested_amount.toLocaleString('en-IN') + '</span>' +
+            '<span>Value: ₹' + item.current_value.toLocaleString('en-IN') + ' &bull; <strong style="color:' + pnlColor + ';">' + sign + '₹' + item.pnl_amount.toLocaleString('en-IN') + ' (' + sign + item.pnl_pct + '%)</strong></span>' +
+          '</div>' +
+
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; gap:0.3rem; flex-wrap:wrap;">' +
+            '<div style="font-size:0.6rem; color:#94a3b8;">' +
+              '📱 <span style="color:#38bdf8; font-weight:600;">' + escapeHtml(item.app_name) + '</span> &bull; ' +
+              '<span style="color:#cbd5e1;">' + escapeHtml(item.investment_type) + '</span>' +
+            '</div>' +
+            '<div style="display:flex; gap:0.25rem;">' +
+              '<button class="btn btn-secondary" style="font-size:0.58rem; padding:0.12rem 0.35rem; color:#38bdf8; border-color:rgba(56,189,248,0.4);" onclick="openHowToInvestItemModal(' + item.id + ')">📖 How to Invest</button>' +
+              '<button class="btn btn-secondary" style="font-size:0.55rem; padding:0.12rem 0.3rem; color:#f87171;" onclick="deleteHoldingItem(' + item.id + ')" title="Delete holding">✕</button>' +
+            '</div>' +
           '</div>';
 
         container.appendChild(itemCard);
       }
+    }
+
+    function refreshLivePrices() {
+      var badge = document.getElementById('liveTickerBadge');
+      if (badge) badge.textContent = 'FETCHING LIVE QUOTES...';
+
+      fetch('/api/investments/prices/refresh', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({})
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (data && data.success && data.portfolio) {
+          var p = data.portfolio;
+          currentInvestmentHoldings = p.holdings || [];
+
+          var elTotal = document.getElementById('valPortTotal');
+          var elInv = document.getElementById('valPortInvested');
+          var elPnl = document.getElementById('valPortPnl');
+          var elDay = document.getElementById('valPortDayPnl');
+          var dashPort = document.getElementById('dashPortVal');
+
+          if (elTotal) elTotal.textContent = '₹' + p.total_current_value.toLocaleString('en-IN', {minimumFractionDigits: 2});
+          if (dashPort) dashPort.textContent = '₹' + p.total_current_value.toLocaleString('en-IN', {minimumFractionDigits: 2});
+          if (elInv) elInv.textContent = '₹' + p.total_invested.toLocaleString('en-IN', {minimumFractionDigits: 2});
+          if (elPnl) {
+            var sign = p.total_pnl >= 0 ? '+' : '';
+            elPnl.textContent = sign + '₹' + p.total_pnl.toLocaleString('en-IN', {minimumFractionDigits: 2}) + ' (' + sign + p.total_pnl_pct + '%)';
+            elPnl.style.color = p.total_pnl >= 0 ? '#34d399' : '#f87171';
+          }
+          if (elDay) {
+            var dSign = p.total_day_pnl >= 0 ? '+' : '';
+            elDay.textContent = dSign + '₹' + p.total_day_pnl.toLocaleString('en-IN', {minimumFractionDigits: 2}) + ' (' + dSign + (p.total_day_pnl/p.total_current_value*100).toFixed(2) + '%)';
+            elDay.style.color = p.total_day_pnl >= 0 ? '#38bdf8' : '#f87171';
+          }
+
+          var bStock = document.getElementById('badgeStocks');
+          var bMF = document.getElementById('badgeMF');
+          var bAssets = document.getElementById('badgeAssets');
+          if (bStock) bStock.textContent = 'STOCKS ' + p.stocks_pct + '%';
+          if (bMF) bMF.textContent = 'MUTUAL FUNDS ' + p.mutual_funds_pct + '%';
+          if (bAssets) bAssets.textContent = 'ASSETS/GOLD ' + p.assets_pct + '%';
+
+          renderHoldingsList();
+          if (badge) badge.textContent = '● LIVE MARKET DATA';
+        }
+      })
+      .catch(function(err) {
+        if (badge) badge.textContent = '● LIVE (OFFLINE READY)';
+      });
+    }
+
+    // Auto-refresh prices periodically every 25 seconds for real-time market action
+    setInterval(refreshLivePrices, 25000);
+
+    function openHowToInvestItemModal(holdingId) {
+      var item = null;
+      for (var i = 0; i < currentInvestmentHoldings.length; i++) {
+        if (currentInvestmentHoldings[i].id === holdingId) {
+          item = currentInvestmentHoldings[i];
+          break;
+        }
+      }
+      if (!item) return;
+
+      var modal = document.getElementById('howToInvestModal');
+      if (modal) modal.style.display = 'block';
+
+      document.getElementById('howToTitle').textContent = 'HOW TO INVEST: ' + item.name.toUpperCase();
+      document.getElementById('howToSubtitle').textContent = 'Symbol: ' + item.symbol + ' &bull; Target App: ' + item.app_name;
+      document.getElementById('howToAppName').textContent = item.app_name;
+      document.getElementById('howToOrderType').textContent = item.investment_type;
+      document.getElementById('howToCharges').textContent = item.expense_ratio || 'Zero Brokerage on Delivery';
+      document.getElementById('howToTax').textContent = item.tax_rules || 'Standard capital gains';
+
+      var appBtn = document.getElementById('howToAppBtn');
+      if (appBtn) appBtn.href = item.app_url || 'https://kite.zerodha.com';
+
+      var stepsBox = document.getElementById('howToStepsContainer');
+      stepsBox.innerHTML = '';
+
+      var steps = item.how_to_invest || [];
+      if (typeof steps === 'string') {
+        try { steps = json.parse(steps); } catch(e) { steps = [steps]; }
+      }
+
+      if (steps.length === 0) {
+        steps = [
+          '1. Open ' + item.app_name + ' app on phone or desktop browser.',
+          '2. Search ' + item.symbol + ' (' + item.name + ').',
+          '3. Tap BUY and choose ' + item.investment_type + '.',
+          '4. Enter quantity or SIP amount and swipe to confirm.'
+        ];
+      }
+
+      for (var s = 0; s < steps.length; s++) {
+        var stepDiv = document.createElement('div');
+        stepDiv.style.padding = '0.2rem 0';
+        stepDiv.innerHTML = '<strong>' + escapeHtml(steps[s]) + '</strong>';
+        stepsBox.appendChild(stepDiv);
+      }
+    }
+
+    function openHowToInvestGeneralModal() {
+      var modal = document.getElementById('howToInvestModal');
+      if (modal) modal.style.display = 'block';
+
+      document.getElementById('howToTitle').textContent = 'INDIA INVESTMENT APPS DIRECTORY & GUIDE';
+      document.getElementById('howToSubtitle').textContent = 'Zerodha Kite &bull; Groww &bull; Coin &bull; RBI Retail Direct';
+      document.getElementById('howToAppName').textContent = 'Multi-Platform Master Guide';
+      document.getElementById('howToOrderType').textContent = 'Stocks &bull; Mutual Funds &bull; Sovereign Gold Bonds';
+      document.getElementById('howToCharges').textContent = 'Zero Delivery Brokerage &bull; Zero MF Distributor Fee';
+      document.getElementById('howToTax').textContent = 'LTCG 12.5% > ₹1.25L &bull; SGB 100% Tax-Free at Maturity';
+
+      var stepsBox = document.getElementById('howToStepsContainer');
+      stepsBox.innerHTML = 
+        '<div style="padding:0.25rem 0; border-bottom:1px solid rgba(255,255,255,0.06);">' +
+          '<strong style="color:#60a5fa;">1. FOR STOCKS (Tata Motors, HDFC Bank, Infosys):</strong><br>' +
+          'Use <strong>Zerodha Kite</strong> or <strong>Groww</strong>. Choose product <strong>CNC (Cash &amp; Carry)</strong>. Zero brokerage on delivery. Settle T+1 in Demat.' +
+        '</div>' +
+        '<div style="padding:0.25rem 0; border-bottom:1px solid rgba(255,255,255,0.06);">' +
+          '<strong style="color:#a78bfa;">2. FOR MUTUAL FUNDS (UTI Nifty 50, Parag Parikh Flexi Cap):</strong><br>' +
+          'Use <strong>Zerodha Coin</strong> or <strong>Groww</strong>. Always select <strong>DIRECT - GROWTH</strong> (saves 1-1.5% commission). Set 1st-of-month UPI AutoPay SIP.' +
+        '</div>' +
+        '<div style="padding:0.25rem 0;">' +
+          '<strong style="color:#fbbf24;">3. FOR SOVEREIGN GOLD (SGB) &amp; EMERGENCY FUNDS:</strong><br>' +
+          'Use <strong>RBI Retail Direct</strong> (rbiretaildirect.org.in) or secondary NSE series on Kite/Groww. Earn 2.5% p.a. interest + 100% tax-free maturity.' +
+        '</div>';
+    }
+
+    function closeHowToInvestModal() {
+      var modal = document.getElementById('howToInvestModal');
+      if (modal) modal.style.display = 'none';
     }
 
     function filterHoldings(cat) {

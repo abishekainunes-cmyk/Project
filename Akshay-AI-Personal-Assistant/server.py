@@ -217,6 +217,14 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
 
+        elif path == "/api/investments/guides":
+            try:
+                guides = portfolio_instance.get_app_execution_guides()
+                self._send_json_response({"success": True, "guides": guides})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
         elif path == "/api/investments/reminder/ics":
             try:
                 ics_data = portfolio_instance.generate_reminders_ics()
@@ -563,6 +571,14 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 image_b64 = data.get("image_b64")
                 ocr_result = dad_tracker_instance.process_prescription_ocr(text_snippet=text_snippet, image_b64=image_b64)
                 self._send_json_response(ocr_result)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/investments/prices/refresh":
+            try:
+                summary = portfolio_instance.refresh_live_prices()
+                self._send_json_response({"success": True, "portfolio": summary.model_dump()})
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return

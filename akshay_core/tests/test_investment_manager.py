@@ -95,3 +95,37 @@ def test_create_reminder_and_ics_valarm_generation(temp_manager: InvestmentPortf
     assert "5,000.00" in ics_str
     assert "END:VALARM" in ics_str
     assert "END:VCALENDAR" in ics_str
+
+
+def test_refresh_live_prices_and_day_pnl(temp_manager: InvestmentPortfolioManager):
+    summary_before = temp_manager.get_portfolio_summary()
+    assert summary_before.total_current_value > 0
+
+    # Refresh prices
+    updated_summary = temp_manager.refresh_live_prices()
+    assert updated_summary.total_current_value > 0
+    # Day P&L must be present
+    assert hasattr(updated_summary, "total_day_pnl")
+
+    # Every holding should now have app_name and how_to_invest
+    for h in updated_summary.holdings:
+        assert h.app_name is not None and len(h.app_name) > 0
+        assert h.how_to_invest is not None and len(h.how_to_invest) > 0
+        assert h.investment_type is not None
+
+
+def test_get_app_execution_guides(temp_manager: InvestmentPortfolioManager):
+    guides = temp_manager.get_app_execution_guides()
+    assert isinstance(guides, list)
+    assert len(guides) >= 3
+
+    app_names = [g["app_name"] for g in guides]
+    assert any("Zerodha" in name for name in app_names)
+    assert any("Groww" in name or "Coin" in name for name in app_names)
+    assert any("RBI" in name for name in app_names)
+
+    kite_guide = next(g for g in guides if "Zerodha Kite" in g["app_name"])
+    assert len(kite_guide["steps"]) >= 4
+    assert "charges" in kite_guide
+
+
