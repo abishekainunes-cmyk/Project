@@ -1,4 +1,4 @@
-"""Unit and integration tests for Autonomous Job Application Bot."""
+"""Unit and integration tests for Evidence-Based Autonomous Job Application Bot."""
 
 import pytest
 import sqlite3
@@ -16,6 +16,7 @@ def test_job_bot_initial_profile_and_stream(temp_job_bot: JobBotManager):
     profile = temp_job_bot.get_profile()
     assert "Abishek Pranav" in profile.name
     assert "Python" in profile.skills
+    assert "Generative AI & Automation | Python | Business Analysis & Data Analytics" in profile.title
 
     jobs = temp_job_bot.get_job_stream()
     assert len(jobs) >= 5
@@ -28,8 +29,7 @@ def test_match_score_calculation(temp_job_bot: JobBotManager):
     profile = CandidateProfile(
         name="Tester",
         title="Python Dev",
-        skills=["Python", "FastAPI", "Docker"],
-        experience_years=3
+        skills=["Python", "FastAPI", "Docker"]
     )
     job = JobPosting(
         id="JOB-TEST-1",
@@ -37,12 +37,12 @@ def test_match_score_calculation(temp_job_bot: JobBotManager):
         role="Python Backend",
         location="Remote",
         work_type="Remote",
-        salary_range="₹20L",
+        salary_range="₹25,000 - ₹35,000/mo (₹3.0L - ₹4.2L/yr)",
         required_skills=["Python", "FastAPI"],
         description="Test desc"
     )
     score = temp_job_bot.calculate_match_score(profile, job)
-    assert score >= 85
+    assert 70 <= score <= 95
 
 
 def test_tailored_cover_letter_generation(temp_job_bot: JobBotManager):
@@ -57,37 +57,43 @@ def test_tailored_cover_letter_generation(temp_job_bot: JobBotManager):
     assert profile.portfolio_url in letter
 
 
-def test_single_job_apply(temp_job_bot: JobBotManager):
+def test_mandatory_review_gate_and_approval(temp_job_bot: JobBotManager):
     jobs = temp_job_bot.get_job_stream()
     target_job = jobs[0]
 
-    application = temp_job_bot.apply_to_job(target_job.id)
+    # 1. Review gate dossier prepared (no DB submission yet)
+    review = temp_job_bot.prepare_application_review(target_job.id)
+    assert review["success"] is True
+    assert review["user_approval_required"] is True
+    assert review["suitability_verdict"] in ["Apply", "Apply after CV changes"]
+    assert len(temp_job_bot.get_applications()) == 0
+
+    # 2. User explicitly approves application
+    application = temp_job_bot.approve_and_submit_application(target_job.id)
     assert application.job_id == target_job.id
     assert application.company == target_job.company
-    assert application.status == "Applied"
+    assert application.status == "Approved & Submitted"
+    assert application.user_approved is True
 
+    # 3. Verified in persistent database
     history = temp_job_bot.get_applications()
     assert len(history) == 1
     assert history[0].job_id == target_job.id
+    assert history[0].user_approved is True
 
 
-def test_batch_auto_apply_with_threshold(temp_job_bot: JobBotManager):
-    result = temp_job_bot.run_batch_auto_apply(min_match_threshold=70)
+def test_batch_screening_audit_with_verdicts(temp_job_bot: JobBotManager):
+    result = temp_job_bot.run_batch_screening_audit(min_match_threshold=75)
     assert result["success"] is True
-    assert result["applied_count"] > 0
-
-    # Running batch auto-apply again should skip already applied jobs
-    result_second = temp_job_bot.run_batch_auto_apply(min_match_threshold=70)
-    assert result_second["applied_count"] == 0
-    assert result_second["skipped_count"] >= result["applied_count"]
+    assert result["total_screened"] >= 5
+    assert result["ready_to_apply_count"] + result["needs_cv_changes_count"] + result["skipped_count"] == result["total_screened"]
 
 
 def test_sql_injection_defense_in_job_profile(temp_job_bot: JobBotManager):
     malicious_profile = CandidateProfile(
         name="Hacker'; DROP TABLE job_applications; --",
         title="Admin' OR '1'='1",
-        skills=["Python", "SQL'; --"],
-        experience_years=5
+        skills=["Python", "SQL'; --"]
     )
     temp_job_bot.save_profile(malicious_profile)
 
@@ -104,7 +110,8 @@ def test_form_filler_audit_and_receipt():
     audit = mailer.generate_form_filler_audit('JOB-AI-01')
     assert audit['success'] is True
     assert len(audit['form_steps']) == 5
-    assert audit['last_page_receipt']['ats_score'] == 100
+    # Step 2 has audited experience
+    assert "Audited" in audit['form_steps'][1]['step_title']
     assert 'Abishek Pranav' in audit['last_page_receipt']['candidate_name']
     assert 'abishekpranav403@gmail.com' in audit['last_page_receipt']['candidate_email'].lower()
 

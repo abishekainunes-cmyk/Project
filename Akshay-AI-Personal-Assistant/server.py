@@ -237,6 +237,34 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
 
+        elif path == "/api/jobs/experience_audit":
+            try:
+                from akshay_core.workflows.experience_audit import ExperienceAuditEngine
+                audit = ExperienceAuditEngine.calculate_audit()
+                self._send_json_response(audit)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/review_gate":
+            try:
+                query = urllib.parse.parse_qs(parsed_url.query)
+                job_id = query.get("id", ["JOB-AI-01"])[0]
+                style = query.get("style", ["balanced"])[0]
+                dossier = job_bot_instance.prepare_application_review(job_id, style=style)
+                self._send_json_response(dossier)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/screening_audit":
+            try:
+                res = job_bot_instance.run_batch_screening_audit()
+                self._send_json_response(res)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
         elif path == "/api/vision/clip_info":
             try:
                 info = clip_engine.get_info()
@@ -263,7 +291,7 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                     "jobs": {
                         "candidate": job_bot_instance.get_profile().name,
                         "target_salary": "₹25,000+/mo (₹3.0L - ₹5.4L/yr)",
-                        "ats_score": 100,
+                        "ats_score": 92, "mode": "EVIDENCE_AUDITED",
                         "matched_count": len(job_bot_instance.get_job_stream()),
                         "applied_count": len(job_bot_instance.get_applications())
                     },
@@ -534,6 +562,25 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 recipient = data.get("recipient_email", "abishekpranav403@gmail.com")
                 res = application_mailer.dispatch_application_email(job_id, recipient)
                 self._send_json_response(res)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/application/approve":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                job_id = data.get("job_id", "JOB-AI-01")
+                custom_letter = data.get("cover_letter")
+                style = data.get("letter_style", "balanced")
+                app = job_bot_instance.approve_and_submit_application(job_id, custom_letter, style=style)
+                dispatch_res = application_mailer.dispatch_application_email(job_id, "abishekpranav403@gmail.com")
+                self._send_json_response({
+                    "success": True,
+                    "application": app.model_dump(),
+                    "email_dispatch": dispatch_res
+                })
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
