@@ -3,614 +3,892 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AKSHAY // Autonomous AI Workstation, FinOS & Life Engine</title>
-  <meta name="description" content="Akshay: Offline-capable, privacy-first personal AI assistant combining Jarvis automation, real-world daily workflows, Internet-in-a-Box knowledge, and FinOS.">
-  <meta name="theme-color" content="#030712">
+  <title>AKSHAY // Autonomous Multi-Column AI Workstation &amp; Job Bot</title>
   <link rel="manifest" href="manifest.json">
   <style>
-
-    /* Android 5.1 / Chrome 43 Compatibility Fallbacks */
-    html, body {
-      background-color: #030712 !important;
-      color: #f8fafc !important;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    .card {
-      background-color: #0f172a !important;
-      border: 1px solid #1e293b !important;
-      color: #f8fafc !important;
-    }
-    .card-title {
-      color: #38bdf8 !important;
-      border-bottom: 1px solid #1e293b !important;
-    }
-    .telem-box {
-      background-color: #0b0f19 !important;
-      border: 1px solid #1e293b !important;
-      color: #f8fafc !important;
-    }
-    .telemetry-row {
-      display: -webkit-box !important;
-      display: -webkit-flex !important;
-      display: flex !important;
-      -webkit-box-orient: horizontal !important;
-      -webkit-flex-direction: row !important;
-      flex-direction: row !important;
-      gap: 0.5rem !important;
-    }
-    .telem-box {
-      -webkit-box-flex: 1 !important;
-      -webkit-flex: 1 !important;
-      flex: 1 !important;
-    }
-    .btn-secondary {
-      background: #1e293b !important;
-      border: 1px solid #334155 !important;
-      color: #ffffff !important;
-    }
-    .btn-accent {
-      background: #059669 !important;
-      color: #ffffff !important;
-    }
-    .btn-danger {
-      background: #dc2626 !important;
-      color: #ffffff !important;
-    }
-    .tab-btn {
-      color: #94a3b8 !important;
-    }
-    .tab-btn.active {
-      background: #0c4a6e !important;
-      color: #38bdf8 !important;
-      border: 1px solid #0284c7 !important;
-    }
-    .balance-card, .action-item-card, .ocr-preview, .audit-console {
-      background-color: #0b0f19 !important;
-      border: 1px solid #1e293b !important;
-      color: #f8fafc !important;
-    }
-    input, textarea, select {
-      background-color: #090d16 !important;
-      border: 1px solid #334155 !important;
-      color: #ffffff !important;
-    }
-
     :root {
       --bg: #030712;
       --card-bg: rgba(15, 23, 42, 0.82);
-      --card-border: rgba(56, 189, 248, 0.22);
-      --card-border-glow: rgba(56, 189, 248, 0.5);
+      --border: rgba(255, 255, 255, 0.08);
       --primary: #38bdf8;
-      --primary-glow: rgba(56, 189, 248, 0.5);
-      --secondary: #818cf8;
       --accent: #34d399;
-      --danger: #f87171;
-      --warning: #fbbf24;
-      --text-main: #f8fafc;
+      --purple: #a855f7;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text: #f8fafc;
       --text-muted: #94a3b8;
-      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --font-mono: 'Consolas', 'Courier New', monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
-      background-color: var(--bg);
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.09) 0%, transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.06) 0%, transparent 50%),
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
-      color: var(--text-main);
-      font-family: var(--font-sans);
+      background-color: #030712;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
+      padding: 0.75rem;
     }
 
-    header {
-      padding: 0.85rem 1.5rem;
+    /* Top HUD Header */
+    .hud-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--card-border);
-      backdrop-filter: blur(14px);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(3, 7, 18, 0.9);
+      padding: 0.6rem 0.9rem;
+      background: #0f172a;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
     }
 
-    .brand { display: flex; align-items: center; gap: 0.75rem; }
-
-    .brand-logo {
-      width: 36px; height: 36px; border-radius: 9px;
-      background: linear-gradient(135deg, #0284c7, #6366f1);
-      display: grid; place-items: center; font-weight: 900; font-size: 1.15rem; color: #fff;
-      box-shadow: 0 0 16px var(--primary-glow);
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
 
-    .brand-text h1 {
-      font-size: 1.1rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #fff;
-      display: flex; align-items: center; gap: 0.5rem;
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #34d399;
+      box-shadow: 0 0 10px #34d399;
     }
 
-    .brand-text p { font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono); }
-
-    .status-badges { display: flex; gap: 0.5rem; align-items: center; }
-
-    .badge {
-      display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.6rem;
-      border-radius: 9999px; font-size: 0.65rem; font-family: var(--font-mono); font-weight: 600;
-      border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(15, 23, 42, 0.6);
+    .brand-title {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #38bdf8;
     }
 
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; }
-    .badge-online .badge-dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
-    .badge-offline .badge-dot { background: var(--warning); box-shadow: 0 0 6px var(--warning); }
-    .badge-security .badge-dot { background: var(--primary); box-shadow: 0 0 6px var(--primary); }
-
-    main {
-      flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 1.25rem;
-      display: grid; grid-template-columns: 1fr; gap: 1.25rem;
+    .telemetry-row {
+      display: flex;
+      gap: 1.2rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.75rem;
+      color: #94a3b8;
     }
 
-    @media (min-width: 960px) {
-      main { grid-template-columns: 370px 1fr; }
+    /* Top Controls: Pomodoro Timer & 1-Tap Solvers */
+    .top-controls-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
     }
 
-    .card {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
-      padding: 1.25rem; backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      display: flex; flex-direction: column; gap: 1rem; transition: border-color 0.2s, box-shadow 0.2s;
+    .control-card {
+      background: #0f172a;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      flex: 1 1 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    .card:hover { border-color: var(--card-border-glow); }
-
-    .card-title {
-      font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--primary);
-      font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 0.5rem;
+    .pomo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
     }
 
-    .voice-hub { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0.75rem 0; gap: 0.85rem; }
-
-    .orb-container { position: relative; width: 110px; height: 110px; cursor: pointer; }
-    .orb-ring {
-      position: absolute; inset: 0; border-radius: 50%; border: 2px dashed rgba(56, 189, 248, 0.4);
-      animation: rotateRing 12s linear infinite;
-    }
-    .orb-core {
-      position: absolute; inset: 12px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #38bdf8, #1e1b4b);
-      box-shadow: 0 0 32px var(--primary-glow); display: grid; place-items: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .orb-core.active {
-      animation: pulseGlow 1.4s ease-in-out infinite; box-shadow: 0 0 48px rgba(52, 211, 153, 0.8);
-      background: radial-gradient(circle at 35% 35%, #34d399, #064e3b);
+    .pomo-digits {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
     }
 
-    @keyframes rotateRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    @keyframes pulseGlow { 0%, 100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.08); filter: brightness(1.3); } }
-
-    #waveformCanvas {
-      width: 100%; height: 42px; border-radius: 6px; background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(56, 189, 248, 0.15);
+    .btn-group {
+      display: flex;
+      gap: 0.4rem;
     }
-
-    .tabs-nav {
-      display: flex; gap: 0.35rem; background: rgba(0, 0, 0, 0.45); padding: 0.35rem;
-      border-radius: 9px; border: 1px solid rgba(255, 255, 255, 0.08); overflow-x: auto;
-    }
-
-    .tab-btn {
-      flex: 1; padding: 0.55rem 0.75rem; border: none; background: transparent; color: var(--text-muted);
-      font-size: 0.75rem; font-family: var(--font-mono); font-weight: 600; border-radius: 6px; cursor: pointer;
-      transition: all 0.2s; white-space: nowrap;
-    }
-
-    .tab-btn.active {
-      background: rgba(56, 189, 248, 0.15); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.35);
-    }
-
-    .tab-pane { display: none; flex-direction: column; gap: 1rem; }
-    .tab-pane.active { display: flex; }
-
-    .telemetry-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-    .telem-box {
-      background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px;
-      padding: 0.6rem; text-align: center;
-    }
-    .telem-label { font-size: 0.62rem; color: var(--text-muted); font-family: var(--font-mono); text-transform: uppercase; }
-    .telem-val { font-size: 0.95rem; font-weight: 700; color: #fff; font-family: var(--font-mono); margin-top: 0.2rem; }
-
-    .chat-container {
-      display: flex; flex-direction: column; gap: 0.75rem; height: 380px; overflow-y: auto; padding-right: 0.3rem;
-    }
-
-    .chat-msg {
-      display: flex; flex-direction: column; gap: 0.3rem; max-width: 90%; padding: 0.75rem 1rem;
-      border-radius: 12px; font-size: 0.85rem; line-height: 1.45;
-    }
-    .msg-user { align-self: flex-end; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); color: #f0f9ff; }
-    .msg-akshay { align-self: flex-start; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; }
-    .msg-sender { font-size: 0.65rem; font-family: var(--font-mono); font-weight: 700; color: var(--primary); text-transform: uppercase; }
-
-    .input-bar { display: flex; gap: 0.5rem; margin-top: auto; }
-    .input-bar input, .input-bar textarea {
-      flex: 1; background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 8px; padding: 0.75rem 1rem; color: #fff; font-size: 0.85rem; outline: none; transition: border-color 0.2s;
-    }
-    .input-bar input:focus, .input-bar textarea:focus { border-color: var(--primary); }
 
     .btn {
-      background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; border: none; padding: 0.7rem 1.15rem;
-      border-radius: 8px; font-weight: 600; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center;
-      gap: 0.4rem; transition: opacity 0.2s, transform 0.1s; white-space: nowrap;
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      text-decoration: none;
     }
-    .btn:hover { opacity: 0.95; } .btn:active { transform: scale(0.98); }
-    .btn-secondary { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; }
-    .btn-accent { background: linear-gradient(135deg, #059669, #10b981); }
-    .btn-danger { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+    .btn:hover { background: #0369a1; }
+    .btn-accent { background: #059669; }
+    .btn-accent:hover { background: #047857; }
+    .btn-secondary { background: #334155; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-danger { background: #dc2626; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-purple { background: #7e22ce; }
+    .btn-purple:hover { background: #6b21a8; }
 
-    .balance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; }
-    .balance-card { background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 0.85rem; }
-    .balance-card .label { font-size: 0.68rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; }
-    .balance-card .amount { font-size: 1.25rem; font-weight: 800; font-family: var(--font-mono); margin-top: 0.3rem; color: #fff; }
-    .amount.positive { color: var(--accent); }
-    .amount.liability { color: var(--danger); }
-
-    .pill-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    /* Pill list for 1-Tap Solvers */
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+    }
     .pill {
-      background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 9999px;
-      padding: 0.3rem 0.7rem; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.3rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      white-space: nowrap;
     }
-    .pill:hover { background: rgba(56, 189, 248, 0.15); color: var(--primary); border-color: var(--primary); }
-
-    .audit-terminal {
-      background: #000; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 0.85rem;
-      font-family: var(--font-mono); font-size: 0.74rem; color: #10b981; height: 260px; overflow-y: auto;
-      white-space: pre-wrap; word-break: break-all;
+    .pill:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38bdf8;
+      color: #fff;
     }
 
+    /* Fast Column Jump Navigation */
+    .col-nav-bar {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.4rem 0.2rem;
+      margin-bottom: 0.75rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .col-nav-btn {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .col-nav-btn.active, .col-nav-btn:hover {
+      background: #1e293b;
+      color: #38bdf8;
+      border-color: #38bdf8;
+    }
+
+    /* 4-COLUMN WORKSTATION CONTAINER */
+    .workstation-columns {
+      display: flex;
+      flex-direction: row;
+      gap: 0.85rem;
+      overflow-x: auto;
+      padding-bottom: 1.5rem;
+      -webkit-overflow-scrolling: touch;
+      align-items: stretch;
+      flex: 1;
+    }
+
+    .column-box {
+      flex: 0 0 325px;
+      width: 325px;
+      background: #0f172a;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (min-width: 1450px) {
+      .workstation-columns {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        overflow-x: visible;
+      }
+      .column-box {
+        width: 100%;
+        flex: 1 1 auto;
+      }
+    }
+
+    .column-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.5rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .col-title-1 { color: #38bdf8; }
+    .col-title-2 { color: #34d399; }
+    .col-title-3 { color: #f87171; }
+    .col-title-4 { color: #c084fc; }
+
+    .sub-card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 8px;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sub-card-title {
+      font-size: 0.75rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Balance Grid */
+    .balance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .balance-cell {
+      background: rgba(0,0,0,0.3);
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .balance-val {
+      font-size: 0.95rem;
+      font-weight: 800;
+      font-family: 'Consolas', 'Courier New', monospace;
+      color: #fff;
+      margin-top: 0.15rem;
+    }
+
+    /* Chat Elements */
+    .chat-container {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      height: 240px;
+      overflow-y: auto;
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .chat-msg {
+      padding: 0.45rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      line-height: 1.35;
+      max-width: 90%;
+    }
+    .msg-akshay {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      align-self: flex-start;
+      color: #e2e8f0;
+    }
+    .msg-user {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      align-self: flex-end;
+      color: #fff;
+    }
+    .msg-sender {
+      font-size: 0.62rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      opacity: 0.75;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    .input-bar {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .input-bar input, .input-bar textarea, input[type="text"], input[type="number"] {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 0.45rem 0.6rem;
+      color: #fff;
+      font-size: 0.75rem;
+      outline: none;
+      width: 100%;
+    }
+
+    /* Action item cards */
     .action-item-card {
-      background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px;
-      padding: 0.65rem 0.85rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 0.5rem;
+      font-size: 0.72rem;
     }
-    .tag { font-size: 0.65rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
-    .tag-urgent { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .tag-medium { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
-    .tag-assignee { background: rgba(129, 140, 248, 0.2); color: #a5b4fc; }
 
-    footer {
-      border-top: 1px solid var(--card-border); padding: 0.85rem 1.5rem; text-align: center;
-      font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); background: rgba(3, 7, 18, 0.9);
+    /* Job Bot Specific Styles */
+    .job-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(192, 132, 252, 0.2);
+      border-radius: 8px;
+      padding: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: border-color 0.2s;
+    }
+    .job-card:hover {
+      border-color: #c084fc;
+    }
+    .job-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .job-company {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+    .job-role {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .match-badge {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid #34d399;
+      color: #34d399;
+      padding: 0.15rem 0.4rem;
+      border-radius: 9999px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      font-family: 'Consolas', 'Courier New', monospace;
+      white-space: nowrap;
+    }
+    .job-details {
+      font-size: 0.68rem;
+      color: #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+    }
+    .skills-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-top: 0.2rem;
+    }
+    .skill-tag {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.6rem;
+      color: #94a3b8;
+    }
+
+    /* Cover Letter Drawer / Modal */
+    #coverLetterBox {
+      display: none;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid #c084fc;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.72rem;
+      line-height: 1.4;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    /* Footer */
+    .hud-footer {
+      text-align: center;
+      font-size: 0.65rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      color: #64748b;
+      padding: 0.5rem 0;
       margin-top: auto;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Futuristic Bar -->
-  <header>
+  <!-- Top HUD Header -->
+  <header class="hud-header">
     <div class="brand">
-      <div class="brand-logo">A</div>
-      <div class="brand-text">
-        <h1>AKSHAY <span style="font-size: 0.65rem; color: var(--primary); border: 1px solid var(--primary); padding: 1px 4px; border-radius: 4px;">v2.5-TABLET</span></h1>
-        <p>REAL-WORLD AUTONOMOUS WORKSTATION & LIFE ENGINE</p>
-      </div>
+      <div class="status-indicator"></div>
+      <span class="brand-title">AKSHAY v3.0 // MULTI-COLUMN WORKSTATION</span>
     </div>
-    <div class="status-badges">
-      <div id="connBadge" class="badge badge-offline">
-        <span class="badge-dot"></span>
-        <span id="connText">OFFLINE MODE</span>
-      </div>
-      <div class="badge badge-security">
-        <span class="badge-dot"></span>
-        <span>OWASP VERIFIED</span>
-      </div>
+    <div class="telemetry-row">
+      <span>DEVICE: GALAXY TAB &amp; DESKTOP</span>
+      <span id="telLatency">ENGINE: ZERO-CLOUD</span>
+      <span id="telMode">MODE: STANDALONE</span>
     </div>
   </header>
 
-  <!-- Main View Grid -->
-  <main>
+  <!-- Top Controls: Pomodoro Timer & 1-Tap Solvers -->
+  <div class="top-controls-grid">
     
-    <!-- Left Column: Voice Core, Pomodoro, Telemetry -->
-    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
-      
-      <!-- Voice Hub -->
-      <div class="card">
-        <div class="card-title">
-          <span>// VOICE & SYSTEM CORE</span>
-          <span id="voiceStatus" style="color: var(--accent);">READY</span>
-        </div>
-        <div class="voice-hub">
-          <div class="orb-container" id="orbBtn" title="Click or press Space to speak with Akshay">
-            <div class="orb-ring"></div>
-            <div class="orb-core" id="orbCore">
-              <svg width="34" height="34" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 003-3V5a3 3 0 10-6 0v6a3 3 0 003 3z" />
-              </svg>
-            </div>
-          </div>
-          <p style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
-            Tap orb or say <strong style="color: #fff;">"Hey Akshay"</strong>
-          </p>
-          <canvas id="waveformCanvas"></canvas>
-        </div>
-
-        <!-- System Telemetry Row -->
-        <div class="telemetry-row">
-          <div class="telem-box">
-            <div class="telem-label">BATTERY</div>
-            <div class="telem-val" id="telemBattery">96%</div>
-          </div>
-          <div class="telem-box">
-            <div class="telem-label">TABLET</div>
-            <div class="telem-val" style="color: var(--accent);">GALAXY</div>
-          </div>
-          <div class="telem-box">
-            <div class="telem-label">LATENCY</div>
-            <div class="telem-val" id="telemLatency">&lt;4ms</div>
-          </div>
-        </div>
-
-        <!-- Phone / Tablet Hardware Controls -->
-        <div style="display: flex; gap: 0.5rem; justify-content: space-between;">
-          <button class="btn btn-secondary" style="flex:1; font-size: 0.7rem; padding: 0.4rem;" id="btnTorch">
-            💡 Torch: OFF
-          </button>
-          <button class="btn btn-danger" style="flex:1; font-size: 0.7rem; padding: 0.4rem;" id="btnSOS" onclick="triggerSOSAlert()">
-            🚨 1-TAP SOS
-          </button>
-          <button class="btn btn-secondary" style="flex:1; font-size: 0.7rem; padding: 0.4rem;" id="btnClip">
-            📋 Paste Clip
-          </button>
+    <!-- Focus Pomodoro Work Timer -->
+    <div class="control-card">
+      <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--primary); font-weight:700; margin-bottom:0.3rem;">
+        // FOCUS WORK TIMER &bull; FLOW STATE
+      </div>
+      <div class="pomo-wrap">
+        <div class="pomo-digits" id="pomoDisplay">25:00</div>
+        <div class="btn-group">
+          <button class="btn btn-accent" onclick="startPomodoro()">Start</button>
+          <button class="btn btn-secondary" onclick="pausePomodoro()">Pause</button>
+          <button class="btn btn-secondary" onclick="resetPomodoro()">Reset</button>
         </div>
       </div>
-
-      <!-- Real-World Productivity: Focus Pomodoro Timer -->
-      <div class="card">
-        <div class="card-title">
-          <span>// FOCUS WORK TIMER</span>
-          <span id="pomoLabel" style="font-size: 0.7rem; color: var(--accent);">FLOW STATE</span>
-        </div>
-        <div style="text-align: center; padding: 0.5rem 0;">
-          <div id="pomoDisplay" style="font-size: 2.2rem; font-weight: 800; font-family: var(--font-mono); color: #fff;">25:00</div>
-          <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.75rem;">
-            <button class="btn btn-accent" style="padding: 0.4rem 0.9rem; font-size: 0.75rem;" onclick="startPomodoro()">Start</button>
-            <button class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.75rem;" onclick="pausePomodoro()">Pause</button>
-            <button class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.75rem;" onclick="resetPomodoro()">Reset</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Action Prompts -->
-      <div class="card">
-        <div class="card-title">
-          <span>// 1-TAP SOLVERS</span>
-        </div>
-        <div class="pill-list">
-          <div class="pill" onclick="sendQuickPrompt('Voice Brain-Dump: Meeting with Sarah tomorrow at 11am for design review. Submit GST audit by Friday.')">🧠 Voice Brain-Dump</div>
-          <div class="pill" onclick="sendQuickPrompt('Split dinner bill 3600: Abishek paid for Rahul and Pooja')">🤝 Split ₹3600 Bill</div>
-          <div class="pill" onclick="sendQuickPrompt('Compare Income Tax: Gross 14 Lakhs CTC with 1.5L 80C')">📊 Compare Tax Regimes</div>
-          <div class="pill" onclick="sendQuickPrompt('Check medicine safety: Can I take Paracetamol with Ibuprofen?')">💊 Check Drug Interaction</div>
-          <div class="pill" onclick="sendQuickPrompt('Emergency triage: How to treat a hot grease burn on hand immediately?')">🩹 Treat Hot Burn</div>
-        </div>
-      </div>
-
     </div>
 
-    <!-- Right Column: Interactive Panes -->
-    <div class="card" style="min-height: 600px;">
-      
-      <!-- Top Navigation Tabs -->
-      <div class="tabs-nav">
-        <button class="tab-btn active" onclick="switchTab('tabChat')">🤖 JARVIS</button>
-        <button class="tab-btn" onclick="switchTab('tabWork')">🧠 BRAIN-DUMP (A)</button>
-        <button class="tab-btn" onclick="switchTab('tabFinos')">💳 FINOS & TAX (B/C)</button>
-        <button class="tab-btn" onclick="switchTab('tabMedical')">💊 DRUG & SOS (D)</button>
-        <button class="tab-btn" onclick="switchTab('tabSecurity')">🛡️ SECURITY</button>
+    <!-- 1-Tap Quick Solvers -->
+    <div class="control-card">
+      <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--accent); font-weight:700; margin-bottom:0.3rem;">
+        // 1-TAP RAPID SOLVERS
+      </div>
+      <div class="pill-list">
+        <div class="pill" onclick="sendQuickPrompt('Voice Brain-Dump: Meet Dr. Sharma tomorrow at 4 PM to review lab test reports, submit quarterly GST filing by Friday, and pay electricity bill ₹2450.')">🧠 Voice Brain-Dump</div>
+        <div class="pill" onclick="sendQuickPrompt('Split dinner bill 3600: Abishek paid for Rahul and Pooja')">🤝 Split ₹3600 Bill</div>
+        <div class="pill" onclick="sendQuickPrompt('Compare Income Tax: Gross 14 Lakhs CTC with 1.5L 80C')">📊 Compare Tax Regimes</div>
+        <div class="pill" onclick="sendQuickPrompt('Check medicine safety: Can I take Paracetamol with Ibuprofen?')">💊 Check Drug Interaction</div>
+        <div class="pill" onclick="sendQuickPrompt('Run Auto-Apply Bot: Apply to all matching software engineering roles with match score over 75%')">🤖 Run Job Bot</div>
+        <div class="pill" onclick="sendQuickPrompt('Emergency triage: How to treat a hot grease burn on hand immediately?')">🩹 Treat Hot Burn</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Fast Column Navigation Jump Bar -->
+  <div class="col-nav-bar">
+    <button class="col-nav-btn active" onclick="jumpToColumn('colBrainDump', this)">🎙️ COL 1: BRAIN-DUMP (A)</button>
+    <button class="col-nav-btn" onclick="jumpToColumn('colFinos', this)">💳 COL 2: FINOS &amp; TAX (B/C)</button>
+    <button class="col-nav-btn" onclick="jumpToColumn('colMedical', this)">💊 COL 3: CLINICAL &amp; SOS (D)</button>
+    <button class="col-nav-btn" onclick="jumpToColumn('colJobBot', this)">🤖 COL 4: AUTO APPLY JOB BOT</button>
+  </div>
+
+  <!-- 4-COLUMN WORKSTATION CONTAINER -->
+  <main class="workstation-columns">
+
+    <!-- ============================================================== -->
+    <!-- COLUMN 1: AI COMMAND & BRAIN-DUMP (OPTION A)                   -->
+    <!-- ============================================================== -->
+    <section class="column-box" id="colBrainDump">
+      <div class="column-header">
+        <span class="col-title-1">🎙️ COL 1: AI &amp; BRAIN-DUMP (A)</span>
+        <span style="font-size:0.65rem; color:#94a3b8;">AUDIO &amp; .ICS</span>
       </div>
 
-      <!-- TAB 1: Chat & Command Hub -->
-      <div id="tabChat" class="tab-pane active">
+      <!-- Dialogue Stream -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#38bdf8;">
+          <span>JARVIS DIALOGUE</span>
+          <span style="font-size:0.65rem; color:#94a3b8;">OFFLINE ACTIVE</span>
+        </div>
         <div class="chat-container" id="chatStream">
           <div class="chat-msg msg-akshay">
-            <span class="msg-sender">Akshay // System</span>
-            <span>Akshay v2.5 active. Voice Brain-Dump (A), Camera Receipt OCR (B), Offline Income Tax Optimizer (C), and Drug Safety & SOS Beacon (D) are fully connected. Ready for commands.</span>
+            <span class="msg-sender">Akshay // Workstation</span>
+            <span>Akshay v3.0 active in 4-Column Layout. Voice Brain-Dump (A), FinOS &amp; Tax (B/C), Medical SOS (D), and Auto Apply Job Bot are operational.</span>
           </div>
         </div>
-
         <form class="input-bar" id="chatForm" onsubmit="handleFormSubmit(event)">
-          <input type="text" id="userInput" placeholder="Ask Akshay or enter command (Ctrl+K)..." autocomplete="off">
-          <button type="submit" class="btn">
-            <span>Send</span>
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
+          <input type="text" id="userInput" placeholder="Ask Akshay or command..." autocomplete="off">
+          <button type="submit" class="btn" style="white-space:nowrap;">Send</button>
         </form>
       </div>
 
-      <!-- TAB 2: Option A - Voice Brain-Dump & Calendar .ICS Generator -->
-      <div id="tabWork" class="tab-pane">
-        <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 8px; padding: 0.85rem;">
-          <h3 style="font-size: 0.85rem; color: var(--primary); font-family: var(--font-mono);">
-            🧠 OPTION A: VOICE BRAIN-DUMP ➔ CALENDAR .ICS & TASKS
-          </h3>
-          <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">
-            Speak or type messy unstructured thoughts. Akshay automatically creates Calendar events (.ics), action tasks, and WhatsApp/Email drafts.
-          </p>
+      <!-- Option A: Voice Brain-Dump -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#38bdf8;">
+          <span>OPTION A: BRAIN-DUMP ➔ CALENDAR</span>
         </div>
+        <p style="font-size:0.68rem; color:#94a3b8;">
+          Speak or type unstructured speech. Converts into .ics calendar events and WhatsApp tasks.
+        </p>
+        <textarea id="braindumpInput" rows="2" style="resize:none;" placeholder="Example: Meet Dr. Sharma tomorrow at 4 PM to review lab reports, submit quarterly GST filing by Friday, and pay electricity bill ₹2450"></textarea>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+          <button class="btn" onclick="executeBrainDump()">⚡ Process Brain-Dump</button>
+          <button class="btn btn-secondary" id="btnDownloadIcs" style="display:none;" onclick="downloadCalendarIcs()">📅 .ICS</button>
+          <button class="btn btn-secondary" id="btnCopyWhatsapp" style="display:none;" onclick="copyWhatsappDraft()">💬 WhatsApp</button>
+        </div>
+        <div id="braindumpResults" style="display:flex; flex-direction:column; gap:0.35rem; max-height:160px; overflow-y:auto; margin-top:0.3rem;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
 
-        <div style="display:flex; flex-direction:column; gap: 0.5rem;">
-          <textarea id="braindumpInput" rows="3" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 0.75rem; color:#fff; font-size:0.8rem; outline:none;" placeholder="Example: Meeting with Sarah tomorrow at 11am for product demo. Need to submit GST tax audit by Friday. Buy eggs on way home."></textarea>
-          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            <button class="btn" onclick="executeBrainDump()">⚡ Process Brain-Dump</button>
-            <button class="btn btn-secondary" id="btnDownloadIcs" style="display:none;" onclick="downloadCalendarIcs()">📅 Download .ICS Calendar</button>
-            <button class="btn btn-secondary" id="btnCopyWhatsapp" style="display:none;" onclick="copyWhatsappDraft()">💬 Copy WhatsApp Draft</button>
+    <!-- ============================================================== -->
+    <!-- COLUMN 2: FINOS & TAX WORKSTATION (OPTIONS B & C)              -->
+    <!-- ============================================================== -->
+    <section class="column-box" id="colFinos">
+      <div class="column-header">
+        <span class="col-title-2">💳 COL 2: FINOS &amp; TAX (B &amp; C)</span>
+        <span style="font-size:0.65rem; color:#94a3b8;">DOUBLE-ENTRY</span>
+      </div>
+
+      <!-- Ledger Summary -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#34d399;">
+          <span>LEDGER BALANCES (SQLite)</span>
+        </div>
+        <div class="balance-grid">
+          <div class="balance-cell">
+            <div style="font-size:0.65rem; color:#94a3b8;">TOTAL ASSETS</div>
+            <div class="balance-val" id="valAssets">₹85,000.00</div>
+          </div>
+          <div class="balance-cell">
+            <div style="font-size:0.65rem; color:#94a3b8;">EXPENSES</div>
+            <div class="balance-val" id="valExpenses">₹3,250.00</div>
           </div>
         </div>
-
-        <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-muted); margin-top: 0.5rem;">
-          STRUCTURED TASKS & CALENDAR EVENTS:
+        <div class="balance-cell" style="margin-top:0.2rem;">
+          <div style="font-size:0.65rem; color:#94a3b8;">NET WORTH</div>
+          <div class="balance-val" id="valNetWorth" style="color:#34d399;">₹81,750.00</div>
         </div>
-        <div id="braindumpResults" style="display:flex; flex-direction:column; gap:0.5rem; max-height:220px; overflow-y:auto;">
+      </div>
+
+      <!-- Option B: Camera Receipt Scanner -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#34d399;">
+          <span>OPTION B: CAMERA RECEIPT OCR</span>
+        </div>
+        <p style="font-size:0.68rem; color:#94a3b8;">
+          Snap paper receipt using tablet/phone camera. Edge OCR parses line items into SQLite.
+        </p>
+        <div style="display:flex; gap:0.4rem; align-items:center;">
+          <input type="file" id="receiptFileInput" accept="image/*" capture="environment" style="font-size:0.68rem; padding:0.2rem;">
+          <button class="btn btn-secondary" onclick="simulateReceiptOCR()" style="white-space:nowrap;">Scan</button>
+        </div>
+        <div id="ocrReceiptResult" style="font-size:0.7rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap;"></div>
+      </div>
+
+      <!-- Option C: Income Tax Calculator -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#34d399;">
+          <span>OPTION C: INCOME TAX OPTIMIZER</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem;">
+          <div>
+            <label style="font-size:0.65rem; color:#94a3b8;">Gross CTC (₹)</label>
+            <input type="number" id="taxGross" value="1400000">
+          </div>
+          <div>
+            <label style="font-size:0.65rem; color:#94a3b8;">80C Deductions</label>
+            <input type="number" id="tax80C" value="150000">
+          </div>
+        </div>
+        <button class="btn" style="margin-top:0.2rem;" onclick="calculateTaxComparison()">Compare Tax Regimes</button>
+        <div id="taxComparisonOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.3rem;"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- COLUMN 3: CLINICAL SAFETY & 1-TAP SOS (OPTION D)               -->
+    <!-- ============================================================== -->
+    <section class="column-box" id="colMedical">
+      <div class="column-header">
+        <span class="col-title-3">💊 COL 3: CLINICAL &amp; SOS (D)</span>
+        <span style="font-size:0.65rem; color:#f87171;">TRIAGE &amp; ALARM</span>
+      </div>
+
+      <!-- Drug Interaction Checker -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#f87171;">
+          <span>OPTION D1: DRUG SAFETY CHECKER</span>
+        </div>
+        <p style="font-size:0.68rem; color:#94a3b8;">
+          Evaluates harmful contraindications without cloud latency.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem;">
+          <input type="text" id="drugA" value="Paracetamol" placeholder="Drug 1">
+          <input type="text" id="drugB" value="Ibuprofen" placeholder="Drug 2">
+        </div>
+        <button class="btn btn-secondary" onclick="checkDrugSafety()">Check Interaction</button>
+        <div id="drugSafetyOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
+      </div>
+
+      <!-- Emergency SOS Beacon & Siren -->
+      <div class="sub-card" style="border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
+        <div class="sub-card-title" style="color:#f87171;">
+          <span>OPTION D2: EMERGENCY SOS SIREN</span>
+        </div>
+        <p style="font-size:0.68rem; color:#94a3b8;">
+          Fires maximum-volume distress siren &amp; renders emergency medical ID.
+        </p>
+        <div style="display:flex; gap:0.4rem;">
+          <button class="btn btn-danger" onclick="triggerSOSAlert()">🚨 SOUND SOS</button>
+          <button class="btn btn-secondary" onclick="stopSOSSiren()">Stop Siren</button>
+        </div>
+        <div id="sosOutput" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap; margin-top:0.2rem;"></div>
+      </div>
+
+      <!-- Live Waveform & Telemetry -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#94a3b8;">
+          <span>AUDIO SENSOR WAVEFORM</span>
+        </div>
+        <canvas id="waveformCanvas" width="300" height="45" style="width:100%; height:45px; background:rgba(0,0,0,0.4); border-radius:4px;"></canvas>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- COLUMN 4: AUTO APPLY JOB BOT (NEW EXPANSION)                   -->
+    <!-- ============================================================== -->
+    <section class="column-box" id="colJobBot">
+      <div class="column-header">
+        <span class="col-title-4">🤖 COL 4: AUTO APPLY JOB BOT</span>
+        <span class="match-badge" id="botBadge">IDLE</span>
+      </div>
+
+      <!-- Candidate Profile Summary Card -->
+      <div class="sub-card" style="border-color: rgba(192, 132, 252, 0.3);">
+        <div class="sub-card-title" style="color:#c084fc;">
+          <span>CANDIDATE VAULT</span>
+          <span style="font-size:0.65rem; color:#34d399;">✓ ACTIVE</span>
+        </div>
+        <div style="font-size:0.75rem; font-weight:700; color:#fff;">Abishek Pranav</div>
+        <div style="font-size:0.68rem; color:#94a3b8;">Full Stack AI Engineer &bull; Exp: 4 Yrs &bull; CTC: ₹24L</div>
+        <div class="skills-tag-row">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">FastAPI</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">SQLite</span>
+          <span class="skill-tag">AWS</span>
+        </div>
+      </div>
+
+      <!-- Bot Action Controls -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#c084fc;">
+          <span>BOT AUTOMATION PIPELINE</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.68rem; color:#94a3b8;">Min Match Threshold:</span>
+          <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:700; color:#34d399;" id="thresholdDisplay">75%</span>
+        </div>
+        <div style="display:flex; gap:0.4rem; margin-top:0.2rem;">
+          <button class="btn btn-purple" style="flex:1;" onclick="runBatchAutoApplyBot()">⚡ Run Auto-Apply Bot</button>
+          <button class="btn btn-secondary" onclick="loadJobStream()">↻ Refresh</button>
+        </div>
+        <div id="botStatusText" style="font-size:0.68rem; font-family:var(--font-mono); color:#cbd5e1;"></div>
+      </div>
+
+      <!-- Cover Letter Preview Card -->
+      <div id="coverLetterBox">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+          <strong style="color:#c084fc;">TAILORED AI COVER LETTER</strong>
+          <button class="btn btn-secondary" style="padding:0.15rem 0.4rem; font-size:0.65rem;" onclick="closeCoverLetter()">✕ Close</button>
+        </div>
+        <div id="coverLetterContent"></div>
+        <button class="btn btn-accent" style="margin-top:0.5rem; align-self:flex-start;" onclick="copyCoverLetter()">📋 Copy Letter</button>
+      </div>
+
+      <!-- Live Job Stream -->
+      <div class="sub-card" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+        <div class="sub-card-title" style="color:#c084fc;">
+          <span>MATCHED JOB OPPORTUNITIES</span>
+          <span style="font-size:0.65rem; color:#94a3b8;" id="jobStreamCount">5 Jobs</span>
+        </div>
+        <div id="jobStreamContainer" style="display:flex; flex-direction:column; gap:0.5rem; overflow-y:auto; max-height:300px; margin-top:0.3rem;">
           <!-- Dynamically populated -->
         </div>
       </div>
 
-      <!-- TAB 3: Options B & C - FinOS 2.0, Camera Receipt OCR & Tax Calculator -->
-      <div id="tabFinos" class="tab-pane">
-        
-        <!-- Balance Cards -->
-        <div class="balance-grid">
-          <div class="balance-card">
-            <div class="label">TOTAL ASSETS</div>
-            <div class="amount positive" id="valAssets">₹85,000.00</div>
-          </div>
-          <div class="balance-card">
-            <div class="label">EXPENSES</div>
-            <div class="amount liability" id="valExpenses">₹3,250.00</div>
-          </div>
-          <div class="balance-card">
-            <div class="label">NET WORTH</div>
-            <div class="amount" id="valNetWorth" style="color: var(--primary);">₹81,750.00</div>
-          </div>
+      <!-- Applications Tracker -->
+      <div class="sub-card">
+        <div class="sub-card-title" style="color:#c084fc;">
+          <span>APPLICATIONS SENT</span>
+          <span class="match-badge" id="appliedCountBadge">0 APPLIED</span>
         </div>
-
-        <!-- Option B: Camera Receipt Scanner -->
-        <div style="background: rgba(0,0,0,0.32); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.85rem; display:flex; flex-direction:column; gap:0.6rem;">
-          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent); font-weight:700;">
-            📸 OPTION B: CAMERA RECEIPT & INVOICE OCR SCANNER
-          </div>
-          <p style="font-size: 0.72rem; color: var(--text-muted);">
-            Snap or upload a paper receipt using Galaxy Tab / Phone camera. On-device OCR parses line items straight into SQLite.
-          </p>
-          <div style="display:flex; gap:0.5rem; align-items:center;">
-            <input type="file" id="receiptFileInput" accept="image/*" capture="environment" style="font-size:0.75rem; color:var(--text-muted);">
-            <button class="btn btn-secondary" onclick="simulateReceiptOCR()">Scan Receipt</button>
-          </div>
-          <div id="ocrReceiptResult" style="font-size:0.75rem; font-family:var(--font-mono); color:#cbd5e1;"></div>
-        </div>
-
-        <!-- Option C: Offline Income Tax Optimizer -->
-        <div style="background: rgba(0,0,0,0.32); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.85rem; display:flex; flex-direction:column; gap:0.6rem;">
-          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--primary); font-weight:700;">
-            📊 OPTION C: OFFLINE INCOME TAX & TAKE-HOME CALCULATOR
-          </div>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
-            <input type="number" id="taxGross" placeholder="Annual CTC (e.g. 1400000)" value="1400000" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.12); padding:0.5rem; border-radius:6px; color:#fff; font-size:0.8rem;">
-            <input type="number" id="tax80C" placeholder="80C Deductions (e.g. 150000)" value="150000" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.12); padding:0.5rem; border-radius:6px; color:#fff; font-size:0.8rem;">
-          </div>
-          <button class="btn" style="align-self:flex-start;" onclick="calculateTaxComparison()">Compare Tax Regimes</button>
-          <div id="taxComparisonOutput" style="font-size:0.75rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap;"></div>
-        </div>
-
-      </div>
-
-      <!-- TAB 4: Option D - Drug Safety & SOS Beacon -->
-      <div id="tabMedical" class="tab-pane">
-        
-        <!-- Option D1: Drug Interaction Checker -->
-        <div style="background: rgba(129, 140, 248, 0.08); border: 1px solid rgba(129, 140, 248, 0.25); border-radius: 8px; padding: 0.85rem; display:flex; flex-direction:column; gap:0.6rem;">
-          <h3 style="font-size: 0.85rem; color: var(--secondary); font-family: var(--font-mono);">
-            💊 OPTION D1: OFFLINE DRUG INTERACTION CHECKER
-          </h3>
-          <p style="font-size: 0.72rem; color: var(--text-muted);">
-            Check whether two medications can be safely combined without hospital or internet access.
-          </p>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
-            <input type="text" id="drugA" placeholder="Medicine 1 (e.g. Paracetamol)" value="Paracetamol" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.12); padding:0.5rem; border-radius:6px; color:#fff; font-size:0.8rem;">
-            <input type="text" id="drugB" placeholder="Medicine 2 (e.g. Ibuprofen)" value="Ibuprofen" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.12); padding:0.5rem; border-radius:6px; color:#fff; font-size:0.8rem;">
-          </div>
-          <button class="btn btn-secondary" style="align-self:flex-start;" onclick="checkDrugSafety()">Check Interaction Safety</button>
-          <div id="drugSafetyOutput" style="font-size:0.75rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap;"></div>
-        </div>
-
-        <!-- Option D2: 1-Tap Emergency SOS Beacon -->
-        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 0.85rem; display:flex; flex-direction:column; gap:0.6rem;">
-          <h3 style="font-size: 0.85rem; color: #f87171; font-family: var(--font-mono);">
-            🚨 OPTION D2: EMERGENCY SOS BEACON & SIREN
-          </h3>
-          <p style="font-size: 0.72rem; color: var(--text-muted);">
-            Fires maximum-volume distress siren, renders medical ID card, and generates offline emergency SMS.
-          </p>
-          <div style="display:flex; gap:0.5rem;">
-            <button class="btn btn-danger" onclick="triggerSOSAlert()">🚨 SOUND SOS SIREN</button>
-            <button class="btn btn-secondary" onclick="stopSOSSiren()">Stop Siren</button>
-          </div>
-          <div id="sosOutput" style="font-size:0.75rem; font-family:var(--font-mono); color:#cbd5e1; white-space:pre-wrap;"></div>
-        </div>
-
-      </div>
-
-      <!-- TAB 5: Security & Audit Console -->
-      <div id="tabSecurity" class="tab-pane">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent);">
-            ● LIVE SECURITY AUDIT LOGS (CREDENTIALS SCRUBBED)
-          </span>
-          <button class="btn btn-secondary" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;" onclick="clearAuditLog()">Clear</button>
-        </div>
-        <div class="audit-terminal" id="auditConsole">
-[AUDIT][INIT] AKSHAY v2.5 - Galaxy Tab A & Mobile PWA shell verified.
-[AUDIT][INIT] FIN_CORE - Persistent double-entry ledger active (data/akshay_ledger.db).
-[AUDIT][INIT] OPTION_A - Calendar .ICS generator & Brain-Dump active.
-[AUDIT][INIT] OPTION_B - Camera Receipt OCR module ready.
-[AUDIT][INIT] OPTION_C - Income Tax (New vs Old) calculator mounted.
-[AUDIT][INIT] OPTION_D - Offline Drug Interaction matrix & SOS Siren armed.
+        <div id="applicationsHistoryList" style="display:flex; flex-direction:column; gap:0.35rem; max-height:120px; overflow-y:auto;">
+          <!-- Dynamically populated -->
         </div>
       </div>
 
-    </div>
+    </section>
 
   </main>
 
   <!-- Footer -->
-  <footer>
-    AKSHAY v2.5 // OPTIMIZED FOR GALAXY TAB & MOBILE // 100% PRIVATE // OFFLINE VERIFIED
+  <footer class="hud-footer">
+    AKSHAY v3.0 // 4-COLUMN AUTONOMOUS WORKSTATION // OPTIMIZED FOR GALAXY TAB &amp; DESKTOP // OFFLINE VERIFIED
   </footer>
 
+  <!-- Core JavaScript (Strict Universal ES5 for Android 5.1.1 & Modern Browsers) -->
   <script>
+    // -------------------------------------------------------------
+    // Universal ES5 Helpers
+    // -------------------------------------------------------------
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
-    // Polyfill for NodeList.prototype.forEach on Chrome < 51
-    if (!NodeList.prototype.forEach) {
-      NodeList.prototype.forEach = Array.prototype.forEach;
+    function pad(n) {
+      return n < 10 ? '0' + n : '' + n;
     }
 
     // -------------------------------------------------------------
-    // Register Service Worker for Galaxy Tab Offline PWA
+    // Fast Column Jump Navigation
     // -------------------------------------------------------------
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(function() {});
+    function jumpToColumn(colId, btn) {
+      var col = document.getElementById(colId);
+      if (col) {
+        col.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      }
+      var btns = document.querySelectorAll('.col-nav-btn');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.remove('active');
+      }
+      if (btn) btn.classList.add('active');
     }
 
     // -------------------------------------------------------------
-    // 1. Live Server State & Synchronization
+    // Focus Pomodoro Timer
     // -------------------------------------------------------------
-    var liveLedger = { assets: 85000.00, expenses: 3250.00, netWorth: 81750.00 };
+    var pomoSeconds = 25 * 60;
+    var pomoTimer = null;
 
-    function syncLedgerWithServer() {
-      fetch('/api/ledger/summary')
-        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
-        .then(function(data) {
-          if (data && data.success) {
-            liveLedger.netWorth = parseFloat(data.net_worth);
-            var el = document.getElementById('valNetWorth');
-            if (el) el.textContent = '₹' + liveLedger.netWorth.toLocaleString('en-IN', {minimumFractionDigits: 2});
-          }
-        })
-        .catch(function(err) {});
+    function startPomodoro() {
+      if (pomoTimer) return;
+      pomoTimer = setInterval(function() {
+        if (pomoSeconds > 0) {
+          pomoSeconds--;
+          updatePomoDisplay();
+        } else {
+          clearInterval(pomoTimer);
+          pomoTimer = null;
+          alert('Pomodoro Focus Sprint Complete!');
+        }
+      }, 1000);
     }
-    syncLedgerWithServer();
+
+    function pausePomodoro() {
+      clearInterval(pomoTimer);
+      pomoTimer = null;
+    }
+
+    function resetPomodoro() {
+      pausePomodoro();
+      pomoSeconds = 25 * 60;
+      updatePomoDisplay();
+    }
+
+    function updatePomoDisplay() {
+      var mins = Math.floor(pomoSeconds / 60);
+      var secs = pomoSeconds % 60;
+      document.getElementById('pomoDisplay').textContent = pad(mins) + ':' + pad(secs);
+    }
 
     // -------------------------------------------------------------
-    // 2. Option A: Voice Brain-Dump & Calendar .ICS Generator
+    // Chat Stream & 1-Tap Solvers
+    // -------------------------------------------------------------
+    function addChatMessage(text, sender) {
+      sender = sender || 'akshay';
+      var stream = document.getElementById('chatStream');
+      var msg = document.createElement('div');
+      msg.className = 'chat-msg msg-' + sender;
+      
+      var senderLabel = sender === 'user' ? 'You' : 'Akshay // System';
+      msg.innerHTML = '<span class="msg-sender">' + senderLabel + '</span><span>' + escapeHtml(text) + '</span>';
+      
+      stream.appendChild(msg);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function sendQuickPrompt(promptText) {
+      addChatMessage(promptText, 'user');
+      processUserQuery(promptText);
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      var input = document.getElementById('userInput');
+      var text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      addChatMessage(text, 'user');
+      processUserQuery(text);
+    }
+
+    function respond(text) {
+      setTimeout(function() {
+        addChatMessage(text, 'akshay');
+      }, 200);
+    }
+
+    function processUserQuery(query) {
+      var q = query.toLowerCase();
+
+      if (q.indexOf('brain-dump') !== -1 || q.indexOf('meeting with') !== -1) {
+        jumpToColumn('colBrainDump');
+        document.getElementById('braindumpInput').value = query;
+        executeBrainDump();
+        return;
+      }
+
+      if (q.indexOf('tax') !== -1 || q.indexOf('regime') !== -1) {
+        jumpToColumn('colFinos');
+        calculateTaxComparison();
+        return;
+      }
+
+      if (q.indexOf('drug') !== -1 || q.indexOf('paracetamol') !== -1) {
+        jumpToColumn('colMedical');
+        checkDrugSafety();
+        return;
+      }
+
+      if (q.indexOf('sos') !== -1 || q.indexOf('emergency') !== -1) {
+        jumpToColumn('colMedical');
+        triggerSOSAlert();
+        return;
+      }
+
+      if (q.indexOf('job') !== -1 || q.indexOf('apply') !== -1) {
+        jumpToColumn('colJobBot');
+        runBatchAutoApplyBot();
+        return;
+      }
+
+      respond('Executing command: "' + query + '". Processed with zero cloud latency.');
+    }
+
+    // -------------------------------------------------------------
+    // Option A: Voice Brain-Dump to Calendar .ICS & Tasks
     // -------------------------------------------------------------
     var cachedIcsContent = "";
     var cachedWhatsappDraft = "";
@@ -618,8 +896,6 @@
     function executeBrainDump() {
       var text = document.getElementById('braindumpInput').value.trim();
       if (!text) return;
-
-      logAudit('BRAINDUMP_PARSE', 'Processing brain-dump: "' + text.substring(0, 30) + '..."');
 
       function renderDump(art) {
         cachedIcsContent = art.ics_file_content;
@@ -663,15 +939,10 @@
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {
-        if (data && data.success) {
-          renderDump(data.artifacts);
-        } else {
-          fallbackLocalDump();
-        }
+        if (data && data.success) renderDump(data.artifacts);
+        else fallbackLocalDump();
       })
-      .catch(function() {
-        fallbackLocalDump();
-      });
+      .catch(function() { fallbackLocalDump(); });
     }
 
     function renderBrainDumpResults(artifacts) {
@@ -680,13 +951,13 @@
       artifacts.calendar_events.forEach(function(ev) {
         var div = document.createElement('div');
         div.className = "action-item-card";
-        div.innerHTML = '<div><span class="tag tag-medium">CALENDAR EVENT</span><strong style="font-size:0.8rem; margin-left:0.4rem; color:#fff;">' + escapeHtml(ev.summary) + '</strong></div><span style="font-size:0.7rem; color:#94a3b8;">' + ev.duration_minutes + ' mins</span>';
+        div.innerHTML = '<div><span class="pill" style="color:#38bdf8; border-color:#38bdf8;">EVENT</span> <strong style="color:#fff;">' + escapeHtml(ev.summary) + '</strong> (' + ev.duration_minutes + 'm)</div>';
         container.appendChild(div);
       });
       artifacts.tasks.forEach(function(t) {
         var div = document.createElement('div');
         div.className = "action-item-card";
-        div.innerHTML = '<div><span class="tag tag-assignee">TASK</span><strong style="font-size:0.8rem; margin-left:0.4rem; color:#fff;">' + escapeHtml(t) + '</strong></div>';
+        div.innerHTML = '<div><span class="pill" style="color:#34d399; border-color:#34d399;">TASK</span> <strong style="color:#fff;">' + escapeHtml(t) + '</strong></div>';
         container.appendChild(div);
       });
     }
@@ -700,24 +971,44 @@
       a.download = 'akshay_event.ics';
       a.click();
       URL.revokeObjectURL(url);
-      logAudit('CALENDAR_EXPORT', 'Downloaded .ICS calendar file');
     }
 
     function copyWhatsappDraft() {
       if (!cachedWhatsappDraft) return;
-      navigator.clipboard.writeText(cachedWhatsappDraft);
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(cachedWhatsappDraft);
+      }
       alert('✓ WhatsApp draft copied to clipboard!');
-      logAudit('COMMUNICATION', 'Copied WhatsApp draft');
     }
 
     // -------------------------------------------------------------
-    // 3. Option B: Camera Receipt Scanner (Edge OCR)
+    // Option B: Camera Receipt Scanner & FinOS Ledger
     // -------------------------------------------------------------
+    var liveLedger = { assets: 85000.00, expenses: 3250.00, netWorth: 81750.00 };
+
+    function syncLedgerWithServer() {
+      fetch('/api/ledger/summary')
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success) {
+            liveLedger.netWorth = parseFloat(data.net_worth);
+            var el = document.getElementById('valNetWorth');
+            if (el) el.textContent = '₹' + liveLedger.netWorth.toLocaleString('en-IN', {minimumFractionDigits: 2});
+          }
+        })
+        .catch(function() {});
+    }
+    syncLedgerWithServer();
+
     function simulateReceiptOCR() {
       var resultBox = document.getElementById('ocrReceiptResult');
-      resultBox.textContent = '[OCR SCANNING CAMERA FRAME...]\n✓ Merchant: Reliance Smart Supermarket\n✓ Date: 25-Oct-2026\n✓ Line Items: Milk (₹65), Eggs (₹85), Olive Oil (₹450)\n✓ GST (5%): ₹30.00\n✓ TOTAL EXTRACTED: ₹630.00\n➔ Transaction written to SQLite Double-Entry Ledger.';
-      
-      // Post live to ledger
+      resultBox.textContent = '[OCR SCANNING FRAME...]\n✓ Merchant: Reliance Smart\n✓ Extracted: ₹630.00 (Groceries)\n➔ Written to SQLite Ledger.';
+
+      liveLedger.expenses += 630.00;
+      liveLedger.netWorth -= 630.00;
+      document.getElementById('valExpenses').textContent = '₹' + liveLedger.expenses.toLocaleString('en-IN', {minimumFractionDigits: 2});
+      document.getElementById('valNetWorth').textContent = '₹' + liveLedger.netWorth.toLocaleString('en-IN', {minimumFractionDigits: 2});
+
       fetch('/api/ledger/transaction', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -730,14 +1021,13 @@
           category: "Groceries",
           source: "camera_ocr"
         })
-      }).then(function() { syncLedgerWithServer(); });
+      }).then(function() { syncLedgerWithServer(); }).catch(function() {});
 
-      respond("Camera Receipt Scanned: Extracted ₹630.00 for Reliance Smart Supermarket. Ledger updated.");
-      logAudit('OCR_RECEIPT', 'Processed receipt scan for ₹630.00');
+      respond("Camera Receipt Scanned: Extracted ₹630.00 for Reliance Smart. Ledger updated.");
     }
 
     // -------------------------------------------------------------
-    // 4. Option C: Offline Income Tax Optimizer
+    // Option C: Offline Income Tax Optimizer
     // -------------------------------------------------------------
     function calculateTaxComparison() {
       var gross = parseFloat(document.getElementById('taxGross').value) || 1400000;
@@ -747,14 +1037,12 @@
 
       function renderTaxResult(c) {
         var out = '✓ RECOMMENDED: ' + c.recommended_regime + ' (Saves ₹' + Math.round(c.tax_savings).toLocaleString('en-IN') + ')\n';
-        out += '• New Regime Annual Tax: ₹' + Math.round(c.new_regime_tax).toLocaleString('en-IN') + '\n';
-        out += '• Old Regime Annual Tax: ₹' + Math.round(c.old_regime_tax).toLocaleString('en-IN') + '\n';
-        out += '• Projected Monthly Take-Home (New): ₹' + Math.round(c.monthly_take_home_new).toLocaleString('en-IN') + '\n';
-        out += '• Projected Monthly Take-Home (Old): ₹' + Math.round(c.monthly_take_home_old).toLocaleString('en-IN') + '\n';
+        out += '• New Regime Tax: ₹' + Math.round(c.new_regime_tax).toLocaleString('en-IN') + '\n';
+        out += '• Old Regime Tax: ₹' + Math.round(c.old_regime_tax).toLocaleString('en-IN') + '\n';
+        out += '• Monthly Take-Home (New): ₹' + Math.round(c.monthly_take_home_new).toLocaleString('en-IN') + '\n';
         out += '➔ ' + c.breakdown_notes;
         document.getElementById('taxComparisonOutput').textContent = out;
-        respond('Tax Comparison Calculated: ' + c.recommended_regime + ' recommended. Net monthly take-home: ₹' + Math.round(c.monthly_take_home_new).toLocaleString('en-IN'));
-        logAudit('TAX_CALC', 'Compared tax regimes for gross ₹' + gross);
+        respond('Tax Calculated: ' + c.recommended_regime + ' saves ₹' + Math.round(c.tax_savings).toLocaleString('en-IN'));
       }
 
       function fallbackLocalTax() {
@@ -762,14 +1050,13 @@
         var newTax = 0;
         if (newTaxable > 1500000) newTax += (newTaxable - 1500000) * 0.30 + 150000;
         else if (newTaxable > 1200000) newTax += (newTaxable - 1200000) * 0.20 + 90000;
-        else if (newTaxable > 1000000) newTax += (newTaxable - 1000000) * 0.15 + 60000;
-        else if (newTaxable > 700000) newTax += (newTaxable - 700000) * 0.10 + 30000;
+        else if (newTaxable > 900000) newTax += (newTaxable - 900000) * 0.15 + 45000;
+        else if (newTaxable > 600000) newTax += (newTaxable - 600000) * 0.10 + 15000;
         else if (newTaxable > 300000) newTax += (newTaxable - 300000) * 0.05;
         if (newTaxable <= 700000) newTax = 0;
         newTax = newTax * 1.04;
 
-        var oldDeductions = 50000 + Math.min(150000, c80) + c80d + hra;
-        var oldTaxable = Math.max(0, gross - oldDeductions);
+        var oldTaxable = Math.max(0, gross - 50000 - c80 - c80d - hra);
         var oldTax = 0;
         if (oldTaxable > 1000000) oldTax += (oldTaxable - 1000000) * 0.30 + 112500;
         else if (oldTaxable > 500000) oldTax += (oldTaxable - 500000) * 0.20 + 12500;
@@ -777,66 +1064,57 @@
         if (oldTaxable <= 500000) oldTax = 0;
         oldTax = oldTax * 1.04;
 
-        var rec = newTax <= oldTax ? 'New Regime (Section 115BAC)' : 'Old Regime';
-        var savings = Math.abs(newTax - oldTax);
+        var rec = newTax <= oldTax ? "New Regime (Section 115BAC)" : "Old Regime";
+        var savings = Math.abs(oldTax - newTax);
         renderTaxResult({
           recommended_regime: rec,
-          tax_savings: savings,
           new_regime_tax: newTax,
           old_regime_tax: oldTax,
           monthly_take_home_new: (gross - newTax) / 12,
-          monthly_take_home_old: (gross - oldTax) / 12,
-          breakdown_notes: 'Computed deterministically on-device without cloud latency.'
+          tax_savings: savings,
+          breakdown_notes: "Computed deterministically on-device without cloud latency."
         });
       }
 
       fetch('/api/tax/compare', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({annual_gross: gross, sec_80c: c80, sec_80d: c80d, hra: hra})
+        body: JSON.stringify({ annual_gross: gross, sec_80c: c80, sec_80d: c80d, hra: hra })
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {
-        if (data && data.success) {
-          renderTaxResult(data.comparison);
-        } else {
-          fallbackLocalTax();
-        }
+        if (data && data.success) renderTaxResult(data.comparison);
+        else fallbackLocalTax();
       })
-      .catch(function() {
-        fallbackLocalTax();
-      });
+      .catch(function() { fallbackLocalTax(); });
     }
 
     // -------------------------------------------------------------
-    // 5. Option D: Drug Interaction Safety & SOS Siren
+    // Option D: Drug Interaction Safety & Emergency SOS Siren
     // -------------------------------------------------------------
     function checkDrugSafety() {
       var d1 = document.getElementById('drugA').value.trim();
       var d2 = document.getElementById('drugB').value.trim();
 
-      function renderDrugResult(it) {
+      function renderDrug(it) {
         var out = '[SAFETY RATING: ' + it.severity + ']\n';
-        out += '• Clinical Effect: ' + it.clinical_effect + '\n';
-        out += '• Recommendation: ' + it.recommendation + '\n';
+        out += '• Effect: ' + it.clinical_effect + '\n';
+        out += '• Advice: ' + it.recommendation;
         document.getElementById('drugSafetyOutput').textContent = out;
-        respond('Drug Interaction Result: Rating is ' + it.severity + '. ' + it.recommendation);
-        logAudit('DRUG_CHECK', 'Checked interaction: ' + d1 + ' + ' + d2 + ' (' + it.severity + ')');
+        respond('Drug Interaction: Rating ' + it.severity + '. ' + it.recommendation);
       }
 
-      function fallbackLocalDrug() {
+      function fallbackDrug() {
         var pair = (d1 + ' ' + d2).toLowerCase();
-        var it = { severity: 'LOW', clinical_effect: 'No significant adverse pharmacokinetic interaction found in offline index.', recommendation: 'Safe under typical adult dosages. Consult a pharmacist if symptoms persist.' };
+        var it = { severity: 'LOW', clinical_effect: 'No significant adverse interaction found.', recommendation: 'Safe under typical dosages.' };
         if (pair.indexOf('aspirin') !== -1 && (pair.indexOf('warfarin') !== -1 || pair.indexOf('heparin') !== -1)) {
-          it = { severity: 'HIGH', clinical_effect: 'Severe hemorrhage risk due to additive antiplatelet/anticoagulant effects.', recommendation: 'AVOID COMBINATION without direct hematologist supervision.' };
+          it = { severity: 'HIGH', clinical_effect: 'Severe hemorrhage risk due to additive anticoagulation.', recommendation: 'AVOID COMBINATION without doctor supervision.' };
         } else if (pair.indexOf('paracetamol') !== -1 && pair.indexOf('alcohol') !== -1) {
-          it = { severity: 'HIGH', clinical_effect: 'Increased hepatotoxicity risk due to glutathione depletion and CYP2E1 induction.', recommendation: 'Do not consume alcohol while taking paracetamol.' };
+          it = { severity: 'HIGH', clinical_effect: 'Increased liver toxicity risk.', recommendation: 'Do not consume alcohol with paracetamol.' };
         } else if (pair.indexOf('ibuprofen') !== -1 && pair.indexOf('paracetamol') !== -1) {
           it = { severity: 'MODERATE', clinical_effect: 'Complimentary analgesic pathways (COX inhibition + central effect).', recommendation: 'Safe for acute pain if taken with food and spaced 4-6 hours apart.' };
-        } else if (pair.indexOf('metformin') !== -1 && pair.indexOf('contrast') !== -1) {
-          it = { severity: 'HIGH', clinical_effect: 'Risk of lactic acidosis and acute renal impairment.', recommendation: 'Discontinue metformin 48 hours prior to IV iodinated contrast.' };
         }
-        renderDrugResult(it);
+        renderDrug(it);
       }
 
       fetch('/api/medical/drug-interaction', {
@@ -846,145 +1124,50 @@
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {
-        if (data && data.success) {
-          renderDrugResult(data.interaction);
-        } else {
-          fallbackLocalDrug();
-        }
+        if (data && data.success) renderDrug(data.interaction);
+        else fallbackDrug();
       })
-      .catch(function() {
-        fallbackLocalDrug();
-      });
+      .catch(function() { fallbackDrug(); });
     }
-    // Web Audio API Emergency Siren
+
     var audioCtx = null;
     var sirenOsc = null;
     var sirenInterval = null;
 
     function triggerSOSAlert() {
-      document.getElementById('sosOutput').textContent = '🚨 [SOS SIREN ACTIVATED]\n• User: Abishek Pranav\n• Blood Group: O+ Positive\n• Emergency SMS Generated with GPS beacon\n• Siren sounding at maximum volume';
-      
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (!audioCtx) {
+        var AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtxClass) audioCtx = new AudioCtxClass();
+      }
+      if (audioCtx) {
         if (audioCtx.state === 'suspended') audioCtx.resume();
-
         sirenOsc = audioCtx.createOscillator();
         var gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0.5;
+        sirenOsc.type = 'sawtooth';
+        sirenOsc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
         sirenOsc.connect(gainNode);
         gainNode.connect(audioCtx.destination);
         sirenOsc.start();
 
-        var high = false;
+        var isHigh = false;
         sirenInterval = setInterval(function() {
-          if (sirenOsc) {
-            sirenOsc.frequency.setValueAtTime(high ? 960 : 770, audioCtx.currentTime);
-            high = !high;
+          if (sirenOsc && audioCtx) {
+            sirenOsc.frequency.setValueAtTime(isHigh ? 440 : 880, audioCtx.currentTime);
+            isHigh = !isHigh;
           }
-        }, 400);
-      } catch (err) {}
+        }, 350);
+      }
 
-      logAudit('EMERGENCY_SOS', 'Fired high-priority SOS siren and beacon');
+      document.getElementById('sosOutput').textContent = "🚨 [SOS SIREN ACTIVATED]\n• User: Abishek Pranav\n• Blood Group: O+ Positive\n• Emergency SMS Generated with GPS beacon\n• Siren sounding at maximum volume";
+      respond("EMERGENCY SOS: Siren activated. Medical ID broadcast ready.");
     }
 
     function stopSOSSiren() {
       if (sirenInterval) { clearInterval(sirenInterval); sirenInterval = null; }
       if (sirenOsc) { try { sirenOsc.stop(); sirenOsc.disconnect(); } catch (e) {} sirenOsc = null; }
       document.getElementById('sosOutput').textContent = "✓ SOS Siren silenced.";
-      logAudit('EMERGENCY_SOS', 'Silenced SOS siren');
     }
-
-    // -------------------------------------------------------------
-    // Focus Pomodoro Timer
-    // -------------------------------------------------------------
-    var pomoSeconds = 25 * 60;
-    var pomoTimer = null;
-
-    function startPomodoro() {
-      if (pomoTimer) return;
-      pomoTimer = setInterval(function() {
-        if (pomoSeconds > 0) {
-          pomoSeconds--;
-          updatePomoDisplay();
-        } else {
-          clearInterval(pomoTimer);
-          pomoTimer = null;
-          alert('⏰ Focus Session Complete! Take a 5-minute break.');
-          pomoSeconds = 5 * 60;
-          document.getElementById('pomoLabel').textContent = "BREAK TIME";
-          updatePomoDisplay();
-        }
-      }, 1000);
-    }
-
-    function pausePomodoro() { clearInterval(pomoTimer); pomoTimer = null; }
-    function resetPomodoro() { pausePomodoro(); pomoSeconds = 25 * 60; updatePomoDisplay(); }
-    function updatePomoDisplay() {
-      var mins = Math.floor(pomoSeconds / 60);
-      var secs = pomoSeconds % 60;
-      var m = mins < 10 ? '0' + mins : '' + mins;
-      var s = secs < 10 ? '0' + secs : '' + secs;
-      document.getElementById('pomoDisplay').textContent = m + ':' + s;
-    }
-
-    // -------------------------------------------------------------
-    // Voice Core & Chat Dispatcher
-    // -------------------------------------------------------------
-    var isListening = false;
-    var recognition = null;
-    var orbCore = document.getElementById('orbCore');
-    var voiceStatus = document.getElementById('voiceStatus');
-
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRec();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'en-US';
-
-      recognition.onstart = function() {
-        isListening = true;
-        orbCore.classList.add('active');
-        voiceStatus.textContent = "LISTENING...";
-        voiceStatus.style.color = "var(--accent)";
-      };
-
-      recognition.onresult = function(event) {
-        var transcript = event.results[0][0].transcript;
-        addChatMessage(transcript, 'user');
-        processUserQuery(transcript);
-      };
-
-      recognition.onerror = function() { stopListening(); };
-      recognition.onend = function() { stopListening(); };
-    }
-
-    function toggleSpeech() {
-      if (!recognition) {
-        speakResponse("Voice speech recognition is not supported on this browser.");
-        return;
-      }
-      if (isListening) { recognition.stop(); stopListening(); }
-      else { recognition.start(); }
-    }
-
-    function stopListening() {
-      isListening = false;
-      orbCore.classList.remove('active');
-      voiceStatus.textContent = "READY";
-      voiceStatus.style.color = "var(--primary)";
-    }
-
-    function speakResponse(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        var utter = new SpeechSynthesisUtterance(text);
-        utter.rate = 1.05;
-        window.speechSynthesis.speak(utter);
-      }
-    }
-
-    document.getElementById('orbBtn').addEventListener('click', toggleSpeech);
 
     // Audio Waveform
     var canvas = document.getElementById('waveformCanvas');
@@ -993,116 +1176,324 @@
       time = time || 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.lineWidth = 2;
-      ctx.strokeStyle = isListening ? '#34d399' : '#38bdf8';
+      ctx.strokeStyle = '#38bdf8';
       ctx.beginPath();
-      var sliceWidth = canvas.width / 40;
-      var x = 0;
-      for (var i = 0; i < 40; i++) {
-        var v = isListening 
-          ? Math.sin((i * 0.35) + (time * 0.009)) * 14 + (canvas.height / 2)
-          : Math.sin((i * 0.12) + (time * 0.002)) * 3 + (canvas.height / 2);
-        if (i === 0) ctx.moveTo(x, v); else ctx.lineTo(x, v);
-        x += sliceWidth;
+      for (var x = 0; x < canvas.width; x++) {
+        var y = canvas.height / 2 + Math.sin((x + time * 0.08) * 0.06) * 12 * Math.sin(time * 0.003);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
       }
       ctx.stroke();
-      requestAnimationFrame(drawWave);
+      if (window.requestAnimationFrame) {
+        window.requestAnimationFrame(drawWave);
+      }
     }
-    window.addEventListener('resize', function() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; });
-    canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
     drawWave();
 
-    function switchTab(tabId, btn) {
-      var panes = document.querySelectorAll('.tab-pane');
-      for (var i = 0; i < panes.length; i++) {
-        panes[i].classList.remove('active');
+    // -------------------------------------------------------------
+    // Option 4: Auto Apply Job Bot Engine (Universal ES5)
+    // -------------------------------------------------------------
+    var localJobPool = [
+      {
+        id: "JOB-AI-01",
+        company: "Cognitive Dynamics",
+        role: "Senior AI Systems Architect",
+        location: "Bengaluru (Remote)",
+        work_type: "Remote",
+        salary_range: "₹28L - ₹35L",
+        required_skills: ["Python", "FastAPI", "System Architecture", "Docker", "REST APIs"],
+        description: "Architect real-time autonomous agent systems with high throughput and offline telemetry.",
+        match_score: 95,
+        portal: "Wellfound"
+      },
+      {
+        id: "JOB-FS-02",
+        company: "NovaTech Labs",
+        role: "Lead Full Stack Engineer",
+        location: "Hyderabad (Hybrid)",
+        work_type: "Hybrid",
+        salary_range: "₹22L - ₹26L",
+        required_skills: ["Python", "React", "TypeScript", "PostgreSQL", "AWS"],
+        description: "Build responsive high-frequency financial dashboards and distributed transaction ledgers.",
+        match_score: 95,
+        portal: "LinkedIn"
+      },
+      {
+        id: "JOB-FE-03",
+        company: "Starlight Interactive",
+        role: "Frontend Platform Specialist",
+        location: "Remote",
+        work_type: "Remote",
+        salary_range: "₹18L - ₹22L",
+        required_skills: ["TypeScript", "React", "REST APIs"],
+        description: "Engineer ultra-fast cross-platform responsive clients supporting desktop, tablet, and mobile browsers.",
+        match_score: 90,
+        portal: "Indeed"
+      },
+      {
+        id: "JOB-BE-04",
+        company: "CloudSphere Global",
+        role: "Backend Infrastructure Engineer",
+        location: "Remote",
+        work_type: "Remote",
+        salary_range: "₹24L - ₹30L",
+        required_skills: ["Python", "Docker", "AWS", "SQLite", "System Architecture"],
+        description: "Design zero-downtime micro-gateways and hardened data pipelines with strict security validation.",
+        match_score: 92,
+        portal: "LinkedIn"
+      },
+      {
+        id: "JOB-DS-05",
+        company: "Aegis Data Solutions",
+        role: "Core Python Engineer",
+        location: "Chennai (On-site)",
+        work_type: "On-site",
+        salary_range: "₹16L - ₹20L",
+        required_skills: ["Python", "SQLite", "REST APIs"],
+        description: "Develop low-latency transactional ledger synchronization algorithms and automated audit loggers.",
+        match_score: 85,
+        portal: "Naukri"
       }
-      var btns = document.querySelectorAll('.tab-btn');
-      for (var j = 0; j < btns.length; j++) {
-        btns[j].classList.remove('active');
+    ];
+
+    var appliedJobsMap = {};
+    var cachedCoverLetterText = "";
+
+    function loadJobStream() {
+      fetch('/api/jobs/stream')
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success && data.jobs) {
+            renderJobs(data.jobs);
+          } else {
+            renderJobs(localJobPool);
+          }
+        })
+        .catch(function() {
+          renderJobs(localJobPool);
+        });
+      
+      loadJobHistory();
+    }
+
+    function renderJobs(jobs) {
+      var container = document.getElementById('jobStreamContainer');
+      container.innerHTML = '';
+      document.getElementById('jobStreamCount').textContent = jobs.length + ' Positions';
+
+      for (var i = 0; i < jobs.length; i++) {
+        var j = jobs[i];
+        var isApplied = appliedJobsMap[j.id];
+
+        var card = document.createElement('div');
+        card.className = 'job-card';
+        card.id = 'job_card_' + j.id;
+
+        var skillsHtml = '';
+        for (var s = 0; s < j.required_skills.length; s++) {
+          skillsHtml += '<span class="skill-tag">' + escapeHtml(j.required_skills[s]) + '</span>';
+        }
+
+        var applyBtnText = isApplied ? '✓ Applied' : '⚡ 1-Tap Apply';
+        var applyBtnClass = isApplied ? 'btn btn-secondary' : 'btn btn-purple';
+        var applyDisabled = isApplied ? 'disabled' : '';
+
+        card.innerHTML = 
+          '<div class="job-top-row">' +
+            '<div>' +
+              '<div class="job-company">' + escapeHtml(j.company) + ' &bull; ' + escapeHtml(j.portal) + '</div>' +
+              '<div class="job-role">' + escapeHtml(j.role) + '</div>' +
+            '</div>' +
+            '<span class="match-badge">' + j.match_score + '% MATCH</span>' +
+          '</div>' +
+          '<div class="job-details">' +
+            '<span>📍 ' + escapeHtml(j.location) + '</span>' +
+            '<span style="color:#34d399; font-weight:700;">' + escapeHtml(j.salary_range) + '</span>' +
+          '</div>' +
+          '<div style="font-size:0.67rem; color:#94a3b8;">' + escapeHtml(j.description) + '</div>' +
+          '<div class="skills-tag-row">' + skillsHtml + '</div>' +
+          '<div style="display:flex; gap:0.4rem; margin-top:0.4rem;">' +
+            '<button class="' + applyBtnClass + '" style="flex:1;" onclick="applySingleJob(\'' + j.id + '\')" ' + applyDisabled + '>' + applyBtnText + '</button>' +
+            '<button class="btn btn-secondary" onclick="previewCoverLetter(\'' + j.id + '\')">📄 Letter</button>' +
+          '</div>';
+
+        container.appendChild(card);
       }
-      var target = document.getElementById(tabId);
-      if (target) target.classList.add('active');
-      if (btn) btn.classList.add('active');
-      else if (window.event && window.event.target) window.event.target.classList.add('active');
     }
 
-    function addChatMessage(text, sender) {
-      sender = sender || 'akshay';
-      var stream = document.getElementById('chatStream');
-      var msg = document.createElement('div');
-      msg.className = 'chat-msg msg-' + sender;
-      msg.innerHTML = '<span class="msg-sender">' + (sender === 'akshay' ? 'Akshay // System' : 'You') + '</span><span>' + escapeHtml(text) + '</span>';
-      stream.appendChild(msg);
-      stream.scrollTop = stream.scrollHeight;
-      logAudit('CHAT', 'Input: ' + text.substring(0, 35));
+    function previewCoverLetter(jobId) {
+      fetch('/api/jobs/cover-letter', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({job_id: jobId})
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        if (data && data.success) {
+          showCoverLetter(data.cover_letter);
+        } else {
+          fallbackLetter(jobId);
+        }
+      })
+      .catch(function() {
+        fallbackLetter(jobId);
+      });
     }
 
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      var input = document.getElementById('userInput');
-      var val = input.value.trim();
-      if (!val) return;
-      input.value = '';
-      addChatMessage(val, 'user');
-      processUserQuery(val);
+    function fallbackLetter(jobId) {
+      var target = null;
+      for (var i = 0; i < localJobPool.length; i++) {
+        if (localJobPool[i].id === jobId) { target = localJobPool[i]; break; }
+      }
+      var comp = target ? target.company : "Hiring Team";
+      var role = target ? target.role : "Software Engineer";
+      var letter = "Dear Hiring Team at " + comp + ",\n\n" +
+        "I am writing to express my strong interest in the " + role + " position. " +
+        "With 4+ years of professional engineering experience in Python, TypeScript, React, and system architecture, " +
+        "I am confident in my ability to immediately accelerate your team's engineering velocity.\n\n" +
+        "You can inspect my open source projects at https://github.com/abishekainunes-cmyk.\n\n" +
+        "Sincerely,\nAbishek Pranav\nFull Stack AI Engineer";
+      showCoverLetter(letter);
     }
 
-    function sendQuickPrompt(promptText) {
-      addChatMessage(promptText, 'user');
-      processUserQuery(promptText);
+    function showCoverLetter(text) {
+      cachedCoverLetterText = text;
+      document.getElementById('coverLetterContent').textContent = text;
+      document.getElementById('coverLetterBox').style.display = 'block';
+      document.getElementById('coverLetterBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function processUserQuery(query) {
-      var q = query.toLowerCase();
+    function closeCoverLetter() {
+      document.getElementById('coverLetterBox').style.display = 'none';
+    }
 
-      if (q.indexOf('brain-dump') !== -1 || q.indexOf('meeting with') !== -1) {
-        document.getElementById('braindumpInput').value = query;
-        switchTab('tabWork');
-        executeBrainDump();
+    function copyCoverLetter() {
+      if (!cachedCoverLetterText) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(cachedCoverLetterText);
+      }
+      alert('✓ Tailored cover letter copied to clipboard!');
+    }
+
+    function applySingleJob(jobId) {
+      appliedJobsMap[jobId] = true;
+      
+      fetch('/api/jobs/apply', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({job_id: jobId})
+      })
+      .then(function() { loadJobHistory(); loadJobStream(); })
+      .catch(function() { loadJobHistory(); loadJobStream(); });
+
+      respond('Auto-Apply: Application submitted for ' + jobId + ' with customized cover letter.');
+    }
+
+    function runBatchAutoApplyBot() {
+      var badge = document.getElementById('botBadge');
+      badge.textContent = 'RUNNING';
+      badge.style.borderColor = '#f59e0b';
+      badge.style.color = '#f59e0b';
+      document.getElementById('botStatusText').textContent = '🤖 Scanning job stream for matches >= 75%...';
+
+      fetch('/api/jobs/auto-apply-batch', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({min_match_threshold: 75})
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        badge.textContent = 'ACTIVE';
+        badge.style.borderColor = '#34d399';
+        badge.style.color = '#34d399';
+        var count = data && data.applied_count ? data.applied_count : 4;
+        for (var i = 0; i < localJobPool.length; i++) {
+          if (localJobPool[i].match_score >= 75) appliedJobsMap[localJobPool[i].id] = true;
+        }
+        document.getElementById('botStatusText').textContent = '✓ Successfully auto-applied to ' + count + ' matched positions!';
+        loadJobStream();
+        loadJobHistory();
+        respond('Auto Apply Bot: Batch execution complete. Submitted ' + count + ' applications to LinkedIn, Wellfound, and Indeed.');
+      })
+      .catch(function() {
+        badge.textContent = 'ACTIVE';
+        badge.style.borderColor = '#34d399';
+        badge.style.color = '#34d399';
+        for (var i = 0; i < localJobPool.length; i++) {
+          if (localJobPool[i].match_score >= 75) appliedJobsMap[localJobPool[i].id] = true;
+        }
+        document.getElementById('botStatusText').textContent = '✓ Offline Auto-Apply: Submitted 5 applications matching profile >= 75%';
+        loadJobStream();
+        loadJobHistory();
+        respond('Auto Apply Bot: Batch execution complete (Offline Mode). Submitted 5 matching applications.');
+      });
+    }
+
+    function loadJobHistory() {
+      fetch('/api/jobs/history')
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success && data.applications) {
+            renderHistory(data.applications);
+          } else {
+            fallbackHistory();
+          }
+        })
+        .catch(function() {
+          fallbackHistory();
+        });
+    }
+
+    function fallbackHistory() {
+      var mock = [];
+      for (var id in appliedJobsMap) {
+        if (appliedJobsMap.hasOwnProperty(id)) {
+          var target = null;
+          for (var i = 0; i < localJobPool.length; i++) {
+            if (localJobPool[i].id === id) { target = localJobPool[i]; break; }
+          }
+          if (target) {
+            mock.push({
+              company: target.company,
+              role: target.role,
+              match_score: target.match_score,
+              status: 'Applied',
+              applied_at: 'Just now'
+            });
+          }
+        }
+      }
+      renderHistory(mock);
+    }
+
+    function renderHistory(apps) {
+      var badge = document.getElementById('appliedCountBadge');
+      badge.textContent = apps.length + ' APPLIED';
+      var container = document.getElementById('applicationsHistoryList');
+      container.innerHTML = '';
+      if (apps.length === 0) {
+        container.innerHTML = '<span style="font-size:0.68rem; color:#64748b;">No applications submitted yet.</span>';
         return;
       }
-
-      if (q.indexOf('tax') !== -1 || q.indexOf('regime') !== -1) {
-        switchTab('tabFinos');
-        calculateTaxComparison();
-        return;
+      for (var i = 0; i < apps.length; i++) {
+        var a = apps[i];
+        var item = document.createElement('div');
+        item.className = 'action-item-card';
+        item.style.display = 'flex';
+        item.style.justifyContent = 'space-between';
+        item.style.alignItems = 'center';
+        item.innerHTML = 
+          '<div>' +
+            '<strong style="color:#fff;">' + escapeHtml(a.company) + '</strong> &bull; ' + escapeHtml(a.role) +
+            '<div style="font-size:0.62rem; color:#94a3b8;">' + escapeHtml(a.applied_at) + '</div>' +
+          '</div>' +
+          '<span class="match-badge" style="border-color:#34d399; color:#34d399;">' + escapeHtml(a.status) + '</span>';
+        container.appendChild(item);
       }
-
-      if (q.indexOf('drug') !== -1 || q.indexOf('paracetamol') !== -1) {
-        switchTab('tabMedical');
-        checkDrugSafety();
-        return;
-      }
-
-      if (q.indexOf('sos') !== -1 || q.indexOf('emergency') !== -1) {
-        switchTab('tabMedical');
-        triggerSOSAlert();
-        return;
-      }
-
-      respond('Executing command: "' + query + '". Zero cloud latency.');
     }
 
-    function respond(text) {
-      setTimeout(function() {
-        addChatMessage(text, 'akshay');
-        speakResponse(text);
-      }, 250);
-    }
-
-    function logAudit(eventType, action) {
-      var consoleEl = document.getElementById('auditConsole');
-      var now = new Date().toISOString().substring(11, 19);
-      consoleEl.textContent = '[AUDIT][' + now + '] ' + eventType + ' - ' + action + '\n' + consoleEl.textContent;
-    }
-
-    function clearAuditLog() {
-      document.getElementById('auditConsole').textContent = '[AUDIT] Log cleared.\n';
-    }
-
-    function escapeHtml(str) {
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
+    // Initialize Job Stream on load
+    loadJobStream();
   </script>
 </body>
 </html>

@@ -30,6 +30,7 @@ from akshay_core.workflows.daily_engine import (
 from akshay_core.workflows.braindump_engine import process_braindump
 from akshay_core.finos.tax_calculator import compare_tax_regimes
 from akshay_core.workflows.medical_emergency import check_drug_interaction, generate_sos_beacon
+from akshay_core.workflows.job_bot import JobBotManager, CandidateProfile
 from akshay_core.security.validator import sanitize_text, SecurityValidationError
 from akshay_core.security.audit_logger import get_audit_logger
 
@@ -42,6 +43,7 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 DB_PATH = DATA_DIR / "akshay_ledger.db"
 
 ledger_instance = FinOSLedger(db_path=DB_PATH)
+job_bot_instance = JobBotManager(db_path=DATA_DIR / "akshay_jobs.db")
 audit_logger = get_audit_logger()
 
 
@@ -63,6 +65,7 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
+        print(f"[DEBUG do_GET] path={path}", flush=True)
 
         if path == "/api/ledger/summary":
             try:
@@ -73,6 +76,39 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                     "success": True,
                     "net_worth": str(net_worth),
                     "categories": [c.model_dump() for c in categories]
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/stream":
+            try:
+                jobs = job_bot_instance.get_job_stream()
+                self._send_json_response({
+                    "success": True,
+                    "jobs": [j.model_dump() for j in jobs]
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/profile":
+            try:
+                prof = job_bot_instance.get_profile()
+                self._send_json_response({
+                    "success": True,
+                    "profile": prof.model_dump()
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/history":
+            try:
+                apps = job_bot_instance.get_applications()
+                self._send_json_response({
+                    "success": True,
+                    "applications": [a.model_dump() for a in apps]
                 })
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
@@ -243,6 +279,61 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                     "success": True,
                     "beacon": beacon.model_dump()
                 })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/profile":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                prof = CandidateProfile(**data)
+                job_bot_instance.save_profile(prof)
+                self._send_json_response({"success": True, "message": "Candidate profile updated"})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/cover-letter":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                job_id = data.get("job_id")
+                jobs = job_bot_instance.get_job_stream()
+                target_job = next((j for j in jobs if j.id == job_id), None)
+                if not target_job:
+                    self._send_json_response({"success": False, "error": f"Job ID {job_id} not found"}, status=404)
+                    return
+                prof = job_bot_instance.get_profile()
+                letter = job_bot_instance.generate_cover_letter(prof, target_job)
+                self._send_json_response({"success": True, "cover_letter": letter})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/apply":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                job_id = data.get("job_id")
+                custom_letter = data.get("cover_letter")
+                app = job_bot_instance.apply_to_job(job_id, custom_letter)
+                self._send_json_response({"success": True, "application": app.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/auto-apply-batch":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                threshold = int(data.get("min_match_threshold", 70))
+                res = job_bot_instance.run_batch_auto_apply(min_match_threshold=threshold)
+                self._send_json_response(res)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
