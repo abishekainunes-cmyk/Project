@@ -1,58 +1,155 @@
-# Galaxy Tab A Auto-Connector & Port Forwarder
-$adb = Join-Path $PSScriptRoot "..\tools\platform-tools\adb.exe"
+# Galaxy Tab A Auto-Connector & Port Forwarder (Robust Multi-Path)
+$ScriptDir = $PSScriptRoot
+
+# Locate adb.exe dynamically across possible deployment locations
+$adbCandidates = @(
+    (Join-Path $ScriptDir "tools\platform-tools\adb.exe"),
+    (Join-Path $ScriptDir "..\tools\platform-tools\adb.exe"),
+    "D:\Akshay_Personal_AI\tools\platform-tools\adb.exe",
+    "C:\Users\abish\Documents\antigravity\quick-curie\tools\platform-tools\adb.exe"
+)
+
+$adb = $null
+foreach ($cand in $adbCandidates) {
+    if (Test-Path $cand) {
+        $adb = $cand
+        break
+    }
+}
+
+if (-not $adb) {
+    $sysAdb = (Get-Command adb.exe -ErrorAction SilentlyContinue).Source
+    if ($sysAdb) { $adb = $sysAdb }
+}
 
 Write-Host "==============================================================" -ForegroundColor Cyan
 Write-Host "       AKSHAY: Galaxy Tab A Auto-Deployment Bridge            " -ForegroundColor Cyan
 Write-Host "==============================================================" -ForegroundColor Cyan
 Write-Host ""
 
-if (-not (Test-Path $adb)) {
-    Write-Host "[-] Error: ADB binary not found at: $adb" -ForegroundColor Red
+if (-not $adb -or -not (Test-Path $adb)) {
+    Write-Host "[-] Error: ADB binary not found in standard locations." -ForegroundColor Red
+    Write-Host "Please verify tools\platform-tools\adb.exe exists." -ForegroundColor Yellow
     exit 1
 }
 
-Write-Host "[*] Checking for connected Galaxy Tab A via ADB..." -ForegroundColor Yellow
-$output = & $adb devices -l
+Write-Host "[*] ADB Engine: $adb" -ForegroundColor Gray
+Write-Host "[*] Probing for connected Galaxy Tab A via ADB..." -ForegroundColor Yellow
 
-$deviceLine = $output | Where-Object { $_ -match "\bdevice\b" -and $_ -notmatch "List of devices" }
-$unauthorizedLine = $output | Where-Object { $_ -match "\bunauthorized\b" }
+$maxAttempts = 15
+$attempt = 0
+$authorized = $false
+$deviceFound = $false
+$devId = ""
 
-if ($deviceLine) {
-    $devId = ($deviceLine -split '\s+')[0]
-    Write-Host "[+] Galaxy Tab A detected and authorized! (Device ID: $devId)" -ForegroundColor Green
-    Write-Host "[*] Forwarding local port 8085 over USB cable to tablet..." -ForegroundColor Cyan
+while ($attempt -lt $maxAttempts) {
+    $output = & $adb devices -l
+    $deviceLine = $output | Where-Object { $_ -match "\bdevice\b" -and $_ -notmatch "List of devices" }
+    $unauthorizedLine = $output | Where-Object { $_ -match "\bunauthorized\b" }
+
+    if ($deviceLine) {
+        $deviceFound = $true
+        $authorized = $true
+        $devId = ($deviceLine -split '\s+')[0]
+        break
+    }
+    elseif ($unauthorizedLine) {
+        $deviceFound = $true
+        if ($attempt -eq 0) {
+            Write-Host ""
+            Write-Host "==============================================================" -ForegroundColor Yellow
+            Write-Host "[!] GALAXY TAB A DETECTED - WAITING FOR USB AUTHORIZATION" -ForegroundColor Red
+            Write-Host "==============================================================" -ForegroundColor Yellow
+            Write-Host "LOOK AT YOUR GALAXY TAB A SCREEN RIGHT NOW!" -ForegroundColor White
+            Write-Host "A prompt is showing: 'Allow USB debugging?'" -ForegroundColor Cyan
+            Write-Host "  1. Check the box: [x] Always allow from this computer" -ForegroundColor Green
+            Write-Host "  2. Tap: [OK] or [Allow]" -ForegroundColor Green
+            Write-Host "--------------------------------------------------------------" -ForegroundColor Yellow
+            Write-Host -NoNewline "[*] Waiting for you to tap Allow on tablet screen" -ForegroundColor Yellow
+        }
+        Write-Host "." -NoNewline -ForegroundColor Yellow
+        Start-Sleep -Seconds 2
+        $attempt++
+    }
+    else {
+        break
+    }
+}
+Write-Host ""
+
+if ($authorized) {
+    Write-Host "[+] Galaxy Tab A authorized successfully! (Device ID: $devId)" -ForegroundColor Green
+    Write-Host "[*] Establishing USB Reverse Port Bridge (tcp:8085 -> tcp:8085)..." -ForegroundColor Cyan
     & $adb reverse tcp:8085 tcp:8085
-    Write-Host "[+] Port forwarded! 'http://localhost:8085' is now bridged through USB!" -ForegroundColor Green
-    Write-Host "[*] Launching Akshay directly on your Galaxy Tab A screen..." -ForegroundColor Cyan
+    Write-Host "[+] Port 8085 bridged over USB! 'http://localhost:8085' is now active on tablet!" -ForegroundColor Green
+
+    # Verify server is listening
+    $serverRunning = $false
+    try {
+        $tcp = Get-NetTCPConnection -LocalPort 8085 -ErrorAction SilentlyContinue
+        if ($tcp) { $serverRunning = $true }
+    } catch {}
+
+    if (-not $serverRunning) {
+        Write-Host "[*] Akshay Server not detected on port 8085. Launching server..." -ForegroundColor Cyan
+        $pyCandidates = @(
+            (Join-Path $ScriptDir "server.py"),
+            "D:\Akshay_Personal_AI\server.py",
+            "C:\Users\abish\Documents\antigravity\quick-curie\Akshay-AI-Personal-Assistant\server.py"
+        )
+        $serverScript = $null
+        foreach ($cand in $pyCandidates) {
+            if (Test-Path $cand) {
+                $serverScript = $cand
+                break
+            }
+        }
+        if ($serverScript) {
+            Start-Process python -ArgumentList "`"$serverScript`"" -WindowStyle Minimized
+            Start-Sleep -Seconds 2
+        }
+    }
+
+    Write-Host "[*] Opening Akshay directly on your Galaxy Tab A screen..." -ForegroundColor Cyan
     & $adb shell am start -a android.intent.action.VIEW -d "http://localhost:8085"
     Write-Host ""
-    Write-Host "[SUCCESS] Akshay is now open on your Galaxy Tab A!" -ForegroundColor Green
-    Write-Host "Tap 'Install App' or 'Add to Home Screen' in the browser." -ForegroundColor Yellow
-    Write-Host "==============================================================" -ForegroundColor Cyan
+    Write-Host "==============================================================" -ForegroundColor Green
+    Write-Host "[SUCCESS] Akshay is now live and running on your Galaxy Tab A!" -ForegroundColor Green
+    Write-Host "==============================================================" -ForegroundColor Green
+    Write-Host "Tips:" -ForegroundColor White
+    Write-Host "  1. In the tablet browser, tap menu (3 dots) -> 'Install App' or 'Add to Home screen'." -ForegroundColor Cyan
+    Write-Host "  2. You can also access Akshay from any phone/laptop on Wi-Fi at:" -ForegroundColor White
+    Write-Host "     http://192.168.0.105:8085" -ForegroundColor Yellow
+    Write-Host "==============================================================" -ForegroundColor Green
     exit 0
 }
-elseif ($unauthorizedLine) {
-    Write-Host "[!] Tablet detected, but UNTRUSTED:" -ForegroundColor Yellow
-    Write-Host "Look at your Galaxy Tab A screen and tap: 'Always allow from this computer' -> [Allow]" -ForegroundColor Red
-    Write-Host "Then run this script again." -ForegroundColor Yellow
+elseif ($deviceFound -and -not $authorized) {
+    Write-Host ""
+    Write-Host "[!] Galaxy Tab A was detected but not authorized in time." -ForegroundColor Yellow
+    Write-Host "Unlock your tablet, accept the 'Allow USB debugging' popup, and run this file again." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "Alternative: Open the browser on your tablet and type:" -ForegroundColor White
+    Write-Host "http://192.168.0.105:8085" -ForegroundColor Green
+    Write-Host "==============================================================" -ForegroundColor Cyan
     exit 1
 }
 else {
-    Write-Host "[!] Galaxy Tab A is currently connected in standard MTP (File Transfer) mode." -ForegroundColor Yellow
+    Write-Host "[!] No Galaxy Tab A detected in USB Debugging mode." -ForegroundColor Yellow
     Write-Host ""
     Write-Host "--------------------------------------------------------------" -ForegroundColor Cyan
-    Write-Host "HOW TO RUN AKSHAY ON YOUR GALAXY TAB RIGHT NOW:" -ForegroundColor Cyan
+    Write-Host "HOW TO CONNECT YOUR GALAXY TAB A:" -ForegroundColor Cyan
     Write-Host "--------------------------------------------------------------" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "WAY 1 (INSTANT VIA WI-FI - NO SETTINGS NEEDED):" -ForegroundColor Green
-    Write-Host "  1. On your Galaxy Tab A, open Samsung Internet or Chrome."
-    Write-Host "  2. Type this exact URL into the tablet address bar:"
+    Write-Host "METHOD 1: INSTANT WI-FI (NO CABLE OR SPECIAL SETTINGS REQUIRED):" -ForegroundColor Green
+    Write-Host "  1. On your Galaxy Tab A, open Chrome or Samsung Internet."
+    Write-Host "  2. Type this into the address bar:"
     Write-Host "     http://192.168.0.105:8085" -ForegroundColor Yellow
-    Write-Host "     (NOTE: Do not type 'localhost' on the tablet! Type 192.168.0.105:8085)" -ForegroundColor Red
     Write-Host ""
-    Write-Host "WAY 2 (VIA DIRECT USB CABLE):" -ForegroundColor Green
-    Write-Host "  1. On your Galaxy Tab A: Settings -> About Tablet -> Software Info -> Tap 'Build Number' 7 times."
-    Write-Host "  2. Back in Settings -> Developer Options -> Turn ON 'USB Debugging'."
-    Write-Host "  3. Re-run this script! It will auto-forward and launch the app on your tablet screen."
+    Write-Host "METHOD 2: DIRECT USB HIGH-SPEED CABLE:" -ForegroundColor Green
+    Write-Host "  1. On your Galaxy Tab A: Settings -> About tablet -> Software information."
+    Write-Host "  2. Tap 'Build number' 7 times until Developer options is enabled."
+    Write-Host "  3. Go to: Settings -> Developer options -> Turn ON 'USB debugging'."
+    Write-Host "  4. Plug USB cable in and run this script again."
     Write-Host "==============================================================" -ForegroundColor Cyan
+    exit 1
 }
