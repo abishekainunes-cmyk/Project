@@ -125,10 +125,12 @@ if ($authorized) {
         }
     }
 
-    # 5. Launch App on Tablet Screen
+    # 5. Launch App on Tablet Screen (Deployed Cloud URL + Local Fallback)
     Write-Host "[*] Launching Akshay AI App on Galaxy Tab A screen..." -ForegroundColor Cyan
-    & $adb shell am start -n com.android.chrome/com.google.android.apps.chrome.Main -d "http://localhost:8085" 2>$null
-    & $adb shell am start -n uk.nktnet.webviewkiosk/.MainActivity -a android.intent.action.VIEW -d "http://localhost:8085" 2>$null
+    $cloudUrl = "https://taste-double-exchanges-decisions.trycloudflare.com"
+    & $adb shell am start -n com.android.chrome/com.google.android.apps.chrome.Main -d "$cloudUrl" 2>$null
+    & $adb shell am start -n uk.nktnet.webviewkiosk/.MainActivity -a android.intent.action.VIEW -d "$cloudUrl" 2>$null
+    & $adb shell input keyevent 66 2>$null
 
     Write-Host ""
     Write-Host "==============================================================" -ForegroundColor Green
