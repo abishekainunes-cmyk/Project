@@ -127,7 +127,7 @@ if ($authorized) {
 
     # 5. Launch App on Tablet Screen (Deployed Cloud URL + Local Fallback)
     Write-Host "[*] Launching Akshay AI App on Galaxy Tab A screen..." -ForegroundColor Cyan
-    $cloudUrl = "https://taste-double-exchanges-decisions.trycloudflare.com"
+    $cloudUrl = "https://suburban-triumph-comm-shoppers.trycloudflare.com"
     & $adb shell am start -n com.android.chrome/com.google.android.apps.chrome.Main -d "$cloudUrl" 2>$null
     & $adb shell am start -n uk.nktnet.webviewkiosk/.MainActivity -a android.intent.action.VIEW -d "$cloudUrl" 2>$null
     & $adb shell input keyevent 66 2>$null
@@ -139,7 +139,7 @@ if ($authorized) {
     Write-Host "How to use Akshay on Galaxy Tab A:" -ForegroundColor White
     Write-Host "  1. Direct USB High-Speed : http://localhost:8085 (Instant 0-latency)" -ForegroundColor Cyan
     Write-Host "  2. Wi-Fi Local Network   : http://$($localIp):8085" -ForegroundColor Yellow
-    Write-Host "  3. Global Cloud Tunnel   : https://taste-double-exchanges-decisions.trycloudflare.com" -ForegroundColor Green
+    Write-Host "  3. Global Cloud Tunnel   : https://suburban-triumph-comm-shoppers.trycloudflare.com" -ForegroundColor Green
     Write-Host "  4. Standalone APK File   : Saved in /sdcard/Download/Akshay_AI_v4.2.apk" -ForegroundColor Gray
     Write-Host "  5. Native Home Screen App: In Chrome, tap ⋮ (menu) -> 'Add to Home screen'" -ForegroundColor White
     Write-Host "==============================================================" -ForegroundColor Green
@@ -149,7 +149,7 @@ if ($authorized) {
     Write-Host ""
     Write-Host "You can still connect instantly over Wi-Fi or Cloud Tunnel:" -ForegroundColor White
     Write-Host "  * Local Wi-Fi  : http://$($localIp):8085" -ForegroundColor Yellow
-    Write-Host "  * Cloud Tunnel : https://taste-double-exchanges-decisions.trycloudflare.com" -ForegroundColor Green
+    Write-Host "  * Cloud Tunnel : https://suburban-triumph-comm-shoppers.trycloudflare.com" -ForegroundColor Green
     Write-Host ""
     Write-Host "To enable Direct USB Mode:" -ForegroundColor Cyan
     Write-Host "  1. On tablet: Settings -> About tablet -> Software information."
