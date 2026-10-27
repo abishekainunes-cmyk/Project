@@ -343,16 +343,13 @@ def solve_user_request(user_input: str) -> Dict[str, Any]:
             "data": artifacts.model_dump()
         }
 
-    # 8. GENERAL HIGH-INTELLIGENCE ASSISTANCE (NO PARROTING)
-    # Provides a direct solution to everyday technical, conceptual, or organizational questions
-    solution = (
-        f"✓ System analysis complete: I have processed your input with local-first telemetry. "
-        f"All 4 modules (Executive Brain-Dump, FinOS Double-Entry Ledger, Clinical Pharmacovigilance, "
-        f"and Autonomous Job Bot) are actively standing by. Enter specific amounts, medicines, or instructions "
-        f"for instant deterministic resolution."
-    )
+    # 8. RAG EXECUTIVE HUMAN ASSISTANT CONVERSATION
+    # Replies like a warm, competent, highly articulate personal assistant grounded in personal records
+    from akshay_core.workflows.rag_assistant import get_rag_assistant
+    rag = get_rag_assistant()
+    human_msg = rag.generate_human_response(clean_text)
     return {
-        "type": "general_solution",
-        "solution": solution,
-        "data": None
+        "type": "rag_assistant_solution",
+        "solution": human_msg.text,
+        "data": human_msg.model_dump()
     }

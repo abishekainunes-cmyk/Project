@@ -56,6 +56,8 @@ portfolio_instance = get_portfolio_manager(db_path=DATA_DIR / "akshay_investment
 audit_logger = get_audit_logger()
 from akshay_core.workflows.job_application_mailer import get_application_mailer
 from akshay_core.vision.clip_engine import get_clip_engine
+from akshay_core.workflows.rag_assistant import get_rag_assistant
+rag_assistant_instance = get_rag_assistant()
 application_mailer = get_application_mailer()
 clip_engine = get_clip_engine()
 
@@ -71,16 +73,30 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(payload)))
-        self.send_header("Access-Control-Allow-Origin", "http://localhost:8085")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
         self.end_headers()
         self.wfile.write(payload)
+
+    def do_OPTIONS(self) -> None:
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+        self.send_header("Access-Control-Max-Age", "86400")
+        self.end_headers()
 
     def do_GET(self) -> None:
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
         print(f"[DEBUG do_GET] path={path}", flush=True)
 
-        if path == "/api/ledger/summary":
+        if path == "/health" or path == "/api/health":
+            self._send_json_response({"status": "ok", "app": "Akshay-AI", "version": "4.2", "cors": "*"})
+            return
+
+        elif path == "/api/ledger/summary":
             try:
                 assets = ledger_instance.get_or_create_account("Assets:Bank:HDFC", AccountType.ASSET)
                 net_worth = ledger_instance.get_net_worth()
@@ -655,7 +671,26 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 data = json.loads(body) if body else {}
                 threshold = int(data.get("min_match_threshold", 70))
                 style = data.get("letter_style", "balanced")
-                res = job_bot_instance.run_batch_auto_apply(min_match_threshold=threshold, style=style)
+                batch_limit = int(data.get("batch_limit", 25))
+                auto_search = bool(data.get("auto_search_next_batch", True))
+                res = job_bot_instance.run_batch_auto_apply(
+                    min_match_threshold=threshold,
+                    style=style,
+                    batch_limit=batch_limit,
+                    auto_search_next_batch=auto_search
+                )
+                self._send_json_response(res)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/search-next-batch":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                batch_size = int(data.get("batch_size", 25))
+                res = job_bot_instance.search_next_batch(count=batch_size)
                 self._send_json_response(res)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
@@ -693,9 +728,31 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 content_length = int(self.headers.get("Content-Length", 0))
                 body = self.rfile.read(content_length).decode("utf-8")
                 data = json.loads(body)
-                query = data.get("query", "")
+                query = data.get("query") or data.get("message", "")
                 result = solve_user_request(query)
-                self._send_json_response({"success": True, "result": result})
+                
+                # Augment with RAG Human Assistant Grounding
+                rag_msg = rag_assistant_instance.generate_human_response(query)
+                if result.get("type") == "general_solution" or not result.get("solution"):
+                    result["solution"] = rag_msg.text
+                result["rag_sources"] = rag_msg.rag_sources
+                result["confidence"] = rag_msg.confidence
+                result["assistant_reply"] = rag_msg.text
+
+                self._send_json_response({"success": True, "result": result, "rag": rag_msg.model_dump()})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/assistant/chat":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8")
+                data = json.loads(body)
+                query = data.get("query") or data.get("message", "")
+                history = data.get("history", [])
+                msg = rag_assistant_instance.generate_human_response(query, conversation_history=history)
+                self._send_json_response({"success": True, "message": msg.model_dump(), "solution": msg.text})
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
