@@ -74,3 +74,30 @@ def test_investment_portfolio_api_integration(tmp_path):
     assert "BEGIN:VALARM" in ics
     assert "TRIGGER:-PT15M" in ics
     assert "UTI Nifty 50 Index Fund" in ics
+
+
+def test_rag_assistant_chat_api_integration():
+    """Verifies RAG Assistant chat returns human-like response with groundings and confidence."""
+    from akshay_core.workflows.rag_assistant import get_rag_assistant
+    rag = get_rag_assistant()
+    msg = rag.generate_human_response("Who am I and what did I do at Nunes Instrumentation?")
+    assert msg.role == "assistant"
+    assert "Abishek" in msg.text
+    assert "Nunes" in msg.text
+    assert "IGNIS" in msg.text
+    assert len(msg.rag_sources) >= 1
+    assert msg.confidence >= 0.70
+
+
+def test_job_bot_continuous_batch_api_integration(tmp_path):
+    """Verifies continuous 20-30 role batch auto apply and next-batch discovery."""
+    from akshay_core.workflows.job_bot import JobBotManager
+    mgr = JobBotManager(db_path=tmp_path / "test_continuous_batch.db")
+    res = mgr.run_batch_auto_apply(min_match_threshold=70, batch_limit=25, auto_search_next_batch=True)
+    assert res["success"] is True
+    assert res["batch_limit"] == 25
+    assert res["applied_count"] >= 20
+    assert res["auto_search_next_batch"] is True
+    assert res["next_batch_count"] == 25
+    assert "Auto-Search Pipeline engaged" in res["message"]
+

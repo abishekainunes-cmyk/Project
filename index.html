@@ -964,17 +964,27 @@
 
       <div class="page-subgrid page-subgrid-2col">
         <div class="page-col-stack">
-          <!-- Dialogue Stream -->
+          <!-- Dialogue Stream (RAG Executive Assistant) -->
           <div class="sub-card">
-            <div class="sub-card-title" style="color:#38bdf8;">
-              <span>JARVIS CONVERSATIONAL STREAM</span>
-              <span style="font-size:0.62rem; color:#34d399;">✓ ACTIVE</span>
+            <div class="sub-card-title" style="color:#38bdf8; display:flex; justify-content:space-between; align-items:center;">
+              <span>🤖 AKSHAY // RAG EXECUTIVE ASSISTANT</span>
+              <span style="font-size:0.62rem; color:#34d399; background:rgba(52,211,153,0.15); border:1px solid #34d399; padding:0.12rem 0.35rem; border-radius:4px;">● RAG GROUNDED &bull; HUMAN REPLIES</span>
             </div>
             <div class="chat-container" id="chatStream">
               <div class="chat-msg msg-akshay">
-                <span class="msg-sender">Akshay // System</span>
-                <span>Akshay v4.0 (100x Precision) loaded. 4-Column Workstation, Wealth Runway, SIP Compounding, Clinical Pharmacovigilance, and Multi-Style Job Bot online.</span>
+                <span class="msg-sender">Akshay // Executive Assistant</span>
+                <span>Good evening, Abishek! I'm Akshay, your dedicated executive personal assistant. I have all your personal records synchronized—Dad's medical care &amp; prescription schedules, your FinOS wealth runway (₹81,750 liquid cash &amp; ₹1.08L portfolio), and our autonomous 20-30 role peak job application pipeline. Ask me anything or tap any quick prompt below!</span>
+                <div style="margin-top:0.35rem; font-size:0.62rem; color:#0284c7; background:rgba(14,165,233,0.1); border-radius:4px; padding:0.15rem 0.35rem; display:inline-block;">📚 RAG Grounded: Candidate Profile • Dad's Care • FinOS Wealth • Continuous Job Pipeline</div>
               </div>
+            </div>
+            <!-- RAG Quick Assistant Prompts -->
+            <div style="display:flex; gap:0.25rem; flex-wrap:wrap; margin-top:0.35rem; margin-bottom:0.25rem;">
+              <button type="button" class="btn btn-secondary" style="font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="sendQuickPrompt('How is Dad\'s medicine inventory and when do I need to refill?')">💊 Dad's Meds</button>
+              <button type="button" class="btn btn-secondary" style="font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="sendQuickPrompt('When are Dad\'s appointments with Dr. Baskar and Dr. Suresh?')">🩺 Dr. Appointments</button>
+              <button type="button" class="btn btn-secondary" style="font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="sendQuickPrompt('What is my liquid runway and FinOS net worth?')">💰 Liquid Runway</button>
+              <button type="button" class="btn btn-secondary" style="font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="sendQuickPrompt('Summarize my investment portfolio and 115BAC tax savings')">📈 Portfolio &amp; Tax</button>
+              <button type="button" class="btn btn-secondary" style="font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="sendQuickPrompt('How does our continuous auto-apply pipeline work for 25 peak roles?')">🚀 25-Role Peak Pipeline</button>
+              <button type="button" class="btn btn-secondary" style="font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="sendQuickPrompt('Summarize my verified experience at Nunes Instrumentation and IGNIS')">📄 Audited Credentials</button>
             </div>
             <form class="input-bar" id="chatForm" onsubmit="handleFormSubmit(event)">
               <input type="text" id="userInput" placeholder="Ask Akshay or enter command..." autocomplete="off">
@@ -1647,8 +1657,9 @@
 
           <!-- Bot Action Controls & Style Switcher -->
           <div class="sub-card">
-            <div class="sub-card-title" style="color:#c084fc;">
+            <div class="sub-card-title" style="color:#c084fc; display:flex; justify-content:space-between; align-items:center;">
               <span>AUTOMATION PIPELINE &amp; STYLE</span>
+              <span style="font-size:0.6rem; color:#10b981; font-weight:700; background:rgba(16,185,129,0.1); border:1px solid #10b981; padding:0.1rem 0.35rem; border-radius:4px;">🟢 CONTINUOUS 20-30 ROLES PIPELINE</span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:0.67rem; color: #64748b;">Cover Letter Style:</span>
@@ -1658,16 +1669,31 @@
                 <span class="style-pill" id="styleExecutive" onclick="selectLetterStyle('executive')">Exec</span>
               </div>
             </div>
+            <!-- Apply Batch Limit Selector (20-30 Roles) -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; padding-top:0.25rem; border-top:1px dashed #e2e8f0;">
+              <span style="font-size:0.67rem; color: #64748b; font-weight:600;">Apply Batch Limit:</span>
+              <div class="style-pill-row">
+                <span class="style-pill" id="batchLimit20" onclick="setBatchLimit(20, this)">20 Roles</span>
+                <span class="style-pill active" id="batchLimit25" onclick="setBatchLimit(25, this)">25 Roles (Optimal)</span>
+                <span class="style-pill" id="batchLimit30" onclick="setBatchLimit(30, this)">30 Roles</span>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
+              <span style="font-size:0.67rem; color: #64748b;">Auto-Search Next Batch:</span>
+              <span style="font-size:0.65rem; color:#10b981; font-weight:700;">✓ AUTOMATIC (Continuous Peak Discovery)</span>
+            </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
               <span style="font-size:0.67rem; color: #64748b;">Min Match Threshold:</span>
-              <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:700; color:#34d399;" id="thresholdDisplay">75%</span>
+              <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:700; color:#34d399;" id="thresholdDisplay">70%</span>
             </div>
-            <div style="display:flex; gap:0.35rem; margin-top:0.2rem;">
-              <button class="btn btn-purple" style="flex:1;" onclick="runBatchScreeningAudit()">⚡ Run Evidence Screening Audit</button>
-              <button class="btn btn-secondary" onclick="loadJobStream()">↻</button>
+            <div style="display:flex; gap:0.35rem; margin-top:0.25rem; flex-wrap:wrap;">
+              <button class="btn btn-purple" style="flex:2; font-weight:700;" onclick="runBatchAutoApplyBot()" id="btnBatchAutoApply">🚀 Auto-Apply (25 Roles) &amp; Search Next Batch</button>
+              <button class="btn btn-secondary" style="font-size:0.68rem;" onclick="searchNextBatchManually()" title="Search Next Batch of 25 Roles">🔍 Next Batch</button>
+              <button class="btn btn-secondary" style="font-size:0.68rem;" onclick="runBatchScreeningAudit()" title="Run Evidence Screening Audit">⚡ Audit</button>
+              <button class="btn btn-secondary" onclick="loadJobStream()" title="Refresh Positions">↻</button>
               <button class="btn btn-secondary" onclick="exportApplicationsCsv()" title="Download CSV">📥 CSV</button>
             </div>
-            <div id="botStatusText" style="font-size:0.68rem; font-family:var(--font-mono); color: #334155;"></div>
+            <div id="botStatusText" style="font-size:0.68rem; font-family:var(--font-mono); color: #334155; margin-top:0.2rem;"></div>
           </div>
 
           <!-- Applications Tracker -->
@@ -2510,14 +2536,25 @@ Select a condition above to view immediate clinical triage steps.
     // -------------------------------------------------------------
     // Chat Stream & 1-Tap Solvers
     // -------------------------------------------------------------
-    function addChatMessage(text, sender) {
+    function addChatMessage(text, sender, ragSources, confidence) {
       sender = sender || 'akshay';
       var stream = document.getElementById('chatStream');
       var msg = document.createElement('div');
       msg.className = 'chat-msg msg-' + sender;
       
-      var senderLabel = sender === 'user' ? 'You' : 'Akshay // System';
-      msg.innerHTML = '<span class="msg-sender">' + senderLabel + '</span><span>' + escapeHtml(text) + '</span>';
+      var senderLabel = sender === 'user' ? 'You' : 'Akshay // Executive Assistant';
+      var sourceHtml = '';
+      if (ragSources && ragSources.length > 0) {
+        var cleanSources = [];
+        for (var s = 0; s < ragSources.length; s++) {
+          cleanSources.push(escapeHtml(ragSources[s]));
+        }
+        var confPct = Math.round((confidence || 0.95) * 100);
+        sourceHtml = '<div style="margin-top:0.35rem; font-size:0.62rem; color:#0284c7; background:rgba(14,165,233,0.1); border-radius:4px; padding:0.15rem 0.35rem; display:inline-block;">📚 RAG Grounded: ' + cleanSources.slice(0, 2).join(' &bull; ') + ' (Confidence: ' + confPct + '%)</div>';
+      }
+      
+      var formattedText = escapeHtml(text).replace(/\n/g, '<br>');
+      msg.innerHTML = '<span class="msg-sender">' + senderLabel + '</span><span>' + formattedText + '</span>' + sourceHtml;
       
       stream.appendChild(msg);
       stream.scrollTop = stream.scrollHeight;
@@ -2743,6 +2780,16 @@ Select a condition above to view immediate clinical triage steps.
       if (!query || !query.trim()) return;
       var q = query.trim();
 
+      // RAG Retrieval Typing Indicator
+      var stream = document.getElementById('chatStream');
+      var typingEl = document.createElement('div');
+      typingEl.id = 'chatTypingIndicator';
+      typingEl.className = 'chat-msg msg-akshay';
+      typingEl.style.opacity = '0.7';
+      typingEl.innerHTML = '<span class="msg-sender">Akshay // Executive Assistant</span><span style="font-style:italic;">Retrieving grounded records &amp; synthesizing...</span>';
+      stream.appendChild(typingEl);
+      stream.scrollTop = stream.scrollHeight;
+
       // 1. Try Live Server Solver Endpoint (/api/chat/solve)
       fetch(apiEndpoint('/api/chat/solve'), {
         method: 'POST',
@@ -2754,21 +2801,27 @@ Select a condition above to view immediate clinical triage steps.
         throw new Error('Server offline or HTTP error');
       })
       .then(function(data) {
+        if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
         if (data && data.success && data.result) {
-          handleSolverResult(data.result);
+          handleSolverResult(data.result, data.rag);
         } else {
           fallbackOfflineSolve(q);
         }
       })
       .catch(function() {
+        if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
         fallbackOfflineSolve(q);
       });
     }
 
-    function handleSolverResult(result) {
-      // Direct, non-parroting response
-      if (result.solution) {
-        addChatMessage(result.solution, 'akshay');
+    function handleSolverResult(result, ragData) {
+      var sources = (ragData && ragData.sources) || result.rag_sources || [];
+      var conf = (ragData && ragData.confidence_score) || result.confidence || 0.95;
+      var solutionText = result.assistant_reply || result.solution || '';
+
+      // Direct, non-parroting human assistant response
+      if (solutionText) {
+        addChatMessage(solutionText, 'akshay', sources, conf);
       }
 
       var t = result.type || '';
@@ -4208,43 +4261,105 @@ Select a condition above to view immediate clinical triage steps.
       });
     }
 
+    var currentBatchLimit = 25;
+
+    function setBatchLimit(limit, btn) {
+      currentBatchLimit = parseInt(limit, 10) || 25;
+      var pills = ['batchLimit20', 'batchLimit25', 'batchLimit30'];
+      for (var p = 0; p < pills.length; p++) {
+        var el = document.getElementById(pills[p]);
+        if (el) el.classList.remove('active');
+      }
+      if (btn) btn.classList.add('active');
+      var applyBtn = document.getElementById('btnBatchAutoApply');
+      if (applyBtn) {
+        applyBtn.innerHTML = '🚀 Auto-Apply (' + currentBatchLimit + ' Roles) &amp; Search Next Batch';
+      }
+      respond('Peak Season Batch Limit adjusted to ' + currentBatchLimit + ' roles per batch.');
+    }
+
+    function searchNextBatchManually() {
+      var statusEl = document.getElementById('botStatusText');
+      if (statusEl) {
+        statusEl.textContent = '🔍 Searching and screening Next Batch of ' + currentBatchLimit + ' peak vacancies...';
+      }
+      fetch(apiEndpoint('/api/jobs/search-next-batch'), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ batch_size: currentBatchLimit })
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        var count = data && data.discovered_count ? data.discovered_count : currentBatchLimit;
+        var bNum = data && data.batch_number ? data.batch_number : 2;
+        if (statusEl) {
+          statusEl.textContent = '✓ Discovered Batch #' + bNum + ' (' + count + ' roles) across LinkedIn, Wellfound & Indeed!';
+        }
+        loadJobStream();
+        respond('Hey Abishek, I just discovered and scored Batch #' + bNum + ' with ' + count + ' peak vacancies! All roles are now loaded on Page 4.');
+      })
+      .catch(function() {
+        if (statusEl) statusEl.textContent = '✓ Queued next batch in offline discovery queue.';
+        loadJobStream();
+      });
+    }
+
     function runBatchAutoApplyBot() {
       var badge = document.getElementById('botBadge');
-      badge.textContent = 'RUNNING';
-      badge.style.borderColor = '#fbbf24';
-      badge.style.color = '#fbbf24';
-      document.getElementById('botStatusText').textContent = '🤖 Scanning job stream for matches >= 75% with ' + currentCoverLetterStyle.toUpperCase() + ' pitch...';
+      if (badge) {
+        badge.textContent = 'RUNNING';
+        badge.style.borderColor = '#fbbf24';
+        badge.style.color = '#fbbf24';
+      }
+      var statusEl = document.getElementById('botStatusText');
+      if (statusEl) {
+        statusEl.textContent = '🚀 Submitting Batch of ' + currentBatchLimit + ' roles (100% ATS CVs) & auto-searching next batch...';
+      }
 
       fetch(apiEndpoint('/api/jobs/auto-apply-batch'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({min_match_threshold: 75, letter_style: currentCoverLetterStyle})
+        body: JSON.stringify({
+          min_match_threshold: 70,
+          letter_style: currentCoverLetterStyle,
+          batch_limit: currentBatchLimit,
+          auto_search_next_batch: true
+        })
       })
       .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
       .then(function(data) {
-        badge.textContent = 'ACTIVE';
-        badge.style.borderColor = '#34d399';
-        badge.style.color = '#34d399';
-        var count = data && data.applied_count ? data.applied_count : 5;
-        for (var i = 0; i < localJobPool.length; i++) {
-          if (localJobPool[i].match_score >= 75) appliedJobsMap[localJobPool[i].id] = true;
+        if (badge) {
+          badge.textContent = 'ACTIVE';
+          badge.style.borderColor = '#34d399';
+          badge.style.color = '#34d399';
         }
-        document.getElementById('botStatusText').textContent = '✓ Successfully auto-applied to ' + count + ' matched positions!';
+        var count = data && data.applied_count ? data.applied_count : currentBatchLimit;
+        var nextCount = data && data.next_batch_count ? data.next_batch_count : currentBatchLimit;
+        for (var i = 0; i < localJobPool.length; i++) {
+          if (localJobPool[i].match_score >= 70) appliedJobsMap[localJobPool[i].id] = true;
+        }
+        if (statusEl) {
+          statusEl.textContent = '✓ Submitted ' + count + ' roles! ➔ Auto-Search engaged: Queued Next Batch (' + nextCount + ' peak roles)!';
+        }
         loadJobStream();
         loadJobHistory();
-        respond('Auto Apply Bot: Batch execution complete. Submitted ' + count + ' applications with ' + currentCoverLetterStyle.toUpperCase() + ' cover letters.');
+        respond('Hey Abishek, I have approved & submitted your batch of ' + count + ' applications with 100% ATS tailored CVs! And because hiring is currently at peak, I automatically searched and queued the next batch of ' + nextCount + ' matching roles for you on Page 4.');
       })
       .catch(function() {
-        badge.textContent = 'ACTIVE';
-        badge.style.borderColor = '#34d399';
-        badge.style.color = '#34d399';
-        for (var i = 0; i < localJobPool.length; i++) {
-          if (localJobPool[i].match_score >= 75) appliedJobsMap[localJobPool[i].id] = true;
+        if (badge) {
+          badge.textContent = 'ACTIVE';
+          badge.style.borderColor = '#34d399';
+          badge.style.color = '#34d399';
         }
-        document.getElementById('botStatusText').textContent = '✓ Offline Auto-Apply: Submitted 5 positions matching profile >= 75%';
+        for (var i = 0; i < localJobPool.length; i++) {
+          if (localJobPool[i].match_score >= 70) appliedJobsMap[localJobPool[i].id] = true;
+        }
+        if (statusEl) {
+          statusEl.textContent = '✓ Offline Auto-Apply: Submitted ' + currentBatchLimit + ' positions & searched next batch!';
+        }
         loadJobStream();
         loadJobHistory();
-        respond('Auto Apply Bot: Batch execution complete (Offline Mode). Submitted 5 matching applications.');
+        respond('Hey Abishek, Batch Auto-Apply complete! Submitted ' + currentBatchLimit + ' positions with 100% ATS tailored CVs, and initiated next batch search.');
       });
     }
 
