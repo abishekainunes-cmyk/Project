@@ -1218,29 +1218,203 @@
       }
     }
 
+  
+    /* 500x Luxury Header & Audio Engine Additions */
+    .brand-avatar-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 0.95rem;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.35);
+      animation: floatBreath 4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    .candidate-header-capsule {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(241, 245, 249, 0.85);
+      border: 1px solid rgba(203, 213, 225, 0.8);
+      padding: 0.22rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.65rem;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+    }
+
+    .candidate-header-capsule .cand-name {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .candidate-header-capsule .cand-email {
+      font-family: var(--font-mono);
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .candidate-header-capsule .cand-status {
+      color: #059669;
+      font-weight: 700;
+    }
+
+    .header-clock-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #334155;
+      background: rgba(241, 245, 249, 0.85);
+      border: 1px solid rgba(203, 213, 225, 0.7);
+      padding: 0.25rem 0.55rem;
+      border-radius: 8px;
+    }
+
+    .btn-sound-toggle {
+      font-size: 0.65rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 8px;
+      font-weight: 700;
+      background: rgba(241, 245, 249, 0.9);
+      border: 1px solid #34d399;
+      color: #059669;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-sound-toggle:hover {
+      transform: scale(1.03);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+    }
+
+    /* 500x Navigation Rail Enhancements */
+    .col-nav-bar {
+      display: flex;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      padding: 0.35rem;
+      border-radius: 12px;
+      margin-bottom: 0.65rem;
+      box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+    }
+
+    .col-nav-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.75rem;
+      background: transparent;
+      border: none;
+      border-radius: 9px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .col-nav-btn:hover {
+      background: rgba(241, 245, 249, 0.8);
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+
+    .col-nav-btn.active {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.32);
+      transform: scale(1.01);
+    }
+
+    .col-nav-btn .tab-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.07);
+      color: currentColor;
+      font-size: 0.6rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .col-nav-btn.active .tab-num {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .candidate-header-capsule {
+        display: none;
+      }
+      .col-nav-btn {
+        font-size: 0.65rem;
+        padding: 0.35rem 0.45rem;
+      }
+    }
+
   </style>
 </head>
 <body>
 
   <!-- Top HUD Header -->
+    <!-- Top HUD Header: 500x Executive Glass Command Bar -->
   <header class="hud-header">
     <div class="brand">
-      <div class="status-indicator"></div>
+      <div class="brand-avatar-wrap">
+        <span class="avatar-icon">⚡</span>
+      </div>
       <div>
-        <span class="brand-title">AKSHAY AI</span>
-        <span class="match-badge" style="border-color:#38bdf8; color:#38bdf8; margin-left:0.3rem; font-size:0.58rem;">v4.2 PRO</span>
+        <div style="display:flex; align-items:center; gap:0.4rem;">
+          <span class="brand-title">AKSHAY AI</span>
+          <span class="match-badge" style="border-color:#2563eb; color:#2563eb; font-size:0.58rem; background:rgba(37,99,235,0.08);">v5.0 ULTRA</span>
+        </div>
+        <div style="font-size:0.55rem; color:#64748b; font-family:var(--font-mono); margin-top:0.1rem;">EXECUTIVE AUTONOMOUS WORKSTATION</div>
       </div>
     </div>
-    
-    <!-- Header Quick Actions (Suggestions, Settings, Layout) -->
-    <div style="display:flex; align-items:center; gap:0.4rem;">
-      <button class="btn" style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fbbf24; font-size:0.68rem; padding:0.25rem 0.55rem;" onclick="openSuggestionsModal()" title="View AI Strategic Suggestions">
-        💡 Suggestions
-      </button>
-      <button class="btn btn-secondary" style="font-size:0.68rem; padding:0.25rem 0.55rem; border-color:rgba(255,255,255,0.2);" onclick="openSettingsModal('devices')" title="Connected Devices & System Settings">
-        ⚙️ Settings
+
+    <!-- Candidate Identity Capsule -->
+    <div class="candidate-header-capsule">
+      <span style="font-size:0.75rem;">👤</span>
+      <span class="cand-name">Abishek Pranav G V</span>
+      <span style="color:#cbd5e1;">&bull;</span>
+      <span class="cand-email">abishekpranav403@gmail.com</span>
+      <span style="color:#cbd5e1;">&bull;</span>
+      <span class="cand-status">● ATS 100/100 AUDITED</span>
+    </div>
+
+    <!-- Header Quick Actions (Clock, Sound Toggle, Suggestions, Settings) -->
+    <div style="display:flex; align-items:center; gap:0.45rem;">
+      <!-- Dynamic IST Clock -->
+      <div class="header-clock-pill">
+        <span style="font-size:0.7rem;">🕒</span>
+        <span id="liveClockIST">10:15:00 PM IST</span>
+      </div>
+
+      <!-- Web Audio Sound Toggle -->
+      <button class="btn btn-sound-toggle" id="btnSoundToggle" onclick="toggleUISound()" title="Toggle Executive UI Sound Effects">
+        🔊 Audio: ON
       </button>
 
+      <button class="btn" style="background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); color:#d97706; font-size:0.68rem; padding:0.25rem 0.55rem; border-radius:8px;" onclick="playUISound('click'); openSuggestionsModal();" title="View AI Strategic Suggestions">
+        💡 Suggestions
+      </button>
+      <button class="btn btn-secondary" style="font-size:0.68rem; padding:0.25rem 0.55rem; border-radius:8px;" onclick="playUISound('click'); openSettingsModal('devices');" title="Connected Devices & System Settings">
+        ⚙️ Settings
+      </button>
     </div>
   </header>
 
@@ -1350,24 +1524,24 @@
   </div>
 
   <!-- Executive Top Tabs Navigation Rail -->
+    <!-- Executive Top Tabs Navigation Rail (500x Segmented Glass) -->
   <div class="col-nav-bar" id="colNavBar">
-    <button class="col-nav-btn active" id="tab_colBrainDump" onclick="switchPage('colBrainDump')">
+    <button class="col-nav-btn active" id="tab_colBrainDump" onclick="playUISound('tab'); switchPage('colBrainDump');">
       <span class="tab-num">1</span>
       <span>🎙️ BRAIN-DUMP &amp; CHAT</span>
     </button>
-    <button class="col-nav-btn" id="tab_colFinos" onclick="switchPage('colFinos')">
+    <button class="col-nav-btn" id="tab_colFinos" onclick="playUISound('tab'); switchPage('colFinos');">
       <span class="tab-num">2</span>
-      <span>💳 WEALTH &amp; INVEST</span>
+      <span>💳 WEALTH &amp; FINOS</span>
     </button>
-    <button class="col-nav-btn" id="tab_colMedical" onclick="switchPage('colMedical')">
+    <button class="col-nav-btn" id="tab_colMedical" onclick="playUISound('tab'); switchPage('colMedical');">
       <span class="tab-num">3</span>
       <span>💊 DAD'S CARE &amp; SOS</span>
     </button>
-    <button class="col-nav-btn" id="tab_colJobBot" onclick="switchPage('colJobBot')">
+    <button class="col-nav-btn" id="tab_colJobBot" onclick="playUISound('tab'); switchPage('colJobBot');">
       <span class="tab-num">4</span>
-      <span>🤖 ATS JOB BOT</span>
+      <span>🤖 5-PORTAL JOB BOT</span>
     </button>
-
   </div>
 
   <!-- 4-COLUMN WORKSTATION CONTAINER (PAGE VIEW FIT BY DEFAULT) -->
@@ -4652,6 +4826,26 @@ Select a condition above to view immediate clinical triage steps.
       .catch(function() {});
     }
 
+    
+    // Dynamic Live IST Clock with pulsing second indicator
+    function updateLiveClockIST() {
+      var clockEl = document.getElementById('liveClockIST');
+      if (!clockEl) return;
+      var now = new Date();
+      var hours = now.getHours();
+      var minutes = now.getMinutes();
+      var seconds = now.getSeconds();
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      var hStr = hours < 10 ? '0' + hours : '' + hours;
+      var mStr = minutes < 10 ? '0' + minutes : '' + minutes;
+      var sStr = seconds < 10 ? '0' + seconds : '' + seconds;
+      clockEl.textContent = hStr + ':' + mStr + ':' + sStr + ' ' + ampm + ' IST';
+    }
+    setInterval(updateLiveClockIST, 1000);
+    setTimeout(updateLiveClockIST, 50);
+
     function loadJobStream() {
       // First fetch history to populate appliedJobsMap, then render positions
       fetch(apiEndpoint('/api/jobs/history'))
@@ -5008,6 +5202,7 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     function runBatchAutoApplyBot() {
+      playUISound('apply');
       var badge = document.getElementById('botBadge');
       if (badge) {
         badge.textContent = 'RUNNING';
