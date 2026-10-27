@@ -101,3 +101,15 @@ def test_job_bot_continuous_batch_api_integration(tmp_path):
     assert res["next_batch_count"] == 25
     assert "Auto-Search Pipeline engaged" in res["message"]
 
+def test_portals_status_and_sync_api_integration(tmp_path):
+    """Verifies that 5 portal gateways and sync endpoints function properly."""
+    from akshay_core.workflows.job_bot import JobBotManager
+    mgr = JobBotManager(db_path=tmp_path / "test_portals_api.db")
+    accounts = mgr.get_portal_accounts()
+    assert len(accounts) == 5
+    emails = {a.email for a in accounts}
+    assert emails == {"abishekpranav403@gmail.com"}
+    
+    sync_res = mgr.sync_portal_account("naukri")
+    assert sync_res["success"] is True
+    assert sync_res["candidate_email"] == "abishekpranav403@gmail.com"
