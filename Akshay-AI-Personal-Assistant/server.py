@@ -889,9 +889,21 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 content_length = int(self.headers.get("Content-Length", 0))
                 body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
                 data = json.loads(body) if body else {}
+                s_amt = None
+                if data.get("savings_amount") is not None:
+                    try:
+                        s_amt = float(data.get("savings_amount"))
+                    except (ValueError, TypeError):
+                        s_amt = 81750.0
+                m_inc = None
+                if data.get("monthly_income") is not None:
+                    try:
+                        m_inc = float(data.get("monthly_income"))
+                    except (ValueError, TypeError):
+                        m_inc = 25000.0
                 res = portfolio_instance.scan_and_suggest_investment(
-                    savings_amount=data.get("savings_amount"),
-                    monthly_income=data.get("monthly_income")
+                    savings_amount=s_amt,
+                    monthly_income=m_inc
                 )
                 self._send_json_response({"success": True, "suggestion": res})
             except Exception as e:

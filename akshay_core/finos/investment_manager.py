@@ -597,8 +597,15 @@ class InvestmentPortfolioManager:
         monthly_income: Optional[float] = None
     ) -> Dict[str, Any]:
         """Scans liquid savings and generates a strategic 4-tier investment allocation plan with exact app guides."""
-        savings = float(savings_amount) if savings_amount and savings_amount > 100 else 81750.0
-        income = float(monthly_income) if monthly_income and monthly_income > 1000 else 25000.0
+        try:
+            savings = float(savings_amount) if savings_amount is not None and float(savings_amount) > 100 else 81750.0
+        except (ValueError, TypeError):
+            savings = 81750.0
+
+        try:
+            income = float(monthly_income) if monthly_income is not None and float(monthly_income) > 1000 else 25000.0
+        except (ValueError, TypeError):
+            income = 25000.0
 
         monthly_sip_capacity = round(income * 0.25, 2)
 

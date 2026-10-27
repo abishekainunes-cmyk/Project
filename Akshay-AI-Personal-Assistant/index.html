@@ -1366,6 +1366,113 @@
       }
     }
 
+  
+    /* ==========================================================================
+       PROFESSIONAL SOFTWARE-GRADE ALIGNMENT & POLISH
+       ========================================================================== */
+    /* Software Input & Form Polish */
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 8px !important;
+      padding: 0.42rem 0.65rem !important;
+      font-size: 0.72rem !important;
+      color: #0f172a !important;
+      font-family: inherit !important;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease !important;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none !important;
+      border-color: #2563eb !important;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+    }
+
+    /* Software Sub-Card Symmetry */
+    .sub-card {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 12px !important;
+      padding: 0.7rem 0.85rem !important;
+      margin-bottom: 0.6rem !important;
+      box-shadow: 0 2px 10px -1px rgba(15, 23, 42, 0.04) !important;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .sub-card:hover {
+      box-shadow: 0 8px 24px -2px rgba(15, 23, 42, 0.07) !important;
+    }
+
+    .sub-card-title {
+      font-size: 0.72rem !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.05em !important;
+      margin-bottom: 0.45rem !important;
+    }
+
+    /* Software Button Polish */
+    .btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 0.35rem !important;
+      font-size: 0.68rem !important;
+      font-weight: 700 !important;
+      border-radius: 8px !important;
+      padding: 0.35rem 0.65rem !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      cursor: pointer !important;
+    }
+
+    .btn:hover {
+      transform: translateY(-1.5px) !important;
+    }
+
+    .btn:active {
+      transform: translateY(0.5px) scale(0.98) !important;
+    }
+
+    /* Software Scrollbar Elegance */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Page Grid Symmetry */
+    .page-2col-grid {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 0.75rem !important;
+      align-items: start !important;
+    }
+
+    @media (max-width: 900px) {
+      .page-2col-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1636,7 +1743,7 @@
             </div>
             <form class="input-bar" id="chatForm" onsubmit="handleFormSubmit(event)">
               <input type="text" id="userInput" placeholder="Ask Akshay or enter command..." autocomplete="off">
-              <button type="submit" class="btn" style="white-space:nowrap;">Send</button>
+              <button type="submit" id="btnChatSend" class="btn btn-primary" style="white-space:nowrap; padding:0.42rem 0.85rem;" onclick="playUISound('click');">⚡ Send</button>
             </form>
 
             <!-- Slow-Phase Voice Listening Station (Built for Thoughtful Speakers) -->
@@ -3176,6 +3283,120 @@ Select a condition above to view immediate clinical triage steps.
 
   <!-- Core JavaScript (Strict Universal ES5 for Android 5.1.1 & Modern Browsers) -->
   <script>
+
+    // ==========================================================================
+    // 500x EXECUTIVE AUDIO SYNTHESIZER ENGINE (Web Audio API, Strict ES5)
+    // ==========================================================================
+    var audioCtx = null;
+    var isSoundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+        var AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioCtxClass();
+      }
+    }
+
+    function playUISound(type) {
+      if (!isSoundEnabled) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        var now = audioCtx.currentTime;
+
+        if (type === 'tab') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(780, now + 0.05);
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'click') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(480, now);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+          osc.start(now);
+          osc.stop(now + 0.035);
+        } else if (type === 'apply') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } else if (type === 'success') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.06);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        }
+      } catch (e) {}
+    }
+
+    function toggleUISound() {
+      isSoundEnabled = !isSoundEnabled;
+      var btn = document.getElementById('btnSoundToggle');
+      if (btn) {
+        btn.innerHTML = isSoundEnabled ? '🔊 Audio: ON' : '🔇 Audio: OFF';
+        btn.style.borderColor = isSoundEnabled ? '#34d399' : '#94a3b8';
+        btn.style.color = isSoundEnabled ? '#059669' : '#64748b';
+      }
+      if (isSoundEnabled) playUISound('click');
+    }
+
+    // Dynamic Live IST Clock with pulsing second indicator
+    function updateLiveClockIST() {
+      var clockEl = document.getElementById('liveClockIST');
+      if (!clockEl) return;
+      var now = new Date();
+      var hours = now.getHours();
+      var minutes = now.getMinutes();
+      var seconds = now.getSeconds();
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      var hStr = hours < 10 ? '0' + hours : '' + hours;
+      var mStr = minutes < 10 ? '0' + minutes : '' + minutes;
+      var sStr = seconds < 10 ? '0' + seconds : '' + seconds;
+      clockEl.textContent = hStr + ':' + mStr + ':' + sStr + ' ' + ampm + ' IST';
+    }
+    setInterval(updateLiveClockIST, 1000);
+    setTimeout(updateLiveClockIST, 50);
+
+    // ==========================================================================
+    // PORTFOLIO HOLDING MANAGEMENT: DELETE HOLDING FUNCTION
+    // ==========================================================================
+    function deleteHoldingItem(id) {
+      if (!confirm('Remove holding from investment portfolio?')) return;
+      playUISound('click');
+      fetch(apiEndpoint('/api/investments/holding/delete'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id })
+      })
+      .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+      .then(function(data) {
+        playUISound('success');
+        loadInvestmentPortfolio();
+      })
+      .catch(function(err) {
+        alert('Failed to remove holding: ' + err.message);
+      });
+    }
+
     // -------------------------------------------------------------
     // Universal ES5 Helpers
     // -------------------------------------------------------------
