@@ -339,14 +339,32 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                     },
                     "jobs": {
                         "candidate": job_bot_instance.get_profile().name,
+                        "candidate_email": "abishekpranav403@gmail.com",
                         "target_salary": "₹25,000+/mo (₹3.0L - ₹5.4L/yr)",
                         "ats_score": 92, "mode": "EVIDENCE_AUDITED",
                         "matched_count": len(job_bot_instance.get_job_stream()),
                         "applied_count": len(job_bot_instance.get_applications())
                     },
+                    "portals": {
+                        "candidate_email": "abishekpranav403@gmail.com",
+                        "total_connected": len(job_bot_instance.get_portal_accounts()),
+                        "gateways": [a.model_dump() for a in job_bot_instance.get_portal_accounts()]
+                    },
                     "clip": clip_engine.get_info()
                 }
                 self._send_json_response(summary)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/portals/status":
+            try:
+                accounts = job_bot_instance.get_portal_accounts()
+                self._send_json_response({
+                    "success": True,
+                    "candidate_email": "abishekpranav403@gmail.com",
+                    "portals": [a.model_dump() for a in accounts]
+                })
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
@@ -673,11 +691,13 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 style = data.get("letter_style", "balanced")
                 batch_limit = int(data.get("batch_limit", 25))
                 auto_search = bool(data.get("auto_search_next_batch", True))
+                portal_filter = data.get("portal_filter")
                 res = job_bot_instance.run_batch_auto_apply(
                     min_match_threshold=threshold,
                     style=style,
                     batch_limit=batch_limit,
-                    auto_search_next_batch=auto_search
+                    auto_search_next_batch=auto_search,
+                    portal_filter=portal_filter
                 )
                 self._send_json_response(res)
             except Exception as e:
@@ -691,6 +711,18 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 data = json.loads(body) if body else {}
                 batch_size = int(data.get("batch_size", 25))
                 res = job_bot_instance.search_next_batch(count=batch_size)
+                self._send_json_response(res)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/portals/sync":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+                data = json.loads(body) if body else {}
+                portal_id = data.get("portal_id", "all")
+                res = job_bot_instance.sync_portal_account(portal_id)
                 self._send_json_response(res)
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
@@ -857,9 +889,21 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 content_length = int(self.headers.get("Content-Length", 0))
                 body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
                 data = json.loads(body) if body else {}
+                s_amt = None
+                if data.get("savings_amount") is not None:
+                    try:
+                        s_amt = float(data.get("savings_amount"))
+                    except (ValueError, TypeError):
+                        s_amt = 81750.0
+                m_inc = None
+                if data.get("monthly_income") is not None:
+                    try:
+                        m_inc = float(data.get("monthly_income"))
+                    except (ValueError, TypeError):
+                        m_inc = 25000.0
                 res = portfolio_instance.scan_and_suggest_investment(
-                    savings_amount=data.get("savings_amount"),
-                    monthly_income=data.get("monthly_income")
+                    savings_amount=s_amt,
+                    monthly_income=m_inc
                 )
                 self._send_json_response({"success": True, "suggestion": res})
             except Exception as e:

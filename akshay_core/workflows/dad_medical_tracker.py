@@ -270,34 +270,47 @@ class DadMedicalTracker:
 
     def refill_medicine(self, med_id: str, qty_added: int = 30) -> DadMedicine:
         """Refills medicine stock (e.g. +30 pills for a full monthly strip)."""
-        now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute("UPDATE dad_medicines SET current_qty = current_qty + ?, updated_at = ? WHERE id = ?", (qty_added, now_str, med_id))
-            conn.commit()
-
         meds = self.get_medicines()
         target = next((m for m in meds if m.id == med_id), None)
         if not target:
+            target = next((m for m in meds if m.id.lower() == str(med_id).lower()), None)
+        if not target:
+            target = next((m for m in meds if str(med_id).lower() in m.id.lower() or str(med_id).lower() in m.name.lower()), None)
+        if not target:
             raise ValueError(f"Medicine ID '{med_id}' not found.")
-        return target
 
-    def log_daily_dose(self, med_id: str) -> DadMedicine:
-        """Deducts one day's dosage from current stock."""
         now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT daily_dose, current_qty FROM dad_medicines WHERE id = ?", (med_id,))
-            row = cursor.fetchone()
-            if not row:
-                raise ValueError(f"Medicine ID '{med_id}' not found.")
-            daily_dose, current_qty = row
-            new_qty = max(0, current_qty - daily_dose)
-            cursor.execute("UPDATE dad_medicines SET current_qty = ?, updated_at = ? WHERE id = ?", (new_qty, now_str, med_id))
+            cursor.execute("UPDATE dad_medicines SET current_qty = current_qty + ?, updated_at = ? WHERE id = ?", (qty_added, now_str, target.id))
             conn.commit()
 
+        updated_meds = self.get_medicines()
+        return next((m for m in updated_meds if m.id == target.id), target)
+
+    def log_daily_dose(self, med_id: str) -> DadMedicine:
+        """Deducts one day's dosage from current stock."""
         meds = self.get_medicines()
-        return next(m for m in meds if m.id == med_id)
+        target = next((m for m in meds if m.id == med_id), None)
+        if not target:
+            target = next((m for m in meds if m.id.lower() == str(med_id).lower()), None)
+        if not target:
+            target = next((m for m in meds if str(med_id).lower() in m.id.lower() or str(med_id).lower() in m.name.lower()), None)
+        if not target:
+            raise ValueError(f"Medicine ID '{med_id}' not found.")
+
+        now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT daily_dose, current_qty FROM dad_medicines WHERE id = ?", (target.id,))
+            row = cursor.fetchone()
+            daily_dose, current_qty = row
+            new_qty = max(0, current_qty - daily_dose)
+            cursor.execute("UPDATE dad_medicines SET current_qty = ?, updated_at = ? WHERE id = ?", (new_qty, now_str, target.id))
+            conn.commit()
+
+        updated_meds = self.get_medicines()
+        return next((m for m in updated_meds if m.id == target.id), target)
 
     def add_or_update_medicine(
         self,

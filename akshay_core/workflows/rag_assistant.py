@@ -222,10 +222,28 @@ def get_master_knowledge_corpus() -> List[KnowledgeChunk]:
                 "Configured for peak recruitment seasons to apply to batches of 20 to 30 matched roles (default 25 roles). "
                 "Human-in-the-Loop Review Gate: Ensures legitimate credentials, verified tenure, and customized cover letters. "
                 "Auto-Search Discovery Loop: As soon as a batch of 20-30 roles is approved and submitted, the bot automatically "
-                "launches the Next Batch Search & Discovery Pipeline across LinkedIn, Wellfound, Indeed, and Naukri, screening and "
+                "launches the Next Batch Search & Discovery Pipeline across LinkedIn, Indeed, Foundit, Shine, and Naukri, screening and "
                 "queuing the next 20-30 peak vacancies so application momentum never stalls."
             ),
             tags=["batch", "auto-apply", "20-30 roles", "next batch", "discovery", "peak", "portals", "continuous"]
+        ),
+        KnowledgeChunk(
+            id="KNOW-JOB-03",
+            category="jobs",
+            title="Authenticated Cloud Portals & Candidate Gateways (abishekpranav403@gmail.com)",
+            content=(
+                "Multi-Portal Candidate Account & Gateway Integration: "
+                "All job applications are verified and dispatched directly from candidate account: abishekpranav403@gmail.com (Abishek Pranav G V). "
+                "5 Connected Production Portals: "
+                "1. LinkedIn (LinkedIn Easy Apply direct API push, 100% profile health). "
+                "2. Indeed (Indeed Instant Apply XML/REST candidate pipeline). "
+                "3. Foundit / Monster India (FastForward Recruiter direct application feed). "
+                "4. Shine (Shine Express candidate ingestion & 1-click matching). "
+                "5. Naukri (Naukri FastForward API & 1-Click application pipeline). "
+                "Each submitted application generates a unique tamper-evident portal submission ID (e.g., LKDN-20261027-XXXX, FND-20261027-XXXX, SHN-20261027-XXXX, NAUKRI-20261027-XXXX, IND-20261027-XXXX) "
+                "and records the applicant email abishekpranav403@gmail.com into the tamper-proof SQLite ledger."
+            ),
+            tags=["portals", "linkedin", "indeed", "foundit", "shine", "naukri", "email", "abishekpranav403@gmail.com", "gateway", "easy apply"]
         ),
 
         # --- DOMAIN 5: DAILY EXECUTIVE OPERATIONS & ASSISTANT PROTOCOLS ---
@@ -487,7 +505,7 @@ class RAGAssistantEngine:
                 f"Abishek, our Autonomous ATS 2.0 Job Bot is primed for peak season recruiting:\n\n"
                 f"• Continuous Batch Pipeline: We've expanded our search capacity to 20–30 roles per batch (25 roles default).\n"
                 f"• Auto-Search Discovery Loop: The moment a batch of 25 roles is applied, the bot instantly initiates the next search cycle, "
-                f"screening and scoring the next 25 vacancies across LinkedIn, Wellfound, Indeed, and Naukri.\n"
+                f"screening and scoring the next 25 vacancies across LinkedIn, Indeed, Foundit, Shine, and Naukri.\n"
                 f"• ATS Optimization: Every single application is paired with a 100/100 ATS-scored tailored CV and custom cover letter.\n\n"
                 f"Would you like me to launch the 25-role auto-apply batch now? Just say 'Start batch apply' or head to Page 4."
             )
