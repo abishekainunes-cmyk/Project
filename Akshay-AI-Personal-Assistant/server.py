@@ -112,7 +112,9 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
 
         elif path == "/api/jobs/stream":
             try:
-                jobs = job_bot_instance.get_job_stream()
+                query = urllib.parse.parse_qs(parsed_url.query)
+                include_applied = query.get("include_applied", ["false"])[0].lower() in ["true", "1"]
+                jobs = job_bot_instance.get_job_stream(only_unapplied=not include_applied)
                 self._send_json_response({
                     "success": True,
                     "jobs": [j.model_dump() for j in jobs]
@@ -167,16 +169,32 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
 
-        elif path == "/api/jobs/export-csv":
+        elif path == "/api/jobs/export-csv" or path == "/api/jobs/export-sheet-csv":
             try:
-                csv_data = job_bot_instance.export_applications_csv()
-                payload = csv_data.encode("utf-8")
+                sheet_file = job_bot_instance.export_applied_roles_sheet()
+                with open(sheet_file, "rb") as f:
+                    payload = f.read()
                 self.send_response(200)
-                self.send_header("Content-Type", "text/csv; charset=utf-8")
-                self.send_header("Content-Disposition", "attachment; filename=\"akshay_job_applications.csv\"")
+                self.send_header("Content-Type", "text/csv; charset=utf-8-sig")
+                self.send_header("Content-Disposition", 'attachment; filename="Abishek_Pranav_Applied_Roles_and_CVs.csv"')
                 self.send_header("Content-Length", str(len(payload)))
+                self.send_header("Access-Control-Allow-Origin", "*")
                 self.end_headers()
                 self.wfile.write(payload)
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/jobs/applied-sheet":
+            try:
+                apps = job_bot_instance.get_applications()
+                self._send_json_response({
+                    "success": True,
+                    "total": len(apps),
+                    "sheet_csv_url": "/api/jobs/export-sheet-csv",
+                    "applicant_email": "abishekpranav403@gmail.com",
+                    "applications": [a.model_dump() for a in apps]
+                })
             except Exception as e:
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
