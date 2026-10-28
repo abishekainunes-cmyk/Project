@@ -2460,7 +2460,8 @@
               <button class="btn btn-secondary" style="font-size:0.68rem;" onclick="searchNextBatchManually()" title="Search Next Batch of 25 Roles">🔍 Next Batch</button>
               <button class="btn btn-secondary" style="font-size:0.68rem;" onclick="runBatchScreeningAudit()" title="Run Evidence Screening Audit">⚡ Audit</button>
               <button class="btn btn-secondary" onclick="loadJobStream()" title="Refresh Positions">↻</button>
-              <button class="btn btn-secondary" onclick="exportApplicationsCsv()" title="Download CSV">📥 CSV</button>
+              <button class="btn btn-secondary" style="background:#10b981; color:#fff; font-weight:700;" onclick="downloadAppliedSheetCSV()" title="Download Full Applied Roles & CV Spreadsheet (.CSV / Excel)">📊 Applied Sheet (.CSV)</button>
+              <button class="btn btn-primary" style="font-weight:700;" onclick="openAppliedSheetModal()" title="Open Interactive Applied Roles & CV Sheet Viewer">📋 View Sheet &amp; CVs</button>
             </div>
             <div id="botStatusText" style="font-size:0.68rem; font-family:var(--font-mono); color: #334155; margin-top:0.2rem;"></div>
           </div>
@@ -2611,6 +2612,50 @@
     <!-- ============================================================== -->
     <!-- 100% ATS-OPTIMIZED TAILORED CV MODAL (FULL SCREEN OVERLAY)     -->
     <!-- ============================================================== -->
+        <!-- ============================================================== -->
+    <!-- APPLIED ROLES & CV SPREADSHEET REPOSITORY MODAL                 -->
+    <!-- ============================================================== -->
+    <div id="appliedSheetModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9998; overflow-y:auto; padding:0.75rem; box-sizing:border-box;">
+      <div style="max-width:980px; margin:1rem auto; background:#0b1329; border:1px solid #10b981; border-radius:10px; padding:1.1rem; box-shadow:0 0 35px rgba(16,185,129,0.35);">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #334155; padding-bottom:0.6rem; margin-bottom:0.75rem;">
+          <div>
+            <div style="font-family:var(--font-mono); font-weight:800; color:#10b981; font-size:1rem;">📊 APPLIED ROLES &amp; TAILORED CV SPREADSHEET REPOSITORY</div>
+            <div style="font-size:0.65rem; color:#94a3b8; font-family:var(--font-mono); margin-top:0.15rem;">
+              Candidate: <strong style="color:#38bdf8;">Abishek Pranav G V</strong> &bull; Account: <strong style="color:#34d399;">abishekpranav403@gmail.com</strong> &bull; <span id="sheetModalCount">0 Applications Tracked</span>
+            </div>
+          </div>
+          <div style="display:flex; gap:0.4rem; align-items:center;">
+            <button class="btn btn-secondary" style="background:#10b981; color:#fff; font-weight:700; padding:0.25rem 0.65rem;" onclick="downloadAppliedSheetCSV()">📥 Download .CSV</button>
+            <button class="btn btn-secondary" style="padding:0.25rem 0.55rem;" onclick="closeAppliedSheetModal()">✕ Close</button>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:0.5rem; margin-bottom:0.75rem; align-items:center;">
+          <input type="text" id="sheetSearchInput" placeholder="🔍 Search applied roles by title, company, portal, or submission ID..." style="flex:1; padding:0.4rem 0.6rem; font-size:0.75rem; background:#0f172a; border:1px solid #334155; color:#f8fafc; border-radius:6px;" oninput="filterAppliedSheetTable()">
+          <span style="font-size:0.65rem; color:#64748b;" id="sheetFilteredCount">Showing all rows</span>
+        </div>
+
+        <div style="max-height:480px; overflow-y:auto; border:1px solid #1e293b; border-radius:6px; background:#0a0f1d;">
+          <table style="width:100%; border-collapse:collapse; font-size:0.68rem; text-align:left;">
+            <thead>
+              <tr style="background:#0f172a; color:#94a3b8; border-bottom:1px solid #334155; position:sticky; top:0;">
+                <th style="padding:0.45rem 0.6rem;">Submission ID</th>
+                <th style="padding:0.45rem 0.6rem;">Portal</th>
+                <th style="padding:0.45rem 0.6rem;">Company &amp; Role</th>
+                <th style="padding:0.45rem 0.6rem;">Location &amp; Salary</th>
+                <th style="padding:0.45rem 0.6rem;">Applied Date</th>
+                <th style="padding:0.45rem 0.6rem; text-align:center;">ATS Score</th>
+                <th style="padding:0.45rem 0.6rem; text-align:center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="appliedSheetTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <div id="atsCvModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:0.75rem; box-sizing:border-box;">
       <div style="max-width:760px; margin:1rem auto; background:#0b1329; border:1px solid #c084fc; border-radius:10px; padding:1rem; box-shadow:0 0 35px rgba(192,132,252,0.35);">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;">
@@ -3443,7 +3488,7 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     // Dynamic Cloud & Local API Routing Engine (Works on Vercel, GitHub Pages, Local & Tablet)
-    var CLOUD_GATEWAY_URL = 'https://suburban-triumph-comm-shoppers.trycloudflare.com';
+    var CLOUD_GATEWAY_URL = 'https://petition-vsnet-contemporary-preparing.trycloudflare.com';
     function apiEndpoint(path) {
       var h = window.location.hostname;
       if (h === 'localhost' || h === '127.0.0.1' || h === '192.168.0.107' || !h) {
@@ -4855,94 +4900,194 @@ Select a condition above to view immediate clinical triage steps.
     // -------------------------------------------------------------
     var localJobPool = [
       {
-        id: "JOB-AI-01",
-        company: "Cognitive Dynamics",
-        role: "Generative AI & Automation Engineer",
+        id: "JOB-B5-01",
+        company: "ApexGen AI (Batch 5)",
+        role: "Generative AI Integration Engineer",
         location: "Bengaluru (Remote)",
         work_type: "Remote",
-        salary_range: "₹30,000 - ₹45,000/mo (₹3.6L - ₹5.4L/yr)",
-        required_skills: ["Generative AI", "Python", "REST APIs", "Google Apps Script", "Workflow Automation"],
-        description: "Develop and deploy production Generative AI automation pipelines, API-driven workflows, and autonomous document processing systems.",
-        match_score: 100,
+        salary_range: "₹32,000 - ₹46,000/mo (₹3.8L - ₹5.5L/yr)",
+        required_skills: ["Generative AI", "Python", "REST APIs", "Prompt Engineering"],
+        description: "Build autonomous multi-agent pipelines, prompt workflows, and API integrations for client enterprises.",
+        match_score: 96,
         skills_match_pct: 100,
-        experience_match_pct: 100,
+        experience_match_pct: 95,
         salary_fit_pct: 100,
-        matched_skills: ["Generative AI", "Python", "REST APIs", "Google Apps Script", "Workflow Automation"],
+        matched_skills: ["Generative AI", "Python", "REST APIs", "Prompt Engineering"],
         missing_skills: [],
         portal: "LinkedIn"
       },
       {
-        id: "JOB-FD-02",
-        company: "NovaTech Automation",
-        role: "Forward Deployed AI Solutions Engineer",
-        location: "Coimbatore / Bengaluru (Hybrid)",
-        work_type: "Hybrid",
-        salary_range: "₹28,000 - ₹40,000/mo (₹3.4L - ₹4.8L/yr)",
-        required_skills: ["Python", "Generative AI", "Process Mapping", "REST APIs", "PowerShell"],
-        description: "Deploy operational automation tools, product research integrations, and enterprise client workflows with robust error handling.",
-        match_score: 100,
-        skills_match_pct: 100,
-        experience_match_pct: 100,
-        salary_fit_pct: 100,
-        matched_skills: ["Python", "Generative AI", "Process Mapping", "REST APIs", "PowerShell"],
-        missing_skills: [],
-        portal: "Wellfound"
-      },
-      {
-        id: "JOB-BA-03",
-        company: "Aegis Enterprise Solutions",
-        role: "Business Analyst — AI & Operations Automation",
-        location: "Chennai (Hybrid)",
-        work_type: "Hybrid",
-        salary_range: "₹25,000 - ₹35,000/mo (₹3.0L - ₹4.2L/yr)",
-        required_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Power BI", "Python", "Workflow Automation"],
-        description: "Translate complex business operations into automated workflows, streamline reconciliation and documentation, and build executive reporting.",
-        match_score: 100,
-        skills_match_pct: 100,
-        experience_match_pct: 100,
-        salary_fit_pct: 100,
-        matched_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Power BI", "Python", "Workflow Automation"],
-        missing_skills: [],
-        portal: "LinkedIn"
-      },
-      {
-        id: "JOB-DA-04",
-        company: "CloudSphere Analytics",
-        role: "Data Analytics & Automation Specialist",
+        id: "JOB-B5-02",
+        company: "AuraTech Automation (Batch 5)",
+        role: "Python Workflow & RPA Developer",
         location: "Remote",
         work_type: "Remote",
-        salary_range: "₹26,000 - ₹38,000/mo (₹3.1L - ₹4.6L/yr)",
-        required_skills: ["SQL", "Python", "Power BI", "Streamlit", "Excel", "Data Classification"],
-        description: "Build intelligent data indexing pipelines, interactive analytics dashboards, and deduplication models across large-scale document repositories.",
-        match_score: 100,
+        salary_range: "₹28,000 - ₹42,000/mo (₹3.4L - ₹5.0L/yr)",
+        required_skills: ["Python", "Task Scheduler", "PowerShell", "REST APIs", "Excel"],
+        description: "Design scheduled data extractors, automated reconciliation tasks, and robust operational batch processors.",
+        match_score: 95,
         skills_match_pct: 100,
-        experience_match_pct: 100,
+        experience_match_pct: 94,
         salary_fit_pct: 100,
-        matched_skills: ["SQL", "Python", "Power BI", "Streamlit", "Excel", "Data Classification"],
+        matched_skills: ["Python", "Task Scheduler", "PowerShell", "REST APIs", "Excel"],
         missing_skills: [],
         portal: "Indeed"
       },
       {
-        id: "JOB-OP-05",
-        company: "Starlight Global Logistics",
-        role: "Operations Automation & Systems Lead",
-        location: "Bengaluru (On-site)",
-        work_type: "On-site",
-        salary_range: "₹25,000 - ₹36,000/mo (₹3.0L - ₹4.3L/yr)",
-        required_skills: ["Python", "PowerShell", "Task Scheduler", "Google Drive API", "CRM", "Excel"],
-        description: "Automate cross-border documentation, shipment tracking pipelines, and scheduled system maintenance workers with 30%+ efficiency gains.",
-        match_score: 100,
-        skills_match_pct: 100,
-        experience_match_pct: 100,
+        id: "JOB-B5-03",
+        company: "Vanguard Business Ops (Batch 5)",
+        role: "AI & Business Systems Analyst",
+        location: "Coimbatore (Hybrid)",
+        work_type: "Hybrid",
+        salary_range: "₹26,000 - ₹38,000/mo (₹3.1L - ₹4.6L/yr)",
+        required_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Excel", "Tally"],
+        description: "Transform operational accounting and client workflows into automated pipelines with executive reporting.",
+        match_score: 94,
+        skills_match_pct: 96,
+        experience_match_pct: 95,
         salary_fit_pct: 100,
-        matched_skills: ["Python", "PowerShell", "Task Scheduler", "Google Drive API", "CRM", "Excel"],
+        matched_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Excel", "Tally"],
+        missing_skills: [],
+        portal: "Foundit"
+      },
+      {
+        id: "JOB-B5-04",
+        company: "DataNexus Labs (Batch 5)",
+        role: "Data Indexing & Classification Lead",
+        location: "Remote",
+        work_type: "Remote",
+        salary_range: "₹28,000 - ₹40,000/mo (₹3.4L - ₹4.8L/yr)",
+        required_skills: ["Data Classification", "Indexing and Deduplication", "Python", "SQL", "Google Drive API"],
+        description: "Deploy document tree parsers and automated indexing for cloud storage with verified accuracy metrics.",
+        match_score: 97,
+        skills_match_pct: 100,
+        experience_match_pct: 95,
+        salary_fit_pct: 100,
+        matched_skills: ["Data Classification", "Indexing and Deduplication", "Python", "SQL", "Google Drive API"],
+        missing_skills: [],
+        portal: "Shine"
+      },
+      {
+        id: "JOB-B5-05",
+        company: "LogiPulse Systems (Batch 5)",
+        role: "Operations & Shipment Workflow Lead",
+        location: "Chennai (Hybrid)",
+        work_type: "Hybrid",
+        salary_range: "₹27,000 - ₹38,000/mo (₹3.2L - ₹4.6L/yr)",
+        required_skills: ["Process Mapping", "Workflow Automation", "CRM", "Excel", "Python"],
+        description: "Automate manifest reconciliations and carrier invoice tracking with custom dispatch alerts.",
+        match_score: 93,
+        skills_match_pct: 94,
+        experience_match_pct: 92,
+        salary_fit_pct: 100,
+        matched_skills: ["Process Mapping", "Workflow Automation", "CRM", "Excel", "Python"],
+        missing_skills: [],
+        portal: "Naukri"
+      },
+      {
+        id: "JOB-B5-06",
+        company: "PromptLogic Corp (Batch 5)",
+        role: "Autonomous Agent & AI Developer",
+        location: "Bengaluru (Hybrid)",
+        work_type: "Hybrid",
+        salary_range: "₹34,000 - ₹48,000/mo (₹4.1L - ₹5.8L/yr)",
+        required_skills: ["Generative AI", "Python", "REST APIs", "Workflow Automation", "SQL"],
+        description: "Deploy autonomous customer engagement and reporting agents with fault-tolerant connectors.",
+        match_score: 98,
+        skills_match_pct: 100,
+        experience_match_pct: 96,
+        salary_fit_pct: 100,
+        matched_skills: ["Generative AI", "Python", "REST APIs", "Workflow Automation", "SQL"],
+        missing_skills: [],
+        portal: "LinkedIn"
+      },
+      {
+        id: "JOB-B5-07",
+        company: "CodeStream Solutions (Batch 5)",
+        role: "Python Backend & Automation Specialist",
+        location: "Remote",
+        work_type: "Remote",
+        salary_range: "₹30,000 - ₹44,000/mo (₹3.6L - ₹5.3L/yr)",
+        required_skills: ["Python", "REST APIs", "SQL", "Excel", "Task Scheduler"],
+        description: "Develop robust data synchronization workers and scheduled batch processors for cloud infrastructure.",
+        match_score: 95,
+        skills_match_pct: 100,
+        experience_match_pct: 94,
+        salary_fit_pct: 100,
+        matched_skills: ["Python", "REST APIs", "SQL", "Excel", "Task Scheduler"],
+        missing_skills: [],
+        portal: "Indeed"
+      },
+      {
+        id: "JOB-B5-08",
+        company: "ElevateOps Consulting (Batch 5)",
+        role: "Business Process Automation Consultant",
+        location: "Bengaluru / Remote",
+        work_type: "Remote",
+        salary_range: "₹30,000 - ₹45,000/mo (₹3.6L - ₹5.4L/yr)",
+        required_skills: ["Requirements Analysis", "Process Mapping", "Generative AI", "Power BI", "Python"],
+        description: "Consult on AI workflow transformation and operational efficiency metrics across finance and supply chain.",
+        match_score: 96,
+        skills_match_pct: 98,
+        experience_match_pct: 95,
+        salary_fit_pct: 100,
+        matched_skills: ["Requirements Analysis", "Process Mapping", "Generative AI", "Power BI", "Python"],
+        missing_skills: [],
+        portal: "Foundit"
+      },
+      {
+        id: "JOB-B5-09",
+        company: "Horizon Scale Systems (Batch 5)",
+        role: "Lead AI Workflow Automation Architect",
+        location: "Remote",
+        work_type: "Remote",
+        salary_range: "₹34,000 - ₹50,000/mo (₹4.0L - ₹6.0L/yr)",
+        required_skills: ["Generative AI", "Python", "Workflow Automation", "REST APIs", "SQL"],
+        description: "Architect multi-tenant agent execution workflows and fault-tolerant connectors for large datasets.",
+        match_score: 99,
+        skills_match_pct: 100,
+        experience_match_pct: 97,
+        salary_fit_pct: 100,
+        matched_skills: ["Generative AI", "Python", "Workflow Automation", "REST APIs", "SQL"],
+        missing_skills: [],
+        portal: "Shine"
+      },
+      {
+        id: "JOB-B5-10",
+        company: "Zenith Enterprise Tech (Batch 5)",
+        role: "ERP Integration & Process Automation Lead",
+        location: "Coimbatore / Hybrid",
+        work_type: "Hybrid",
+        salary_range: "₹28,000 - ₹42,000/mo (₹3.4L - ₹5.0L/yr)",
+        required_skills: ["Requirements Analysis", "Process Mapping", "Tally", "Excel", "Python"],
+        description: "Implement end-to-end accounting ingestion and automated compliance reporting with verifiable audit logs.",
+        match_score: 95,
+        skills_match_pct: 98,
+        experience_match_pct: 96,
+        salary_fit_pct: 100,
+        matched_skills: ["Requirements Analysis", "Process Mapping", "Tally", "Excel", "Python"],
         missing_skills: [],
         portal: "Naukri"
       }
     ];
-
     var currentCoverLetterStyle = "balanced";
     var appliedJobsMap = {};
+    var rawAppliedSheetData = [];
+    try {
+      var cachedApplied = localStorage.getItem('akshay_applied_jobs_v2');
+      if (cachedApplied) {
+        var parsed = JSON.parse(cachedApplied);
+        for (var k in parsed) { appliedJobsMap[k] = true; }
+      }
+    } catch(e) {}
+
+    function persistAppliedJob(jobId) {
+      if (!jobId) return;
+      appliedJobsMap[jobId] = true;
+      try {
+        localStorage.setItem('akshay_applied_jobs_v2', JSON.stringify(appliedJobsMap));
+      } catch(e) {}
+    }
     var cachedCoverLetterText = "";
 
     function selectLetterStyle(style) {
@@ -5073,8 +5218,9 @@ Select a condition above to view immediate clinical triage steps.
         .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
         .then(function(histData) {
           if (histData && histData.success && histData.applications) {
+            rawAppliedSheetData = histData.applications;
             for (var a = 0; a < histData.applications.length; a++) {
-              appliedJobsMap[histData.applications[a].job_id] = true;
+              persistAppliedJob(histData.applications[a].job_id);
             }
             renderHistory(histData.applications);
           }
@@ -5117,7 +5263,7 @@ Select a condition above to view immediate clinical triage steps.
 
       var streamCountEl = document.getElementById('jobStreamCount');
       if (streamCountEl) {
-        streamCountEl.textContent = unapplied.length + ' Pending • ' + applied.length + ' Saved Below';
+        streamCountEl.textContent = unapplied.length + ' New Unapplied Roles • ' + (rawAppliedSheetData.length || Object.keys(appliedJobsMap).length) + ' Saved in Sheet';
       }
 
       // Live Application Queue Banner (Auto-Advance Indicator)
@@ -5140,7 +5286,7 @@ Select a condition above to view immediate clinical triage steps.
         '<span class="match-badge" style="font-size:0.55rem; border-color:#34d399; color:#34d399;">' + unapplied.length + ' IN QUEUE</span>';
       container.appendChild(queueBanner);
 
-      // Render Active & Pending Unapplied Jobs First (Showing next automatically!)
+      // STRICT: Show ONLY NEW unapplied roles in the queue!
       for (var u = 0; u < unapplied.length; u++) {
         var ju = unapplied[u];
         var isNextSpotlight = (u === 0);
@@ -5148,40 +5294,20 @@ Select a condition above to view immediate clinical triage steps.
         container.appendChild(cardU);
       }
 
-      // If all unapplied jobs are done, show completion congratulations card
+      // If all unapplied jobs in this batch are done, prompt Next Batch discovery
       if (unapplied.length === 0) {
         var completeCard = document.createElement('div');
         completeCard.style.background = 'rgba(16,185,129,0.12)';
         completeCard.style.border = '1px solid #10b981';
-        completeCard.style.borderRadius = '6px';
-        completeCard.style.padding = '0.85rem';
+        completeCard.style.borderRadius = '8px';
+        completeCard.style.padding = '1rem';
         completeCard.style.textAlign = 'center';
         completeCard.style.marginBottom = '0.65rem';
         completeCard.innerHTML = 
-          '<div style="font-size:0.95rem; font-weight:800; color:#34d399;">🎉 ALL POSITIONS APPLIED &amp; ARCHIVED!</div>' +
-          '<div style="font-size:0.65rem; color: #334155; margin-top:0.25rem;">Every vacancy has been submitted with a tailored ATS CV and saved into SQLite below.</div>';
+          '<div style="font-size:0.95rem; font-weight:800; color:#34d399;">✨ ALL CURRENT POSITIONS APPLIED &amp; SAVED IN SHEET!</div>' +
+          '<div style="font-size:0.68rem; color: #94a3b8; margin:0.35rem 0 0.65rem 0;">All previously applied roles are archived in the Applied Roles &amp; CV Sheet below. Ready to discover the next batch of fresh roles?</div>' +
+          '<button class="btn btn-purple" style="font-weight:700; padding:0.35rem 0.85rem;" onclick="searchNextBatchManually()">🔍 Queue Next 25 Verified Roles</button>';
         container.appendChild(completeCard);
-      }
-
-      // Render Applied & Archived Jobs Below
-      if (applied.length > 0) {
-        var divider = document.createElement('div');
-        divider.style.display = 'flex';
-        divider.style.justifyContent = 'space-between';
-        divider.style.alignItems = 'center';
-        divider.style.margin = '0.75rem 0 0.35rem 0';
-        divider.style.padding = '0.2rem 0';
-        divider.style.borderBottom = '1px solid #334155';
-        divider.innerHTML = 
-          '<strong style="font-size:0.65rem; color: #64748b;">ARCHIVED APPLIED POSITIONS (' + applied.length + ' SAVED IN SQLITE BELOW):</strong>' +
-          '<span style="font-size:0.58rem; color:#34d399;">✓ Verified Saved</span>';
-        container.appendChild(divider);
-
-        for (var a = 0; a < applied.length; a++) {
-          var ja = applied[a];
-          var cardA = createSingleJobCard(ja, true, false, 0, 0);
-          container.appendChild(cardA);
-        }
       }
     }
 
@@ -5547,6 +5673,120 @@ Select a condition above to view immediate clinical triage steps.
           '</div>';
         container.appendChild(item);
       }
+    }
+
+    // -------------------------------------------------------------
+    // Applied Roles & Tailored CV Spreadsheet Management (ES5)
+    // -------------------------------------------------------------
+    function downloadAppliedSheetCSV() {
+      playUISound('click');
+      // Direct file download from API
+      var url = apiEndpoint('/api/jobs/export-sheet-csv');
+      try {
+        var a = document.createElement('a');
+        a.href = url;
+        a.setAttribute('download', 'Abishek_Pranav_Applied_Roles_and_CVs.csv');
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (err) {
+        window.open(url, '_blank');
+      }
+    }
+
+    function openAppliedSheetModal() {
+      playUISound('click');
+      var modal = document.getElementById('appliedSheetModal');
+      if (modal) modal.style.display = 'block';
+
+      // Load full applications data
+      fetch(apiEndpoint('/api/jobs/applied-sheet'))
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success && data.applications) {
+            rawAppliedSheetData = data.applications;
+            renderAppliedSheetTable(rawAppliedSheetData);
+          } else {
+            renderAppliedSheetTable(rawAppliedSheetData);
+          }
+        })
+        .catch(function() {
+          renderAppliedSheetTable(rawAppliedSheetData);
+        });
+    }
+
+    function closeAppliedSheetModal() {
+      playUISound('click');
+      var modal = document.getElementById('appliedSheetModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function renderAppliedSheetTable(apps) {
+      var tbody = document.getElementById('appliedSheetTableBody');
+      var countEl = document.getElementById('sheetModalCount');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (countEl) countEl.textContent = apps.length + ' Applications Tracked';
+
+      if (!apps || apps.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem; text-align:center; color:#64748b;">No applications recorded yet.</td></tr>';
+        return;
+      }
+
+      var portalColors = {
+        'LinkedIn': '#0A66C2',
+        'Indeed': '#2164F3',
+        'Foundit': '#6C5CE7',
+        'Shine': '#F26522',
+        'Naukri': '#0078DB'
+      };
+
+      for (var i = 0; i < apps.length; i++) {
+        var a = apps[i];
+        var tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #1e293b';
+        tr.style.transition = 'background 0.15s ease';
+        tr.onmouseover = function() { this.style.background = '#1e293b'; };
+        tr.onmouseout = function() { this.style.background = 'transparent'; };
+
+        var pCol = portalColors[a.portal] || '#6366f1';
+        var portalBadge = '<span style="font-weight:700; color:' + pCol + '; background:' + pCol + '18; border:1px solid ' + pCol + '44; padding:0.1rem 0.35rem; border-radius:4px;">' + escapeHtml(a.portal || 'LinkedIn') + '</span>';
+
+        tr.innerHTML = 
+          '<td style="padding:0.45rem 0.6rem; font-family:var(--font-mono); color:#38bdf8; font-weight:700;">' + escapeHtml(a.submission_id || ('APP-' + a.id)) + '</td>' +
+          '<td style="padding:0.45rem 0.6rem;">' + portalBadge + '</td>' +
+          '<td style="padding:0.45rem 0.6rem;"><strong style="color:#f8fafc;">' + escapeHtml(a.company) + '</strong><br><span style="color:#94a3b8;">' + escapeHtml(a.role) + '</span></td>' +
+          '<td style="padding:0.45rem 0.6rem; color:#cbd5e1;">' + escapeHtml(a.location || 'Remote') + '<br><span style="font-size:0.62rem; color:#34d399;">' + escapeHtml(a.salary || 'Market') + '</span></td>' +
+          '<td style="padding:0.45rem 0.6rem; font-family:var(--font-mono); color:#94a3b8; font-size:0.62rem;">' + escapeHtml(a.applied_at || '') + '</td>' +
+          '<td style="padding:0.45rem 0.6rem; text-align:center;"><span class="match-badge" style="border-color:#34d399; color:#34d399;">' + (a.ats_score || 100) + '%</span></td>' +
+          '<td style="padding:0.45rem 0.6rem; text-align:center;">' +
+            '<button class="btn btn-secondary" style="font-size:0.6rem; padding:0.15rem 0.4rem;" onclick="viewApplicationAtsCv('' + escapeHtml(a.job_id) + '')">📄 View CV</button>' +
+          '</td>';
+        tbody.appendChild(tr);
+      }
+    }
+
+    function filterAppliedSheetTable() {
+      var query = (document.getElementById('sheetSearchInput').value || '').toLowerCase().trim();
+      if (!rawAppliedSheetData) return;
+      if (!query) {
+        renderAppliedSheetTable(rawAppliedSheetData);
+        var fCount = document.getElementById('sheetFilteredCount');
+        if (fCount) fCount.textContent = 'Showing all ' + rawAppliedSheetData.length + ' rows';
+        return;
+      }
+      var filtered = [];
+      for (var i = 0; i < rawAppliedSheetData.length; i++) {
+        var a = rawAppliedSheetData[i];
+        var str = (a.company + ' ' + a.role + ' ' + a.portal + ' ' + (a.submission_id || '') + ' ' + (a.location || '')).toLowerCase();
+        if (str.indexOf(query) !== -1) {
+          filtered.push(a);
+        }
+      }
+      renderAppliedSheetTable(filtered);
+      var fCount2 = document.getElementById('sheetFilteredCount');
+      if (fCount2) fCount2.textContent = 'Found ' + filtered.length + ' of ' + rawAppliedSheetData.length + ' rows';
     }
 
     function exportApplicationsCsv() {

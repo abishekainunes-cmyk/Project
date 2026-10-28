@@ -16,11 +16,12 @@ from __future__ import annotations
 import csv
 import io
 import random
+import re
 import sqlite3
 import datetime
 from decimal import Decimal
 from pathlib import Path
-from typing import List, Optional, Dict, Any, Tuple
+from typing import List, Optional, Dict, Any, Tuple, Set
 from pydantic import BaseModel, Field
 
 from akshay_core.security.validator import sanitize_text
@@ -947,6 +948,27 @@ class JobBotManager:
         overall, _, _, _, _, _ = self.evaluate_job_match(profile, job)
         return overall
 
+    def get_applied_job_ids(self) -> Set[str]:
+        """Returns set of all job IDs that have already been applied to."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT job_id FROM job_applications")
+            return {row[0] for row in cursor.fetchall()}
+
+    def get_max_batch_number(self) -> int:
+        """Finds highest batch index currently present in applications or dynamic list."""
+        applied_ids = self.get_applied_job_ids()
+        nums = [1]
+        for jid in applied_ids:
+            m = re.search(r"JOB-B(\d+)-", jid)
+            if m:
+                nums.append(int(m.group(1)))
+        for v in self._dynamic_vacancies:
+            m = re.search(r"JOB-B(\d+)-", v.id)
+            if m:
+                nums.append(int(m.group(1)))
+        return max(nums)
+
     def get_all_vacancies(self) -> List[JobPosting]:
         """Combines peak catalog vacancies with dynamically discovered batches."""
         seen_ids = set()
@@ -966,12 +988,26 @@ class JobBotManager:
 
         return all_jobs
 
-    def get_job_stream(self) -> List[JobPosting]:
-        """Returns jobs enriched with multi-dimensional match scores and diagnostic verdicts."""
+    def get_job_stream(self, only_unapplied: bool = True) -> List[JobPosting]:
+        """Returns jobs enriched with multi-dimensional match scores.
+        When only_unapplied is True (default), strictly filters out positions already applied to.
+        If fewer than 20 unapplied positions remain, automatically discovers and queues a fresh batch!
+        """
+        applied_ids = self.get_applied_job_ids()
+        all_vacancies = self.get_all_vacancies()
+        unapplied = [j for j in all_vacancies if j.id not in applied_ids]
+
+        if len(unapplied) < 20:
+            self.search_next_batch(count=25)
+            all_vacancies = self.get_all_vacancies()
+            unapplied = [j for j in all_vacancies if j.id not in applied_ids]
+
+        target_vacancies = unapplied if only_unapplied else all_vacancies
+
         profile = self.get_profile()
         enriched_jobs = []
 
-        for job in self.get_all_vacancies():
+        for job in target_vacancies:
             overall, s_score, e_score, sal_score, matched, missing = self.evaluate_job_match(profile, job)
             job_copy = job.model_copy()
             job_copy.match_score = overall
@@ -1124,6 +1160,11 @@ class JobBotManager:
             conn.commit()
             app_id = cursor.lastrowid
 
+        try:
+            self.export_applied_roles_sheet()
+        except Exception:
+            pass
+
         return JobApplication(
             id=app_id,
             job_id=target_job.id,
@@ -1192,8 +1233,10 @@ class JobBotManager:
 
     def search_next_batch(self, count: int = 25) -> Dict[str, Any]:
         """Automatically discovers, validates, and queues the next batch of 20-30 peak vacancies across top platforms."""
-        self._current_batch_number += 1
+        max_batch = self.get_max_batch_number()
+        self._current_batch_number = max(self._current_batch_number, max_batch) + 1
         b_num = self._current_batch_number
+        applied_ids = self.get_applied_job_ids()
 
         discovered_roles: List[JobPosting] = []
         templates = [
@@ -1209,30 +1252,35 @@ class JobBotManager:
             ("Zenith Enterprise Tech", "ERP Integration & Process Automation Lead", "Coimbatore / Hybrid", "Hybrid", "₹28,000 - ₹42,000/mo (₹3.4L - ₹5.0L/yr)", 336000, 504000, ["Requirements Analysis", "Process Mapping", "Tally", "Excel", "Python"], "Implement end-to-end accounting ingestion and automated compliance reporting.", "Naukri", "Business Analyst — AI & Operations Automation")
         ]
 
-        # Generate up to requested count
-        for i in range(count):
+        # Generate up to requested count guaranteed to be unapplied
+        i = 0
+        added = 0
+        while added < count:
             tmpl = templates[i % len(templates)]
-            job_id = f"JOB-B{b_num}-{i+1:02d}"
-            job = JobPosting(
-                id=job_id,
-                company=f"{tmpl[0]} (Batch {b_num})",
-                role=tmpl[1],
-                location=tmpl[2],
-                work_type=tmpl[3],
-                salary_range=tmpl[4],
-                min_salary_inr=tmpl[5],
-                max_salary_inr=tmpl[6],
-                required_skills=tmpl[7],
-                description=tmpl[8],
-                portal=tmpl[9],
-                vacancy_verification_status="VERIFIED_OPEN",
-                suitability_verdict="Apply",
-                tailoring_mode=tmpl[10],
-                match_score=88 + (i % 6),
-                rejection_risks=[f"Batch {b_num} active recruitment window; highlights audited experience and tailored CV."],
-                batch_number=b_num
-            )
-            discovered_roles.append(job)
+            job_id = f"JOB-B{b_num}-{added+1:02d}"
+            if job_id not in applied_ids:
+                job = JobPosting(
+                    id=job_id,
+                    company=f"{tmpl[0]} (Batch {b_num})",
+                    role=tmpl[1],
+                    location=tmpl[2],
+                    work_type=tmpl[3],
+                    salary_range=tmpl[4],
+                    min_salary_inr=tmpl[5],
+                    max_salary_inr=tmpl[6],
+                    required_skills=tmpl[7],
+                    description=tmpl[8],
+                    portal=tmpl[9],
+                    vacancy_verification_status="VERIFIED_OPEN",
+                    suitability_verdict="Apply",
+                    tailoring_mode=tmpl[10],
+                    match_score=88 + (added % 6),
+                    rejection_risks=[f"Batch {b_num} active recruitment window; highlights audited experience and tailored CV."],
+                    batch_number=b_num
+                )
+                discovered_roles.append(job)
+                added += 1
+            i += 1
 
         # Store in dynamic vacancies list
         self._dynamic_vacancies.extend(discovered_roles)
@@ -1242,7 +1290,7 @@ class JobBotManager:
             "batch_number": b_num,
             "discovered_count": len(discovered_roles),
             "jobs": [j.model_dump() for j in discovered_roles],
-            "message": f"Auto-Search Discovery engaged: Discovered and screened Next Batch #{b_num} ({len(discovered_roles)} peak vacancies) across LinkedIn, Wellfound, Indeed, and Naukri!"
+            "message": f"Auto-Search Discovery engaged: Discovered and screened Next Batch #{b_num} ({len(discovered_roles)} peak vacancies) across LinkedIn, Indeed, Foundit, Shine, and Naukri!"
         }
 
     def run_batch_auto_apply(self, min_match_threshold: int = 70, style: str = "balanced", batch_limit: int = 25, auto_search_next_batch: bool = True, portal_filter: Optional[str] = None) -> Dict[str, Any]:
@@ -1285,6 +1333,11 @@ class JobBotManager:
             f"✓ Approved & submitted Batch of {applied_count} matching positions through Human-in-the-Loop review gate (Limit: {batch_limit} roles, Threshold >= {min_match_threshold}%). "
             f"➔ Auto-Search Pipeline engaged: Discovered and queued Next Batch of {next_batch_count} peak vacancies!"
         )
+
+        try:
+            self.export_applied_roles_sheet()
+        except Exception:
+            pass
 
         return {
             "success": True,
@@ -1383,6 +1436,49 @@ class JobBotManager:
                     submission_id=r[17] if len(r) > 17 and r[17] else ""
                 ) for r in rows
             ]
+
+    def export_applied_roles_sheet(self, output_path: Optional[Path] = None) -> Path:
+        """Saves all applied roles along with their full tailored CVs to an Excel-compatible UTF-8 CSV spreadsheet."""
+        if output_path is None:
+            output_path = self.db_path.parent / "applied_roles_with_cv.csv"
+        apps = self.get_applications()
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8-sig", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow([
+                "Submission ID",
+                "Portal Gateway",
+                "Company Name",
+                "Target Role",
+                "Location / Work Mode",
+                "Salary Range",
+                "ATS Diagnostic Score",
+                "Applicant Name",
+                "Applicant Email",
+                "Applied Date (IST)",
+                "Application Status",
+                "Cover Letter Style",
+                "Cover Letter Text",
+                "Tailored ATS CV (Full Verifiable Evidence)"
+            ])
+            for a in apps:
+                writer.writerow([
+                    a.submission_id or f"APP-{a.id}",
+                    a.portal,
+                    a.company,
+                    a.role,
+                    a.location,
+                    a.salary,
+                    f"{a.ats_score}%",
+                    "Abishek Pranav G V",
+                    a.applicant_email or "abishekpranav403@gmail.com",
+                    a.applied_at,
+                    a.status,
+                    a.letter_style,
+                    a.cover_letter,
+                    a.tailored_cv
+                ])
+        return output_path
 
     def export_applications_csv(self) -> str:
         """Exports tracked applications as RFC 4180 CSV string with ATS scores."""
