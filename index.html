@@ -5689,7 +5689,7 @@ Select a condition above to view immediate clinical triage steps.
           '<td style="padding:0.45rem 0.6rem; font-family:var(--font-mono); color:#94a3b8; font-size:0.62rem;">' + escapeHtml(a.applied_at || '') + '</td>' +
           '<td style="padding:0.45rem 0.6rem; text-align:center;"><span class="match-badge" style="border-color:#34d399; color:#34d399;">' + (a.ats_score || 100) + '%</span></td>' +
           '<td style="padding:0.45rem 0.6rem; text-align:center;">' +
-            '<button class="btn btn-secondary" style="font-size:0.6rem; padding:0.15rem 0.4rem;" onclick="viewApplicationAtsCv('' + escapeHtml(a.job_id) + '')">📄 View CV</button>' +
+            '<button class="btn btn-secondary" style="font-size:0.6rem; padding:0.15rem 0.4rem;" onclick="viewApplicationAtsCv(\' + escapeHtml(a.job_id) + \')">📄 View CV</button>' +
           '</td>';
         tbody.appendChild(tr);
       }
@@ -6619,6 +6619,8 @@ Select a condition above to view immediate clinical triage steps.
     loadInvestmentPortfolio();
     loadInvestmentReminders();
         respond('Dad\'s Medical Tracker: Refilled +30 pills for ' + (data && data.medicine ? data.medicine.name : medId) + '. Reorder schedule updated.');
+        if (typeof showToast === 'function') showToast('✓ Refilled +30 pills for ' + (data && data.medicine ? data.medicine.name : medId), 'success');
+        if (typeof playUISound === 'function') playUISound('click');
       })
       .catch(function() {
         for (var i = 0; i < localDadMedicines.length; i++) {
@@ -6631,6 +6633,8 @@ Select a condition above to view immediate clinical triage steps.
         }
         renderDadMedicines(localDadMedicines);
         respond('Dad\'s Medical Tracker (Offline): Refilled +30 pills for ' + medId);
+        if (typeof showToast === 'function') showToast('✓ Refilled +30 pills for ' + medId + ' (Offline Updated)', 'success');
+        if (typeof playUISound === 'function') playUISound('click');
       });
     }
 
@@ -8164,6 +8168,61 @@ Select a condition above to view immediate clinical triage steps.
     }
     initDeviceTelemetry();
 
+
+    // -------------------------------------------------------------
+    // 5000x Luxury Micro-Interaction & Toast Notification System
+    // -------------------------------------------------------------
+    function showToast(message, type) {
+      try {
+        var toastContainer = document.getElementById('akshayToastContainer');
+        if (!toastContainer) {
+          toastContainer = document.createElement('div');
+          toastContainer.id = 'akshayToastContainer';
+          toastContainer.style.cssText = 'position:fixed; bottom:24px; right:24px; z-index:999999; display:flex; flex-direction:column; gap:8px; pointer-events:none; font-family:var(--font-sans, system-ui, -apple-system, sans-serif);';
+          document.body.appendChild(toastContainer);
+        }
+
+        var toast = document.createElement('div');
+        var bg = '#0f172a';
+        var border = '#38bdf8';
+        var icon = '⚡';
+
+        if (type === 'success' || type === 'refill' || type === 'visited') {
+          border = '#22c55e';
+          icon = '✓';
+        } else if (type === 'warn' || type === 'alert') {
+          border = '#f59e0b';
+          icon = '⚠️';
+        } else if (type === 'error') {
+          border = '#ef4444';
+          icon = '✕';
+        } else if (type === 'cal') {
+          border = '#38bdf8';
+          icon = '📅';
+        }
+
+        toast.style.cssText = 'background:' + bg + '; color:#f8fafc; border:1px solid ' + border + '; border-radius:8px; padding:10px 16px; font-size:12px; font-weight:600; box-shadow:0 10px 25px -5px rgba(0,0,0,0.5); display:flex; align-items:center; gap:8px; opacity:0; transform:translateY(12px) scale(0.96); transition:all 0.24s cubic-bezier(0.16, 1, 0.3, 1); pointer-events:auto;';
+        toast.innerHTML = '<span style="color:' + border + '; font-size:14px;">' + icon + '</span><span>' + message + '</span>';
+        toastContainer.appendChild(toast);
+
+        // Animate in
+        setTimeout(function() {
+          toast.style.opacity = '1';
+          toast.style.transform = 'translateY(0) scale(1)';
+        }, 10);
+
+        // Auto remove
+        setTimeout(function() {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-6px) scale(0.96)';
+          setTimeout(function() {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 250);
+        }, 3200);
+      } catch (e) {
+        console.log('Toast:', message);
+      }
+    }
 </script>
 
   <!-- ============================================================== -->
