@@ -3068,15 +3068,18 @@
         <div style="padding:0.65rem 0.8rem; background: #ffffff; border:1px solid #c084fc; border-radius:6px; margin-top:0.55rem;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <strong style="color:#c084fc; font-size:0.75rem;">📦 STANDALONE ANDROID APP (.APK) &amp; TABLET SYNC</strong>
-            <span class="match-badge" style="border-color:#c084fc; color:#c084fc; font-size:0.55rem;">v4.2 PRO APK (4.4 MB)</span>
+            <span class="match-badge" style="border-color:#10b981; color:#059669; font-size:0.55rem; font-weight:800;">v4.5 PRO APK (4.4 MB)</span>
           </div>
           <div style="font-size:0.63rem; color: #334155; margin-top:0.35rem; line-height:1.4;">
-            Standalone Android App Package optimized for Samsung Galaxy Tab A (Android 5.1.1 Lollipop / API 22 / DEX 035). Includes offline cache, 0-latency USB reverse bridge, and 100% Page Fit display.
+            Standalone Native Android App Package with standalone kiosk fullscreen, offline cache, and 100% Page Fit display. Compatible with Android 5.0 through Android 15.
           </div>
           <div style="display:flex; gap:0.4rem; margin-top:0.5rem; flex-wrap:wrap;">
-            <a href="/download/app.apk" class="btn btn-purple" style="font-size:0.64rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:0.25rem;" download="Akshay_AI_v4.2.apk">
+            <a href="./Akshay_AI_v4.5.apk" download="Akshay_AI_v4.5.apk" class="btn btn-purple" style="font-size:0.64rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:0.25rem;" onclick="downloadAkshayApk()">
               📱 Download App (.APK)
             </a>
+            <button class="btn btn-secondary" style="font-size:0.64rem; font-weight:700; color:#7c3aed; border-color:#c084fc;" onclick="openAppInstallModal()">
+              📲 Install Guide &amp; PWA
+            </button>
             <button class="btn btn-accent" style="font-size:0.64rem; font-weight:700;" onclick="triggerTabletSyncAndLaunch()">
               ⚡ 1-Click Sync &amp; Open on Tab
             </button>
@@ -10515,6 +10518,21 @@ Select a condition above to view immediate clinical triage steps.
       if (btn) btn.style.display = 'block';
     });
 
+    function downloadAkshayApk() {
+      if (typeof playUISound === 'function') playUISound('click');
+      var isGhPages = (window.location.hostname.indexOf('github.io') !== -1);
+      var apkUrl = isGhPages ? './Akshay_AI_v4.5.apk' : '/Akshay_AI_v4.5.apk';
+      var a = document.createElement('a');
+      a.href = apkUrl;
+      a.setAttribute('download', 'Akshay_AI_v4.5.apk');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      if (typeof showToast === 'function') {
+        showToast('⬇️ Downloading Akshay_AI_v4.5.apk (4.4 MB)...', 'success');
+      }
+    }
+
     function openAppInstallModal() {
       if (typeof playUISound === 'function') playUISound('click');
       var modal = document.getElementById('appInstallModal');
@@ -10650,6 +10668,135 @@ Select a condition above to view immediate clinical triage steps.
         <span style="font-size:0.62rem; color:#64748b;">All appointments synced with Google Calendar 1-click links &amp; RFC 5545 .ics</span>
         <button class="btn btn-secondary" style="font-size:0.65rem; padding:0.25rem 0.6rem;" onclick="closeDadAppointmentHistoryModal()">Close</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 📱 NATIVE APP INSTALL & STANDALONE APK DISTRIBUTION HUB MODAL   -->
+  <!-- ============================================================== -->
+  <div class="custom-modal-backdrop" id="appInstallModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; padding:0.75rem; box-sizing:border-box; overflow-y:auto;" onclick="if(event.target===this) closeAppInstallModal()">
+    <div class="custom-modal-card" style="background:#0f172a; border:2px solid #7c3aed; border-radius:12px; width:94%; max-width:680px; max-height:90vh; display:flex; flex-direction:column; padding:1.25rem; box-shadow:0 0 50px rgba(124,58,237,0.45); color:#f8fafc; overflow-y:auto;">
+      
+      <!-- Modal Header -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #334155; padding-bottom:0.75rem; margin-bottom:1rem;">
+        <div>
+          <div style="font-family:var(--font-mono); font-weight:800; color:#c084fc; font-size:1.05rem; display:flex; align-items:center; gap:0.4rem;">
+            <span>📱</span> AKSHAY AI // NATIVE APP &amp; APK INSTALL HUB
+          </div>
+          <div style="font-size:0.68rem; color:#94a3b8; margin-top:0.2rem;">
+            Complete standalone mobile app &bull; Zero browser URL bar &bull; Works 100% offline anytime, anywhere
+          </div>
+        </div>
+        <button class="btn btn-secondary" onclick="closeAppInstallModal()" style="padding:0.25rem 0.55rem; font-size:0.75rem; border-radius:4px; color:#cbd5e1; border-color:#475569;">✕</button>
+      </div>
+
+      <!-- App Identity Hero Strip -->
+      <div style="background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border:1px solid #6366f1; border-radius:10px; padding:0.9rem 1rem; margin-bottom:1rem; display:flex; align-items:center; gap:0.9rem;">
+        <div style="width:52px; height:52px; border-radius:12px; background:#2563eb; display:flex; align-items:center; justify-content:center; font-size:1.8rem; font-weight:900; color:#fff; box-shadow:0 4px 15px rgba(37,99,235,0.5); flex-shrink:0;">
+          A
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:1.05rem; font-weight:800; color:#ffffff; display:flex; align-items:center; gap:0.4rem;">
+            Akshay AI Pro v4.5
+            <span style="font-size:0.6rem; background:#10b981; color:#064e3b; padding:0.1rem 0.4rem; border-radius:4px; font-weight:800;">REAL NATIVE APP</span>
+          </div>
+          <div style="font-size:0.7rem; color:#c7d2fe; margin-top:0.2rem;">
+            Universal Android APK (4.4 MB) &bull; Android 5.0 to Android 15 &bull; Samsung Galaxy Tab A Ready
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Download & Install Action Grid -->
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:0.75rem; margin-bottom:1rem;">
+        
+        <!-- Action 1: Direct APK Download -->
+        <div style="background:#1e293b; border:1px solid #475569; border-radius:10px; padding:0.85rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:0.8rem; font-weight:800; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+              <span>📦</span> METHOD 1: DOWNLOAD .APK
+            </div>
+            <div style="font-size:0.66rem; color:#94a3b8; margin-top:0.3rem; line-height:1.4;">
+              Download standalone Android package directly to your phone, tablet, or PC storage.
+            </div>
+          </div>
+          <div style="margin-top:0.75rem;">
+            <a href="./Akshay_AI_v4.5.apk" download="Akshay_AI_v4.5.apk" class="btn btn-primary" style="width:100%; display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; font-size:0.75rem; padding:0.45rem 0.75rem; background:#7c3aed; border-color:#7c3aed; color:#fff; font-weight:800; border-radius:6px; box-shadow:0 3px 12px rgba(124,58,237,0.4); text-decoration:none;" onclick="if(typeof playUISound==='function') playUISound('click');">
+              ⬇️ Download Akshay_AI_v4.5.apk (4.4 MB)
+            </a>
+          </div>
+        </div>
+
+        <!-- Action 2: 1-Tap Home Screen App (PWA) -->
+        <div style="background:#1e293b; border:1px solid #475569; border-radius:10px; padding:0.85rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:0.8rem; font-weight:800; color:#34d399; display:flex; align-items:center; gap:0.35rem;">
+              <span>⚡</span> METHOD 2: 1-TAP HOME SCREEN APP
+            </div>
+            <div style="font-size:0.66rem; color:#94a3b8; margin-top:0.3rem; line-height:1.4;">
+              Installs native home screen icon with splash screen, no browser bar, full offline service worker.
+            </div>
+          </div>
+          <div style="margin-top:0.75rem;">
+            <button class="btn btn-accent" style="width:100%; font-size:0.75rem; padding:0.45rem 0.75rem; font-weight:800; border-radius:6px; background:#10b981; border-color:#10b981; color:#064e3b; box-shadow:0 3px 12px rgba(16,185,129,0.3);" onclick="triggerPwaInstall()">
+              📲 Install App to Home Screen
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Wi-Fi Network & Tablet USB Direct Access Strip -->
+      <div style="background:#020617; border:1px solid #334155; border-radius:10px; padding:0.85rem; margin-bottom:1rem;">
+        <div style="font-size:0.75rem; font-weight:800; color:#fbbf24; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.35rem;">
+          <span>📶</span> DOWNLOAD FROM ANY DEVICE ON YOUR HOME WI-FI:
+        </div>
+        <div style="font-size:0.66rem; color:#cbd5e1; margin-bottom:0.45rem;">
+          Open this link on your Mobile, iPhone, iPad, or Samsung Galaxy Tab A (connected to same Wi-Fi):
+        </div>
+        <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+          <div style="background:#0f172a; border:1px dashed #475569; padding:0.35rem 0.65rem; border-radius:6px; font-family:monospace; font-size:0.75rem; color:#38bdf8; flex:1; min-width:200px;" id="modalWifiIpText">
+            http://192.168.0.106:8085
+          </div>
+          <button class="btn btn-secondary" style="font-size:0.65rem; padding:0.35rem 0.6rem;" onclick="copyNetworkWifiUrl()">
+            📋 Copy Link
+          </button>
+          <a href="./Akshay_AI_v4.5.apk" download="Akshay_AI_v4.5.apk" class="btn btn-secondary" style="font-size:0.65rem; padding:0.35rem 0.6rem; color:#34d399; border-color:#34d399; text-decoration:none;">
+            📥 Direct APK Link
+          </a>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Installation Visual Guide -->
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:0.85rem; margin-bottom:0.75rem;">
+        <div style="font-size:0.75rem; font-weight:800; color:#38bdf8; margin-bottom:0.45rem;">
+          📖 HOW TO INSTALL &amp; OPEN ON ANDROID / GALAXY TAB A:
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.4rem; font-size:0.68rem; color:#cbd5e1;">
+          <div style="display:flex; gap:0.45rem; align-items:flex-start;">
+            <span style="background:#7c3aed; color:#fff; width:18px; height:18px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800; flex-shrink:0;">1</span>
+            <div><strong>Tap Download APK:</strong> Tap the purple download button above to download <code style="color:#a78bfa;">Akshay_AI_v4.5.apk</code>.</div>
+          </div>
+          <div style="display:flex; gap:0.45rem; align-items:flex-start;">
+            <span style="background:#7c3aed; color:#fff; width:18px; height:18px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800; flex-shrink:0;">2</span>
+            <div><strong>Allow Installation:</strong> If Android says <em>"File might be harmful"</em>, tap <strong style="color:#34d399;">"Download anyway"</strong>. Then tap <strong style="color:#38bdf8;">"Open"</strong> in the notification bar.</div>
+          </div>
+          <div style="display:flex; gap:0.45rem; align-items:flex-start;">
+            <span style="background:#7c3aed; color:#fff; width:18px; height:18px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800; flex-shrink:0;">3</span>
+            <div><strong>Install &amp; Enjoy:</strong> Tap <strong style="color:#34d399;">"Install"</strong>. Once installed, tap <strong style="color:#34d399;">"Open"</strong>. The app launches full-screen without any browser address bar!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USB 1-Click Sync for Galaxy Tab A -->
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; border-top:1px solid #334155; padding-top:0.75rem;">
+        <button class="btn btn-secondary" style="font-size:0.65rem; padding:0.3rem 0.6rem;" onclick="triggerTabletSyncAndLaunch()">
+          ⚡ 1-Click USB Sync to Connected Galaxy Tab A
+        </button>
+        <button class="btn btn-secondary" style="font-size:0.65rem; padding:0.3rem 0.6rem;" onclick="closeAppInstallModal()">
+          Close
+        </button>
+      </div>
+
     </div>
   </div>
 
