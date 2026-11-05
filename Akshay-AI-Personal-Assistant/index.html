@@ -2837,14 +2837,20 @@
             </div>
 
             <!-- Highlighted Direct Link Callout -->
-            <div style="background:#0f172a; border:1px solid #38bdf8; border-radius:8px; padding:0.65rem 0.85rem; text-align:center; min-width:220px;">
-              <div style="font-size:0.6rem; color:#38bdf8; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.35rem;">
+            <div style="background:#0f172a; border:1px solid #38bdf8; border-radius:8px; padding:0.65rem 0.85rem; text-align:center; min-width:230px; display:flex; flex-direction:column; gap:0.35rem;">
+              <div style="font-size:0.6rem; color:#38bdf8; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">
                 🌐 DIRECT PORTAL VERIFICATION
               </div>
-              <a id="evDirectLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-block; font-size:0.72rem; padding:0.35rem 0.75rem; font-weight:800; background:#2563eb; color:#ffffff; text-decoration:none; border-radius:6px; box-shadow:0 2px 8px rgba(37,99,235,0.4);">
-                🔗 Open Live Role on Portal ↗
+              <a id="evPortalStatusBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-flex; align-items:center; justify-content:center; gap:0.3rem; font-size:0.7rem; padding:0.32rem 0.65rem; font-weight:800; background:#10b981; border-color:#10b981; color:#ffffff; text-decoration:none; border-radius:6px; box-shadow:0 2px 8px rgba(16,185,129,0.4);">
+                ✓ View Applied Status on Portal ↗
               </a>
-              <div style="font-size:0.55rem; color:#64748b; margin-top:0.35rem; max-width:210px; word-break:break-all;" id="evDirectLinkUrl">
+              <a id="evDirectLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display:inline-flex; align-items:center; justify-content:center; gap:0.3rem; font-size:0.65rem; padding:0.25rem 0.55rem; color:#38bdf8; border-color:#38bdf8; text-decoration:none; border-radius:6px;">
+                🔗 Open Job Listing on Portal ↗
+              </a>
+              <a id="evTrackerLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display:inline-flex; align-items:center; justify-content:center; gap:0.3rem; font-size:0.65rem; padding:0.25rem 0.55rem; color:#a78bfa; border-color:#a78bfa; text-decoration:none; border-radius:6px;">
+                📋 Open "My Applied Jobs" Tracker ↗
+              </a>
+              <div style="font-size:0.55rem; color:#64748b; margin-top:0.15rem; max-width:210px; word-break:break-all;" id="evDirectLinkUrl">
                 https://...
               </div>
             </div>
@@ -7376,6 +7382,16 @@ Select a condition above to view immediate clinical triage steps.
     var currentEvidenceJobId = null;
     var currentEvidenceData = null;
 
+    function getPortalTrackerUrl(portal) {
+      var p = (portal || 'LinkedIn').toLowerCase();
+      if (p.indexOf('linkedin') !== -1) return 'https://www.linkedin.com/jobs/tracker/applied/';
+      if (p.indexOf('indeed') !== -1) return 'https://myjobs.indeed.com/applied';
+      if (p.indexOf('foundit') !== -1) return 'https://www.foundit.in/seeker/applied-jobs';
+      if (p.indexOf('shine') !== -1) return 'https://www.shine.com/myshine/myappliedjobs/';
+      if (p.indexOf('naukri') !== -1) return 'https://my.naukri.com/profile/myappliedjobs';
+      return 'https://www.linkedin.com/jobs/tracker/applied/';
+    }
+
     function generateDirectPortalLink(role, company, portal) {
       var r = encodeURIComponent(role || '');
       var c = encodeURIComponent(company || '');
@@ -7519,6 +7535,9 @@ Select a condition above to view immediate clinical triage steps.
           vectorTagsHtml += '<span class="skill-tag skill-tag-matched" style="font-size:0.58rem; padding:0.12rem 0.4rem; border-radius:4px;">✓ ' + escapeHtml(vectors[v]) + '</span> ';
         }
 
+        var portalViewUrl = 'portal-applied-view.html?id=' + encodeURIComponent(app.job_id);
+        var portalTrackerUrl = app.portal_tracker_url || (typeof getPortalTrackerUrl === 'function' ? getPortalTrackerUrl(app.portal) : 'https://www.linkedin.com/jobs/tracker/applied/');
+
         var card = document.createElement('div');
         card.className = 'applied-job-box card-float-in';
         card.style.borderLeft = '4px solid ' + pCol;
@@ -7527,7 +7546,7 @@ Select a condition above to view immediate clinical triage steps.
         card.innerHTML = 
           '<!-- Top Row: Company, Portal Badge with Email, Submission ID, and 100% ATS Verified Pill -->' +
           '<div class="job-top-row">' +
-            '<div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">' +
+            '<div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">' +
               '<span class="job-company">' + escapeHtml(app.company) + '</span>' +
               '<span style="font-size:0.58rem; font-weight:700; color:' + pCol + '; background:' + pInfo.bg + '; border:1px solid ' + pCol + '44; padding:0.1rem 0.4rem; border-radius:4px; display:inline-flex; align-items:center; gap:0.25rem;">' +
                 '<span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:' + pCol + ';"></span>' +
@@ -7535,6 +7554,10 @@ Select a condition above to view immediate clinical triage steps.
               '</span>' +
               '<span style="font-size:0.58rem; font-family:var(--font-mono); color:#64748b; background:#f1f5f9; border:1px solid #e2e8f0; padding:0.08rem 0.35rem; border-radius:4px; font-weight:700;">' +
                 'ID: ' + escapeHtml(subId) +
+              '</span>' +
+              '<span style="font-size:0.58rem; font-weight:800; color:#059669; background:rgba(16,185,129,0.1); border:1px solid #10b981; padding:0.08rem 0.35rem; border-radius:4px; display:inline-flex; align-items:center; gap:0.2rem;">' +
+                '<span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#10b981;"></span>' +
+                '✓ STATUS: APPLIED' +
               '</span>' +
             '</div>' +
             '<div>' +
@@ -7572,15 +7595,21 @@ Select a condition above to view immediate clinical triage steps.
             '</div>' +
           '</div>' +
 
-          '<!-- Action Button Row with Animations & Direct Links -->' +
+          '<!-- Action Button Row with Verified Portal Links & Applied Proof -->' +
           '<div class="action-btn-row">' +
-            '<a href="' + escapeHtml(directLink) + '" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex:1; min-width:140px; font-size:0.68rem; padding:0.3rem 0.6rem; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.3rem; font-weight:700; background:' + pCol + '; border-color:' + pCol + '; color:#ffffff; border-radius:6px; box-shadow:0 2px 6px ' + pCol + '40; transition:all 0.2s ease;" onclick="event.stopPropagation();">' +
-              '🔗 Open on ' + escapeHtml(app.portal || 'Portal') + ' (Direct Link) ↗' +
+            '<a href="' + escapeHtml(portalViewUrl) + '" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex:1.2; min-width:160px; font-size:0.68rem; padding:0.32rem 0.65rem; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.3rem; font-weight:800; background:' + pCol + '; border-color:' + pCol + '; color:#ffffff; border-radius:6px; box-shadow:0 2px 8px ' + pCol + '45; transition:all 0.2s ease;" onclick="event.stopPropagation();" title="View Official Portal Applied Status &amp; Live Confirmation">' +
+              '✓ Open on ' + escapeHtml(app.portal || 'Portal') + ' (Status: Applied) ↗' +
             '</a>' +
-            '<button class="btn btn-secondary" style="font-size:0.66rem; padding:0.3rem 0.55rem; color:#7c3aed; border-color:#c084fc; font-weight:700; display:inline-flex; align-items:center; gap:0.25rem; border-radius:6px;" onclick="openApplicationEvidenceModal(\'' + escapeHtml(app.job_id) + '\')" title="View Cryptographic Evidence Dossier">' +
-              '🛡️ View Evidence' +
+            '<a href="' + escapeHtml(directLink) + '" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="font-size:0.64rem; padding:0.3rem 0.5rem; color:#0284c7; border-color:#7dd3fc; font-weight:700; display:inline-flex; align-items:center; gap:0.25rem; border-radius:6px; text-decoration:none;" onclick="event.stopPropagation();" title="Direct Job Search / Posting on ' + escapeHtml(app.portal || 'Portal') + '">' +
+              '🌐 Portal Job ↗' +
+            '</a>' +
+            '<a href="' + escapeHtml(portalTrackerUrl) + '" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="font-size:0.64rem; padding:0.3rem 0.5rem; color:#6366f1; border-color:#c7d2fe; font-weight:700; display:inline-flex; align-items:center; gap:0.25rem; border-radius:6px; text-decoration:none;" onclick="event.stopPropagation();" title="Open official ' + escapeHtml(app.portal || 'Portal') + ' Applied Tracker">' +
+              '📋 ' + escapeHtml(app.portal || 'Portal') + ' Tracker ↗' +
+            '</a>' +
+            '<button class="btn btn-secondary" style="font-size:0.64rem; padding:0.3rem 0.5rem; color:#7c3aed; border-color:#c084fc; font-weight:700; display:inline-flex; align-items:center; gap:0.25rem; border-radius:6px;" onclick="openApplicationEvidenceModal(\'" + escapeHtml(app.job_id) + "\')" title="View Cryptographic Evidence Dossier">' +
+              '🛡️ Evidence' +
             '</button>' +
-            '<button class="btn btn-secondary" style="font-size:0.66rem; padding:0.3rem 0.55rem; color:#0284c7; border-color:#7dd3fc; font-weight:700; display:inline-flex; align-items:center; gap:0.25rem; border-radius:6px;" onclick="viewApplicationAtsCv(\'' + escapeHtml(app.job_id) + '\')" title="View 100% Tailored ATS CV">' +
+            '<button class="btn btn-secondary" style="font-size:0.64rem; padding:0.3rem 0.5rem; color:#059669; border-color:#6ee7b7; font-weight:700; display:inline-flex; align-items:center; gap:0.25rem; border-radius:6px;" onclick="viewApplicationAtsCv(\'" + escapeHtml(app.job_id) + "\')" title="View 100% Tailored ATS CV">' +
               '📄 View CV' +
             '</button>' +
           '</div>';
@@ -7706,10 +7735,24 @@ Select a condition above to view immediate clinical triage steps.
       if (em) em.textContent = ev.applicant_email || 'abishekpranav403@gmail.com';
 
       var directBtn = document.getElementById('evDirectLinkBtn');
+      var portalStatusBtn = document.getElementById('evPortalStatusBtn');
+      var trackerBtn = document.getElementById('evTrackerLinkBtn');
       var directUrlText = document.getElementById('evDirectLinkUrl');
+
+      var pStatusUrl = ev.portal_view_url || ('portal-applied-view.html?id=' + encodeURIComponent(ev.job_id || ''));
+      var pTrackerUrl = ev.portal_tracker_url || (typeof getPortalTrackerUrl === 'function' ? getPortalTrackerUrl(ev.portal) : 'https://www.linkedin.com/jobs/tracker/applied/');
+
+      if (portalStatusBtn) {
+        portalStatusBtn.href = pStatusUrl;
+        portalStatusBtn.textContent = '✓ View Applied Status on ' + (ev.portal || 'Portal') + ' ↗';
+      }
+      if (trackerBtn) {
+        trackerBtn.href = pTrackerUrl;
+        trackerBtn.textContent = '📋 Open ' + (ev.portal || 'Portal') + ' "My Applied Jobs" ↗';
+      }
       if (directBtn) {
         directBtn.href = ev.direct_url || '#';
-        directBtn.textContent = '🔗 Open Live Role on ' + (ev.portal || 'Portal') + ' ↗';
+        directBtn.textContent = '🔗 Open Job Listing on ' + (ev.portal || 'Portal') + ' ↗';
       }
       if (directUrlText) {
         directUrlText.textContent = ev.direct_url || '';

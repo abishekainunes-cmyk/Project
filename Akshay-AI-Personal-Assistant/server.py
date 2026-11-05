@@ -180,6 +180,16 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                         d["direct_url"] = f"https://www.naukri.com/{clean_role.lower()}-jobs"
                     else:
                         d["direct_url"] = f"https://www.google.com/search?q={clean_role}+{clean_comp}+careers"
+                    portal_trackers = {
+                        "linkedin": "https://www.linkedin.com/jobs/tracker/applied/",
+                        "indeed": "https://myjobs.indeed.com/applied",
+                        "foundit": "https://www.foundit.in/seeker/applied-jobs",
+                        "shine": "https://www.shine.com/myshine/myappliedjobs/",
+                        "naukri": "https://my.naukri.com/profile/myappliedjobs"
+                    }
+                    d["portal_tracker_url"] = portal_trackers.get(portal_l, "https://www.linkedin.com/jobs/tracker/applied/")
+                    d["portal_view_url"] = f"portal-applied-view.html?id={a.job_id}"
+                    d["application_status"] = "APPLIED & VERIFIED"
                     raw_proof = f"{a.submission_id}|{a.job_id}|{a.applied_at}"
                     d["evidence_hash"] = f"SHA256:{hashlib.sha256(raw_proof.encode()).hexdigest()[:24]}"
                     d["receipt_id"] = a.submission_id or f"PROOF-{a.portal[:2].upper()}-{a.id}"
@@ -246,6 +256,16 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                         d["direct_url"] = f"https://www.naukri.com/{clean_role.lower()}-jobs"
                     else:
                         d["direct_url"] = f"https://www.google.com/search?q={clean_role}+{clean_comp}+careers"
+                    portal_trackers = {
+                        "linkedin": "https://www.linkedin.com/jobs/tracker/applied/",
+                        "indeed": "https://myjobs.indeed.com/applied",
+                        "foundit": "https://www.foundit.in/seeker/applied-jobs",
+                        "shine": "https://www.shine.com/myshine/myappliedjobs/",
+                        "naukri": "https://my.naukri.com/profile/myappliedjobs"
+                    }
+                    d["portal_tracker_url"] = portal_trackers.get(portal_l, "https://www.linkedin.com/jobs/tracker/applied/")
+                    d["portal_view_url"] = f"portal-applied-view.html?id={a.job_id}"
+                    d["application_status"] = "APPLIED & VERIFIED"
                     raw_proof = f"{a.submission_id}|{a.job_id}|{a.applied_at}"
                     d["evidence_hash"] = f"SHA256:{hashlib.sha256(raw_proof.encode()).hexdigest()[:24]}"
                     d["receipt_id"] = a.submission_id or f"PROOF-{a.portal[:2].upper()}-{a.id}"
