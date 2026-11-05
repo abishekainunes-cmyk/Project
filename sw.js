@@ -1,5 +1,5 @@
 // Service Worker for 100% Offline Caching on Galaxy Tab, Mobile, and Desktop
-const CACHE_NAME = 'akshay-v4.5-offline-v1';
+const CACHE_NAME = 'akshay-v4.5-offline-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

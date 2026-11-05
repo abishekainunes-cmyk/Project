@@ -518,78 +518,144 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
-    /* Job Card in Light Theme */
-    /* 5000x Applied Job Box Cards (Matches Matched Positions & ATS Vectors) */
+    /* ==========================================================================
+       5000x ISOLATED APPLIED JOB BOX CARDS (FULL HEIGHT & ZERO SHRINKING)
+       ========================================================================== */
     .applied-job-box {
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      padding: 0.75rem 0.9rem;
-      margin-bottom: 0.6rem;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
+      display: block !important;
+      flex-shrink: 0 !important;
+      flex-grow: 0 !important;
+      flex-basis: auto !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      min-height: 145px !important;
+      height: auto !important;
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 10px !important;
+      padding: 0.85rem 1rem !important;
+      margin-bottom: 0.65rem !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+      position: relative !important;
+      overflow: visible !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     .applied-job-box:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
-      border-color: #a78bfa;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+      border-color: #a78bfa !important;
+    }
+    .applied-job-box * {
+      box-sizing: border-box !important;
     }
     .applied-job-box .job-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.35rem;
-      flex-wrap: wrap;
-      gap: 0.4rem;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      margin-bottom: 0.35rem !important;
+      flex-wrap: wrap !important;
+      gap: 0.4rem !important;
+      visibility: visible !important;
+      height: auto !important;
+      opacity: 1 !important;
     }
     .applied-job-box .job-company {
-      font-size: 0.74rem;
-      color: #475569;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
+      font-size: 0.76rem !important;
+      color: #334155 !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.3px !important;
+      text-transform: uppercase !important;
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     .applied-job-box .job-role {
-      font-size: 0.88rem;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.2px;
-      margin: 0.25rem 0 0.15rem 0;
+      font-size: 0.95rem !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      letter-spacing: -0.2px !important;
+      margin: 0.35rem 0 0.25rem 0 !important;
+      display: block !important;
+      visibility: visible !important;
+      height: auto !important;
+      opacity: 1 !important;
+      line-height: 1.35 !important;
     }
     .applied-job-box .job-meta-row {
-      display: flex;
-      gap: 0.75rem;
-      font-size: 0.66rem;
-      color: #64748b;
-      margin: 0.25rem 0 0.4rem 0;
-      flex-wrap: wrap;
-      align-items: center;
+      display: flex !important;
+      gap: 0.85rem !important;
+      font-size: 0.68rem !important;
+      color: #475569 !important;
+      margin: 0.35rem 0 0.45rem 0 !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      visibility: visible !important;
+      height: auto !important;
+      opacity: 1 !important;
+    }
+    .applied-job-box .skills-tag-row {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 0.35rem !important;
+      margin: 0.35rem 0 0.45rem 0 !important;
+      visibility: visible !important;
+      height: auto !important;
+      opacity: 1 !important;
     }
     .applied-job-box .proof-strip {
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      border-radius: 6px;
-      padding: 0.35rem 0.6rem;
-      margin: 0.4rem 0 0.3rem 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: var(--font-mono);
-      font-size: 0.62rem;
-      color: #475569;
-      flex-wrap: wrap;
-      gap: 0.35rem;
+      background: #f8fafc !important;
+      border: 1px dashed #cbd5e1 !important;
+      border-radius: 6px !important;
+      padding: 0.4rem 0.65rem !important;
+      margin: 0.45rem 0 0.45rem 0 !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      font-family: var(--font-mono) !important;
+      font-size: 0.63rem !important;
+      color: #334155 !important;
+      flex-wrap: wrap !important;
+      gap: 0.35rem !important;
+      visibility: visible !important;
+      height: auto !important;
+      opacity: 1 !important;
     }
     .applied-job-box .action-btn-row {
-      display: flex;
-      gap: 0.35rem;
-      align-items: center;
-      margin-top: 0.45rem;
-      padding-top: 0.4rem;
-      border-top: 1px solid #f1f5f9;
-      flex-wrap: wrap;
+      display: flex !important;
+      gap: 0.4rem !important;
+      align-items: center !important;
+      margin-top: 0.45rem !important;
+      padding-top: 0.45rem !important;
+      border-top: 1px solid #f1f5f9 !important;
+      flex-wrap: wrap !important;
+      visibility: visible !important;
+      height: auto !important;
+      opacity: 1 !important;
+    }
+
+    #applicationsHistoryList {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0.65rem !important;
+      max-height: 520px !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding: 0.25rem !important;
+    }
+    #applicationsHistoryList > .applied-job-box {
+      flex-shrink: 0 !important;
+      flex-grow: 0 !important;
+      min-height: 145px !important;
+      height: auto !important;
+    }
+    #jobStreamContainer > .job-card {
+      flex-shrink: 0 !important;
+      flex-grow: 0 !important;
+      min-height: 110px !important;
+      height: auto !important;
     }
 
     .job-card {
@@ -2533,7 +2599,7 @@
             </div>
 
             <!-- Scrollable Applied Job Stream with Direct Links & Verifiable Evidence -->
-            <div id="applicationsHistoryList" style="display:flex; flex-direction:column; gap:0.45rem; max-height:380px; overflow-y:auto; padding-right:0.2rem;">
+            <div id="applicationsHistoryList" style="display:flex; flex-direction:column; gap:0.65rem; max-height:520px; overflow-y:auto; padding:0.25rem;">
               <!-- Dynamically populated cards with Direct Portal Link & Evidence buttons -->
             </div>
           </div>
@@ -7454,7 +7520,7 @@ Select a condition above to view immediate clinical triage steps.
         }
 
         var card = document.createElement('div');
-        card.className = 'job-card applied-job-box card-float-in';
+        card.className = 'applied-job-box card-float-in';
         card.style.borderLeft = '4px solid ' + pCol;
         card.style.animationDelay = (j * 35) + 'ms';
 
@@ -10484,7 +10550,22 @@ Select a condition above to view immediate clinical triage steps.
     }
 
     function bootstrapAkshayEcosystem() {
-      try { applyLayoutView(); } catch (e) {}
+      try {
+        var qPage = '';
+        if (window.location.search) {
+          var match = window.location.search.match(/[?&]page=([^&]+)/);
+          if (match) qPage = decodeURIComponent(match[1]);
+        }
+        var hPage = window.location.hash ? window.location.hash.replace('#', '') : '';
+        var targetP = qPage || hPage;
+        if (targetP) {
+          switchPage(targetP);
+        } else {
+          applyLayoutView();
+        }
+      } catch (e) {
+        try { applyLayoutView(); } catch (err) {}
+      }
       try { syncLedgerWithServer(); } catch (e) {}
       try { loadDadDashboard(); } catch (e) {}
       try { if (typeof localAppliedJobsPool !== "undefined" && (!currentAllApplications || currentAllApplications.length === 0)) renderHistory(localAppliedJobsPool); } catch (e) {}
