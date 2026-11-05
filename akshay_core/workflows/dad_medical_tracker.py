@@ -14,6 +14,7 @@ Features:
 
 from __future__ import annotations
 import re
+import urllib.parse
 import sqlite3
 import datetime
 from pathlib import Path
@@ -37,6 +38,86 @@ def add_months(sourcedate: datetime.date, months: int) -> datetime.date:
     return datetime.date(year, month, day)
 
 
+def parse_time_slot(slot: Optional[str]) -> Optional[Tuple[str, str]]:
+    """Parses time slot strings like '07:00 AM - 08:30 AM' or '07-8.30' or '01:30 PM - 02:00 PM' into compact HHMMSS."""
+    if not slot:
+        return None
+    s = slot.strip().upper()
+    # Match standard '07:00 AM - 08:30 AM' or '01:30 PM - 02:00 PM'
+    m = re.search(r'(\d{1,2}):(\d{2})\s*(AM|PM)?\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)?', s)
+    if m:
+        h1, m1, p1, h2, m2, p2 = m.groups()
+        h1, h2 = int(h1), int(h2)
+        # Infer PM for afternoon if p1 not specified but >= 12 or h1 in [1,2,3,4,5,6]
+        if p1 == "PM" and h1 < 12: h1 += 12
+        elif p1 == "AM" and h1 == 12: h1 = 0
+        elif not p1 and (h1 >= 1 and h1 <= 6): h1 += 12
+
+        if p2 == "PM" and h2 < 12: h2 += 12
+        elif p2 == "AM" and h2 == 12: h2 = 0
+        elif not p2 and (h2 >= 1 and h2 <= 6): h2 += 12
+        return f"{h1:02d}{m1}00", f"{h2:02d}{m2}00"
+
+    # Match short format like '07-8.30'
+    m2 = re.search(r'(\d{1,2})-(\d{1,2})(?:\.(\d{2}))?', s)
+    if m2:
+        h1 = int(m2.group(1))
+        h2 = int(m2.group(2))
+        min2 = m2.group(3) or "00"
+        if h1 < 7: h1 += 12
+        if h2 < 7: h2 += 12
+        return f"{h1:02d}0000", f"{h2:02d}{min2}00"
+    return None
+
+
+def build_google_calendar_url(
+    title: str,
+    start_date: str,
+    end_date: Optional[str] = None,
+    time_slot: Optional[str] = None,
+    details: str = "",
+    location: str = ""
+) -> str:
+    """Generates universal 1-click Google Calendar web link with pre-filled details & IST timezone."""
+    base = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+    d_clean = start_date.replace("-", "")
+
+    times = parse_time_slot(time_slot)
+    if times:
+        st_clean, et_clean = times
+        dates_param = f"{d_clean}T{st_clean}/{d_clean}T{et_clean}"
+    else:
+        # All day event (next day end)
+        try:
+            start_dt = datetime.date.fromisoformat(start_date)
+            end_dt = start_dt + datetime.timedelta(days=1)
+            dates_param = f"{d_clean}/{end_dt.strftime('%Y%m%d')}"
+        except Exception:
+            dates_param = f"{d_clean}/{d_clean}"
+
+    params = {
+        "text": title,
+        "dates": dates_param,
+        "details": details,
+        "location": location,
+        "ctz": "Asia/Kolkata"
+    }
+    return base + "&" + urllib.parse.urlencode(params)
+
+
+class DadAppointmentHistoryItem(BaseModel):
+    id: Optional[int] = None
+    doctor_name: str
+    specialty: str
+    visit_date: str
+    next_visit_date: Optional[str] = ""
+    call_date: Optional[str] = ""
+    booked_for: Optional[str] = ""
+    time_slot: Optional[str] = ""
+    interval_days: Optional[int] = 0
+    medicines_summary: Optional[str] = ""
+    created_at: Optional[str] = ""
+
 class DadMedicine(BaseModel):
     id: str
     name: str
@@ -50,6 +131,12 @@ class DadMedicine(BaseModel):
     urgency: str = "HEALTHY"  # REORDER_NOW, APPROACHING_REFILL, HEALTHY
     prescribed_by: str = ""
     notes: str = ""
+    pack_size: int = 15
+    total_tablets_required: int = 150
+    packs_required: int = 10
+    cycle_from: str = ""
+    cycle_to: str = ""
+    google_calendar_url: str = ""
 
 
 class DadDoctorAppointment(BaseModel):
@@ -65,6 +152,9 @@ class DadDoctorAppointment(BaseModel):
     booking_status: str = "SCHEDULED"  # BOOK_NOW, UPCOMING_BOOKING, SCHEDULED
     hospital: str = "City Multi-Specialty Hospital"
     notes: str = ""
+    time_slot: str = ""
+    google_calendar_url: str = ""
+    google_calendar_call_url: str = ""
 
 
 DEFAULT_MEDICINES = [
@@ -173,7 +263,12 @@ class DadMedicalTracker:
                     reorder_lead_days INTEGER NOT NULL DEFAULT 12,
                     prescribed_by TEXT NOT NULL,
                     notes TEXT NOT NULL,
-                    updated_at TEXT NOT NULL
+                    updated_at TEXT NOT NULL,
+                    pack_size INTEGER DEFAULT 15,
+                    total_tablets_required INTEGER DEFAULT 150,
+                    packs_required INTEGER DEFAULT 10,
+                    cycle_from TEXT DEFAULT '',
+                    cycle_to TEXT DEFAULT ''
                 )
             """)
             cursor.execute("""
@@ -185,7 +280,25 @@ class DadMedicalTracker:
                     last_visit_date TEXT NOT NULL,
                     hospital TEXT NOT NULL,
                     notes TEXT NOT NULL,
-                    updated_at TEXT NOT NULL
+                    updated_at TEXT NOT NULL,
+                    time_slot TEXT DEFAULT '',
+                    next_visit_date TEXT DEFAULT '',
+                    call_booking_date TEXT DEFAULT ''
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS dad_appointment_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    doctor_name TEXT NOT NULL,
+                    specialty TEXT NOT NULL,
+                    visit_date TEXT NOT NULL,
+                    next_visit_date TEXT,
+                    call_date TEXT,
+                    booked_for TEXT,
+                    time_slot TEXT,
+                    interval_days INTEGER,
+                    medicines_summary TEXT,
+                    created_at TEXT NOT NULL
                 )
             """)
             cursor.execute("""
@@ -197,6 +310,36 @@ class DadMedicalTracker:
                     created_at TEXT NOT NULL
                 )
             """)
+            conn.commit()
+
+            # Dynamic column migrations for existing databases
+            cursor.execute("PRAGMA table_info(dad_medicines)")
+            m_cols = [c[1] for c in cursor.fetchall()]
+            for col_def in [
+                ("pack_size", "INTEGER DEFAULT 15"),
+                ("total_tablets_required", "INTEGER DEFAULT 150"),
+                ("packs_required", "INTEGER DEFAULT 10"),
+                ("cycle_from", "TEXT DEFAULT ''"),
+                ("cycle_to", "TEXT DEFAULT ''")
+            ]:
+                if col_def[0] not in m_cols:
+                    try:
+                        cursor.execute(f"ALTER TABLE dad_medicines ADD COLUMN {col_def[0]} {col_def[1]}")
+                    except Exception:
+                        pass
+
+            cursor.execute("PRAGMA table_info(dad_appointments)")
+            a_cols = [c[1] for c in cursor.fetchall()]
+            for col_def in [
+                ("time_slot", "TEXT DEFAULT ''"),
+                ("next_visit_date", "TEXT DEFAULT ''"),
+                ("call_booking_date", "TEXT DEFAULT ''")
+            ]:
+                if col_def[0] not in a_cols:
+                    try:
+                        cursor.execute(f"ALTER TABLE dad_appointments ADD COLUMN {col_def[0]} {col_def[1]}")
+                    except Exception:
+                        pass
             conn.commit()
 
             # Seed defaults if empty
@@ -242,16 +385,37 @@ class DadMedicalTracker:
         }
 
     def get_medicines(self) -> List[DadMedicine]:
-        """Returns all medicines with dynamically computed runout and reorder dates."""
+        """Returns all medicines with dynamically computed runout, reorder dates, and Google Calendar URLs."""
         results = []
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT id, name, category, current_qty, daily_dose, reorder_lead_days, prescribed_by, notes
+                SELECT id, name, category, current_qty, daily_dose, reorder_lead_days, prescribed_by, notes,
+                       pack_size, total_tablets_required, packs_required, cycle_from, cycle_to
                 FROM dad_medicines ORDER BY current_qty ASC
             """)
             for r in cursor.fetchall():
                 proj = self.calculate_medicine_projection(r[3], r[4], r[5])
+                pack_sz = r[8] if len(r) > 8 and r[8] is not None else 15
+                tot_req = r[9] if len(r) > 9 and r[9] is not None else 150
+                packs_req = r[10] if len(r) > 10 and r[10] is not None else 10
+                cyc_from = r[11] if len(r) > 11 and r[11] is not None else ""
+                cyc_to = r[12] if len(r) > 12 and r[12] is not None else ""
+
+                gcal_refill_url = build_google_calendar_url(
+                    title=f"Refill Dad's Medicine: {r[1]} ({r[2]})",
+                    start_date=proj["reorder_date"],
+                    details=(
+                        f"Refill reminder for Dad: {r[1]} ({r[2]} Care).\n"
+                        f"Prescribed by: {r[6]}\n"
+                        f"Current stock: {r[3]} pills ({proj['days_remaining']} days left, runs out on {proj['runout_date']}).\n"
+                        f"Daily dosage: {r[4]} pill/day.\n"
+                        f"Pack size: {pack_sz} tablets/pack. Cycle requirement: {tot_req} tablets ({packs_req} packs).\n"
+                        f"Notes: {r[7]}"
+                    ),
+                    location=r[6]
+                )
+
                 results.append(DadMedicine(
                     id=r[0],
                     name=r[1],
@@ -264,7 +428,13 @@ class DadMedicalTracker:
                     reorder_date=proj["reorder_date"],
                     urgency=proj["urgency"],
                     prescribed_by=r[6],
-                    notes=r[7]
+                    notes=r[7],
+                    pack_size=pack_sz,
+                    total_tablets_required=tot_req,
+                    packs_required=packs_req,
+                    cycle_from=cyc_from,
+                    cycle_to=cyc_to,
+                    google_calendar_url=gcal_refill_url
                 ))
         return results
 
@@ -343,17 +513,40 @@ class DadMedicalTracker:
         meds = self.get_medicines()
         return next(m for m in meds if m.id == med_id)
 
-    def calculate_appointment_projection(self, last_visit_str: str, interval_months: int) -> Dict[str, Any]:
-        """Calculates next due date and advance booking reminder date (15-20 days prior)."""
-        try:
-            last_visit = datetime.date.fromisoformat(last_visit_str)
-        except Exception:
-            last_visit = datetime.date.today()
-
-        next_due = add_months(last_visit, interval_months)
-        # Advance booking reminder is 20 days before next appointment
-        booking_reminder = next_due - datetime.timedelta(days=20)
+    def calculate_appointment_projection(
+        self,
+        last_visit_str: str,
+        interval_months: int,
+        explicit_next_due: Optional[str] = None,
+        explicit_call_date: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """Calculates next due date and advance booking reminder date (15-20 days prior, or explicit dates)."""
         today = datetime.date.today()
+
+        next_due = None
+        if explicit_next_due and explicit_next_due.strip():
+            try:
+                next_due = datetime.date.fromisoformat(explicit_next_due.strip())
+            except Exception:
+                next_due = None
+
+        if next_due is None:
+            try:
+                last_visit = datetime.date.fromisoformat(last_visit_str)
+            except Exception:
+                last_visit = datetime.date.today()
+            next_due = add_months(last_visit, interval_months)
+
+        booking_reminder = None
+        if explicit_call_date and explicit_call_date.strip():
+            try:
+                booking_reminder = datetime.date.fromisoformat(explicit_call_date.strip())
+            except Exception:
+                booking_reminder = None
+
+        if booking_reminder is None:
+            # Advance booking reminder is 20 days before next appointment
+            booking_reminder = next_due - datetime.timedelta(days=20)
 
         days_until_due = (next_due - today).days
         days_until_booking = (booking_reminder - today).days
@@ -376,16 +569,52 @@ class DadMedicalTracker:
         }
 
     def get_appointments(self) -> List[DadDoctorAppointment]:
-        """Returns recurring doctor appointments with calculated booking schedules."""
+        """Returns recurring doctor appointments with calculated booking schedules and Google Calendar URLs."""
         results = []
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT id, doctor_name, specialty, interval_months, last_visit_date, hospital, notes
+                SELECT id, doctor_name, specialty, interval_months, last_visit_date, hospital, notes,
+                       time_slot, next_visit_date, call_booking_date
                 FROM dad_appointments ORDER BY interval_months ASC
             """)
             for r in cursor.fetchall():
-                proj = self.calculate_appointment_projection(r[4], r[3])
+                t_slot = r[7] if len(r) > 7 and r[7] is not None else ""
+                nxt_vis = r[8] if len(r) > 8 and r[8] is not None else ""
+                call_dt = r[9] if len(r) > 9 and r[9] is not None else ""
+
+                proj = self.calculate_appointment_projection(
+                    r[4], r[3],
+                    explicit_next_due=nxt_vis,
+                    explicit_call_date=call_dt
+                )
+
+                gcal_appt_url = build_google_calendar_url(
+                    title=f"Dad's Appointment: {r[1]} ({r[2]})",
+                    start_date=proj["next_due_date"],
+                    time_slot=t_slot,
+                    details=(
+                        f"Dad's Consultation with {r[1]} ({r[2]}).\n"
+                        f"Hospital: {r[5]}\n"
+                        f"Time Slot: {t_slot or 'Check clinic reception'}\n"
+                        f"Recurring every {r[3]} months. Notes: {r[6]}"
+                    ),
+                    location=r[5]
+                )
+
+                gcal_call_url = build_google_calendar_url(
+                    title=f"📞 Call {r[5]}: Book Dad's {r[1]} Visit",
+                    start_date=proj["booking_reminder_date"],
+                    time_slot="09:00 AM - 10:00 AM",
+                    details=(
+                        f"Call deadline to book Dad's upcoming consultation with {r[1]} ({r[2]}).\n"
+                        f"Hospital: {r[5]}\n"
+                        f"Target Appointment Date: {proj['next_due_date']}\n"
+                        f"Preferred Slot: {t_slot or 'Morning'}"
+                    ),
+                    location=r[5]
+                )
+
                 results.append(DadDoctorAppointment(
                     id=r[0],
                     doctor_name=r[1],
@@ -398,8 +627,40 @@ class DadMedicalTracker:
                     days_until_booking=proj["days_until_booking"],
                     booking_status=proj["booking_status"],
                     hospital=r[5],
-                    notes=r[6]
+                    notes=r[6],
+                    time_slot=t_slot,
+                    google_calendar_url=gcal_appt_url,
+                    google_calendar_call_url=gcal_call_url
                 ))
+        return results
+
+    def get_appointment_history(self) -> List[DadAppointmentHistoryItem]:
+        """Returns Dad's historical consultations and prescriptions across 2024-2027."""
+        results = []
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute("""
+                    SELECT id, doctor_name, specialty, visit_date, next_visit_date, call_date,
+                           booked_for, time_slot, interval_days, medicines_summary, created_at
+                    FROM dad_appointment_history ORDER BY visit_date DESC
+                """)
+                for r in cursor.fetchall():
+                    results.append(DadAppointmentHistoryItem(
+                        id=r[0],
+                        doctor_name=r[1],
+                        specialty=r[2],
+                        visit_date=r[3],
+                        next_visit_date=r[4] or "",
+                        call_date=r[5] or "",
+                        booked_for=r[6] or "",
+                        time_slot=r[7] or "",
+                        interval_days=r[8] or 0,
+                        medicines_summary=r[9] or "",
+                        created_at=r[10] or ""
+                    ))
+            except sqlite3.OperationalError:
+                pass
         return results
 
     def update_appointment_visit(self, doc_id: str, new_visit_date: str) -> DadDoctorAppointment:
@@ -860,6 +1121,7 @@ class DadMedicalTracker:
         approaching_reorders = [m for m in meds if m.urgency == "APPROACHING_REFILL"]
         booking_due_appts = [a for a in appts if a.booking_status in ["BOOK_NOW", "OVERDUE", "UPCOMING_BOOKING"]]
 
+        history = self.get_appointment_history()
         return {
             "total_medicines": len(meds),
             "urgent_reorders_count": len(urgent_reorders),
@@ -868,6 +1130,8 @@ class DadMedicalTracker:
             "approaching_reorders": [m.model_dump() for m in approaching_reorders],
             "medicines": [m.model_dump() for m in meds],
             "appointments": [a.model_dump() for a in appts],
+            "appointment_history": [h.model_dump() for h in history],
+            "appointment_history_count": len(history),
             "booking_due_count": len(booking_due_appts),
             "booking_due_appointments": [a.model_dump() for a in booking_due_appts],
             "calendar_events": cal_events,
