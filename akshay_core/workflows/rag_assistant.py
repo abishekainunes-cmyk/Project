@@ -108,15 +108,20 @@ def get_master_knowledge_corpus() -> List[KnowledgeChunk]:
             category="medical",
             title="Dad's Prescribed Medicines & Inventory Schedule",
             content=(
-                "Dad's Active Prescriptions & Inventory Schedule: "
-                "1. Riverflow (Sacubitril/Valsartan 2.5mg / 50mg): For Heart Failure / Cardiac Support. Prescribed by Dr. Suresh (Cardiologist). Daily dose: 1 pill. Buffer: 12 days. "
-                "2. Telmisartan 40mg: For Blood Pressure / Hypertension. Daily dose: 1 pill morning. Buffer: 10 days. "
-                "3. Atorvastatin 20mg: For Cholesterol / Lipid management. Daily dose: 1 pill bedtime. Buffer: 15 days. "
-                "4. Donepezil 5mg: For Neurological / Cognitive health. Prescribed by Dr. Baskar (Neurologist). Daily dose: 1 pill night. Buffer: 15 days. "
-                "5. Ecosprin 75mg: Blood thinner / antiplatelet. Daily dose: 1 pill post-lunch. Buffer: 10 days. "
-                "Predictive Reorder Rule: System enforces reordering 10-15 days in advance of runout date to ensure zero missed doses."
+                "Dad's Active Clinical Prescriptions & Exact 5-Month Refill Schedule: "
+                "1. Dr. Baskar (Neurology • Sri Ramakrishna Hospital, Morning 07:00 AM - 08:30 AM): "
+                "   - Clonotril-DT 0.25MG: 1 tab morning post-breakfast. 5-month refill cycle (150 tablets / 10 packs). Current: 15 tabs left. "
+                "   - Rivamer: 1 tab morning post-breakfast. 5-month refill cycle (150 tablets / 10 packs). Current: 1 tab left (CRITICAL REFILL NEEDED). "
+                "2. Dr. Suresh (Cardiology • Sri Ramakrishna Hospital, Afternoon 01:30 PM - 02:00 PM): "
+                "   - Riva flo 2.5MG (Riverflow): 1 tab twice daily post-meals. CRITICAL ALERT: Only 20 days left (40 tabs remaining). Needs urgent 5-month refill: 300 tabs / 30 packs. "
+                "   - Cardace meto 5/50: 1 tab daily morning. 5-month refill: 150 tabs / 15 packs. "
+                "   - Veltam plus 0.4/0.5 MG: 1 tab daily bedtime. 5-month refill: 150 tabs / 10 packs. "
+                "   - Glycomet-SR 500 MG: 1 tab daily post-dinner. 5-month refill: 150 tabs / 8 packs. "
+                "   - Ecosprin AV 75/10 MG CAP: 1 cap daily post-lunch. 5-month refill: 150 caps / 10 packs. "
+                "   - Rantac 150 MG (SOS only if needed): Take for gastric acidity/discomfort only. 150 tabs / 8 packs safety reserve. "
+                "Refill Schedule: Strict 5-month cycle with automatic 10-15 day predictive reorder buffer and Google Calendar reminders."
             ),
-            tags=["dad", "medicines", "riverflow", "telmisartan", "donepezil", "atorvastatin", "ecosprin", "inventory", "refill", "pills"]
+            tags=["dad", "medicines", "riverflow", "clonotril", "rivamer", "riva flo", "cardace meto", "veltam plus", "glycomet", "ecosprin", "rantac", "baskar", "suresh", "neuro", "heart", "refill", "inventory"]
         ),
         KnowledgeChunk(
             id="KNOW-MED-02",
@@ -124,13 +129,13 @@ def get_master_knowledge_corpus() -> List[KnowledgeChunk]:
             title="Dad's Doctor Appointments & Consultation Intervals",
             content=(
                 "Dad's Doctor Appointments & Specialized Recurrence: "
-                "1. Dr. Baskar (Neurologist, Sri Ramakrishna Hospital / Coimbatore): Follow-up consultation strictly every 5 Months. "
-                "   Advance booking reminder triggered 20 days prior to due date. "
-                "2. Dr. Suresh (Cardiologist, GKNM Hospital / Coimbatore): Cardiac review consultation strictly every 6 Months. "
-                "   Advance booking reminder triggered 20 days prior to due date. "
-                "Emergency Contacts: GKNM Hospital Cardiac Emergency: 0422 432 4444; Dr. Suresh Clinic: +91 98422 12345; Ambulance: 108 / 112."
+                "1. Dr. Baskar (Neurologist, Sri Ramakrishna Hospital / Coimbatore): Clinical Neuro Review strictly every 5 Months (Time: 07:00 AM - 08:30 AM). "
+                "   Advance booking reminder triggered 20 days prior to due date with 1-click Google Calendar sync. "
+                "2. Dr. Suresh (Cardiologist, Sri Ramakrishna Hospital / Coimbatore): Cardiac Care Review strictly every 5 Months (Time: 01:30 PM - 02:00 PM). "
+                "   Advance booking reminder triggered 20 days prior to due date with 1-click Google Calendar sync. "
+                "Emergency Contacts: Sri Ramakrishna Hospital Emergency: 0422 450 0000; Dr. Suresh Clinic: +91 98422 12345; Dr. Baskar Clinic: +91 98422 67890; Ambulance: 108 / 112."
             ),
-            tags=["dad", "doctor", "baskar", "suresh", "neuro", "heart", "appointment", "gknm", "emergency", "hospital"]
+            tags=["dad", "doctor", "baskar", "suresh", "neuro", "heart", "appointment", "ramakrishna", "emergency", "hospital", "google calendar", "ics"]
         ),
         KnowledgeChunk(
             id="KNOW-MED-03",
@@ -453,27 +458,35 @@ class RAGAssistantEngine:
             )
 
         # 2. DAD'S MEDICINE & APPOINTMENT STATUS
-        if intent == "medical" or any(w in q for w in ["dad", "father", "medicine", "pill", "doctor", "baskar", "suresh", "refill", "riverflow"]):
-            if any(w in q for w in ["doctor", "appointment", "baskar", "suresh", "visit", "book"]):
+        if intent == "medical" or any(w in q for w in ["dad", "father", "medicine", "pill", "doctor", "baskar", "suresh", "refill", "riva", "rivamer", "clonotril", "ecosprin", "glycomet", "cardace", "veltam", "rantac"]):
+            if any(w in q for w in ["doctor", "appointment", "baskar", "suresh", "visit", "book", "hospital", "calendar"]):
                 return (
-                    f"Hey Abishek, I've checked Dad's consultation calendar. Here is where we stand:\n\n"
-                    f"• Dr. Baskar (Neurology • Sri Ramakrishna Hospital): Consultations occur every 5 Months. "
-                    f"Our advance booking window opens 20 days prior to secure his preferred morning slot.\n"
-                    f"• Dr. Suresh (Cardiology • GKNM Hospital): Follow-ups are scheduled every 6 Months. "
-                    f"Both appointments are linked to your Galaxy Tab RFC 5545 calendar alerts.\n\n"
-                    f"If you need emergency hospital support, GKNM Cardiac Emergency is logged in our quick-dial at 0422 432 4444. "
-                    f"Would you like me to open Page 3 or trigger an advance booking alert?"
+                    f"Hey Abishek, I've checked Dad's consultation calendar & doctor appointments:\n\n"
+                    f"• 🧠 Dr. Baskar (Neurology • Sri Ramakrishna Hospital, Coimbatore):\n"
+                    f"  - Timing: 07:00 AM – 08:30 AM (Morning Slot). Strict 5-Month Recurrence Cycle.\n"
+                    f"  - Tracks Rivamer & Clonotril-DT 0.25MG therapy. 1-Click Google Calendar sync enabled.\n\n"
+                    f"• ❤️ Dr. Suresh (Cardiology • Sri Ramakrishna Hospital, Coimbatore):\n"
+                    f"  - Timing: 01:30 PM – 02:00 PM (Afternoon Slot). 5-Month Recurrence Cycle.\n"
+                    f"  - Tracks Riva flo 2.5MG, Cardace meto 5/50, Veltam plus, Glycomet, and Ecosprin AV.\n\n"
+                    f"Both appointments include instant Google Calendar sync links and RFC 5545 .ICS downloads on Page 3. Sri Ramakrishna Hospital Emergency is 0422 450 0000."
                 )
             else:
                 return (
-                    f"I've audited Dad's active medicine inventory for you, Abishek:\n\n"
-                    f"• Riverflow 2.5mg (Sacubitril/Valsartan) & Telmisartan 40mg are tracked with our 10-15 day predictive reorder buffer.\n"
-                    f"• Atorvastatin 20mg and Donepezil 5mg are safely stocked for evening doses.\n"
-                    f"• 0 urgent runouts right now. When pills hit the 12-day threshold, I'll alert you immediately to order refills.\n\n"
-                    f"You can also say 'Remind me to add [medicine] [qty]' anytime, or tap '1-Tap Refill +30' directly on Page 3."
+                    f"I've audited Dad's full clinical medicine schedule & 5-month refill cycles for you, Abishek:\n\n"
+                    f"• 🧠 Neurology (Dr. Baskar • 07:00 AM – 08:30 AM):\n"
+                    f"  - Rivamer: 1 pill morning. Current: 1 tab left (⚠️ URGENT REFILL NEEDED). 5-month cycle: 150 tabs (10 packs).\n"
+                    f"  - Clonotril-DT 0.25MG: 1 pill morning. Current: 15 tabs left. 5-month cycle: 150 tabs (10 packs).\n\n"
+                    f"• ❤️ Cardiology (Dr. Suresh • 01:30 PM – 02:00 PM):\n"
+                    f"  - 🚨 Riva flo 2.5MG (Riverflow): CRITICAL ALERT! Only 20 days left (40 tabs at 2/day). Immediate 5-month refill needed: 300 tabs (30 packs).\n"
+                    f"  - Cardace meto 5/50: 150 tabs (15 packs) for 5-month cycle.\n"
+                    f"  - Veltam plus 0.4/0.5 MG: 150 tabs (10 packs) for 5-month cycle.\n"
+                    f"  - Glycomet-SR 500 MG: 150 tabs (8 packs) for 5-month cycle.\n"
+                    f"  - Ecosprin AV 75/10 MG CAP: 150 caps (10 packs) for 5-month cycle.\n"
+                    f"  - Rantac 150 MG (SOS only if needed): 150 tabs (8 packs) safety reserve.\n\n"
+                    f"All 1-Tap Refills and Google Calendar reminders are live on Page 3!"
                 )
 
-        # 3. WEALTH, FINOS, RUNWAY & INVESTMENTS
+        # 3. WEALTH, FINOS, RUNWAY & INVESTMENTS# 3. WEALTH, FINOS, RUNWAY & INVESTMENTS
         if intent == "wealth" or any(w in q for w in ["money", "wealth", "runway", "tax", "115bac", "sip", "portfolio", "gold", "sgb", "invest", "savings"]):
             if any(w in q for w in ["tax", "115bac", "regime", "ctc"]):
                 return (
