@@ -1641,6 +1641,12 @@
       <span>BATTERY: <strong style="color:#16a34a;" id="tileBattery">96%</strong></span>
       <span>•</span>
       <span>GATEWAY: <strong style="color:#16a34a;" id="tileTunnel">200 OK</strong></span>
+      <span>•</span>
+      <span style="cursor:pointer; color:#0284c7; font-weight:700;" onclick="copyNetworkWifiUrl()" title="Tap to copy Wi-Fi address">📶 <span id="hdrWifiAddress">Wi-Fi: 192.168.0.106:8085</span></span>
+      <span>•</span>
+      <span style="color:#10b981; font-weight:800;">⚡ 100% OFFLINE READY</span>
+      <span>•</span>
+      <button class="btn btn-secondary" onclick="openAppInstallModal()" style="font-size:0.62rem; padding:0.18rem 0.55rem; background:linear-gradient(135deg,#7c3aed,#2563eb); color:#fff; border:none; font-weight:800; border-radius:4px; cursor:pointer; box-shadow:0 2px 6px rgba(124,58,237,0.35);">📱 INSTALL APP / 📥 APK</button>
     </div>
   </div>
 
@@ -10379,6 +10385,104 @@ Select a condition above to view immediate clinical triage steps.
     // ==========================================================================
     // UNIVERSAL ECOSYSTEM BOOTSTRAP (RUNS ON LOCALHOST, GITHUB PAGES & VERCEL)
     // ==========================================================================
+    // -------------------------------------------------------------
+    // PWA, 100% Offline Service Worker & Native APK Engine (ES5)
+    // -------------------------------------------------------------
+    var deferredInstallPrompt = null;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js').then(function(reg) {
+          console.log('✓ Akshay 100% Offline ServiceWorker Active:', reg.scope);
+        }).catch(function(err) {
+          console.log('ServiceWorker note:', err.message);
+        });
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      var btn = document.getElementById('btnDirectPwaInstall');
+      if (btn) btn.style.display = 'block';
+    });
+
+    function openAppInstallModal() {
+      if (typeof playUISound === 'function') playUISound('click');
+      var modal = document.getElementById('appInstallModal');
+      if (modal) modal.style.display = 'block';
+
+      fetch(apiEndpoint('/api/network/info'))
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          if (data && data.success && data.primary_ip) {
+            var el = document.getElementById('modalWifiIpText');
+            if (el) el.textContent = 'http://' + data.primary_ip + ':8085';
+            var hdrWifi = document.getElementById('hdrWifiAddress');
+            if (hdrWifi) hdrWifi.textContent = 'Wi-Fi: ' + data.primary_ip + ':8085';
+          }
+        }).catch(function() {});
+    }
+
+    function closeAppInstallModal() {
+      if (typeof playUISound === 'function') playUISound('click');
+      var modal = document.getElementById('appInstallModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function triggerPwaInstall() {
+      if (typeof playUISound === 'function') playUISound('click');
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then(function(choice) {
+          if (choice.outcome === 'accepted') {
+            if (typeof showToast === 'function') showToast('✓ Akshay App Installed to Home Screen!', 'success');
+          }
+          deferredInstallPrompt = null;
+        });
+      } else {
+        if (typeof showToast === 'function') {
+          showToast('ℹ️ To install: Tap browser menu (⋮) -> "Add to Home screen" or "Install App"', 'info');
+        } else {
+          alert('To install: Tap your browser menu (⋮) -> "Add to Home screen" or "Install App"');
+        }
+      }
+    }
+
+    function copyNetworkWifiUrl() {
+      if (typeof playUISound === 'function') playUISound('click');
+      var ipText = document.getElementById('modalWifiIpText');
+      var url = ipText ? ipText.textContent.trim() : 'http://192.168.0.106:8085';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          if (typeof showToast === 'function') showToast('✓ Wi-Fi URL Copied: ' + url, 'success');
+        }).catch(function() {
+          if (typeof showToast === 'function') showToast('Wi-Fi URL: ' + url, 'info');
+        });
+      } else {
+        if (typeof showToast === 'function') showToast('Wi-Fi URL: ' + url, 'info');
+      }
+    }
+
+    function copyCloudflareUrl() {
+      if (typeof playUISound === 'function') playUISound('click');
+      var url = 'https://closer-fans-approve-evaluating.trycloudflare.com';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          if (typeof showToast === 'function') showToast('✓ Global Edge Tunnel Copied!', 'success');
+        });
+      }
+    }
+
+    function copyGitHubPagesUrl() {
+      if (typeof playUISound === 'function') playUISound('click');
+      var url = 'https://abishekainunes-cmyk.github.io/Project/?';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          if (typeof showToast === 'function') showToast('✓ GitHub Pages URL Copied!', 'success');
+        });
+      }
+    }
+
     function bootstrapAkshayEcosystem() {
       try { applyLayoutView(); } catch (e) {}
       try { syncLedgerWithServer(); } catch (e) {}
