@@ -1479,176 +1479,93 @@
 
   <!-- Top HUD Header -->
     <!-- Top HUD Header: 500x Executive Glass Command Bar -->
-  <header class="hud-header">
-    <div class="brand">
-      <div class="brand-avatar-wrap">
+  <header class="hud-header" style="padding:0.5rem 1rem; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(15,23,42,0.05);">
+    <div class="brand" style="display:flex; align-items:center; gap:0.6rem;">
+      <div class="brand-avatar-wrap" style="width:34px; height:34px; border-radius:8px; background:linear-gradient(135deg, #2563eb, #3b82f6); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; box-shadow:0 2px 8px rgba(37,99,235,0.3);">
         <span class="avatar-icon">⚡</span>
       </div>
       <div>
         <div style="display:flex; align-items:center; gap:0.4rem;">
-          <span class="brand-title">AKSHAY AI</span>
-          <span class="match-badge" style="border-color:#2563eb; color:#2563eb; font-size:0.58rem; background:rgba(37,99,235,0.08);">v5.0 ULTRA</span>
+          <span class="brand-title" style="font-size:0.95rem; font-weight:800; color:#0f172a; letter-spacing:0.02em;">AKSHAY AI</span>
+          <span class="match-badge" style="border-color:#2563eb; color:#2563eb; font-size:0.58rem; background:rgba(37,99,235,0.08); padding:0.1rem 0.35rem; border-radius:4px;">v5.0 ULTRA</span>
         </div>
         <div style="font-size:0.55rem; color:#64748b; font-family:var(--font-mono); margin-top:0.1rem;">EXECUTIVE AUTONOMOUS WORKSTATION</div>
       </div>
     </div>
 
     <!-- Candidate Identity Capsule -->
-    <div class="candidate-header-capsule">
+    <div class="candidate-header-capsule" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9999px; padding:0.25rem 0.75rem; display:flex; align-items:center; gap:0.45rem; font-size:0.68rem;">
       <span style="font-size:0.75rem;">👤</span>
-      <span class="cand-name">Abishek Pranav G V</span>
-      <span style="color:#cbd5e1;">&bull;</span>
-      <span class="cand-email">abishekpranav403@gmail.com</span>
-      <span style="color:#cbd5e1;">&bull;</span>
-      <span class="cand-status">● ATS 100/100 AUDITED</span>
+      <span class="cand-name" style="font-weight:700; color:#0f172a;">Abishek Pranav G V</span>
+      <span style="color:#cbd5e1;">•</span>
+      <span class="cand-email" style="color:#64748b; font-family:var(--font-mono);">abishekpranav403@gmail.com</span>
+      <span style="color:#cbd5e1;">•</span>
+      <span class="cand-status" style="color:#16a34a; font-weight:700;">● ATS 100/100 AUDITED</span>
     </div>
 
     <!-- Header Quick Actions (Clock, Sound Toggle, Suggestions, Settings) -->
-    <div style="display:flex; align-items:center; gap:0.45rem;">
-      <!-- Dynamic IST Clock -->
-      <div class="header-clock-pill">
+    <div style="display:flex; align-items:center; gap:0.4rem;">
+      <div class="header-clock-pill" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.25rem 0.55rem; font-size:0.65rem; color:#475569; font-family:var(--font-mono); display:flex; align-items:center; gap:0.25rem;">
         <span style="font-size:0.7rem;">🕒</span>
-        <span id="liveClockIST">10:15:00 PM IST</span>
+        <span id="liveClockIST">10:45:00 PM IST</span>
       </div>
 
-      <!-- Web Audio Sound Toggle -->
-      <button class="btn btn-sound-toggle" id="btnSoundToggle" onclick="toggleUISound()" title="Toggle Executive UI Sound Effects">
+      <button class="btn btn-sound-toggle" id="btnSoundToggle" style="padding:0.25rem 0.55rem; font-size:0.65rem; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#334155;" onclick="toggleUISound()" title="Toggle UI Sound Effects">
         🔊 Audio: ON
       </button>
 
-      <button class="btn" style="background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); color:#d97706; font-size:0.68rem; padding:0.25rem 0.55rem; border-radius:8px;" onclick="playUISound('click'); openSuggestionsModal();" title="View AI Strategic Suggestions">
+      <button class="btn" style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.4); color:#b45309; font-size:0.65rem; padding:0.25rem 0.55rem; border-radius:8px;" onclick="playUISound('click'); openSuggestionsModal();" title="View AI Strategic Suggestions">
         💡 Suggestions
       </button>
-      <button class="btn btn-secondary" style="font-size:0.68rem; padding:0.25rem 0.55rem; border-radius:8px;" onclick="playUISound('click'); openSettingsModal('devices');" title="Connected Devices & System Settings">
+      <button class="btn btn-secondary" style="font-size:0.65rem; padding:0.25rem 0.55rem; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#334155;" onclick="playUISound('click'); openSettingsModal('devices');" title="Connected Devices & System Settings">
         ⚙️ Settings
       </button>
     </div>
   </header>
 
-  <!-- Live Connected Devices Telemetry Strip (Galaxy Tab A & Host PC) -->
-  <div class="device-telemetry-strip">
-    <div class="device-telemetry-tile">
-      <span class="device-tile-label">BATTERY</span>
-      <span class="device-tile-val" id="tileBattery" style="color:#34d399;">96%</span>
-    </div>
-    <div class="device-telemetry-tile" onclick="openSettingsModal('devices')" style="cursor:pointer;" title="Tap to inspect device details">
-      <span class="device-tile-label">TABLET</span>
-      <span class="device-tile-val" id="tileTablet" style="color:#38bdf8;">GALAXY TAB A</span>
-    </div>
-    <div class="device-telemetry-tile">
-      <span class="device-tile-label">LATENCY</span>
-      <span class="device-tile-val" id="tileLatency" style="color:#a78bfa;">&lt;4ms</span>
-    </div>
-    <div class="device-telemetry-tile" onclick="openSettingsModal('devices')" style="cursor:pointer;" title="Gateway status">
-      <span class="device-tile-label">GATEWAY</span>
-      <span class="device-tile-val" id="tileTunnel" style="color:#34d399;">200 OK</span>
-    </div>
-  </div>
-
-  <!-- Device Quick Action Buttons (Torch, SOS, Paste Clip) -->
-  <div class="device-quick-actions">
-    <button class="btn-tile" id="btnTorch" onclick="toggleTabletTorch()">
-      <span id="torchIcon">💡</span> Torch: <span id="torchState">OFF</span>
-    </button>
-    <button class="btn-tile btn-tile-sos" onclick="triggerSosBeacon()">
-      🚨 1-TAP SOS
-    </button>
-    <button class="btn-tile" onclick="pasteClipboardToChat()">
-      📋 Paste Clip
-    </button>
-  </div>
-
-  <!-- Top Category Quick Navigation Bar (Short 1-Word Names, Zero Voice, Direct Function Redirect) -->
-  <div class="category-quick-bar" id="categoryQuickBar">
-    <div class="cat-pill" onclick="navigateCategory('braindump')">🧠 Brain-Dump</div>
-    <div class="cat-pill" onclick="navigateCategory('split')">🤝 Split Bill</div>
-    <div class="cat-pill" onclick="navigateCategory('tax')">📊 Tax 115BAC</div>
-    <div class="cat-pill" onclick="navigateCategory('portfolio')">📈 Portfolio</div>
-    <div class="cat-pill" onclick="navigateCategory('dad')">💊 Dad's Meds</div>
-    <div class="cat-pill" onclick="navigateCategory('calendar')">📅 Care Calendar</div>
-    <div class="cat-pill" onclick="navigateCategory('firstaid')">🩹 First Aid</div>
-    <div class="cat-pill" onclick="navigateCategory('jobs')">💼 Job Bot</div>
-    <div class="cat-pill" onclick="navigateCategory('timer')">⏱️ Focus Timer</div>
-  </div>
-
-  
-
-
-
   <!-- ============================================================== -->
-  <!-- MASTER ADVANCED LIVE KPI DASHBOARD BAR (ACROSS ALL CATEGORIES) -->
+  <!-- COLUMNS ON THE TOP WITH THE HEADER (EXECUTIVE SEGMENTED NAV)    -->
   <!-- ============================================================== -->
-  <div class="master-kpi-bar" id="masterKpiDashboard" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:0.4rem; padding:0.35rem 0.6rem 0.15rem 0.6rem;">
-    <!-- KPI 1: Brain-Dump & Voice Core -->
-    <div class="kpi-live-card" onclick="navigateCategory('braindump')" class="kpi-live-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">🧠 BRAIN-DUMP &amp; NLP</span>
-        <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#38bdf8; border-color:#38bdf8;">PAGE 1</span>
-      </div>
-      <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-top:0.15rem;" id="kpiCoreStatus">● STANDBY ACTIVE</div>
-      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;" id="kpiCoreDetail">Zero-Parroting NLP &bull; Fast Local First</div>
-    </div>
-
-    <!-- KPI 2: FinOS Wealth & SIP -->
-    <div class="kpi-live-card" onclick="navigateCategory('portfolio')" class="kpi-live-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">💳 WEALTH &amp; PORTFOLIO</span>
-        <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#34d399; border-color:#34d399;">PAGE 2</span>
-      </div>
-      <div style="font-size:0.85rem; font-weight:800; color:#34d399; font-family:var(--font-mono); margin-top:0.15rem;" id="kpiWealthTotal">₹1,09,050.79</div>
-      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;" id="kpiWealthDetail"><span style="color:#38bdf8;">+₹1,283 (1-Day)</span> &bull; Savings: ₹81,750</div>
-    </div>
-
-    <!-- KPI 3: Dad's Care & Appointments -->
-    <div class="kpi-live-card" onclick="navigateCategory('dad')" class="kpi-live-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">💊 DAD'S CARE &amp; CALENDAR</span>
-        <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#fbbf24; border-color:#fbbf24;">PAGE 3</span>
-      </div>
-      <div style="font-size:0.85rem; font-weight:800; color:#fbbf24; font-family:var(--font-mono); margin-top:0.15rem;" id="kpiDadStatus">8 MEDS &bull; 0 URGENT</div>
-      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;" id="kpiDadDetail">Dr. Baskar (5M) &bull; Dr. Suresh (6M)</div>
-    </div>
-
-    <!-- KPI 4: Precision ATS 2.0 Job Bot -->
-    <div class="kpi-live-card" onclick="navigateCategory('jobs')" class="kpi-live-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">💼 ATS 2.0 JOB BOT</span>
-        <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#c084fc; border-color:#c084fc;">PAGE 4</span>
-      </div>
-      <div style="font-size:0.85rem; font-weight:800; color:#c084fc; font-family:var(--font-mono); margin-top:0.15rem;" id="kpiJobStatus">EVIDENCE-BASED ATS</div>
-      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;" id="kpiJobDetail">Human-in-the-Loop Review Gate &bull; Audit Active</div>
-    </div>
-
-    <!-- KPI 5: OpenAI CLIP Local Multimodal Vision -->
-    <div class="kpi-live-card" onclick="openClipVisionModal()" class="kpi-live-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.56rem; color: #64748b; font-weight:700; font-family:var(--font-mono);">👁️ OPENAI CLIP AI</span>
-        <span class="match-badge" style="font-size:0.5rem; padding:0.04rem 0.2rem; color:#0ea5e9; border-color:#0ea5e9;">$0 FREE</span>
-      </div>
-      <div style="font-size:0.85rem; font-weight:800; color:#0ea5e9; font-family:var(--font-mono); margin-top:0.15rem;">LOCAL PYTORCH</div>
-      <div style="font-size:0.58rem; color: #334155; margin-top:0.1rem;">Zero API Keys &bull; Vision Embeddings</div>
-    </div>
-  </div>
-
-  <!-- Executive Top Tabs Navigation Rail -->
-    <!-- Executive Top Tabs Navigation Rail (500x Segmented Glass) -->
-  <div class="col-nav-bar" id="colNavBar">
-    <button class="col-nav-btn active" id="tab_colBrainDump" onclick="playUISound('tab'); switchPage('colBrainDump');">
-      <span class="tab-num">1</span>
+  <nav class="col-nav-bar" id="colNavBar" style="display:flex; gap:0.5rem; padding:0.5rem 1rem 0.35rem 1rem; background:#ffffff; border-bottom:1px solid #e2e8f0;">
+    <button class="col-nav-btn active" id="tab_colBrainDump" style="flex:1; padding:0.55rem 0.75rem; border-radius:8px; border:1px solid #2563eb; background:#2563eb; color:#ffffff; font-weight:800; font-size:0.74rem; display:flex; align-items:center; justify-content:center; gap:0.45rem; cursor:pointer; box-shadow:0 2px 6px rgba(37,99,235,0.25);" onclick="playUISound('tab'); switchPage('colBrainDump');">
+      <span class="tab-num" style="background:rgba(255,255,255,0.25); color:#fff; padding:0.08rem 0.35rem; border-radius:4px; font-size:0.62rem;">1</span>
       <span>🎙️ BRAIN-DUMP &amp; CHAT</span>
     </button>
-    <button class="col-nav-btn" id="tab_colFinos" onclick="playUISound('tab'); switchPage('colFinos');">
-      <span class="tab-num">2</span>
+    <button class="col-nav-btn" id="tab_colFinos" style="flex:1; padding:0.55rem 0.75rem; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#475569; font-weight:700; font-size:0.74rem; display:flex; align-items:center; justify-content:center; gap:0.45rem; cursor:pointer;" onclick="playUISound('tab'); switchPage('colFinos');">
+      <span class="tab-num" style="background:#f1f5f9; color:#64748b; padding:0.08rem 0.35rem; border-radius:4px; font-size:0.62rem;">2</span>
       <span>💳 WEALTH &amp; FINOS</span>
     </button>
-    <button class="col-nav-btn" id="tab_colMedical" onclick="playUISound('tab'); switchPage('colMedical');">
-      <span class="tab-num">3</span>
+    <button class="col-nav-btn" id="tab_colMedical" style="flex:1; padding:0.55rem 0.75rem; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#475569; font-weight:700; font-size:0.74rem; display:flex; align-items:center; justify-content:center; gap:0.45rem; cursor:pointer;" onclick="playUISound('tab'); switchPage('colMedical');">
+      <span class="tab-num" style="background:#f1f5f9; color:#64748b; padding:0.08rem 0.35rem; border-radius:4px; font-size:0.62rem;">3</span>
       <span>💊 DAD'S CARE &amp; SOS</span>
     </button>
-    <button class="col-nav-btn" id="tab_colJobBot" onclick="playUISound('tab'); switchPage('colJobBot');">
-      <span class="tab-num">4</span>
+    <button class="col-nav-btn" id="tab_colJobBot" style="flex:1; padding:0.55rem 0.75rem; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#475569; font-weight:700; font-size:0.74rem; display:flex; align-items:center; justify-content:center; gap:0.45rem; cursor:pointer;" onclick="playUISound('tab'); switchPage('colJobBot');">
+      <span class="tab-num" style="background:#f1f5f9; color:#64748b; padding:0.08rem 0.35rem; border-radius:4px; font-size:0.62rem;">4</span>
       <span>🤖 5-PORTAL JOB BOT</span>
     </button>
+  </nav>
+
+  <!-- Slim Professional Utility & Telemetry Bar -->
+  <div style="display:flex; justify-content:space-between; align-items:center; padding:0.35rem 1rem; background:#f8fafc; border-bottom:1px solid #e2e8f0; font-size:0.65rem;">
+    <!-- Quick Jumps -->
+    <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
+      <span style="font-weight:700; color:#64748b; font-size:0.58rem; text-transform:uppercase; letter-spacing:0.04em;">JUMP:</span>
+      <button class="cat-pill" style="cursor:pointer; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:0.18rem 0.45rem; font-size:0.63rem; color:#334155;" onclick="navigateCategory('braindump')">🧠 Brain-Dump</button>
+      <button class="cat-pill" style="cursor:pointer; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:0.18rem 0.45rem; font-size:0.63rem; color:#334155;" onclick="navigateCategory('portfolio')">💳 Wealth</button>
+      <button class="cat-pill" style="cursor:pointer; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:0.18rem 0.45rem; font-size:0.63rem; color:#334155;" onclick="navigateCategory('dad')">💊 Dad's Meds</button>
+      <button class="cat-pill" style="cursor:pointer; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:0.18rem 0.45rem; font-size:0.63rem; color:#334155;" onclick="navigateCategory('jobs')">🤖 Job Bot</button>
+      <button class="cat-pill" style="cursor:pointer; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:0.18rem 0.45rem; font-size:0.63rem; color:#dc2626; font-weight:700;" onclick="triggerSosBeacon()">🚨 1-Tap SOS</button>
+      <button class="cat-pill" style="cursor:pointer; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:0.18rem 0.45rem; font-size:0.63rem; color:#334155;" onclick="toggleTabletTorch()">💡 <span id="torchState">Torch</span></button>
+    </div>
+
+    <!-- Live Telemetry Pill -->
+    <div style="display:flex; align-items:center; gap:0.4rem; color:#64748b; font-family:var(--font-mono); font-size:0.62rem;">
+      <span style="display:flex; align-items:center; gap:0.2rem;"><span style="color:#16a34a;">●</span> GALAXY TAB A</span>
+      <span>•</span>
+      <span>BATTERY: <strong style="color:#16a34a;" id="tileBattery">96%</strong></span>
+      <span>•</span>
+      <span>GATEWAY: <strong style="color:#16a34a;" id="tileTunnel">200 OK</strong></span>
+    </div>
   </div>
 
   <!-- 4-COLUMN WORKSTATION CONTAINER (PAGE VIEW FIT BY DEFAULT) -->
@@ -6070,11 +5987,11 @@ Select a condition above to view immediate clinical triage steps.
         doctor_name: "Dr. Baskar",
         specialty: "Neurology",
         visit_date: "2026-11-06",
-        next_visit_date: "2027-05-05",
+        next_visit_date: "2027-04-06",
         call_date: "2027-03-06",
         time_slot: "07:00 AM - 08:30 AM",
-        interval_days: 180,
-        medicines_summary: "Active: Clonotril-DT 0.25mg (180 required), Rivamer (180 required - 1 tab left!)"
+        interval_days: 150,
+        medicines_summary: "Active (5-Month Cycle): Rivamer (150 tabs needed - 1 tab left!), Clonotril-DT 0.25mg (150 tabs needed)"
       },
       {
         doctor_name: "Dr. Suresh",
@@ -6084,7 +6001,7 @@ Select a condition above to view immediate clinical triage steps.
         call_date: "2026-12-04",
         time_slot: "01:30 PM - 02:00 PM",
         interval_days: 150,
-        medicines_summary: "Active: Ecosprin AV 75/10, Riva flo 2.5mg (300 req), Glycomet-SR 500, Cardace meto 5/50, Veltam plus, Rantac"
+        medicines_summary: "Active: Riva flo 2.5mg (20d left - 300 tabs req), Ecosprin AV 75/10, Glycomet-SR 500, Cardace meto 5/50, Veltam plus, Rantac (SOS)"
       },
       {
         doctor_name: "Dr. Baskar",
@@ -6179,14 +6096,158 @@ Select a condition above to view immediate clinical triage steps.
     ];
 
     var localDadMedicines = [
-      { id: "MED-NEURO-02", name: "Rivamer", category: "Neuro", current_qty: 1, daily_dose: 1, days_remaining: 1, reorder_lead_days: 14, reorder_date: "Today", runout_date: "Tomorrow", urgency: "REORDER_NOW", prescribed_by: "Dr. Baskar (Neuro)", pack_size: 15, total_tablets_required: 180, packs_required: 12, cycle_from: "2026-11-06", cycle_to: "2027-05-05", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Rivamer+%28Neuro%29&dates=20261105/20261105&details=Refill+reminder+for+Dad%3A+Rivamer+%28Neuro+Care%29.+1+tablet+left.+Total+needed%3A+180+tablets+%2812+packs%29.&location=Dr.+Baskar+%28Neuro%29&ctz=Asia/Kolkata" },
-      { id: "MED-CARD-02", name: "Riva flo 2.5MG", category: "Cardiac", current_qty: 10, daily_dose: 2, days_remaining: 5, reorder_lead_days: 10, reorder_date: "Today", runout_date: "In 5 days", urgency: "REORDER_NOW", prescribed_by: "Dr. Suresh (Heart)", pack_size: 10, total_tablets_required: 300, packs_required: 30, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Riva+flo+2.5MG+%28Cardiac%29&dates=20261105/20261105&details=Refill+reminder+for+Dad%3A+Riva+flo+2.5MG+%28Cardiac+Care%29.+10+tablets+left.+Total+needed%3A+300+tablets+%2830+packs%29.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
-      { id: "MED-CARD-04", name: "Cardace meto 5/50", category: "Cardiac", current_qty: 15, daily_dose: 1, days_remaining: 15, reorder_lead_days: 12, reorder_date: "In 3 days", runout_date: "In 15 days", urgency: "APPROACHING_REFILL", prescribed_by: "Dr. Suresh (Heart)", pack_size: 10, total_tablets_required: 150, packs_required: 15, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Cardace+meto+5%2F50+%28Cardiac%29&dates=20261108/20261108&details=Refill+reminder+for+Dad%3A+Cardace+meto+5%2F50+%28Cardiac+Care%29.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
-      { id: "MED-NEURO-01", name: "Clonotril-DT 0.25MG", category: "Neuro", current_qty: 30, daily_dose: 1, days_remaining: 30, reorder_lead_days: 12, reorder_date: "In 18 days", runout_date: "In 30 days", urgency: "HEALTHY", prescribed_by: "Dr. Baskar (Neuro)", pack_size: 15, total_tablets_required: 180, packs_required: 12, cycle_from: "2026-11-06", cycle_to: "2027-05-05", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Clonotril-DT+0.25MG+%28Neuro%29&dates=20261123/20261123&details=Refill+reminder+for+Dad%3A+Clonotril-DT+0.25MG+%28Neuro+Care%29.&location=Dr.+Baskar+%28Neuro%29&ctz=Asia/Kolkata" },
-      { id: "MED-CARD-01", name: "Ecosprin AV 75/10 MG", category: "Cardiac", current_qty: 75, daily_dose: 1, days_remaining: 75, reorder_lead_days: 12, reorder_date: "In 63 days", runout_date: "In 75 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)", pack_size: 15, total_tablets_required: 150, packs_required: 10, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Ecosprin+AV+75%2F10+MG+%28Cardiac%29&dates=20270107/20270107&details=Refill+reminder+for+Dad%3A+Ecosprin+AV+75%2F10+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
-      { id: "MED-CARD-03", name: "Glycomet-SR 500 MG", category: "Cardiac", current_qty: 40, daily_dose: 1, days_remaining: 40, reorder_lead_days: 12, reorder_date: "In 28 days", runout_date: "In 40 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)", pack_size: 20, total_tablets_required: 150, packs_required: 8, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Glycomet-SR+500+MG+%28Cardiac%29&dates=20261203/20261203&details=Refill+reminder+for+Dad%3A+Glycomet-SR+500+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
-      { id: "MED-CARD-05", name: "Veltam plus 0.4/0.5 MG", category: "Cardiac", current_qty: 25, daily_dose: 1, days_remaining: 25, reorder_lead_days: 12, reorder_date: "In 13 days", runout_date: "In 25 days", urgency: "APPROACHING_REFILL", prescribed_by: "Dr. Suresh (Heart)", pack_size: 15, total_tablets_required: 150, packs_required: 10, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Veltam+plus+0.4%2F0.5+MG+%28Cardiac%29&dates=20261118/20261118&details=Refill+reminder+for+Dad%3A+Veltam+plus+0.4%2F0.5+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
-      { id: "MED-CARD-06", name: "Rantac 150 MG", category: "Cardiac", current_qty: 30, daily_dose: 1, days_remaining: 30, reorder_lead_days: 10, reorder_date: "In 20 days", runout_date: "In 30 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)", pack_size: 20, total_tablets_required: 150, packs_required: 8, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Rantac+150+MG+%28Cardiac%29&dates=20261125/20261125&details=Refill+reminder+for+Dad%3A+Rantac+150+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" }
+      {
+        id: "MED-NEURO-RIVAMER",
+        name: "Rivamer",
+        category: "Neuro",
+        current_qty: 1,
+        daily_dose: 1,
+        days_remaining: 1,
+        reorder_lead_days: 14,
+        reorder_date: "Today",
+        runout_date: "Tomorrow",
+        urgency: "REORDER_NOW",
+        prescribed_by: "Dr. Baskar (Neurology)",
+        pack_size: 15,
+        total_tablets_required: 150,
+        packs_required: 10,
+        cycle_from: "2026-11-06",
+        cycle_to: "2027-04-06",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Rivamer+%28Neuro%29&dates=20261105/20261105&details=Refill+reminder+for+Dad%3A+Rivamer+%28Neuro+Care%29.+1+tablet+left.+Total+needed%3A+150+tablets+%2810+packs%29.&location=Dr.+Baskar+%28Neuro%29&ctz=Asia/Kolkata"
+      },
+      {
+        id: "MED-NEURO-CLONOTRIL",
+        name: "Clonotril-DT 0.25MG",
+        category: "Neuro",
+        current_qty: 15,
+        daily_dose: 1,
+        days_remaining: 15,
+        reorder_lead_days: 12,
+        reorder_date: "In 3 days",
+        runout_date: "In 15 days",
+        urgency: "REORDER_NOW",
+        prescribed_by: "Dr. Baskar (Neurology)",
+        pack_size: 15,
+        total_tablets_required: 150,
+        packs_required: 10,
+        cycle_from: "2026-11-06",
+        cycle_to: "2027-04-06",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Clonotril-DT+0.25MG+%28Neuro%29&dates=20261108/20261108&details=Refill+reminder+for+Dad%3A+Clonotril-DT+0.25MG+%28Neuro+Care%29.+15+tablets+left.+Total+needed%3A+150+tablets+%2810+packs%29.&location=Dr.+Baskar+%28Neuro%29&ctz=Asia/Kolkata"
+      },
+      {
+        id: "MED-CARD-RIVAFLO",
+        name: "Riva flo 2.5MG",
+        category: "Cardiac",
+        current_qty: 40,
+        daily_dose: 2,
+        days_remaining: 20,
+        reorder_lead_days: 12,
+        reorder_date: "In 8 days",
+        runout_date: "In 20 days",
+        urgency: "REORDER_NOW",
+        prescribed_by: "Dr. Suresh (Cardiology)",
+        pack_size: 10,
+        total_tablets_required: 300,
+        packs_required: 30,
+        cycle_from: "2026-11-05",
+        cycle_to: "2027-04-05",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Riva+flo+2.5MG+%28Cardiac%29&dates=20261113/20261113&details=Refill+reminder+for+Dad%3A+Riva+flo+2.5MG+%28Cardiac+Care%29.+20+days+left.+Total+needed%3A+300+tablets+%2830+packs%29.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata"
+      },
+      {
+        id: "MED-CARD-CARDACE-METO",
+        name: "Cardace meto 5/50",
+        category: "Cardiac",
+        current_qty: 25,
+        daily_dose: 1,
+        days_remaining: 25,
+        reorder_lead_days: 12,
+        reorder_date: "In 13 days",
+        runout_date: "In 25 days",
+        urgency: "APPROACHING_REFILL",
+        prescribed_by: "Dr. Suresh (Cardiology)",
+        pack_size: 10,
+        total_tablets_required: 150,
+        packs_required: 15,
+        cycle_from: "2026-11-05",
+        cycle_to: "2027-04-05",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Cardace+meto+5%2F50+%28Cardiac%29&dates=20261118/20261118&details=Refill+reminder+for+Dad%3A+Cardace+meto+5%2F50+%28Cardiac+Care%29.+Total+needed%3A+150+tablets+%2815+packs%29.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata"
+      },
+      {
+        id: "MED-GEN-VELTAM-PLUS",
+        name: "Veltam plus 0.4/0.5 MG",
+        category: "Cardiac",
+        current_qty: 25,
+        daily_dose: 1,
+        days_remaining: 25,
+        reorder_lead_days: 12,
+        reorder_date: "In 13 days",
+        runout_date: "In 25 days",
+        urgency: "APPROACHING_REFILL",
+        prescribed_by: "Dr. Suresh (Cardiology)",
+        pack_size: 15,
+        total_tablets_required: 150,
+        packs_required: 10,
+        cycle_from: "2026-11-05",
+        cycle_to: "2027-04-05",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Veltam+plus+0.4%2F0.5+MG+%28Cardiac%29&dates=20261118/20261118&details=Refill+reminder+for+Dad%3A+Veltam+plus+0.4%2F0.5+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata"
+      },
+      {
+        id: "MED-GEN-GLYCOMET",
+        name: "Glycomet-SR 500 MG",
+        category: "Cardiac",
+        current_qty: 35,
+        daily_dose: 1,
+        days_remaining: 35,
+        reorder_lead_days: 12,
+        reorder_date: "In 23 days",
+        runout_date: "In 35 days",
+        urgency: "HEALTHY",
+        prescribed_by: "Dr. Suresh (Cardiology)",
+        pack_size: 20,
+        total_tablets_required: 150,
+        packs_required: 8,
+        cycle_from: "2026-11-05",
+        cycle_to: "2027-04-05",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Glycomet-SR+500+MG+%28Cardiac%29&dates=20261128/20261128&details=Refill+reminder+for+Dad%3A+Glycomet-SR+500+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata"
+      },
+      {
+        id: "MED-CARD-ECOSPRIN-AV",
+        name: "Ecosprin AV 75/10 MG CAP",
+        category: "Cardiac",
+        current_qty: 75,
+        daily_dose: 1,
+        days_remaining: 75,
+        reorder_lead_days: 12,
+        reorder_date: "In 63 days",
+        runout_date: "In 75 days",
+        urgency: "HEALTHY",
+        prescribed_by: "Dr. Suresh (Cardiology)",
+        pack_size: 15,
+        total_tablets_required: 150,
+        packs_required: 10,
+        cycle_from: "2026-11-05",
+        cycle_to: "2027-04-05",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Ecosprin+AV+75%2F10+MG+%28Cardiac%29&dates=20270107/20270107&details=Refill+reminder+for+Dad%3A+Ecosprin+AV+75%2F10+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata"
+      },
+      {
+        id: "MED-GEN-RANTAC",
+        name: "Rantac 150 MG (SOS only if needed)",
+        category: "Cardiac",
+        current_qty: 30,
+        daily_dose: 1,
+        days_remaining: 30,
+        reorder_lead_days: 10,
+        reorder_date: "In 20 days",
+        runout_date: "In 30 days",
+        urgency: "HEALTHY",
+        prescribed_by: "Dr. Suresh (Cardiology)",
+        pack_size: 20,
+        total_tablets_required: 150,
+        packs_required: 8,
+        cycle_from: "2026-11-05",
+        cycle_to: "2027-04-05",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Rantac+150+MG+%28Cardiac%29&dates=20261125/20261125&details=Refill+reminder+for+Dad%3A+Rantac+150+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata"
+      }
     ];
 
     var localDadAppointments = [
@@ -6194,17 +6255,17 @@ Select a condition above to view immediate clinical triage steps.
         id: "DOC-NEURO",
         doctor_name: "Dr. Baskar",
         specialty: "Neurology",
-        interval_months: 6,
+        interval_months: 5,
         last_visit_date: "2026-11-06",
-        next_due_date: "2027-05-05",
+        next_due_date: "2027-04-06",
         booking_reminder_date: "2027-03-06",
-        days_until_due: 181,
+        days_until_due: 152,
         days_until_booking: 121,
         booking_status: "SCHEDULED",
         hospital: "Neuro Care & Brain Institute",
         time_slot: "07:00 AM - 08:30 AM",
-        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Dad%27s+Appointment%3A+Dr.+Baskar+%28Neurology%29&dates=20270505T070000/20270505T083000&details=Dad%27s+Consultation+with+Dr.+Baskar+%28Neurology%29.+Hospital%3A+Neuro+Care+%26+Brain+Institute.+Time+Slot%3A+07%3A00+AM+-+08%3A30+AM.&location=Neuro+Care+%26+Brain+Institute&ctz=Asia/Kolkata",
-        google_calendar_call_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%F0%9F%93%9E+Call+Neuro+Care+%26+Brain+Institute%3A+Book+Dad%27s+Dr.+Baskar+Visit&dates=20270306T090000/20270306T100000&details=Call+deadline+to+book+Dad%27s+upcoming+consultation+with+Dr.+Baskar+%28Neurology%29.+Hospital%3A+Neuro+Care+%26+Brain+Institute.+Target+Appointment+Date%3A+2027-05-05.+Preferred+Slot%3A+07%3A00+AM+-+08%3A30+AM&location=Neuro+Care+%26+Brain+Institute&ctz=Asia/Kolkata"
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Dad%27s+Appointment%3A+Dr.+Baskar+%28Neurology%29&dates=20270406T070000/20270406T083000&details=Dad%27s+Consultation+with+Dr.+Baskar+%28Neurology%29.+Hospital%3A+Neuro+Care+%26+Brain+Institute.+Time+Slot%3A+07%3A00+AM+-+08%3A30+AM.&location=Neuro+Care+%26+Brain+Institute&ctz=Asia/Kolkata",
+        google_calendar_call_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%F0%9F%93%9E+Call+Neuro+Care+%26+Brain+Institute%3A+Book+Dad%27s+Dr.+Baskar+Visit&dates=20270306T090000/20270306T100000&details=Call+deadline+to+book+Dad%27s+upcoming+consultation+with+Dr.+Baskar+%28Neurology%29.+Hospital%3A+Neuro+Care+%26+Brain+Institute.+Target+Appointment+Date%3A+2027-04-06.+Preferred+Slot%3A+07%3A00+AM+-+08%3A30+AM&location=Neuro+Care+%26+Brain+Institute&ctz=Asia/Kolkata"
       },
       {
         id: "DOC-HEART",
@@ -6258,56 +6319,58 @@ Select a condition above to view immediate clinical triage steps.
       var urgentCount = 0;
       var bannerAlerts = [];
 
+      // Separate into Neuro (Dr. Baskar) and Heart (Dr. Suresh)
+      var neuroMeds = [];
+      var heartMeds = [];
+
       for (var i = 0; i < meds.length; i++) {
         var m = meds[i];
         if (m.urgency === 'REORDER_NOW') {
           urgentCount++;
           bannerAlerts.push(m.name + ' (' + m.current_qty + ' pills left! Reorder Date: ' + m.reorder_date + ')');
         }
-
-        var badgeColor = m.urgency === 'REORDER_NOW' ? '#f87171' : (m.urgency === 'APPROACHING_REFILL' ? '#fbbf24' : '#34d399');
-        var badgeText = m.urgency === 'REORDER_NOW' ? '🚨 REORDER NOW' : (m.urgency === 'APPROACHING_REFILL' ? '⚠️ REFILL SOON' : '✓ IN STOCK');
-
-        var card = document.createElement('div');
-        card.style.background = '#1e293b';
-        card.style.border = '1px solid ' + (m.urgency === 'REORDER_NOW' ? 'rgba(239, 68, 68, 0.5)' : '#334155');
-        card.style.borderRadius = '6px';
-        card.style.padding = '0.45rem';
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        card.style.gap = '0.2rem';
-
-        var packSize = m.pack_size || 15;
-        var packsReq = m.packs_required || 10;
-        var totalReq = m.total_tablets_required || (packSize * packsReq);
-        var cycleText = (m.cycle_from && m.cycle_to) ? (' &bull; Cycle: ' + escapeHtml(m.cycle_from) + ' &rarr; ' + escapeHtml(m.cycle_to)) : '';
-
-        var gcalRefillBtn = '';
-        if (m.google_calendar_url) {
-          gcalRefillBtn = '<a class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.58rem; color:#60a5fa; text-decoration:none; display:inline-flex; align-items:center; gap:0.2rem;" href="' + escapeHtml(m.google_calendar_url) + '" target="_blank" rel="noopener noreferrer">📅 GCal Refill</a>';
+        var cat = (m.category || '').toLowerCase();
+        var pres = (m.prescribed_by || '').toLowerCase();
+        if (cat.indexOf('neuro') !== -1 || pres.indexOf('baskar') !== -1) {
+          neuroMeds.push(m);
+        } else {
+          heartMeds.push(m);
         }
+      }
 
-        card.innerHTML = 
-          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
-            '<strong style="color:#fff; font-size:0.73rem;">' + escapeHtml(m.name) + '</strong>' +
-            '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
+      // 1. NEUROLOGY SECTION HEADER
+      var neuroSec = document.createElement('div');
+      neuroSec.style.marginBottom = '0.6rem';
+      neuroSec.innerHTML = 
+        '<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(192,132,252,0.12); border:1px solid rgba(192,132,252,0.35); padding:0.35rem 0.6rem; border-radius:6px; margin-bottom:0.35rem;">' +
+          '<div>' +
+            '<strong style="color:#c084fc; font-size:0.75rem;">🧠 NEUROLOGY CARE — Dr. Baskar (07:00 AM – 08:30 AM)</strong>' +
+            '<div style="font-size:0.6rem; color:#94a3b8;">5-Month Refill Cycle Active &bull; 150 Tablets / 10 Packs Required per Drug</div>' +
           '</div>' +
-          '<div style="display:flex; justify-content:space-between; font-size:0.63rem; color: #94a3b8;">' +
-            '<span>Stock: <strong style="color:#38bdf8;">' + m.current_qty + ' pills</strong> (' + m.days_remaining + 'd left)</span>' +
-            '<span>Dose: ' + m.daily_dose + '/day &bull; ' + escapeHtml(m.category) + '</span>' +
-          '</div>' +
-          '<div style="font-size:0.6rem; color:#cbd5e1; background:rgba(0,0,0,0.2); padding:0.15rem 0.3rem; border-radius:3px;">' +
-            '<span>📦 <strong>' + packSize + ' tabs/pack</strong> &bull; Needed: <strong style="color:#38bdf8;">' + totalReq + ' tabs (' + packsReq + ' packs)</strong>' + cycleText + '</span>' +
-          '</div>' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.62rem; color: #94a3b8; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px; margin-top:0.15rem;">' +
-            '<span>📅 <strong style="color:' + badgeColor + ';">Buy: ' + escapeHtml(m.reorder_date) + '</strong></span>' +
-            '<div style="display:flex; gap:0.25rem;">' +
-              gcalRefillBtn +
-              '<button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.58rem; color:#38bdf8;" onclick="refillDadMedicine('' + escapeHtml(m.id) + '')">+ Refill (+30)</button>' +
-            '</div>' +
-          '</div>';
+          '<span class="match-badge" style="border-color:#c084fc; color:#c084fc; font-size:0.55rem; padding:0.08rem 0.35rem;">5M CYCLE</span>' +
+        '</div>';
+      container.appendChild(neuroSec);
 
-        container.appendChild(card);
+      for (var ni = 0; ni < neuroMeds.length; ni++) {
+        container.appendChild(createMedicineCardElement(neuroMeds[ni]));
+      }
+
+      // 2. HEART & CARDIOLOGY SECTION HEADER
+      var heartSec = document.createElement('div');
+      heartSec.style.marginTop = '0.6rem';
+      heartSec.style.marginBottom = '0.35rem';
+      heartSec.innerHTML = 
+        '<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.35); padding:0.35rem 0.6rem; border-radius:6px; margin-bottom:0.35rem;">' +
+          '<div>' +
+            '<strong style="color:#38bdf8; font-size:0.75rem;">❤️ HEART &amp; CARDIOLOGY CARE — Dr. Suresh (01:30 PM – 02:00 PM)</strong>' +
+            '<div style="font-size:0.6rem; color:#94a3b8;">Riva flo 20-Day Alert &bull; 5-Month Regimen Active &bull; Dr. Suresh Prescribed</div>' +
+          '</div>' +
+          '<span class="match-badge" style="border-color:#38bdf8; color:#38bdf8; font-size:0.55rem; padding:0.08rem 0.35rem;">5M REGIMEN</span>' +
+        '</div>';
+      container.appendChild(heartSec);
+
+      for (var hi = 0; hi < heartMeds.length; hi++) {
+        container.appendChild(createMedicineCardElement(heartMeds[hi]));
       }
 
       var alertCountEl = document.getElementById('dadRefillAlertCount');
@@ -6324,6 +6387,61 @@ Select a condition above to view immediate clinical triage steps.
       }
     }
 
+    function createMedicineCardElement(m) {
+      var badgeColor = m.urgency === 'REORDER_NOW' ? '#f87171' : (m.urgency === 'APPROACHING_REFILL' ? '#fbbf24' : '#34d399');
+      var badgeText = m.urgency === 'REORDER_NOW' ? '🚨 REORDER NOW' : (m.urgency === 'APPROACHING_REFILL' ? '⚠️ REFILL SOON' : '✓ IN STOCK');
+
+      var card = document.createElement('div');
+      card.style.background = '#1e293b';
+      card.style.border = '1px solid ' + (m.urgency === 'REORDER_NOW' ? 'rgba(239, 68, 68, 0.5)' : '#334155');
+      card.style.borderRadius = '6px';
+      card.style.padding = '0.5rem';
+      card.style.display = 'flex';
+      card.style.flexDirection = 'column';
+      card.style.gap = '0.22rem';
+      card.style.marginBottom = '0.35rem';
+
+      var packSize = m.pack_size || 15;
+      var packsReq = m.packs_required || 10;
+      var totalReq = m.total_tablets_required || (packSize * packsReq);
+      var cycleText = (m.cycle_from && m.cycle_to) ? (' &bull; Cycle: ' + escapeHtml(m.cycle_from) + ' &rarr; ' + escapeHtml(m.cycle_to)) : '';
+
+      var gcalRefillBtn = '';
+      if (m.google_calendar_url) {
+        gcalRefillBtn = '<a class="btn btn-secondary" style="padding:0.15rem 0.45rem; font-size:0.6rem; color:#60a5fa; text-decoration:none; display:inline-flex; align-items:center; gap:0.25rem;" href="' + escapeHtml(m.google_calendar_url) + '" target="_blank" rel="noopener noreferrer">📅 GCal Refill</a>';
+      }
+
+      card.innerHTML = 
+        '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+          '<strong style="color:#fff; font-size:0.75rem;">' + escapeHtml(m.name) + '</strong>' +
+          '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; font-size:0.64rem; color: #94a3b8;">' +
+          '<span>Stock: <strong style="color:#38bdf8;">' + m.current_qty + ' pills</strong> (' + m.days_remaining + 'd left)</span>' +
+          '<span>Dose: ' + m.daily_dose + '/day &bull; ' + escapeHtml(m.category) + '</span>' +
+        '</div>' +
+        '<div style="font-size:0.62rem; color:#cbd5e1; background:rgba(0,0,0,0.25); padding:0.2rem 0.35rem; border-radius:4px;">' +
+          '<span>📦 <strong>' + packSize + ' tabs/pack</strong> &bull; Total Required: <strong style="color:#38bdf8;">' + totalReq + ' tabs (' + packsReq + ' packs)</strong>' + cycleText + '</span>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.62rem; color: #94a3b8; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px; margin-top:0.15rem;">' +
+          '<span>📅 <strong style="color:' + badgeColor + ';">Buy Before: ' + escapeHtml(m.reorder_date) + '</strong></span>' +
+          '<div style="display:flex; gap:0.3rem;">' +
+            gcalRefillBtn +
+            '<button class="btn btn-secondary btn-refill-act" style="padding:0.15rem 0.45rem; font-size:0.6rem; color:#38bdf8;">+ Refill (+30)</button>' +
+          '</div>' +
+        '</div>';
+
+      // Attach direct click event listener for 100% precision
+      var refillBtn = card.querySelector('.btn-refill-act');
+      if (refillBtn) {
+        refillBtn.addEventListener('click', function() {
+          refillDadMedicine(m.id);
+        });
+      }
+
+      return card;
+    }
+
     function renderDadAppointments(appts) {
       var container = document.getElementById('dadAppointmentsContainer');
       if (!container) return;
@@ -6331,51 +6449,71 @@ Select a condition above to view immediate clinical triage steps.
 
       for (var i = 0; i < appts.length; i++) {
         var a = appts[i];
-        var badgeColor = a.booking_status === 'BOOK_NOW' ? '#f87171' : (a.booking_status === 'UPCOMING_BOOKING' ? '#fbbf24' : '#34d399');
-        var badgeText = a.booking_status === 'BOOK_NOW' ? '🔴 CALL & BOOK NOW' : (a.booking_status === 'UPCOMING_BOOKING' ? '🟡 BOOKING UPCOMING' : '🟢 SCHEDULED');
-
-        var card = document.createElement('div');
-        card.style.background = '#1e293b';
-        card.style.border = '1px solid ' + (a.booking_status === 'BOOK_NOW' ? 'rgba(239, 68, 68, 0.5)' : '#334155');
-        card.style.borderRadius = '6px';
-        card.style.padding = '0.5rem';
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        card.style.gap = '0.25rem';
-
-        var slotInfo = a.time_slot ? ('<div style="font-size:0.64rem; color:#38bdf8; font-weight:600; margin-top:0.15rem;">🕒 Time Slot: ' + escapeHtml(a.time_slot) + '</div>') : '';
-        var gcalApptUrl = a.google_calendar_url || '#';
-        var gcalCallUrl = a.google_calendar_call_url || '#';
-
-        card.innerHTML = 
-          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
-            '<div>' +
-              '<strong style="color:#c084fc; font-size:0.75rem;">' + escapeHtml(a.doctor_name) + '</strong> ' +
-              '<span style="font-size:0.63rem; color: #94a3b8;">(' + escapeHtml(a.specialty) + ' &bull; ' + escapeHtml(a.hospital) + ')</span>' +
-            '</div>' +
-            '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
-          '</div>' +
-          slotInfo +
-          '<div style="font-size:0.63rem; color: #94a3b8; display:flex; justify-content:space-between; margin-top:0.1rem;">' +
-            '<span>Last Visit: ' + escapeHtml(a.last_visit_date) + '</span>' +
-            '<span>Target Visit in: <strong style="color:#38bdf8;">' + a.days_until_due + ' days</strong></span>' +
-          '</div>' +
-          '<div style="background:rgba(0,0,0,0.3); border-radius:4px; padding:0.3rem 0.4rem; font-size:0.62rem; color: #cbd5e1; margin-top:0.15rem;">' +
-            '<div style="color:#34d399; font-weight:700;">📅 Target Appointment Date: ' + escapeHtml(a.next_due_date) + '</div>' +
-            '<div style="color:#fbbf24; margin-top:0.1rem;">📞 Advance Booking Call Deadline: <strong>' + escapeHtml(a.booking_reminder_date) + '</strong> (Call clinic reception)</div>' +
-          '</div>' +
-          '<!-- Universal 1-Click Google Calendar & Actions -->' +
-          '<div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.25rem;">' +
-            '<a class="btn btn-secondary" style="font-size:0.6rem; padding:0.2rem 0.35rem; color:#38bdf8; text-decoration:none; text-align:center; display:inline-flex; align-items:center; justify-content:center; gap:0.2rem;" href="' + escapeHtml(gcalApptUrl) + '" target="_blank" rel="noopener noreferrer">📅 Add to Google Cal</a>' +
-            '<a class="btn btn-secondary" style="font-size:0.6rem; padding:0.2rem 0.35rem; color:#fbbf24; text-decoration:none; text-align:center; display:inline-flex; align-items:center; justify-content:center; gap:0.2rem;" href="' + escapeHtml(gcalCallUrl) + '" target="_blank" rel="noopener noreferrer">📞 GCal Call Reminder</a>' +
-          '</div>' +
-          '<div style="display:flex; gap:0.3rem; margin-top:0.15rem;">' +
-            '<button class="btn btn-secondary" style="flex:1; font-size:0.6rem; padding:0.15rem 0.35rem;" onclick="downloadDoctorAppointmentIcs('' + escapeHtml(a.id) + '')">📥 Calendar .ICS</button>' +
-            '<button class="btn btn-purple" style="flex:1; font-size:0.6rem; padding:0.15rem 0.35rem;" onclick="markDoctorVisited('' + escapeHtml(a.id) + '')">✓ Visited Today (Reset +' + a.interval_months + 'm)</button>' +
-          '</div>';
-
-        container.appendChild(card);
+        container.appendChild(createAppointmentCardElement(a));
       }
+    }
+
+    function createAppointmentCardElement(a) {
+      var badgeColor = a.booking_status === 'BOOK_NOW' ? '#f87171' : (a.booking_status === 'UPCOMING_BOOKING' ? '#fbbf24' : '#34d399');
+      var badgeText = a.booking_status === 'BOOK_NOW' ? '🔴 CALL & BOOK NOW' : (a.booking_status === 'UPCOMING_BOOKING' ? '🟡 BOOKING UPCOMING' : '🟢 SCHEDULED');
+
+      var card = document.createElement('div');
+      card.style.background = '#1e293b';
+      card.style.border = '1px solid ' + (a.booking_status === 'BOOK_NOW' ? 'rgba(239, 68, 68, 0.5)' : '#334155');
+      card.style.borderRadius = '6px';
+      card.style.padding = '0.55rem';
+      card.style.display = 'flex';
+      card.style.flexDirection = 'column';
+      card.style.gap = '0.25rem';
+      card.style.marginBottom = '0.4rem';
+
+      var slotInfo = a.time_slot ? ('<div style="font-size:0.64rem; color:#38bdf8; font-weight:600; margin-top:0.15rem;">🕒 Consultation Slot: ' + escapeHtml(a.time_slot) + '</div>') : '';
+      var gcalApptUrl = a.google_calendar_url || '#';
+      var gcalCallUrl = a.google_calendar_call_url || '#';
+
+      card.innerHTML = 
+        '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+          '<div>' +
+            '<strong style="color:#c084fc; font-size:0.78rem;">' + escapeHtml(a.doctor_name) + '</strong> ' +
+            '<span style="font-size:0.64rem; color: #94a3b8;">(' + escapeHtml(a.specialty) + ' &bull; ' + escapeHtml(a.hospital) + ')</span>' +
+          '</div>' +
+          '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
+        '</div>' +
+        slotInfo +
+        '<div style="font-size:0.63rem; color: #94a3b8; display:flex; justify-content:space-between; margin-top:0.1rem;">' +
+          '<span>Last Visit: ' + escapeHtml(a.last_visit_date) + '</span>' +
+          '<span>Target Visit in: <strong style="color:#38bdf8;">' + a.days_until_due + ' days</strong></span>' +
+        '</div>' +
+        '<div style="background:rgba(0,0,0,0.3); border-radius:4px; padding:0.35rem 0.45rem; font-size:0.62rem; color: #cbd5e1; margin-top:0.15rem;">' +
+          '<div style="color:#34d399; font-weight:700;">📅 Target Appointment Date: ' + escapeHtml(a.next_due_date) + '</div>' +
+          '<div style="color:#fbbf24; margin-top:0.1rem;">📞 Advance Booking Call Deadline: <strong>' + escapeHtml(a.booking_reminder_date) + '</strong> (Call clinic reception)</div>' +
+        '</div>' +
+        '<!-- Universal 1-Click Google Calendar & Actions -->' +
+        '<div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; margin-top:0.25rem;">' +
+          '<a class="btn btn-secondary" style="font-size:0.62rem; padding:0.22rem 0.4rem; color:#38bdf8; text-decoration:none; text-align:center; display:inline-flex; align-items:center; justify-content:center; gap:0.2rem;" href="' + escapeHtml(gcalApptUrl) + '" target="_blank" rel="noopener noreferrer">📅 Add to Google Cal</a>' +
+          '<a class="btn btn-secondary" style="font-size:0.62rem; padding:0.22rem 0.4rem; color:#fbbf24; text-decoration:none; text-align:center; display:inline-flex; align-items:center; justify-content:center; gap:0.2rem;" href="' + escapeHtml(gcalCallUrl) + '" target="_blank" rel="noopener noreferrer">📞 GCal Call Reminder</a>' +
+        '</div>' +
+        '<div style="display:flex; gap:0.35rem; margin-top:0.2rem;">' +
+          '<button class="btn btn-secondary btn-download-ics" style="flex:1; font-size:0.62rem; padding:0.18rem 0.35rem;">📥 Calendar .ICS</button>' +
+          '<button class="btn btn-purple btn-visit-today" style="flex:1; font-size:0.62rem; padding:0.18rem 0.35rem;">✓ Visited Today (Reset +' + a.interval_months + 'm)</button>' +
+        '</div>';
+
+      // Attach direct event listeners for button precision
+      var icsBtn = card.querySelector('.btn-download-ics');
+      if (icsBtn) {
+        icsBtn.addEventListener('click', function() {
+          downloadDoctorAppointmentIcs(a.id);
+        });
+      }
+
+      var visitBtn = card.querySelector('.btn-visit-today');
+      if (visitBtn) {
+        visitBtn.addEventListener('click', function() {
+          markDoctorVisited(a.id);
+        });
+      }
+
+      return card;
     }
 
     function openDadAppointmentHistoryModal() {
