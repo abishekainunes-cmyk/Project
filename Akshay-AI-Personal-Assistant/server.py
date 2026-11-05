@@ -261,6 +261,52 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
 
+        elif path == "/api/dad/appointment/history":
+            try:
+                history = dad_tracker_instance.get_appointment_history()
+                self._send_json_response({
+                    "success": True,
+                    "history": [h.model_dump() for h in history],
+                    "count": len(history)
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif path == "/api/dad/calendar/google-links":
+            try:
+                appts = dad_tracker_instance.get_appointments()
+                meds = dad_tracker_instance.get_medicines()
+                links = {
+                    "appointments": [
+                        {
+                            "id": a.id,
+                            "doctor_name": a.doctor_name,
+                            "specialty": a.specialty,
+                            "next_due_date": a.next_due_date,
+                            "time_slot": a.time_slot,
+                            "hospital": a.hospital,
+                            "google_calendar_url": a.google_calendar_url,
+                            "google_calendar_call_url": a.google_calendar_call_url
+                        } for a in appts
+                    ],
+                    "medicines": [
+                        {
+                            "id": m.id,
+                            "name": m.name,
+                            "category": m.category,
+                            "reorder_date": m.reorder_date,
+                            "runout_date": m.runout_date,
+                            "urgency": m.urgency,
+                            "google_calendar_url": m.google_calendar_url
+                        } for m in meds
+                    ]
+                }
+                self._send_json_response({"success": True, "links": links})
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
+
         elif path == "/api/jobs/form_filler/audit":
             try:
                 query = urllib.parse.parse_qs(parsed_url.query)

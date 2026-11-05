@@ -2253,6 +2253,17 @@
             <div id="dadAppointmentsContainer" style="display:flex; flex-direction:column; gap:0.45rem;">
               <!-- Dynamically populated -->
             </div>
+
+            <!-- 2024-2027 History Button & Unified GCal Sync -->
+            <div style="display:flex; flex-direction:column; gap:0.35rem; margin-top:0.45rem;">
+              <button class="btn btn-purple" style="width:100%; font-size:0.65rem; padding:0.3rem 0.5rem; display:flex; align-items:center; justify-content:center; gap:0.35rem;" onclick="openDadAppointmentHistoryModal()">
+                <span>📜</span> <strong>View 2024–2027 Consultation &amp; Medicine History (11 Visits)</strong>
+              </button>
+              <div style="display:flex; gap:0.3rem;">
+                <button class="btn btn-secondary" style="flex:1; font-size:0.62rem; padding:0.2rem 0.35rem;" onclick="downloadUnifiedCareCalendar()">📅 Download Master .ICS</button>
+                <button class="btn btn-secondary" style="font-size:0.62rem; padding:0.2rem 0.35rem;" onclick="loadDadDashboard()">↻ Sync</button>
+              </div>
+            </div>
           </div>
 
           <!-- Camera Prescription OCR & Auto-Ingestion -->
@@ -6054,18 +6065,163 @@ Select a condition above to view immediate clinical triage steps.
     // -------------------------------------------------------------
     // Dad's Medical Tracker & Appointments Engine (Strict ES5)
     // -------------------------------------------------------------
+    var localDadAppointmentHistory = [
+      {
+        doctor_name: "Dr. Baskar",
+        specialty: "Neurology",
+        visit_date: "2026-11-06",
+        next_visit_date: "2027-05-05",
+        call_date: "2027-03-06",
+        time_slot: "07:00 AM - 08:30 AM",
+        interval_days: 180,
+        medicines_summary: "Active: Clonotril-DT 0.25mg (180 required), Rivamer (180 required - 1 tab left!)"
+      },
+      {
+        doctor_name: "Dr. Suresh",
+        specialty: "Cardiology",
+        visit_date: "2026-09-03",
+        next_visit_date: "2027-02-02",
+        call_date: "2026-12-04",
+        time_slot: "01:30 PM - 02:00 PM",
+        interval_days: 150,
+        medicines_summary: "Active: Ecosprin AV 75/10, Riva flo 2.5mg (300 req), Glycomet-SR 500, Cardace meto 5/50, Veltam plus, Rantac"
+      },
+      {
+        doctor_name: "Dr. Baskar",
+        specialty: "Neurology",
+        visit_date: "2026-02-21",
+        next_visit_date: "2026-08-20",
+        call_date: "2026-06-21",
+        time_slot: "07:00 AM - 08:30 AM",
+        interval_days: 180,
+        medicines_summary: "Clonotril-DT 0.25mg, Rivamer (replaces Cypholine)"
+      },
+      {
+        doctor_name: "Dr. Suresh",
+        specialty: "Cardiology",
+        visit_date: "2025-10-30",
+        next_visit_date: "2026-03-29",
+        call_date: "2026-01-28",
+        time_slot: "01:30 PM - 02:00 PM",
+        interval_days: 150,
+        medicines_summary: "Ecosprin AV, Rovor 2.5mg, Glycomet-SR 500, Cardace meto 5/50 (combines Ramistar + Prolomet), Veltam plus, Rantac"
+      },
+      {
+        doctor_name: "Dr. Baskar",
+        specialty: "Neurology",
+        visit_date: "2025-07-19",
+        next_visit_date: "2026-01-15",
+        call_date: "2025-11-16",
+        time_slot: "07:00 AM - 08:30 AM",
+        interval_days: 180,
+        medicines_summary: "Clonotril-DT 0.25mg, Cypholine 500mg (replaces Serta)"
+      },
+      {
+        doctor_name: "Dr. Suresh",
+        specialty: "Cardiology",
+        visit_date: "2025-03-30",
+        next_visit_date: "2025-08-27",
+        call_date: "2025-06-30",
+        time_slot: "01:30 PM - 02:00 PM",
+        interval_days: 150,
+        medicines_summary: "Ecosprin AV, Riva flo 2.5mg (replaces Rovor), Glycomet-SR 500, Cardace meto 5/50, Veltam plus, Rantac"
+      },
+      {
+        doctor_name: "Dr. Baskar",
+        specialty: "Neurology",
+        visit_date: "2025-03-06",
+        next_visit_date: "2025-06-04",
+        call_date: "2025-04-20",
+        time_slot: "07:00 AM - 08:30 AM",
+        interval_days: 90,
+        medicines_summary: "Clonotril-DT 0.25mg, Serta 25mg (replaces Laregab)"
+      },
+      {
+        doctor_name: "Dr. Suresh",
+        specialty: "Cardiology",
+        visit_date: "2025-02-03",
+        next_visit_date: "2025-06-03",
+        call_date: "2025-04-19",
+        time_slot: "01:30 PM - 02:00 PM",
+        interval_days: 120,
+        medicines_summary: "Ecosprin AV, Rovor 2.5mg, Glycomet-SR 500, Ramistar 5mg, Prolomet XL 50mg, Veltam plus, Rantac"
+      },
+      {
+        doctor_name: "Dr. Suresh",
+        specialty: "Cardiology",
+        visit_date: "2024-09-17",
+        next_visit_date: "2025-01-15",
+        call_date: "2024-12-16",
+        time_slot: "01:30 PM - 02:00 PM",
+        interval_days: 120,
+        medicines_summary: "Ecosprin AV, Rovor 2.5mg, Glycomet-SR 500, Ramistar 5mg, Prolomet XL, Veltam plus, Rantac"
+      },
+      {
+        doctor_name: "Dr. Suresh",
+        specialty: "Cardiology",
+        visit_date: "2024-05-07",
+        next_visit_date: "2024-09-04",
+        call_date: "2024-08-05",
+        time_slot: "01:30 PM - 02:00 PM",
+        interval_days: 120,
+        medicines_summary: "Ecosprin AV, Rovor 2.5mg, Glycomet-SR 500, Ramistar 5mg, Prolomet XL 50mg, Veltam plus, Rantac"
+      },
+      {
+        doctor_name: "Dr. Baskar",
+        specialty: "Neurology",
+        visit_date: "2024-03-22",
+        next_visit_date: "2024-09-18",
+        call_date: "2024-08-19",
+        time_slot: "07:00 AM - 08:30 AM",
+        interval_days: 180,
+        medicines_summary: "Laregab 300mg, Clonotril-DT 0.25mg"
+      }
+    ];
+
     var localDadMedicines = [
-      { id: "MED-NEURO-01", name: "Levetiracetam 500mg", category: "Neuro", current_qty: 24, daily_dose: 2, days_remaining: 12, reorder_lead_days: 12, reorder_date: "Today", runout_date: "In 12 days", urgency: "REORDER_NOW", prescribed_by: "Dr. Baskar (Neuro)" },
-      { id: "MED-NEURO-02", name: "Donepezil 5mg", category: "Neuro", current_qty: 35, daily_dose: 1, days_remaining: 35, reorder_lead_days: 14, reorder_date: "In 21 days", runout_date: "In 35 days", urgency: "HEALTHY", prescribed_by: "Dr. Baskar (Neuro)" },
-      { id: "MED-CARD-01", name: "Telmisartan 40mg", category: "Cardiac", current_qty: 18, daily_dose: 1, days_remaining: 18, reorder_lead_days: 12, reorder_date: "In 6 days", runout_date: "In 18 days", urgency: "APPROACHING_REFILL", prescribed_by: "Dr. Suresh (Heart)" },
-      { id: "MED-CARD-02", name: "Atorvastatin 20mg", category: "Cardiac", current_qty: 45, daily_dose: 1, days_remaining: 45, reorder_lead_days: 14, reorder_date: "In 31 days", runout_date: "In 45 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)" },
-      { id: "MED-CARD-03", name: "Ecosprin 75mg", category: "Cardiac", current_qty: 60, daily_dose: 1, days_remaining: 60, reorder_lead_days: 10, reorder_date: "In 50 days", runout_date: "In 60 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)" },
-      { id: "MED-GEN-01", name: "Pantoprazole 40mg", category: "General", current_qty: 20, daily_dose: 1, days_remaining: 20, reorder_lead_days: 10, reorder_date: "In 10 days", runout_date: "In 20 days", urgency: "APPROACHING_REFILL", prescribed_by: "Dr. Suresh (Heart)" }
+      { id: "MED-NEURO-02", name: "Rivamer", category: "Neuro", current_qty: 1, daily_dose: 1, days_remaining: 1, reorder_lead_days: 14, reorder_date: "Today", runout_date: "Tomorrow", urgency: "REORDER_NOW", prescribed_by: "Dr. Baskar (Neuro)", pack_size: 15, total_tablets_required: 180, packs_required: 12, cycle_from: "2026-11-06", cycle_to: "2027-05-05", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Rivamer+%28Neuro%29&dates=20261105/20261105&details=Refill+reminder+for+Dad%3A+Rivamer+%28Neuro+Care%29.+1+tablet+left.+Total+needed%3A+180+tablets+%2812+packs%29.&location=Dr.+Baskar+%28Neuro%29&ctz=Asia/Kolkata" },
+      { id: "MED-CARD-02", name: "Riva flo 2.5MG", category: "Cardiac", current_qty: 10, daily_dose: 2, days_remaining: 5, reorder_lead_days: 10, reorder_date: "Today", runout_date: "In 5 days", urgency: "REORDER_NOW", prescribed_by: "Dr. Suresh (Heart)", pack_size: 10, total_tablets_required: 300, packs_required: 30, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Riva+flo+2.5MG+%28Cardiac%29&dates=20261105/20261105&details=Refill+reminder+for+Dad%3A+Riva+flo+2.5MG+%28Cardiac+Care%29.+10+tablets+left.+Total+needed%3A+300+tablets+%2830+packs%29.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
+      { id: "MED-CARD-04", name: "Cardace meto 5/50", category: "Cardiac", current_qty: 15, daily_dose: 1, days_remaining: 15, reorder_lead_days: 12, reorder_date: "In 3 days", runout_date: "In 15 days", urgency: "APPROACHING_REFILL", prescribed_by: "Dr. Suresh (Heart)", pack_size: 10, total_tablets_required: 150, packs_required: 15, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Cardace+meto+5%2F50+%28Cardiac%29&dates=20261108/20261108&details=Refill+reminder+for+Dad%3A+Cardace+meto+5%2F50+%28Cardiac+Care%29.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
+      { id: "MED-NEURO-01", name: "Clonotril-DT 0.25MG", category: "Neuro", current_qty: 30, daily_dose: 1, days_remaining: 30, reorder_lead_days: 12, reorder_date: "In 18 days", runout_date: "In 30 days", urgency: "HEALTHY", prescribed_by: "Dr. Baskar (Neuro)", pack_size: 15, total_tablets_required: 180, packs_required: 12, cycle_from: "2026-11-06", cycle_to: "2027-05-05", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Clonotril-DT+0.25MG+%28Neuro%29&dates=20261123/20261123&details=Refill+reminder+for+Dad%3A+Clonotril-DT+0.25MG+%28Neuro+Care%29.&location=Dr.+Baskar+%28Neuro%29&ctz=Asia/Kolkata" },
+      { id: "MED-CARD-01", name: "Ecosprin AV 75/10 MG", category: "Cardiac", current_qty: 75, daily_dose: 1, days_remaining: 75, reorder_lead_days: 12, reorder_date: "In 63 days", runout_date: "In 75 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)", pack_size: 15, total_tablets_required: 150, packs_required: 10, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Ecosprin+AV+75%2F10+MG+%28Cardiac%29&dates=20270107/20270107&details=Refill+reminder+for+Dad%3A+Ecosprin+AV+75%2F10+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
+      { id: "MED-CARD-03", name: "Glycomet-SR 500 MG", category: "Cardiac", current_qty: 40, daily_dose: 1, days_remaining: 40, reorder_lead_days: 12, reorder_date: "In 28 days", runout_date: "In 40 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)", pack_size: 20, total_tablets_required: 150, packs_required: 8, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Glycomet-SR+500+MG+%28Cardiac%29&dates=20261203/20261203&details=Refill+reminder+for+Dad%3A+Glycomet-SR+500+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
+      { id: "MED-CARD-05", name: "Veltam plus 0.4/0.5 MG", category: "Cardiac", current_qty: 25, daily_dose: 1, days_remaining: 25, reorder_lead_days: 12, reorder_date: "In 13 days", runout_date: "In 25 days", urgency: "APPROACHING_REFILL", prescribed_by: "Dr. Suresh (Heart)", pack_size: 15, total_tablets_required: 150, packs_required: 10, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Veltam+plus+0.4%2F0.5+MG+%28Cardiac%29&dates=20261118/20261118&details=Refill+reminder+for+Dad%3A+Veltam+plus+0.4%2F0.5+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" },
+      { id: "MED-CARD-06", name: "Rantac 150 MG", category: "Cardiac", current_qty: 30, daily_dose: 1, days_remaining: 30, reorder_lead_days: 10, reorder_date: "In 20 days", runout_date: "In 30 days", urgency: "HEALTHY", prescribed_by: "Dr. Suresh (Heart)", pack_size: 20, total_tablets_required: 150, packs_required: 8, cycle_from: "2026-09-03", cycle_to: "2027-01-31", google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Refill+Dad%27s+Medicine%3A+Rantac+150+MG+%28Cardiac%29&dates=20261125/20261125&details=Refill+reminder+for+Dad%3A+Rantac+150+MG.&location=Dr.+Suresh+%28Heart%29&ctz=Asia/Kolkata" }
     ];
 
     var localDadAppointments = [
-      { id: "DOC-NEURO", doctor_name: "Dr. Baskar", specialty: "Neurology", interval_months: 5, last_visit_date: "2026-08-15", next_due_date: "2027-01-15", booking_reminder_date: "2026-12-26", days_until_due: 82, days_until_booking: 62, booking_status: "SCHEDULED", hospital: "Neuro Care Institute" },
-      { id: "DOC-HEART", doctor_name: "Dr. Suresh", specialty: "Cardiology", interval_months: 6, last_visit_date: "2026-06-20", next_due_date: "2026-12-20", booking_reminder_date: "2026-11-30", days_until_due: 56, days_until_booking: 36, booking_status: "SCHEDULED", hospital: "Heart Rhythm & Cardiac Sciences" }
+      {
+        id: "DOC-NEURO",
+        doctor_name: "Dr. Baskar",
+        specialty: "Neurology",
+        interval_months: 6,
+        last_visit_date: "2026-11-06",
+        next_due_date: "2027-05-05",
+        booking_reminder_date: "2027-03-06",
+        days_until_due: 181,
+        days_until_booking: 121,
+        booking_status: "SCHEDULED",
+        hospital: "Neuro Care & Brain Institute",
+        time_slot: "07:00 AM - 08:30 AM",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Dad%27s+Appointment%3A+Dr.+Baskar+%28Neurology%29&dates=20270505T070000/20270505T083000&details=Dad%27s+Consultation+with+Dr.+Baskar+%28Neurology%29.+Hospital%3A+Neuro+Care+%26+Brain+Institute.+Time+Slot%3A+07%3A00+AM+-+08%3A30+AM.&location=Neuro+Care+%26+Brain+Institute&ctz=Asia/Kolkata",
+        google_calendar_call_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%F0%9F%93%9E+Call+Neuro+Care+%26+Brain+Institute%3A+Book+Dad%27s+Dr.+Baskar+Visit&dates=20270306T090000/20270306T100000&details=Call+deadline+to+book+Dad%27s+upcoming+consultation+with+Dr.+Baskar+%28Neurology%29.+Hospital%3A+Neuro+Care+%26+Brain+Institute.+Target+Appointment+Date%3A+2027-05-05.+Preferred+Slot%3A+07%3A00+AM+-+08%3A30+AM&location=Neuro+Care+%26+Brain+Institute&ctz=Asia/Kolkata"
+      },
+      {
+        id: "DOC-HEART",
+        doctor_name: "Dr. Suresh",
+        specialty: "Cardiology",
+        interval_months: 5,
+        last_visit_date: "2026-09-03",
+        next_due_date: "2027-02-02",
+        booking_reminder_date: "2026-12-04",
+        days_until_due: 89,
+        days_until_booking: 29,
+        booking_status: "UPCOMING_BOOKING",
+        hospital: "Heart Rhythm & Cardiac Sciences",
+        time_slot: "01:30 PM - 02:00 PM",
+        google_calendar_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Dad%27s+Appointment%3A+Dr.+Suresh+%28Cardiology%29&dates=20270202T133000/20270202T140000&details=Dad%27s+Consultation+with+Dr.+Suresh+%28Cardiology%29.+Hospital%3A+Heart+Rhythm+%26+Cardiac+Sciences.+Time+Slot%3A+01%3A30+PM+-+02%3A00+PM.&location=Heart+Rhythm+%26+Cardiac+Sciences&ctz=Asia/Kolkata",
+        google_calendar_call_url: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%F0%9F%93%9E+Call+Heart+Rhythm+%26+Cardiac+Sciences%3A+Book+Dad%27s+Dr.+Suresh+Visit&dates=20261204T090000/20261204T100000&details=Call+deadline+to+book+Dad%27s+upcoming+consultation+with+Dr.+Suresh+%28Cardiology%29.+Hospital%3A+Heart+Rhythm+%26+Cardiac+Sciences.+Target+Appointment+Date%3A+2027-02-02.+Preferred+Slot%3A+01%3A30+PM+-+02%3A00+PM&location=Heart+Rhythm+%26+Cardiac+Sciences&ctz=Asia/Kolkata"
+      }
     ];
 
     function loadDadDashboard() {
@@ -6076,6 +6232,9 @@ Select a condition above to view immediate clinical triage steps.
             renderDadMedicines(data.dashboard.medicines || localDadMedicines);
             renderDadAppointments(data.dashboard.appointments || localDadAppointments);
             updateDadAlerts(data.dashboard);
+            if (data.dashboard.appointment_history && data.dashboard.appointment_history.length > 0) {
+              localDadAppointmentHistory = data.dashboard.appointment_history;
+            }
             if (data.dashboard.calendar_events) {
               currentCareCalendarEvents = data.dashboard.calendar_events;
               renderMobileCalendar(currentCareCalendarEvents);
@@ -6118,18 +6277,34 @@ Select a condition above to view immediate clinical triage steps.
         card.style.flexDirection = 'column';
         card.style.gap = '0.2rem';
 
+        var packSize = m.pack_size || 15;
+        var packsReq = m.packs_required || 10;
+        var totalReq = m.total_tablets_required || (packSize * packsReq);
+        var cycleText = (m.cycle_from && m.cycle_to) ? (' &bull; Cycle: ' + escapeHtml(m.cycle_from) + ' &rarr; ' + escapeHtml(m.cycle_to)) : '';
+
+        var gcalRefillBtn = '';
+        if (m.google_calendar_url) {
+          gcalRefillBtn = '<a class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.58rem; color:#60a5fa; text-decoration:none; display:inline-flex; align-items:center; gap:0.2rem;" href="' + escapeHtml(m.google_calendar_url) + '" target="_blank" rel="noopener noreferrer">📅 GCal Refill</a>';
+        }
+
         card.innerHTML = 
           '<div style="display:flex; justify-content:space-between; align-items:center;">' +
             '<strong style="color:#fff; font-size:0.73rem;">' + escapeHtml(m.name) + '</strong>' +
             '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
           '</div>' +
-          '<div style="display:flex; justify-content:space-between; font-size:0.63rem; color: #64748b;">' +
-            '<span>Qty: <strong style="color:#38bdf8;">' + m.current_qty + ' pills</strong> (' + m.days_remaining + ' days left)</span>' +
+          '<div style="display:flex; justify-content:space-between; font-size:0.63rem; color: #94a3b8;">' +
+            '<span>Stock: <strong style="color:#38bdf8;">' + m.current_qty + ' pills</strong> (' + m.days_remaining + 'd left)</span>' +
             '<span>Dose: ' + m.daily_dose + '/day &bull; ' + escapeHtml(m.category) + '</span>' +
           '</div>' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.62rem; color: #334155; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px; margin-top:0.15rem;">' +
-            '<span>📅 <strong style="color:' + badgeColor + ';">Buy Before: ' + escapeHtml(m.reorder_date) + '</strong> (Buffer: 10-15d)</span>' +
-            '<button class="btn btn-secondary" style="padding:0.1rem 0.35rem; font-size:0.6rem; color:#38bdf8;" onclick="refillDadMedicine(\'' + escapeHtml(m.id) + '\')">+ Refill (+30)</button>' +
+          '<div style="font-size:0.6rem; color:#cbd5e1; background:rgba(0,0,0,0.2); padding:0.15rem 0.3rem; border-radius:3px;">' +
+            '<span>📦 <strong>' + packSize + ' tabs/pack</strong> &bull; Needed: <strong style="color:#38bdf8;">' + totalReq + ' tabs (' + packsReq + ' packs)</strong>' + cycleText + '</span>' +
+          '</div>' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.62rem; color: #94a3b8; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px; margin-top:0.15rem;">' +
+            '<span>📅 <strong style="color:' + badgeColor + ';">Buy: ' + escapeHtml(m.reorder_date) + '</strong></span>' +
+            '<div style="display:flex; gap:0.25rem;">' +
+              gcalRefillBtn +
+              '<button class="btn btn-secondary" style="padding:0.12rem 0.35rem; font-size:0.58rem; color:#38bdf8;" onclick="refillDadMedicine('' + escapeHtml(m.id) + '')">+ Refill (+30)</button>' +
+            '</div>' +
           '</div>';
 
         container.appendChild(card);
@@ -6157,7 +6332,7 @@ Select a condition above to view immediate clinical triage steps.
       for (var i = 0; i < appts.length; i++) {
         var a = appts[i];
         var badgeColor = a.booking_status === 'BOOK_NOW' ? '#f87171' : (a.booking_status === 'UPCOMING_BOOKING' ? '#fbbf24' : '#34d399');
-        var badgeText = a.booking_status === 'BOOK_NOW' ? '🔴 BOOK APPOINTMENT NOW' : (a.booking_status === 'UPCOMING_BOOKING' ? '🟡 BOOKING UPCOMING' : '🟢 SCHEDULED');
+        var badgeText = a.booking_status === 'BOOK_NOW' ? '🔴 CALL & BOOK NOW' : (a.booking_status === 'UPCOMING_BOOKING' ? '🟡 BOOKING UPCOMING' : '🟢 SCHEDULED');
 
         var card = document.createElement('div');
         card.style.background = '#1e293b';
@@ -6168,29 +6343,115 @@ Select a condition above to view immediate clinical triage steps.
         card.style.flexDirection = 'column';
         card.style.gap = '0.25rem';
 
+        var slotInfo = a.time_slot ? ('<div style="font-size:0.64rem; color:#38bdf8; font-weight:600; margin-top:0.15rem;">🕒 Time Slot: ' + escapeHtml(a.time_slot) + '</div>') : '';
+        var gcalApptUrl = a.google_calendar_url || '#';
+        var gcalCallUrl = a.google_calendar_call_url || '#';
+
         card.innerHTML = 
           '<div style="display:flex; justify-content:space-between; align-items:center;">' +
             '<div>' +
               '<strong style="color:#c084fc; font-size:0.75rem;">' + escapeHtml(a.doctor_name) + '</strong> ' +
-              '<span style="font-size:0.63rem; color: #64748b;">(' + escapeHtml(a.specialty) + ' &bull; Every ' + a.interval_months + ' Months)</span>' +
+              '<span style="font-size:0.63rem; color: #94a3b8;">(' + escapeHtml(a.specialty) + ' &bull; ' + escapeHtml(a.hospital) + ')</span>' +
             '</div>' +
             '<span class="match-badge" style="border-color:' + badgeColor + '; color:' + badgeColor + '; font-size:0.58rem; padding:0.1rem 0.35rem;">' + badgeText + '</span>' +
           '</div>' +
-          '<div style="font-size:0.63rem; color: #334155; display:flex; justify-content:space-between;">' +
+          slotInfo +
+          '<div style="font-size:0.63rem; color: #94a3b8; display:flex; justify-content:space-between; margin-top:0.1rem;">' +
             '<span>Last Visit: ' + escapeHtml(a.last_visit_date) + '</span>' +
-            '<span>Due in: <strong style="color:#38bdf8;">' + a.days_until_due + ' days</strong></span>' +
+            '<span>Target Visit in: <strong style="color:#38bdf8;">' + a.days_until_due + ' days</strong></span>' +
           '</div>' +
-          '<div style="background:rgba(0,0,0,0.3); border-radius:4px; padding:0.3rem 0.4rem; font-size:0.62rem; color: #334155; margin-top:0.15rem;">' +
-            '<div style="color:#34d399; font-weight:700;">📅 Next Due Date: ' + escapeHtml(a.next_due_date) + '</div>' +
-            '<div style="color:#fbbf24; margin-top:0.1rem;">🔔 Advance Booking Reminder: ' + escapeHtml(a.booking_reminder_date) + ' (Book 20d prior)</div>' +
+          '<div style="background:rgba(0,0,0,0.3); border-radius:4px; padding:0.3rem 0.4rem; font-size:0.62rem; color: #cbd5e1; margin-top:0.15rem;">' +
+            '<div style="color:#34d399; font-weight:700;">📅 Target Appointment Date: ' + escapeHtml(a.next_due_date) + '</div>' +
+            '<div style="color:#fbbf24; margin-top:0.1rem;">📞 Advance Booking Call Deadline: <strong>' + escapeHtml(a.booking_reminder_date) + '</strong> (Call clinic reception)</div>' +
           '</div>' +
-          '<div style="display:flex; gap:0.35rem; margin-top:0.25rem;">' +
-            '<button class="btn btn-secondary" style="flex:1; font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="downloadDoctorAppointmentIcs(\'' + escapeHtml(a.id) + '\')">📅 Calendar .ICS</button>' +
-            '<button class="btn btn-purple" style="flex:1; font-size:0.62rem; padding:0.15rem 0.35rem;" onclick="markDoctorVisited(\'' + escapeHtml(a.id) + '\')">✓ Visited Today (Reset +' + a.interval_months + 'm)</button>' +
+          '<!-- Universal 1-Click Google Calendar & Actions -->' +
+          '<div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.25rem;">' +
+            '<a class="btn btn-secondary" style="font-size:0.6rem; padding:0.2rem 0.35rem; color:#38bdf8; text-decoration:none; text-align:center; display:inline-flex; align-items:center; justify-content:center; gap:0.2rem;" href="' + escapeHtml(gcalApptUrl) + '" target="_blank" rel="noopener noreferrer">📅 Add to Google Cal</a>' +
+            '<a class="btn btn-secondary" style="font-size:0.6rem; padding:0.2rem 0.35rem; color:#fbbf24; text-decoration:none; text-align:center; display:inline-flex; align-items:center; justify-content:center; gap:0.2rem;" href="' + escapeHtml(gcalCallUrl) + '" target="_blank" rel="noopener noreferrer">📞 GCal Call Reminder</a>' +
+          '</div>' +
+          '<div style="display:flex; gap:0.3rem; margin-top:0.15rem;">' +
+            '<button class="btn btn-secondary" style="flex:1; font-size:0.6rem; padding:0.15rem 0.35rem;" onclick="downloadDoctorAppointmentIcs('' + escapeHtml(a.id) + '')">📥 Calendar .ICS</button>' +
+            '<button class="btn btn-purple" style="flex:1; font-size:0.6rem; padding:0.15rem 0.35rem;" onclick="markDoctorVisited('' + escapeHtml(a.id) + '')">✓ Visited Today (Reset +' + a.interval_months + 'm)</button>' +
           '</div>';
 
         container.appendChild(card);
       }
+    }
+
+    function openDadAppointmentHistoryModal() {
+      var modal = document.getElementById('dadAppointmentHistoryModal');
+      var container = document.getElementById('dadAppointmentHistoryContent');
+      if (!modal || !container) return;
+
+      container.innerHTML = '<div style="font-size:0.68rem; color:#94a3b8; padding:0.5rem;">Loading clinical history timeline...</div>';
+      modal.style.display = 'flex';
+
+      fetch(apiEndpoint('/api/dad/appointment/history'))
+        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
+        .then(function(data) {
+          var items = (data && data.success && data.history) ? data.history : localDadAppointmentHistory;
+          renderDadAppointmentHistoryItems(items);
+        })
+        .catch(function() {
+          renderDadAppointmentHistoryItems(localDadAppointmentHistory);
+        });
+    }
+
+    function renderDadAppointmentHistoryItems(items) {
+      var container = document.getElementById('dadAppointmentHistoryContent');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!items || items.length === 0) {
+        container.innerHTML = '<div style="font-size:0.7rem; color:#94a3b8; padding:0.5rem;">No historical records found.</div>';
+        return;
+      }
+
+      for (var i = 0; i < items.length; i++) {
+        var it = items[i];
+        var isBaskar = it.doctor_name.indexOf('Baskar') !== -1;
+        var themeColor = isBaskar ? '#c084fc' : '#38bdf8';
+        var isRecent = (i === 0 || i === 1);
+
+        var card = document.createElement('div');
+        card.style.background = isRecent ? 'rgba(30, 41, 59, 0.95)' : 'rgba(15, 23, 42, 0.85)';
+        card.style.border = '1px solid ' + (isRecent ? themeColor : '#334155');
+        card.style.borderRadius = '6px';
+        card.style.padding = '0.55rem';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.gap = '0.25rem';
+
+        var recentBadge = isRecent ? '<span class="match-badge" style="border-color:#34d399; color:#34d399; font-size:0.55rem; padding:0.08rem 0.3rem;">LATEST CYCLE</span>' : '';
+        var slotBadge = it.time_slot ? ('<span style="font-size:0.6rem; color:#e2e8f0; background:rgba(0,0,0,0.3); padding:0.08rem 0.3rem; border-radius:3px;">🕒 ' + escapeHtml(it.time_slot) + '</span>') : '';
+
+        card.innerHTML = 
+          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+            '<div style="display:flex; align-items:center; gap:0.4rem;">' +
+              '<strong style="color:' + themeColor + '; font-size:0.78rem;">' + escapeHtml(it.doctor_name) + '</strong>' +
+              '<span style="font-size:0.64rem; color:#94a3b8;">(' + escapeHtml(it.specialty) + ')</span>' +
+              slotBadge +
+            '</div>' +
+            '<div style="display:flex; align-items:center; gap:0.35rem;">' +
+              recentBadge +
+              '<span style="color:#fbbf24; font-weight:700; font-size:0.68rem;">' + escapeHtml(it.visit_date) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex; justify-content:space-between; font-size:0.62rem; color:#94a3b8; background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px;">' +
+            '<span>Next Due: <strong style="color:#34d399;">' + (it.next_visit_date ? escapeHtml(it.next_visit_date) : 'N/A') + '</strong> (' + it.interval_days + 'd interval)</span>' +
+            '<span>Call Reminder: <strong style="color:#fbbf24;">' + (it.call_date ? escapeHtml(it.call_date) : 'N/A') + '</strong></span>' +
+          '</div>' +
+          '<div style="font-size:0.63rem; color:#e2e8f0; line-height:1.35; margin-top:0.1rem;">' +
+            '<strong style="color:#94a3b8;">Prescription &amp; Drugs:</strong> ' + escapeHtml(it.medicines_summary || 'Standard protocol') +
+          '</div>';
+
+        container.appendChild(card);
+      }
+    }
+
+    function closeDadAppointmentHistoryModal() {
+      var modal = document.getElementById('dadAppointmentHistoryModal');
+      if (modal) modal.style.display = 'none';
     }
 
     function updateDadAlerts(dashboard) {
@@ -6251,6 +6512,20 @@ Select a condition above to view immediate clinical triage steps.
         loadDadDashboard();
         respond('Dad\'s Medical Tracker: Recalculated next appointment recurrence.');
       });
+    }
+
+    function downloadUnifiedCareCalendar() {
+      try {
+        var a = document.createElement('a');
+        a.href = '/api/dad/calendar/ics';
+        a.setAttribute('download', 'dad_family_care_calendar.ics');
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (e) {
+        window.open('/api/dad/calendar/ics', '_blank');
+      }
     }
 
     function downloadDoctorAppointmentIcs(docId) {
@@ -7752,5 +8027,35 @@ Select a condition above to view immediate clinical triage steps.
     initDeviceTelemetry();
 
 </script>
+
+  <!-- ============================================================== -->
+  <!-- 📜 DAD'S 2024-2027 APPOINTMENTS & MEDICINES HISTORY MODAL       -->
+  <!-- ============================================================== -->
+  <div class="custom-modal-backdrop" id="dadAppointmentHistoryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:9999; justify-content:center; align-items:center;" onclick="if(event.target===this) closeDadAppointmentHistoryModal()">
+    <div class="custom-modal-card" style="background:#0f172a; border:1px solid #c084fc; border-radius:10px; width:92%; max-width:720px; max-height:85vh; display:flex; flex-direction:column; padding:1rem; box-shadow:0 20px 40px rgba(0,0,0,0.8); overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem; border-bottom:1px solid #334155; padding-bottom:0.5rem;">
+        <div>
+          <strong style="color:#c084fc; font-size:0.92rem; display:flex; align-items:center; gap:0.35rem;">
+            <span>📜</span> Dad's Clinical History (2024 – 2027 Progression)
+          </strong>
+          <div style="font-size:0.64rem; color:#94a3b8; margin-top:0.15rem;">
+            Dr. Baskar (Neurology) &bull; Dr. Suresh (Cardiology) &bull; 11 Verified Visits, Slot Schedules &amp; Drug Transitions
+          </div>
+        </div>
+        <button class="btn btn-secondary" style="padding:0.15rem 0.45rem; font-size:0.75rem; border-radius:4px;" onclick="closeDadAppointmentHistoryModal()">✕</button>
+      </div>
+
+      <!-- Scrollable History List -->
+      <div id="dadAppointmentHistoryContent" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem; padding-right:0.3rem;">
+        <!-- Populated dynamically via renderDadAppointmentHistory() -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; border-top:1px solid #334155; padding-top:0.5rem;">
+        <span style="font-size:0.62rem; color:#64748b;">All appointments synced with Google Calendar 1-click links &amp; RFC 5545 .ics</span>
+        <button class="btn btn-secondary" style="font-size:0.65rem; padding:0.25rem 0.6rem;" onclick="closeDadAppointmentHistoryModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
