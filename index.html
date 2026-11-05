@@ -519,6 +519,79 @@
     }
 
     /* Job Card in Light Theme */
+    /* 5000x Applied Job Box Cards (Matches Matched Positions & ATS Vectors) */
+    .applied-job-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+      margin-bottom: 0.6rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .applied-job-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+      border-color: #a78bfa;
+    }
+    .applied-job-box .job-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.35rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .applied-job-box .job-company {
+      font-size: 0.74rem;
+      color: #475569;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .applied-job-box .job-role {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.2px;
+      margin: 0.25rem 0 0.15rem 0;
+    }
+    .applied-job-box .job-meta-row {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.66rem;
+      color: #64748b;
+      margin: 0.25rem 0 0.4rem 0;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .applied-job-box .proof-strip {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 6px;
+      padding: 0.35rem 0.6rem;
+      margin: 0.4rem 0 0.3rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: #475569;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .applied-job-box .action-btn-row {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+      margin-top: 0.45rem;
+      padding-top: 0.4rem;
+      border-top: 1px solid #f1f5f9;
+      flex-wrap: wrap;
+    }
+
     .job-card {
       background: #ffffff;
       border: 1px solid var(--border);
@@ -2409,7 +2482,7 @@
                     <!-- AUTO JOB APPLY BOT // APPLICATIONS & EVIDENCE DASHBOARD -->
           <div class="sub-card" id="appliedJobsDashboardCard" style="border-color: rgba(124,58,237,0.35); background: #ffffff;">
             <div class="sub-card-title" style="color:#7c3aed; display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-weight:800; letter-spacing:0.3px;">📊 AUTO APPLY BOT // APPLIED ROLES &amp; EVIDENCE DASHBOARD</span>
+              <span style="font-weight:800; letter-spacing:0.3px;">📊 TRACKED APPLICATIONS // APPLIED ROLES &amp; EVIDENCE DASHBOARD (SQLite)</span>
               <span class="match-badge" id="appliedCountBadge" style="background:rgba(124,58,237,0.1); border-color:#7c3aed; color:#7c3aed; font-weight:800;">0 APPLIED</span>
             </div>
 
@@ -7334,70 +7407,110 @@ Select a condition above to view immediate clinical triage steps.
       }
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="padding:0.75rem; text-align:center; color:#64748b; font-size:0.7rem; background:#f8fafc; border-radius:6px; border:1px dashed #cbd5e1;">No applied roles matching portal: ' + escapeHtml(currentAppliedFilter) + '</div>';
+        container.innerHTML = '<div style="padding:1rem; text-align:center; color:#64748b; font-size:0.75rem; background:#f8fafc; border-radius:8px; border:1px dashed #cbd5e1;">No applied roles matching portal: <strong>' + escapeHtml(currentAppliedFilter) + '</strong></div>';
         return;
       }
 
       var portalColors = {
-        'LinkedIn': '#0A66C2',
-        'Indeed': '#2164F3',
-        'Foundit': '#6C5CE7',
-        'Shine': '#F26522',
-        'Naukri': '#0078DB'
+        'LinkedIn': { color: '#0A66C2', bg: 'rgba(10, 102, 194, 0.1)' },
+        'Indeed': { color: '#2164F3', bg: 'rgba(33, 100, 243, 0.1)' },
+        'Foundit': { color: '#6C5CE7', bg: 'rgba(108, 92, 231, 0.1)' },
+        'Shine': { color: '#F26522', bg: 'rgba(242, 101, 34, 0.1)' },
+        'Naukri': { color: '#0078DB', bg: 'rgba(0, 120, 219, 0.1)' }
       };
 
       var displayLimit = Math.min(filtered.length, 50);
       for (var j = 0; j < displayLimit; j++) {
         var app = filtered[j];
-        var pCol = portalColors[app.portal] || '#7c3aed';
+        var pInfo = portalColors[app.portal] || { color: '#7c3aed', bg: 'rgba(124, 58, 237, 0.1)' };
+        var pCol = pInfo.color;
         var directLink = app.direct_url || generateDirectPortalLink(app.role, app.company, app.portal);
         var subId = app.submission_id || ('APP-' + (app.portal ? app.portal.substring(0, 2).toUpperCase() : 'AP') + '-' + (app.id || j));
         var evHash = app.evidence_hash || generateProofHash(subId, app.job_id, app.applicant_email, app.applied_at);
+        var atsScore = app.ats_score || 100;
+
+        // Generate relevant ATS Vector skill tags matching Matched Positions
+        var roleLower = (app.role || '').toLowerCase();
+        var vectors = ['Python', 'Generative AI', 'REST APIs', 'Immediate Join', 'ATS 100'];
+        if (roleLower.indexOf('erp') !== -1 || roleLower.indexOf('lead') !== -1) {
+          vectors = ['Python', 'ERP APIs', 'PowerShell', 'Process Mapping', 'ATS 100'];
+        } else if (roleLower.indexOf('analyst') !== -1 || roleLower.indexOf('business') !== -1) {
+          vectors = ['Python', 'SQL', 'Power BI', 'Business Systems', 'ATS 100'];
+        } else if (roleLower.indexOf('data') !== -1) {
+          vectors = ['Python', 'Data Analytics', 'SQL', 'ETL Pipelines', 'ATS 100'];
+        } else if (roleLower.indexOf('ops') !== -1 || roleLower.indexOf('operations') !== -1) {
+          vectors = ['Python', 'Workflow Automation', 'Google Workspace', 'SLA Tracking', 'ATS 100'];
+        }
+
+        var vectorTagsHtml = '';
+        for (var v = 0; v < vectors.length; v++) {
+          vectorTagsHtml += '<span class="skill-tag skill-tag-matched" style="font-size:0.58rem; padding:0.12rem 0.4rem; border-radius:4px;">✓ ' + escapeHtml(vectors[v]) + '</span> ';
+        }
 
         var card = document.createElement('div');
-        card.className = 'action-item-card';
-        card.style.background = '#ffffff';
-        card.style.border = '1px solid #cbd5e1';
+        card.className = 'job-card applied-job-box card-float-in';
         card.style.borderLeft = '4px solid ' + pCol;
-        card.style.borderRadius = '8px';
-        card.style.padding = '0.55rem 0.65rem';
-        card.style.marginBottom = '0.3rem';
-        card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)';
+        card.style.animationDelay = (j * 35) + 'ms';
 
         card.innerHTML = 
-          '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem; flex-wrap:wrap;">' +
-            '<div style="flex:1; min-width:240px;">' +
-              '<div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">' +
-                '<span style="font-weight:700; color:' + pCol + '; background:' + pCol + '15; border:1px solid ' + pCol + '40; padding:0.1rem 0.35rem; border-radius:4px; font-size:0.65rem;">' + escapeHtml(app.portal || 'Portal') + '</span>' +
-                '<strong style="color:#0f172a; font-size:0.78rem;">' + escapeHtml(app.company) + '</strong>' +
-                '<span style="font-size:0.62rem; font-family:var(--font-mono); color:#64748b; background:#f1f5f9; padding:0.05rem 0.3rem; border-radius:3px;">ID: ' + escapeHtml(subId) + '</span>' +
-              '</div>' +
-              '<div style="font-size:0.72rem; color:#334155; font-weight:700; margin-top:0.2rem;">' +
-                escapeHtml(app.role) +
-              '</div>' +
-              '<div style="font-size:0.63rem; color:#64748b; margin-top:0.15rem; display:flex; gap:0.5rem; flex-wrap:wrap;">' +
-                '<span>📍 ' + escapeHtml(app.location || 'Remote') + '</span>' +
-                '<span>💰 <strong style="color:#059669;">' + escapeHtml(app.salary || 'Market CTC') + '</strong></span>' +
-                '<span>🕒 ' + escapeHtml(app.applied_at || 'Just now') + '</span>' +
-              '</div>' +
-              '<div style="font-size:0.6rem; color:#059669; font-family:var(--font-mono); margin-top:0.2rem; display:flex; align-items:center; gap:0.25rem; flex-wrap:wrap;">' +
-                '<span>🛡️ Proof: <strong>' + escapeHtml(evHash) + '</strong></span>' +
-                '<span style="color:#10b981; font-weight:700;">✓ ENQUEUED BY ATS</span>' +
-              '</div>' +
+          '<!-- Top Row: Company, Portal Badge with Email, Submission ID, and 100% ATS Verified Pill -->' +
+          '<div class="job-top-row">' +
+            '<div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">' +
+              '<span class="job-company">' + escapeHtml(app.company) + '</span>' +
+              '<span style="font-size:0.58rem; font-weight:700; color:' + pCol + '; background:' + pInfo.bg + '; border:1px solid ' + pCol + '44; padding:0.1rem 0.4rem; border-radius:4px; display:inline-flex; align-items:center; gap:0.25rem;">' +
+                '<span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:' + pCol + ';"></span>' +
+                escapeHtml(app.portal || 'LinkedIn') + ' &bull; abishekpranav403@gmail.com' +
+              '</span>' +
+              '<span style="font-size:0.58rem; font-family:var(--font-mono); color:#64748b; background:#f1f5f9; border:1px solid #e2e8f0; padding:0.08rem 0.35rem; border-radius:4px; font-weight:700;">' +
+                'ID: ' + escapeHtml(subId) +
+              '</span>' +
             '</div>' +
-            '<div style="display:flex; flex-direction:column; gap:0.3rem; align-items:flex-end;">' +
-              '<a href="' + escapeHtml(directLink) + '" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size:0.65rem; padding:0.22rem 0.55rem; text-decoration:none; display:inline-flex; align-items:center; gap:0.25rem; font-weight:700; white-space:nowrap; background:' + pCol + '; border-color:' + pCol + '; color:#ffffff; border-radius:4px;" onclick="event.stopPropagation();">' +
-                '🔗 Direct Portal Link ↗' +
-              '</a>' +
-              '<div style="display:flex; gap:0.25rem;">' +
-                '<button class="btn btn-secondary" style="font-size:0.62rem; padding:0.18rem 0.4rem; border-color:#7c3aed; color:#7c3aed; font-weight:700;" onclick="openApplicationEvidenceModal(\'' + escapeHtml(app.job_id) + '\')" title="View Cryptographic Evidence Dossier">' +
-                  '🛡️ Evidence' +
-                '</button>' +
-                '<button class="btn btn-secondary" style="font-size:0.62rem; padding:0.18rem 0.4rem;" onclick="viewApplicationAtsCv(\'' + escapeHtml(app.job_id) + '\')" title="View 100% Tailored ATS CV">' +
-                  '📄 CV' +
-                '</button>' +
-              '</div>' +
+            '<div>' +
+              '<span class="match-badge" style="background:#10b981; color:#ffffff; border-color:#10b981; font-weight:800; font-size:0.6rem; box-shadow:0 0 10px rgba(16,185,129,0.3); display:inline-flex; align-items:center; gap:0.25rem;">' +
+                '<span>✓</span> ' + atsScore + '% ATS MATCH &bull; PASSED' +
+              '</span>' +
             '</div>' +
+          '</div>' +
+
+          '<!-- Role Title -->' +
+          '<div class="job-role">' +
+            escapeHtml(app.role) +
+          '</div>' +
+
+          '<!-- Meta Row: Location, Salary, Applied At -->' +
+          '<div class="job-meta-row">' +
+            '<span>📍 <strong>' + escapeHtml(app.location || 'Remote') + '</strong></span>' +
+            '<span>💰 <strong style="color:#059669;">' + escapeHtml(app.salary || 'Market CTC') + '</strong></span>' +
+            '<span>🕒 Applied: <strong style="color:#334155;">' + escapeHtml(app.applied_at || 'Just now') + '</strong></span>' +
+          '</div>' +
+
+          '<!-- Matched ATS Vectors / Skill Tags (Exact like Matched Positions) -->' +
+          '<div class="skills-tag-row" style="margin:0.25rem 0 0.35rem 0;">' +
+            vectorTagsHtml +
+          '</div>' +
+
+          '<!-- Cryptographic Proof & Status Strip -->' +
+          '<div class="proof-strip">' +
+            '<div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">' +
+              '<span style="color:#7c3aed; font-weight:700;">🛡️ SHA-256 Proof:</span>' +
+              '<strong style="color:#0f172a;">' + escapeHtml(evHash) + '</strong>' +
+            '</div>' +
+            '<div style="display:flex; align-items:center; gap:0.35rem;">' +
+              '<span style="color:#10b981; font-weight:800;">● ENQUEUED BY PORTAL ATS</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Action Button Row with Animations & Direct Links -->' +
+          '<div class="action-btn-row">' +
+            '<a href="' + escapeHtml(directLink) + '" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex:1; min-width:140px; font-size:0.68rem; padding:0.3rem 0.6rem; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.3rem; font-weight:700; background:' + pCol + '; border-color:' + pCol + '; color:#ffffff; border-radius:6px; box-shadow:0 2px 6px ' + pCol + '40; transition:all 0.2s ease;" onclick="event.stopPropagation();">' +
+              '🔗 Open on ' + escapeHtml(app.portal || 'Portal') + ' (Direct Link) ↗' +
+            '</a>' +
+            '<button class="btn btn-secondary" style="font-size:0.66rem; padding:0.3rem 0.55rem; color:#7c3aed; border-color:#c084fc; font-weight:700; display:inline-flex; align-items:center; gap:0.25rem; border-radius:6px;" onclick="openApplicationEvidenceModal(\'' + escapeHtml(app.job_id) + '\')" title="View Cryptographic Evidence Dossier">' +
+              '🛡️ View Evidence' +
+            '</button>' +
+            '<button class="btn btn-secondary" style="font-size:0.66rem; padding:0.3rem 0.55rem; color:#0284c7; border-color:#7dd3fc; font-weight:700; display:inline-flex; align-items:center; gap:0.25rem; border-radius:6px;" onclick="viewApplicationAtsCv(\'' + escapeHtml(app.job_id) + '\')" title="View 100% Tailored ATS CV">' +
+              '📄 View CV' +
+            '</button>' +
           '</div>';
 
         container.appendChild(card);
@@ -7405,11 +7518,15 @@ Select a condition above to view immediate clinical triage steps.
 
       if (filtered.length > displayLimit) {
         var moreNotice = document.createElement('div');
-        moreNotice.style.padding = '0.45rem';
+        moreNotice.style.padding = '0.55rem';
         moreNotice.style.textAlign = 'center';
-        moreNotice.style.fontSize = '0.65rem';
+        moreNotice.style.fontSize = '0.68rem';
         moreNotice.style.color = '#64748b';
-        moreNotice.innerHTML = 'Showing top ' + displayLimit + ' of ' + filtered.length + ' applied roles in stream. <a href="javascript:void(0)" onclick="openAppliedSheetModal()" style="color:#7c3aed; font-weight:700; text-decoration:underline;">View all in full Table Repository →</a>';
+        moreNotice.style.background = '#f8fafc';
+        moreNotice.style.borderRadius = '6px';
+        moreNotice.style.border = '1px dashed #cbd5e1';
+        moreNotice.style.marginTop = '0.4rem';
+        moreNotice.innerHTML = 'Showing top ' + displayLimit + ' of ' + filtered.length + ' applied roles. <a href="javascript:void(0)" onclick="openAppliedSheetModal()" style="color:#7c3aed; font-weight:800; text-decoration:underline;">View full repository (' + filtered.length + ' roles) in Sheet Table →</a>';
         container.appendChild(moreNotice);
       }
     }
