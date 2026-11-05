@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AKSHAY v4.0 // 100x Hyper-Precision Autonomous AI Workstation &amp; Job Bot</title>
   <link rel="manifest" href="manifest.json">
@@ -4211,36 +4214,140 @@ Select a condition above to view immediate clinical triage steps.
     var currentHoldingsFilter = 'ALL';
     var currentReminders = [];
 
-    function loadInvestmentPortfolio() {
-      fetch(apiEndpoint('/api/investments/portfolio'))
-        .then(function(res) { if (res.ok) return res.json(); throw new Error('err'); })
-        .then(function(data) {
-          if (data && data.success && data.portfolio) {
-            var p = data.portfolio;
-            currentInvestmentHoldings = p.holdings || [];
-
-            var elTotal = document.getElementById('valPortTotal');
-            var elInv = document.getElementById('valPortInvested');
-            var elPnl = document.getElementById('valPortPnl');
-            if (elTotal) elTotal.textContent = '₹' + p.total_current_value.toLocaleString('en-IN', {minimumFractionDigits: 2});
-            if (elInv) elInv.textContent = '₹' + p.total_invested.toLocaleString('en-IN', {minimumFractionDigits: 2});
-            if (elPnl) {
-              var sign = p.total_pnl >= 0 ? '+' : '';
-              elPnl.textContent = sign + '₹' + p.total_pnl.toLocaleString('en-IN', {minimumFractionDigits: 2}) + ' (' + sign + p.total_pnl_pct + '%)';
-              elPnl.style.color = p.total_pnl >= 0 ? '#34d399' : '#f87171';
+        var localInvestmentPortfolio = {
+      "total_current_value": 108756.19,
+      "total_invested": 101060.0,
+      "total_pnl": 7696.19,
+      "total_pnl_pct": 7.62,
+      "stocks_pct": 39.0,
+      "mutual_funds_pct": 38.8,
+      "assets_pct": 31.3,
+      "holdings": [
+            {
+                  "id": 1,
+                  "symbol": "SGB_GOLD",
+                  "name": "Sovereign Gold Bond (2.5g)",
+                  "category": "ASSET",
+                  "quantity": 2.5,
+                  "buy_price": 6800.0,
+                  "current_price": 7445.53,
+                  "invested_amount": 17000.0,
+                  "current_value": 18613.83,
+                  "pnl": 1613.83,
+                  "pnl_pct": 9.49
+            },
+            {
+                  "id": 2,
+                  "symbol": "LIQUID_RESERVE",
+                  "name": "HDFC Liquid Reserve Fund",
+                  "category": "ASSET",
+                  "quantity": 1500.0,
+                  "buy_price": 10.0,
+                  "current_price": 10.29,
+                  "invested_amount": 15000.0,
+                  "current_value": 15441.22,
+                  "pnl": 441.22,
+                  "pnl_pct": 2.94
+            },
+            {
+                  "id": 3,
+                  "symbol": "NIFTY50",
+                  "name": "UTI Nifty 50 Index Fund Direct",
+                  "category": "MUTUAL_FUND",
+                  "quantity": 100.0,
+                  "buy_price": 210.0,
+                  "current_price": 231.19,
+                  "invested_amount": 21000.0,
+                  "current_value": 23119.2,
+                  "pnl": 2119.2,
+                  "pnl_pct": 10.09
+            },
+            {
+                  "id": 4,
+                  "symbol": "PPFAS",
+                  "name": "Parag Parikh Flexi Cap Fund",
+                  "category": "MUTUAL_FUND",
+                  "quantity": 250.0,
+                  "buy_price": 68.0,
+                  "current_price": 76.4,
+                  "invested_amount": 17000.0,
+                  "current_value": 19100.0,
+                  "pnl": 2100.0,
+                  "pnl_pct": 12.35
+            },
+            {
+                  "id": 5,
+                  "symbol": "HDFCBANK",
+                  "name": "HDFC Bank Ltd",
+                  "category": "STOCK",
+                  "quantity": 8.0,
+                  "buy_price": 1620.0,
+                  "current_price": 1677.55,
+                  "invested_amount": 12960.0,
+                  "current_value": 13420.4,
+                  "pnl": 460.4,
+                  "pnl_pct": 3.55
+            },
+            {
+                  "id": 6,
+                  "symbol": "TATAMOTORS",
+                  "name": "Tata Motors Ltd",
+                  "category": "STOCK",
+                  "quantity": 10.0,
+                  "buy_price": 920.0,
+                  "current_price": 980.53,
+                  "invested_amount": 9200.0,
+                  "current_value": 9805.3,
+                  "pnl": 605.3,
+                  "pnl_pct": 6.58
+            },
+            {
+                  "id": 7,
+                  "symbol": "INFY",
+                  "name": "Infosys Ltd",
+                  "category": "STOCK",
+                  "quantity": 5.0,
+                  "buy_price": 1780.0,
+                  "current_price": 1851.25,
+                  "invested_amount": 8900.0,
+                  "current_value": 9256.25,
+                  "pnl": 356.25,
+                  "pnl_pct": 4.0
             }
+      ]
+};
 
-            var bStock = document.getElementById('badgeStocks');
-            var bMF = document.getElementById('badgeMF');
-            var bAssets = document.getElementById('badgeAssets');
-            if (bStock) bStock.textContent = 'STOCKS ' + p.stocks_pct + '%';
-            if (bMF) bMF.textContent = 'MUTUAL FUNDS ' + p.mutual_funds_pct + '%';
-            if (bAssets) bAssets.textContent = 'ASSETS/GOLD ' + p.assets_pct + '%';
+    function loadInvestmentPortfolio() {
+      function renderPort(p) {
+        currentInvestmentHoldings = p.holdings || [];
+        var elTotal = document.getElementById("valPortTotal");
+        var elInv = document.getElementById("valPortInvested");
+        var elPnl = document.getElementById("valPortPnl");
+        if (elTotal) elTotal.textContent = "₹" + Number(p.total_current_value).toLocaleString("en-IN", {minimumFractionDigits: 2});
+        if (elInv) elInv.textContent = "₹" + Number(p.total_invested).toLocaleString("en-IN", {minimumFractionDigits: 2});
+        if (elPnl) {
+          var sign = p.total_pnl >= 0 ? "+" : "";
+          elPnl.textContent = sign + "₹" + Number(p.total_pnl).toLocaleString("en-IN", {minimumFractionDigits: 2}) + " (" + sign + p.total_pnl_pct + "%)";
+          elPnl.style.color = p.total_pnl >= 0 ? "#34d399" : "#f87171";
+        }
+        var bStock = document.getElementById("badgeStocks");
+        var bMF = document.getElementById("badgeMF");
+        var bAssets = document.getElementById("badgeAssets");
+        if (bStock) bStock.textContent = "STOCKS " + (p.stocks_pct || 39) + "%";
+        if (bMF) bMF.textContent = "MUTUAL FUNDS " + (p.mutual_funds_pct || 39) + "%";
+        if (bAssets) bAssets.textContent = "ASSETS/GOLD " + (p.assets_pct || 22) + "%";
+        renderHoldingsList();
+      }
 
-            renderHoldingsList();
-          }
+      fetch(apiEndpoint("/api/investments/portfolio"))
+        .then(function(res) { if (res.ok) return res.json(); throw new Error("err"); })
+        .then(function(data) {
+          if (data && data.success && data.portfolio) renderPort(data.portfolio);
+          else renderPort(localInvestmentPortfolio);
         })
-        .catch(function(err) {});
+        .catch(function() {
+          renderPort(localInvestmentPortfolio);
+        });
     }
 
     function renderHoldingsList() {
@@ -4272,8 +4379,9 @@ Select a condition above to view immediate clinical triage steps.
 
         var catColor = item.category === 'STOCK' ? '#60a5fa' : (item.category === 'MUTUAL_FUND' ? '#a78bfa' : '#fbbf24');
         var catName = item.category === 'STOCK' ? 'STOCK' : (item.category === 'MUTUAL_FUND' ? 'MUTUAL FUND' : 'ASSET/GOLD');
-        var pnlColor = item.pnl_amount >= 0 ? '#34d399' : '#f87171';
-        var sign = item.pnl_amount >= 0 ? '+' : '';
+        var pnlVal = (item.pnl_amount !== undefined ? item.pnl_amount : (item.pnl !== undefined ? item.pnl : 0));
+        var pnlColor = pnlVal >= 0 ? '#34d399' : '#f87171';
+        var sign = pnlVal >= 0 ? '+' : '';
 
         var dayChg = parseFloat(item.day_change_pct || 0);
         var daySign = dayChg >= 0 ? '+' : '';
@@ -4295,7 +4403,7 @@ Select a condition above to view immediate clinical triage steps.
 
           '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem; font-size:0.62rem; color: #334155; font-family:var(--font-mono); background:rgba(0,0,0,0.25); padding:0.25rem 0.35rem; border-radius:4px;">' +
             '<span>Holdings: ' + item.units + ' &bull; Invested: ₹' + item.invested_amount.toLocaleString('en-IN') + '</span>' +
-            '<span>Value: ₹' + item.current_value.toLocaleString('en-IN') + ' &bull; <strong style="color:' + pnlColor + ';">' + sign + '₹' + item.pnl_amount.toLocaleString('en-IN') + ' (' + sign + item.pnl_pct + '%)</strong></span>' +
+            '<span>Value: ₹' + item.current_value.toLocaleString('en-IN') + ' &bull; <strong style="color:' + pnlColor + ';">' + sign + '₹' + Number(pnlVal).toLocaleString('en-IN', {minimumFractionDigits: 2}) + ' (' + sign + item.pnl_pct + '%)</strong></span>' +
           '</div>' +
 
           '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; gap:0.3rem; flex-wrap:wrap;">' +
@@ -5009,176 +5117,952 @@ Select a condition above to view immediate clinical triage steps.
     // -------------------------------------------------------------
     var localJobPool = [
       {
-        id: "JOB-B5-01",
-        company: "ApexGen AI (Batch 5)",
-        role: "Generative AI Integration Engineer",
-        location: "Bengaluru (Remote)",
-        work_type: "Remote",
-        salary_range: "₹32,000 - ₹46,000/mo (₹3.8L - ₹5.5L/yr)",
-        required_skills: ["Generative AI", "Python", "REST APIs", "Prompt Engineering"],
-        description: "Build autonomous multi-agent pipelines, prompt workflows, and API integrations for client enterprises.",
-        match_score: 96,
-        skills_match_pct: 100,
-        experience_match_pct: 95,
-        salary_fit_pct: 100,
-        matched_skills: ["Generative AI", "Python", "REST APIs", "Prompt Engineering"],
-        missing_skills: [],
-        portal: "LinkedIn"
+            "id": "JOB-B24-01",
+            "company": "ApexGen AI (Batch 24)",
+            "role": "Generative AI Integration Engineer",
+            "location": "Bengaluru (Remote)",
+            "work_type": "Remote",
+            "salary_range": "\u20b932,000 - \u20b946,000/mo (\u20b93.8L - \u20b95.5L/yr)",
+            "min_salary_inr": 384000,
+            "max_salary_inr": 552000,
+            "required_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Prompt Engineering"
+            ],
+            "description": "Build autonomous multi-agent pipelines and prompt workflows.",
+            "portal": "LinkedIn",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Prompt Engineering"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-02",
-        company: "AuraTech Automation (Batch 5)",
-        role: "Python Workflow & RPA Developer",
-        location: "Remote",
-        work_type: "Remote",
-        salary_range: "₹28,000 - ₹42,000/mo (₹3.4L - ₹5.0L/yr)",
-        required_skills: ["Python", "Task Scheduler", "PowerShell", "REST APIs", "Excel"],
-        description: "Design scheduled data extractors, automated reconciliation tasks, and robust operational batch processors.",
-        match_score: 95,
-        skills_match_pct: 100,
-        experience_match_pct: 94,
-        salary_fit_pct: 100,
-        matched_skills: ["Python", "Task Scheduler", "PowerShell", "REST APIs", "Excel"],
-        missing_skills: [],
-        portal: "Indeed"
+            "id": "JOB-B24-02",
+            "company": "AuraTech Automation (Batch 24)",
+            "role": "Python Workflow & RPA Developer",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b928,000 - \u20b942,000/mo (\u20b93.4L - \u20b95.0L/yr)",
+            "min_salary_inr": 336000,
+            "max_salary_inr": 504000,
+            "required_skills": [
+                  "Python",
+                  "Task Scheduler",
+                  "PowerShell",
+                  "REST APIs",
+                  "Excel"
+            ],
+            "description": "Design scheduled data extractors and automated reconciliation tasks.",
+            "portal": "Indeed",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "Task Scheduler",
+                  "PowerShell",
+                  "REST APIs",
+                  "Excel"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-03",
-        company: "Vanguard Business Ops (Batch 5)",
-        role: "AI & Business Systems Analyst",
-        location: "Coimbatore (Hybrid)",
-        work_type: "Hybrid",
-        salary_range: "₹26,000 - ₹38,000/mo (₹3.1L - ₹4.6L/yr)",
-        required_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Excel", "Tally"],
-        description: "Transform operational accounting and client workflows into automated pipelines with executive reporting.",
-        match_score: 94,
-        skills_match_pct: 96,
-        experience_match_pct: 95,
-        salary_fit_pct: 100,
-        matched_skills: ["Requirements Analysis", "Process Mapping", "SQL", "Excel", "Tally"],
-        missing_skills: [],
-        portal: "Foundit"
+            "id": "JOB-B24-06",
+            "company": "PromptLogic Corp (Batch 24)",
+            "role": "Autonomous Agent & AI Developer",
+            "location": "Bengaluru",
+            "work_type": "Hybrid",
+            "salary_range": "\u20b934,000 - \u20b948,000/mo (\u20b94.1L - \u20b95.8L/yr)",
+            "min_salary_inr": 408000,
+            "max_salary_inr": 576000,
+            "required_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Workflow Automation",
+                  "SQL"
+            ],
+            "description": "Deploy autonomous customer engagement and reporting agents.",
+            "portal": "LinkedIn",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Workflow Automation",
+                  "SQL"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-04",
-        company: "DataNexus Labs (Batch 5)",
-        role: "Data Indexing & Classification Lead",
-        location: "Remote",
-        work_type: "Remote",
-        salary_range: "₹28,000 - ₹40,000/mo (₹3.4L - ₹4.8L/yr)",
-        required_skills: ["Data Classification", "Indexing and Deduplication", "Python", "SQL", "Google Drive API"],
-        description: "Deploy document tree parsers and automated indexing for cloud storage with verified accuracy metrics.",
-        match_score: 97,
-        skills_match_pct: 100,
-        experience_match_pct: 95,
-        salary_fit_pct: 100,
-        matched_skills: ["Data Classification", "Indexing and Deduplication", "Python", "SQL", "Google Drive API"],
-        missing_skills: [],
-        portal: "Shine"
+            "id": "JOB-B24-07",
+            "company": "CodeStream Solutions (Batch 24)",
+            "role": "Python Backend & Automation Specialist",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b930,000 - \u20b944,000/mo (\u20b93.6L - \u20b95.3L/yr)",
+            "min_salary_inr": 360000,
+            "max_salary_inr": 528000,
+            "required_skills": [
+                  "Python",
+                  "REST APIs",
+                  "SQL",
+                  "Excel",
+                  "Task Scheduler"
+            ],
+            "description": "Develop robust data synchronization workers and scheduled batch processors.",
+            "portal": "Indeed",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "REST APIs",
+                  "SQL",
+                  "Excel",
+                  "Task Scheduler"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-05",
-        company: "LogiPulse Systems (Batch 5)",
-        role: "Operations & Shipment Workflow Lead",
-        location: "Chennai (Hybrid)",
-        work_type: "Hybrid",
-        salary_range: "₹27,000 - ₹38,000/mo (₹3.2L - ₹4.6L/yr)",
-        required_skills: ["Process Mapping", "Workflow Automation", "CRM", "Excel", "Python"],
-        description: "Automate manifest reconciliations and carrier invoice tracking with custom dispatch alerts.",
-        match_score: 93,
-        skills_match_pct: 94,
-        experience_match_pct: 92,
-        salary_fit_pct: 100,
-        matched_skills: ["Process Mapping", "Workflow Automation", "CRM", "Excel", "Python"],
-        missing_skills: [],
-        portal: "Naukri"
+            "id": "JOB-B24-08",
+            "company": "ElevateOps Consulting (Batch 24)",
+            "role": "Business Process Automation Consultant",
+            "location": "Bengaluru / Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b930,000 - \u20b945,000/mo (\u20b93.6L - \u20b95.4L/yr)",
+            "min_salary_inr": 360000,
+            "max_salary_inr": 540000,
+            "required_skills": [
+                  "Requirements Analysis",
+                  "Process Mapping",
+                  "Generative AI",
+                  "Power BI",
+                  "Python"
+            ],
+            "description": "Consult on AI workflow transformation and operational efficiency metrics.",
+            "portal": "Foundit",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Business Analyst \u2014 AI & Operations Automation",
+            "match_score": 84,
+            "matched_skills": [
+                  "Requirements Analysis",
+                  "Process Mapping",
+                  "Generative AI",
+                  "Power BI",
+                  "Python"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-06",
-        company: "PromptLogic Corp (Batch 5)",
-        role: "Autonomous Agent & AI Developer",
-        location: "Bengaluru (Hybrid)",
-        work_type: "Hybrid",
-        salary_range: "₹34,000 - ₹48,000/mo (₹4.1L - ₹5.8L/yr)",
-        required_skills: ["Generative AI", "Python", "REST APIs", "Workflow Automation", "SQL"],
-        description: "Deploy autonomous customer engagement and reporting agents with fault-tolerant connectors.",
-        match_score: 98,
-        skills_match_pct: 100,
-        experience_match_pct: 96,
-        salary_fit_pct: 100,
-        matched_skills: ["Generative AI", "Python", "REST APIs", "Workflow Automation", "SQL"],
-        missing_skills: [],
-        portal: "LinkedIn"
+            "id": "JOB-B24-11",
+            "company": "ApexGen AI (Batch 24)",
+            "role": "Generative AI Integration Engineer",
+            "location": "Bengaluru (Remote)",
+            "work_type": "Remote",
+            "salary_range": "\u20b932,000 - \u20b946,000/mo (\u20b93.8L - \u20b95.5L/yr)",
+            "min_salary_inr": 384000,
+            "max_salary_inr": 552000,
+            "required_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Prompt Engineering"
+            ],
+            "description": "Build autonomous multi-agent pipelines and prompt workflows.",
+            "portal": "LinkedIn",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Prompt Engineering"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-07",
-        company: "CodeStream Solutions (Batch 5)",
-        role: "Python Backend & Automation Specialist",
-        location: "Remote",
-        work_type: "Remote",
-        salary_range: "₹30,000 - ₹44,000/mo (₹3.6L - ₹5.3L/yr)",
-        required_skills: ["Python", "REST APIs", "SQL", "Excel", "Task Scheduler"],
-        description: "Develop robust data synchronization workers and scheduled batch processors for cloud infrastructure.",
-        match_score: 95,
-        skills_match_pct: 100,
-        experience_match_pct: 94,
-        salary_fit_pct: 100,
-        matched_skills: ["Python", "REST APIs", "SQL", "Excel", "Task Scheduler"],
-        missing_skills: [],
-        portal: "Indeed"
+            "id": "JOB-B24-12",
+            "company": "AuraTech Automation (Batch 24)",
+            "role": "Python Workflow & RPA Developer",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b928,000 - \u20b942,000/mo (\u20b93.4L - \u20b95.0L/yr)",
+            "min_salary_inr": 336000,
+            "max_salary_inr": 504000,
+            "required_skills": [
+                  "Python",
+                  "Task Scheduler",
+                  "PowerShell",
+                  "REST APIs",
+                  "Excel"
+            ],
+            "description": "Design scheduled data extractors and automated reconciliation tasks.",
+            "portal": "Indeed",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "Task Scheduler",
+                  "PowerShell",
+                  "REST APIs",
+                  "Excel"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-08",
-        company: "ElevateOps Consulting (Batch 5)",
-        role: "Business Process Automation Consultant",
-        location: "Bengaluru / Remote",
-        work_type: "Remote",
-        salary_range: "₹30,000 - ₹45,000/mo (₹3.6L - ₹5.4L/yr)",
-        required_skills: ["Requirements Analysis", "Process Mapping", "Generative AI", "Power BI", "Python"],
-        description: "Consult on AI workflow transformation and operational efficiency metrics across finance and supply chain.",
-        match_score: 96,
-        skills_match_pct: 98,
-        experience_match_pct: 95,
-        salary_fit_pct: 100,
-        matched_skills: ["Requirements Analysis", "Process Mapping", "Generative AI", "Power BI", "Python"],
-        missing_skills: [],
-        portal: "Foundit"
+            "id": "JOB-B24-16",
+            "company": "PromptLogic Corp (Batch 24)",
+            "role": "Autonomous Agent & AI Developer",
+            "location": "Bengaluru",
+            "work_type": "Hybrid",
+            "salary_range": "\u20b934,000 - \u20b948,000/mo (\u20b94.1L - \u20b95.8L/yr)",
+            "min_salary_inr": 408000,
+            "max_salary_inr": 576000,
+            "required_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Workflow Automation",
+                  "SQL"
+            ],
+            "description": "Deploy autonomous customer engagement and reporting agents.",
+            "portal": "LinkedIn",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Workflow Automation",
+                  "SQL"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-09",
-        company: "Horizon Scale Systems (Batch 5)",
-        role: "Lead AI Workflow Automation Architect",
-        location: "Remote",
-        work_type: "Remote",
-        salary_range: "₹34,000 - ₹50,000/mo (₹4.0L - ₹6.0L/yr)",
-        required_skills: ["Generative AI", "Python", "Workflow Automation", "REST APIs", "SQL"],
-        description: "Architect multi-tenant agent execution workflows and fault-tolerant connectors for large datasets.",
-        match_score: 99,
-        skills_match_pct: 100,
-        experience_match_pct: 97,
-        salary_fit_pct: 100,
-        matched_skills: ["Generative AI", "Python", "Workflow Automation", "REST APIs", "SQL"],
-        missing_skills: [],
-        portal: "Shine"
+            "id": "JOB-B24-17",
+            "company": "CodeStream Solutions (Batch 24)",
+            "role": "Python Backend & Automation Specialist",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b930,000 - \u20b944,000/mo (\u20b93.6L - \u20b95.3L/yr)",
+            "min_salary_inr": 360000,
+            "max_salary_inr": 528000,
+            "required_skills": [
+                  "Python",
+                  "REST APIs",
+                  "SQL",
+                  "Excel",
+                  "Task Scheduler"
+            ],
+            "description": "Develop robust data synchronization workers and scheduled batch processors.",
+            "portal": "Indeed",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "REST APIs",
+                  "SQL",
+                  "Excel",
+                  "Task Scheduler"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
       },
       {
-        id: "JOB-B5-10",
-        company: "Zenith Enterprise Tech (Batch 5)",
-        role: "ERP Integration & Process Automation Lead",
-        location: "Coimbatore / Hybrid",
-        work_type: "Hybrid",
-        salary_range: "₹28,000 - ₹42,000/mo (₹3.4L - ₹5.0L/yr)",
-        required_skills: ["Requirements Analysis", "Process Mapping", "Tally", "Excel", "Python"],
-        description: "Implement end-to-end accounting ingestion and automated compliance reporting with verifiable audit logs.",
-        match_score: 95,
-        skills_match_pct: 98,
-        experience_match_pct: 96,
-        salary_fit_pct: 100,
-        matched_skills: ["Requirements Analysis", "Process Mapping", "Tally", "Excel", "Python"],
-        missing_skills: [],
-        portal: "Naukri"
+            "id": "JOB-B24-18",
+            "company": "ElevateOps Consulting (Batch 24)",
+            "role": "Business Process Automation Consultant",
+            "location": "Bengaluru / Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b930,000 - \u20b945,000/mo (\u20b93.6L - \u20b95.4L/yr)",
+            "min_salary_inr": 360000,
+            "max_salary_inr": 540000,
+            "required_skills": [
+                  "Requirements Analysis",
+                  "Process Mapping",
+                  "Generative AI",
+                  "Power BI",
+                  "Python"
+            ],
+            "description": "Consult on AI workflow transformation and operational efficiency metrics.",
+            "portal": "Foundit",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Business Analyst \u2014 AI & Operations Automation",
+            "match_score": 84,
+            "matched_skills": [
+                  "Requirements Analysis",
+                  "Process Mapping",
+                  "Generative AI",
+                  "Power BI",
+                  "Python"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
+      },
+      {
+            "id": "JOB-B24-21",
+            "company": "ApexGen AI (Batch 24)",
+            "role": "Generative AI Integration Engineer",
+            "location": "Bengaluru (Remote)",
+            "work_type": "Remote",
+            "salary_range": "\u20b932,000 - \u20b946,000/mo (\u20b93.8L - \u20b95.5L/yr)",
+            "min_salary_inr": 384000,
+            "max_salary_inr": 552000,
+            "required_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Prompt Engineering"
+            ],
+            "description": "Build autonomous multi-agent pipelines and prompt workflows.",
+            "portal": "LinkedIn",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Prompt Engineering"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
+      },
+      {
+            "id": "JOB-B24-22",
+            "company": "AuraTech Automation (Batch 24)",
+            "role": "Python Workflow & RPA Developer",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b928,000 - \u20b942,000/mo (\u20b93.4L - \u20b95.0L/yr)",
+            "min_salary_inr": 336000,
+            "max_salary_inr": 504000,
+            "required_skills": [
+                  "Python",
+                  "Task Scheduler",
+                  "PowerShell",
+                  "REST APIs",
+                  "Excel"
+            ],
+            "description": "Design scheduled data extractors and automated reconciliation tasks.",
+            "portal": "Indeed",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "Task Scheduler",
+                  "PowerShell",
+                  "REST APIs",
+                  "Excel"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Batch 24 active recruitment window; highlights audited experience and tailored CV."
+            ],
+            "batch_number": 24
+      },
+      {
+            "id": "JOB-AI-01",
+            "company": "Cognitive Dynamics",
+            "role": "Generative AI & Automation Engineer",
+            "location": "Bengaluru (Remote)",
+            "work_type": "Remote",
+            "salary_range": "\u20b930,000 - \u20b945,000/mo (\u20b93.6L - \u20b95.4L/yr)",
+            "min_salary_inr": 360000,
+            "max_salary_inr": 540000,
+            "required_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Google Apps Script",
+                  "Workflow Automation"
+            ],
+            "description": "Develop and deploy production Generative AI automation pipelines, API-driven workflows, and autonomous document processing systems.",
+            "portal": "LinkedIn",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Google Apps Script",
+                  "Workflow Automation"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Ensure IGNIS 19k records indexer and Gmail API rate limits are highlighted clearly."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-AI-06",
+            "company": "HyperScale AI",
+            "role": "Generative AI Workflow Engineer",
+            "location": "Bengaluru / Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b932,000 - \u20b948,000/mo (\u20b93.8L - \u20b95.8L/yr)",
+            "min_salary_inr": 384000,
+            "max_salary_inr": 576000,
+            "required_skills": [
+                  "Generative AI",
+                  "Prompt Engineering",
+                  "Python",
+                  "REST APIs",
+                  "Workflow Automation"
+            ],
+            "description": "Build autonomous LLM pipelines, prompt engineering harnesses, and enterprise document extraction agents.",
+            "portal": "Foundit",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Prompt Engineering",
+                  "Python",
+                  "REST APIs",
+                  "Workflow Automation"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Focus on rate limit backoff and error recovery in API chains."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-AI-07",
+            "company": "Turing Labs",
+            "role": "Autonomous Agent & LLM Pipeline Developer",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b935,000 - \u20b950,000/mo (\u20b94.2L - \u20b96.0L/yr)",
+            "min_salary_inr": 420000,
+            "max_salary_inr": 600000,
+            "required_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Task Scheduler",
+                  "SQL"
+            ],
+            "description": "Design multi-agent orchestration workflows, automated research extractors, and automated report generators.",
+            "portal": "LinkedIn",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Python",
+                  "REST APIs",
+                  "Task Scheduler",
+                  "SQL"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Highlight OpenCV and Python background for multimodal understanding."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-AI-09",
+            "company": "NeuralFlow Systems",
+            "role": "GenAI Prompt & Automation Engineer",
+            "location": "Hyderabad / Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b930,000 - \u20b944,000/mo (\u20b93.6L - \u20b95.3L/yr)",
+            "min_salary_inr": 360000,
+            "max_salary_inr": 528000,
+            "required_skills": [
+                  "Prompt Engineering",
+                  "Python",
+                  "Generative AI",
+                  "Workflow Automation",
+                  "Excel"
+            ],
+            "description": "Optimize few-shot prompts and structured JSON schema outputs from LLMs for downstream database insertion.",
+            "portal": "Shine",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Prompt Engineering",
+                  "Python",
+                  "Generative AI",
+                  "Workflow Automation",
+                  "Excel"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Show concrete test rubrics and accuracy validation mechanisms."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-AI-10",
+            "company": "Agentic Works",
+            "role": "LangChain & Python Automation Specialist",
+            "location": "Bengaluru (Hybrid)",
+            "work_type": "Hybrid",
+            "salary_range": "\u20b932,000 - \u20b946,000/mo (\u20b93.8L - \u20b95.5L/yr)",
+            "min_salary_inr": 384000,
+            "max_salary_inr": 552000,
+            "required_skills": [
+                  "Python",
+                  "Generative AI",
+                  "REST APIs",
+                  "SQL",
+                  "Streamlit"
+            ],
+            "description": "Deploy agentic tooling and autonomous workflow loops with human-in-the-loop review boundaries.",
+            "portal": "Foundit",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "Generative AI",
+                  "REST APIs",
+                  "SQL",
+                  "Streamlit"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Demonstrate human-in-the-loop audit logs and safety guards."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-AI-11",
+            "company": "PromptGenius Labs",
+            "role": "Generative AI Operations Engineer",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b928,000 - \u20b940,000/mo (\u20b93.4L - \u20b94.8L/yr)",
+            "min_salary_inr": 336000,
+            "max_salary_inr": 480000,
+            "required_skills": [
+                  "Generative AI",
+                  "Python",
+                  "Process Mapping",
+                  "Google Apps Script",
+                  "Power BI"
+            ],
+            "description": "Automate internal intelligence operations, candidate intake, and supplier intelligence research via Generative AI.",
+            "portal": "Indeed",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Generative AI & Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Generative AI",
+                  "Python",
+                  "Process Mapping",
+                  "Google Apps Script",
+                  "Power BI"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Cite IndiaMART supplier price intelligence benchmarking at Nunes."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-FD-02",
+            "company": "NovaTech Automation",
+            "role": "Forward Deployed AI Solutions Engineer",
+            "location": "Coimbatore / Bengaluru (Hybrid)",
+            "work_type": "Hybrid",
+            "salary_range": "\u20b928,000 - \u20b940,000/mo (\u20b93.4L - \u20b94.8L/yr)",
+            "min_salary_inr": 336000,
+            "max_salary_inr": 480000,
+            "required_skills": [
+                  "Python",
+                  "Generative AI",
+                  "Process Mapping",
+                  "REST APIs",
+                  "PowerShell"
+            ],
+            "description": "Deploy operational automation tools, product research integrations, and enterprise client workflows with robust error handling.",
+            "portal": "Foundit",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply after CV changes",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "Generative AI",
+                  "Process Mapping",
+                  "REST APIs",
+                  "PowerShell"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Clarify difference between local workstation deployment vs multi-PC enterprise synchronization."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-PY-13",
+            "company": "QuantStack Technologies",
+            "role": "Python Backend & Automation Developer",
+            "location": "Bengaluru (Remote)",
+            "work_type": "Remote",
+            "salary_range": "\u20b930,000 - \u20b944,000/mo (\u20b93.6L - \u20b95.3L/yr)",
+            "min_salary_inr": 360000,
+            "max_salary_inr": 528000,
+            "required_skills": [
+                  "Python",
+                  "SQL",
+                  "REST APIs",
+                  "Excel",
+                  "Data Classification"
+            ],
+            "description": "Build Python middleware pipelines connecting enterprise databases, third-party APIs, and executive dashboards.",
+            "portal": "Shine",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "SQL",
+                  "REST APIs",
+                  "Excel",
+                  "Data Classification"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Demonstrate clean relational schema designs and parameterized SQLite queries."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-PY-14",
+            "company": "DataFlux Systems",
+            "role": "API Integration & Python Developer",
+            "location": "Coimbatore (Hybrid)",
+            "work_type": "Hybrid",
+            "salary_range": "\u20b925,000 - \u20b936,000/mo (\u20b93.0L - \u20b94.3L/yr)",
+            "min_salary_inr": 300000,
+            "max_salary_inr": 432000,
+            "required_skills": [
+                  "Python",
+                  "REST APIs",
+                  "Google Apps Script",
+                  "Gmail API",
+                  "Process Mapping"
+            ],
+            "description": "Connect CRM platforms, email queues, and internal accounting systems via webhook listeners and scheduled Python ETL jobs.",
+            "portal": "Naukri",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "REST APIs",
+                  "Google Apps Script",
+                  "Gmail API",
+                  "Process Mapping"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Local Coimbatore presence is a strong competitive advantage."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-PY-15",
+            "company": "CodeSync India",
+            "role": "Python RPA & Task Automation Developer",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b927,000 - \u20b938,000/mo (\u20b93.2L - \u20b94.6L/yr)",
+            "min_salary_inr": 324000,
+            "max_salary_inr": 456000,
+            "required_skills": [
+                  "Python",
+                  "PowerShell",
+                  "Workflow Automation",
+                  "Excel",
+                  "Task Scheduler"
+            ],
+            "description": "Automate repetitive desktop tasks, file format conversions, report exports, and system hygiene tasks.",
+            "portal": "Indeed",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "PowerShell",
+                  "Workflow Automation",
+                  "Excel",
+                  "Task Scheduler"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Present five documented Nunes automation initiatives."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-PY-17",
+            "company": "ScriptCraft Software",
+            "role": "Fullstack Python Workflow Developer",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b928,000 - \u20b940,000/mo (\u20b93.4L - \u20b94.8L/yr)",
+            "min_salary_inr": 336000,
+            "max_salary_inr": 480000,
+            "required_skills": [
+                  "Python",
+                  "Streamlit",
+                  "SQL",
+                  "Workflow Automation",
+                  "REST APIs"
+            ],
+            "description": "Create internal web consoles, data visualization micro-apps, and automated background synchronization workers.",
+            "portal": "Foundit",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Python Automation Developer / AI Automation Engineer",
+            "match_score": 84,
+            "matched_skills": [
+                  "Python",
+                  "Streamlit",
+                  "SQL",
+                  "Workflow Automation",
+                  "REST APIs"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Demonstrate Streamlit portfolio and live deployed dashboards."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-BA-03",
+            "company": "Aegis Enterprise Solutions",
+            "role": "Business Analyst \u2014 AI & Operations Automation",
+            "location": "Chennai (Hybrid)",
+            "work_type": "Hybrid",
+            "salary_range": "\u20b925,000 - \u20b935,000/mo (\u20b93.0L - \u20b94.2L/yr)",
+            "min_salary_inr": 300000,
+            "max_salary_inr": 420000,
+            "required_skills": [
+                  "Requirements Analysis",
+                  "Process Mapping",
+                  "SQL",
+                  "Power BI",
+                  "Python",
+                  "Workflow Automation"
+            ],
+            "description": "Translate complex business operations into automated workflows, streamline reconciliation and documentation, and build executive reporting.",
+            "portal": "LinkedIn",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Business Analyst \u2014 AI & Operations Automation",
+            "match_score": 84,
+            "matched_skills": [
+                  "Requirements Analysis",
+                  "Process Mapping",
+                  "SQL",
+                  "Power BI",
+                  "Python",
+                  "Workflow Automation"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Emphasize CA foundation, BBA Data Science, and Tally/TDS reconciliation experience at RXG Studios."
+            ],
+            "batch_number": 1
+      },
+      {
+            "id": "JOB-BA-19",
+            "company": "SyncOps Analytics",
+            "role": "Operations Business Analyst",
+            "location": "Remote",
+            "work_type": "Remote",
+            "salary_range": "\u20b928,000 - \u20b938,000/mo (\u20b93.4L - \u20b94.6L/yr)",
+            "min_salary_inr": 336000,
+            "max_salary_inr": 456000,
+            "required_skills": [
+                  "Process Mapping",
+                  "Power BI",
+                  "Excel",
+                  "Requirements Analysis",
+                  "Workflow Automation"
+            ],
+            "description": "Map end-to-end operational processes, identify manual bottleneck steps, and specify technical requirements for engineering.",
+            "portal": "Shine",
+            "vacancy_verification_status": "VERIFIED_OPEN",
+            "suitability_verdict": "Apply",
+            "tailoring_mode": "Business Analyst \u2014 AI & Operations Automation",
+            "match_score": 84,
+            "matched_skills": [
+                  "Process Mapping",
+                  "Power BI",
+                  "Excel",
+                  "Requirements Analysis",
+                  "Workflow Automation"
+            ],
+            "missing_skills": [],
+            "skills_match_pct": 100,
+            "experience_match_pct": 82,
+            "salary_fit_pct": 50,
+            "rejection_risks": [
+                  "Frame MBA in AI coursework as formal business process modeling qualification."
+            ],
+            "batch_number": 1
       }
-    ];
+];
     var currentCoverLetterStyle = "balanced";
     var appliedJobsMap = {};
     var rawAppliedSheetData = [];
@@ -8403,6 +9287,24 @@ Select a condition above to view immediate clinical triage steps.
       } catch (e) {
         console.log('Toast:', message);
       }
+    }
+
+    // ==========================================================================
+    // UNIVERSAL ECOSYSTEM BOOTSTRAP (RUNS ON LOCALHOST, GITHUB PAGES & VERCEL)
+    // ==========================================================================
+    function bootstrapAkshayEcosystem() {
+      try { applyLayoutView(); } catch (e) {}
+      try { syncLedgerWithServer(); } catch (e) {}
+      try { loadDadDashboard(); } catch (e) {}
+      try { loadJobStream(); } catch (e) {}
+      try { loadInvestmentPortfolio(); } catch (e) {}
+      try { initDeviceTelemetry(); } catch (e) {}
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", bootstrapAkshayEcosystem);
+    } else {
+      bootstrapAkshayEcosystem();
     }
 </script>
 
