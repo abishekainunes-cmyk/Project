@@ -1469,6 +1469,16 @@ class JobBotManager:
         else:
             direct_url = f"https://www.google.com/search?q={clean_role}+{clean_company}+careers"
 
+        portal_trackers = {
+            "LinkedIn": "https://www.linkedin.com/jobs/tracker/applied/",
+            "Indeed": "https://myjobs.indeed.com/applied",
+            "Foundit": "https://www.foundit.in/seeker/applied-jobs",
+            "Shine": "https://www.shine.com/myshine/myappliedjobs/",
+            "Naukri": "https://my.naukri.com/profile/myappliedjobs"
+        }
+        portal_tracker_url = portal_trackers.get(app.portal or "LinkedIn", "https://www.linkedin.com/jobs/tracker/applied/")
+        portal_view_url = f"portal-applied-view.html?id={app.job_id}"
+
         screening_qa = [
             {"question": "Notice Period", "answer": "Immediate (0 Days / Ready to Join)", "status": "VERIFIED"},
             {"question": "Total AI / Automation Experience", "answer": "3.5 Years Total Operations (~10 Months Dedicated Production Automation at Nunes Instrumentation & IGNIS 19,000+ files indexer)", "status": "VERIFIED"},
@@ -1487,6 +1497,9 @@ class JobBotManager:
             "role": app.role,
             "portal": app.portal,
             "direct_url": direct_url,
+            "portal_tracker_url": portal_tracker_url,
+            "portal_view_url": portal_view_url,
+            "application_status": "APPLIED & VERIFIED",
             "location": app.location,
             "salary": app.salary,
             "applicant_name": "Abishek Pranav G V",
