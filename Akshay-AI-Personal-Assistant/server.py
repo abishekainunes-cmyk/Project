@@ -424,24 +424,91 @@ class AkshayAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json_response({"success": False, "error": str(e)}, status=500)
             return
 
-        elif path in ("/download/app.apk", "/Akshay_AI.apk", "/download/Akshay_AI_v4.2.apk"):
-            apk_path = ROOT_DIR / "tools" / "WebviewKiosk.apk"
-            if not apk_path.exists():
-                apk_path = ROOT_DIR / "tools" / "Akshay_AI_v4.2.apk"
-            if not apk_path.exists():
-                apk_path = HUD_DIR / "Akshay_AI_v4.2.apk"
-            if apk_path.exists():
+        elif path in (
+            "/download/Akshay_AI.apk",
+            "/download/Akshay_AI_v4.5.apk",
+            "/download/Akshay_AI_v4.2.apk",
+            "/download/app.apk",
+            "/Akshay_AI.apk",
+            "/Akshay_AI_v4.5.apk",
+            "/Akshay_AI_v4.2.apk"
+        ):
+            candidates = [
+                ROOT_DIR / "Akshay_AI_v4.5.apk",
+                HUD_DIR / "Akshay_AI_v4.5.apk",
+                HUD_DIR / "Akshay_AI_v4.2.apk",
+                ROOT_DIR / "tools" / "WebviewKiosk.apk",
+                ROOT_DIR / "tools" / "app-release.apk"
+            ]
+            apk_path = next((c for c in candidates if c.exists()), None)
+            if apk_path and apk_path.exists():
                 payload = apk_path.read_bytes()
                 self.send_response(200)
                 self.send_header("Content-Type", "application/vnd.android.package-archive")
-                self.send_header("Content-Disposition", "attachment; filename=\"Akshay_AI_v4.2.apk\"")
+                self.send_header("Content-Disposition", 'attachment; filename="Akshay_AI_v4.5.apk"')
                 self.send_header("Content-Length", str(len(payload)))
+                self.send_header("Cache-Control", "no-cache, must-revalidate")
                 self.end_headers()
                 self.wfile.write(payload)
                 return
             else:
                 self._send_json_response({"error": "APK file not found on server"}, status=404)
                 return
+
+        elif path == "/manifest.json":
+            manifest_path = ROOT_DIR / "manifest.json"
+            if not manifest_path.exists():
+                manifest_path = HUD_DIR / "manifest.json"
+            if manifest_path.exists():
+                payload = manifest_path.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/manifest+json; charset=utf-8")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+                return
+
+        elif path == "/sw.js":
+            sw_path = ROOT_DIR / "sw.js"
+            if not sw_path.exists():
+                sw_path = HUD_DIR / "sw.js"
+            if sw_path.exists():
+                payload = sw_path.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/javascript; charset=utf-8")
+                self.send_header("Service-Worker-Allowed", "/")
+                self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+                return
+
+        elif path == "/api/network/info":
+            try:
+                import socket
+                try:
+                    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                    s.connect(("8.8.8.8", 80))
+                    primary_ip = s.getsockname()[0]
+                    s.close()
+                except Exception:
+                    primary_ip = "192.168.0.105"
+                
+                self._send_json_response({
+                    "success": True,
+                    "primary_ip": primary_ip,
+                    "wifi_url": f"http://{primary_ip}:8085",
+                    "localhost_url": "http://localhost:8085",
+                    "cloudflare_url": "https://closer-fans-approve-evaluating.trycloudflare.com",
+                    "github_pages_url": "https://abishekainunes-cmyk.github.io/Project/?",
+                    "apk_download_url": "/download/Akshay_AI_v4.5.apk",
+                    "github_apk_url": "https://abishekainunes-cmyk.github.io/Project/Akshay_AI_v4.5.apk",
+                    "pwa_ready": True,
+                    "offline_ready": True
+                })
+            except Exception as e:
+                self._send_json_response({"success": False, "error": str(e)}, status=500)
+            return
 
         elif path == "/api/tablet/status":
             try:
